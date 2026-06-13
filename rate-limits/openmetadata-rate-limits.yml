@@ -1,0 +1,57 @@
+name: OpenMetadata Rate Limits
+description: OpenMetadata is an open-source platform where rate limits are not enforced by the software itself for self-hosted deployments. For Collate managed SaaS plans, rate limits are implicitly tied to plan tiers through data refresh cadence and asset limits. No explicit per-request rate limit values are publicly documented. The API returns HTTP 429 status codes when limits are exceeded. Self-hosted operators should implement their own rate limiting at the infrastructure layer (e.g., reverse proxy, API gateway).
+version: '0.1'
+url: https://docs.open-metadata.org/latest/main-concepts/metadata-standard/apis
+rateLimits:
+  - name: Self-Hosted (Open Source)
+    description: No software-enforced API rate limits. The operator is responsible for configuring rate limiting at the infrastructure layer.
+    type: none
+    enforced: false
+    notes: Deployments should configure rate limiting at the reverse proxy or API gateway layer (e.g., nginx, Kong, AWS API Gateway).
+  - name: Collate Free SaaS
+    description: Implicit limits based on plan tier. No published per-request rate limit. Data refresh is weekly, and asset catalog is capped at 500 data assets.
+    type: implicit
+    enforced: true
+    limits:
+      dataRefreshCadence: weekly
+      maxDataAssets: 500
+      maxUsers: 5
+  - name: Collate Premium SaaS
+    description: Implicit limits based on plan tier. Data refresh is every 8 hours, and asset catalog is capped at 5,000 data assets.
+    type: implicit
+    enforced: true
+    limits:
+      dataRefreshCadence: 8hours
+      maxDataAssets: 5000
+      maxUsers: 25
+  - name: Collate Enterprise SaaS
+    description: Implicit limits based on plan tier. Data refresh is hourly. Asset counts start at 10,000 with unlimited options available via contract.
+    type: implicit
+    enforced: true
+    limits:
+      dataRefreshCadence: hourly
+      maxDataAssets: 10000
+      maxUsers: 50
+statusCodes:
+  - code: 200
+    description: OK — Request succeeded
+  - code: 201
+    description: Created — Resource created successfully
+  - code: 400
+    description: Bad Request — Invalid input or malformed request
+  - code: 401
+    description: Unauthorized — Missing or invalid JWT Bearer token
+  - code: 403
+    description: Forbidden — Authenticated user lacks permission
+  - code: 404
+    description: Not Found — Requested resource does not exist
+  - code: 409
+    description: Conflict — Resource already exists
+  - code: 429
+    description: Too Many Requests — Rate limit exceeded (managed deployments)
+  - code: 500
+    description: Internal Server Error — Unexpected server-side error
+authentication:
+  - type: BearerToken
+    description: JWT Bearer tokens required for all API requests. Tokens can be generated as Bot Tokens (service accounts via Settings > Bots) or Personal Access Tokens (via Profile > Access Tokens).
+    url: https://docs.open-metadata.org/latest/main-concepts/metadata-standard/apis

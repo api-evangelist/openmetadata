@@ -1,0 +1,79 @@
+name: OpenMetadata FinOps Framework
+description: FinOps guidance for OpenMetadata deployments covering both self-hosted open-source and Collate managed SaaS options. OpenMetadata itself is Apache 2.0 licensed and free; costs arise from infrastructure (self-hosted) or subscription fees (Collate SaaS). OpenMetadata also provides a Cost Analysis feature within the platform to track and optimize data infrastructure spend.
+version: '1.0'
+url: https://open-metadata.org
+framework: FinOps Framework 1.0 FOCUS-aligned
+phases:
+  - phase: Inform
+    description: Understand and gain visibility into OpenMetadata-related costs across deployment options.
+    activities:
+      - name: Deployment Cost Baseline
+        description: For self-hosted deployments, catalog infrastructure costs (compute, storage, networking) for the OpenMetadata server, Elasticsearch/OpenSearch index, and MySQL/PostgreSQL database. For Collate SaaS, identify subscription tier and per-asset costs.
+        costDrivers:
+          - Compute (JVM heap for OpenMetadata server)
+          - Elasticsearch or OpenSearch cluster
+          - MySQL or PostgreSQL database
+          - Ingestion worker compute (Python-based)
+          - Networking and egress
+          - Storage for metadata and audit logs
+      - name: Collate SaaS Cost Visibility
+        description: Track Collate SaaS subscription costs by tier (Free, Premium, Enterprise) and monitor asset utilization against plan limits.
+        costDrivers:
+          - User seat count vs. plan limit
+          - Data asset count vs. plan limit
+          - Collate AI add-on licensing
+      - name: OpenMetadata Cost Analysis Feature
+        description: OpenMetadata includes a built-in Cost Analysis feature (Settings > Data Insights > Cost Analysis) that tracks compute costs across data services, enabling visibility into which tables, pipelines, and services drive data infrastructure spend.
+        url: https://docs.open-metadata.org/v1.12.x/how-to-guides/data-insights/cost-analysis
+  - phase: Optimize
+    description: Identify and act on opportunities to reduce OpenMetadata infrastructure and licensing costs.
+    activities:
+      - name: Right-Size Infrastructure
+        description: For self-hosted deployments, match compute and memory allocations to actual ingestion load. Use Kubernetes HPA or auto-scaling groups to handle variable ingestion workloads.
+        recommendations:
+          - Start with minimum viable cluster sizes and scale based on observed load
+          - Use spot/preemptible instances for ingestion workers
+          - Archive historical metadata snapshots to cold storage
+      - name: Connector Scheduling Optimization
+        description: Schedule metadata ingestion connectors during off-peak hours to reduce concurrent compute pressure. Avoid redundant re-ingestion of unchanged assets.
+        recommendations:
+          - Use incremental ingestion where connectors support it
+          - Stagger ingestion schedules across services to flatten compute peaks
+          - Disable connectors for deprecated or decommissioned data sources
+      - name: Plan Right-Sizing (Collate SaaS)
+        description: Monitor seat utilization and data asset counts against Collate plan limits. Downgrade or upgrade plans based on actual usage patterns.
+        recommendations:
+          - Audit active user seats quarterly
+          - Remove inactive users to stay within tier limits
+          - Tag data assets by domain to track utilization by business unit
+  - phase: Operate
+    description: Establish ongoing FinOps practices for sustained cost management of OpenMetadata environments.
+    activities:
+      - name: Cost Allocation by Domain
+        description: Use OpenMetadata Domains to logically group data assets by business unit or team. Map infrastructure costs to domains for internal chargeback or showback reporting.
+        recommendations:
+          - Assign all data services and assets to a Domain
+          - Use Data Insights dashboards to track per-domain asset counts
+          - Correlate ingestion worker costs with domain-level ingestion volumes
+      - name: Governance Cost Tracking
+        description: Track API usage patterns to identify high-frequency consumers of the OpenMetadata API that may drive infrastructure costs. Monitor search query volumes against Elasticsearch cluster costs.
+      - name: Open Source vs. SaaS TCO
+        description: Periodically compare Total Cost of Ownership between self-hosted (infrastructure + engineering time) and Collate SaaS (subscription + reduced ops overhead) to ensure the optimal deployment model.
+        considerations:
+          - Engineering hours for deployment, upgrades, and operations
+          - Infrastructure costs (compute, storage, networking)
+          - Collate SaaS subscription fee
+          - Support and incident response overhead
+licensing:
+  openSource:
+    license: Apache 2.0
+    cost: Free
+    url: https://github.com/open-metadata/OpenMetadata/blob/main/LICENSE
+  managedService:
+    provider: Collate
+    pricingUrl: https://www.getcollate.io/pricing
+    tiers:
+      - Free (5 users, 500 assets)
+      - Premium (25 users, 5,000 assets — contact for pricing)
+      - Enterprise (50+ users, 10,000+ assets — custom pricing)
+      - Collate AI add-on (custom pricing)
