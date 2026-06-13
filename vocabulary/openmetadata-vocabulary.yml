@@ -1,0 +1,159 @@
+vocabulary:
+  name: OpenMetadata API Vocabulary
+  description: Key terms, concepts, and domain vocabulary for the OpenMetadata REST API covering data catalog, metadata management, governance, and data quality.
+  version: "1.13"
+  source: https://sandbox.open-metadata.org/swagger.yaml
+  terms:
+    - term: Table
+      definition: A relational database table that can be cataloged and discovered through OpenMetadata, including schema, columns, lineage, and quality metadata.
+      category: Data Asset
+    - term: Dashboard
+      definition: A BI or analytics dashboard asset tracked in the metadata catalog, including charts, data models, and lineage.
+      category: Data Asset
+    - term: Pipeline
+      definition: A data pipeline or ETL workflow that moves or transforms data, tracked with lineage and observability metadata.
+      category: Data Asset
+    - term: Topic
+      definition: A messaging or streaming topic (e.g., Kafka topic) tracked in OpenMetadata with schema and lineage.
+      category: Data Asset
+    - term: ML Model
+      definition: A machine learning model asset tracked in the catalog including features, hyperparameters, and lineage.
+      category: Data Asset
+    - term: Container
+      definition: An object storage container (e.g., S3 bucket or GCS bucket) tracked as a metadata asset.
+      category: Data Asset
+    - term: SearchIndex
+      definition: A search engine index (e.g., Elasticsearch index) tracked as a metadata asset.
+      category: Data Asset
+    - term: Database
+      definition: A database instance tracked in OpenMetadata that can contain multiple schemas and tables.
+      category: Data Asset
+    - term: Database Schema
+      definition: A schema within a database that organizes tables and stored procedures.
+      category: Data Asset
+    - term: Chart
+      definition: A single visualization element that is part of a dashboard asset.
+      category: Data Asset
+    - term: Stored Procedure
+      definition: A stored procedure in a database tracked as a data asset in the catalog.
+      category: Data Asset
+    - term: Lineage
+      definition: The data lineage graph tracking how data flows between sources, transformations, and targets across assets.
+      category: Governance
+    - term: Glossary
+      definition: A business glossary that defines domain terms and maps them to technical data assets.
+      category: Governance
+    - term: Glossary Term
+      definition: A single term within a business glossary with definition, synonyms, and asset mappings.
+      category: Governance
+    - term: Tag
+      definition: A classification label applied to data assets for categorization, governance, and discovery.
+      category: Governance
+    - term: Classification
+      definition: A classification system that organizes tags into hierarchical categories for governance.
+      category: Governance
+    - term: Policy
+      definition: A governance policy defining access control rules, data handling requirements, or quality standards.
+      category: Governance
+    - term: Domain
+      definition: A business domain that organizes data assets by ownership and subject area.
+      category: Governance
+    - term: Data Contract
+      definition: A formal agreement defining the schema, quality, and SLA for a data asset between producers and consumers.
+      category: Governance
+    - term: Test Case
+      definition: A data quality test assertion that validates specific data quality conditions on an asset.
+      category: Data Quality
+    - term: Test Suite
+      definition: A collection of test cases grouped together for execution and reporting.
+      category: Data Quality
+    - term: Test Definition
+      definition: The definition of a type of data quality test with its parameters and expected behavior.
+      category: Data Quality
+    - term: Data Quality Report
+      definition: An aggregated report of data quality test results for an asset or suite.
+      category: Data Quality
+    - term: Test Case Incident
+      definition: A data quality incident triggered when a test case fails, managed through the incident workflow.
+      category: Data Quality
+    - term: Entity Reference
+      definition: A lightweight reference to any metadata entity by ID, type, name, and fully-qualified name.
+      category: Core
+    - term: Change Event
+      definition: An event recording a change to a metadata entity, used for audit trails and event-driven updates.
+      category: Core
+    - term: Change Description
+      definition: A description of the fields that changed on a metadata entity in a specific version.
+      category: Core
+    - term: Fully Qualified Name (FQN)
+      definition: A dot-separated hierarchical identifier uniquely identifying a metadata entity (e.g., service.database.schema.table).
+      category: Core
+    - term: Team
+      definition: An organizational team in OpenMetadata that can own data assets and have assigned policies and roles.
+      category: Organization
+    - term: User
+      definition: An individual user within OpenMetadata who can own assets, follow entities, and have assigned roles.
+      category: Organization
+    - term: Role
+      definition: A named set of permissions assigned to users or teams for access control.
+      category: Organization
+    - term: Bot
+      definition: A service account used for automated ingestion and programmatic metadata updates.
+      category: Organization
+    - term: Persona
+      definition: A user persona grouping that controls UI customization and data asset visibility for different user types.
+      category: Organization
+    - term: Ingestion Pipeline
+      definition: A metadata ingestion pipeline that extracts metadata from source systems into OpenMetadata.
+      category: Services
+    - term: API Service
+      definition: A service connector tracking API specifications and endpoints as metadata assets.
+      category: Services
+    - term: Database Service
+      definition: A service connector for a database (e.g., MySQL, PostgreSQL, Snowflake) that ingests database metadata.
+      category: Services
+    - term: LLM Service
+      definition: A service connector for large language model providers used in AI governance metadata.
+      category: Services
+    - term: MCP Server
+      definition: A Model Context Protocol server that exposes metadata operations as AI-accessible tools.
+      category: AI
+    - term: AI Application
+      definition: An AI application asset tracked in OpenMetadata with governance, compliance, and performance metadata.
+      category: AI
+    - term: AI Governance Policy
+      definition: A governance policy specifically for AI applications defining compliance, bias, and safety requirements.
+      category: AI
+    - term: LLM Model
+      definition: A large language model tracked as a metadata asset with parameters, training data, and governance information.
+      category: AI
+    - term: Prompt Template
+      definition: A reusable prompt template for AI applications tracked as a metadata asset.
+      category: AI
+    - term: OpenLineage
+      definition: Support for the OpenLineage standard for emitting and receiving lineage events in OpenMetadata.
+      category: Standards
+    - term: SCIM
+      definition: System for Cross-domain Identity Management support for automated user and team provisioning.
+      category: Standards
+  api_tags:
+    - name: Data Assets
+      includes: [Tables, Dashboards, Pipelines, Topics, ML Models, Charts, Containers, SearchIndex, Databases, Database Schemas, Stored Procedures, API Collections, API Endpoint, Metrics]
+    - name: Governance
+      includes: [Glossaries, Classifications, Policies, Domains, Data Contracts, Tags]
+    - name: Data Quality
+      includes: [Data Quality, Test Cases, Test Case Results, Test Definitions, Test Suites, Test Case Incident Manager]
+    - name: Lineage
+      includes: [Lineage, OpenLineage]
+    - name: Organization
+      includes: [Teams, Users, Roles, Personas, Bots, Permissions]
+    - name: Services
+      includes: [API Services, Database Services, Drive Services, Ingestion Pipelines, LLM Services, MCP Services, Metadata Services, Search Services, Security Services, Object Store Services]
+    - name: AI
+      includes: [AI Applications, AI Governance Policies, Agent Executions, LLM Models, MCP Executions, MCP Servers, Prompt Templates]
+    - name: Search & Discovery
+      includes: [Search, Vector Search, Queries, Usage]
+    - name: Events & Audit
+      includes: [Events, Feeds, Suggestions, Audit Logs, ChangeSummary]
+    - name: System
+      includes: [System, Apps, SCIM, Search Reindex]

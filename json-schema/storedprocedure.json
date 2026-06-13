@@ -1,0 +1,247 @@
+{
+  "required": [
+    "id",
+    "name",
+    "storedProcedureCode"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "fullyQualifiedName": {
+      "maxLength": 3072,
+      "minLength": 1,
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "storedProcedureCode": {
+      "$ref": "#/components/schemas/StoredProcedureCode"
+    },
+    "version": {
+      "type": "number",
+      "format": "double"
+    },
+    "dataProducts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataContract": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "storedProcedureType": {
+      "type": "string",
+      "enum": [
+        "StoredProcedure",
+        "UDF",
+        "StoredPackage",
+        "Function"
+      ]
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "impersonatedBy": {
+      "type": "string"
+    },
+    "href": {
+      "type": "string",
+      "format": "uri"
+    },
+    "changeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "incrementalChangeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "databaseSchema": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "database": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "service": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "serviceType": {
+      "type": "string",
+      "enum": [
+        "BigQuery",
+        "BigTable",
+        "Mysql",
+        "Redshift",
+        "Snowflake",
+        "Postgres",
+        "Timescale",
+        "Mssql",
+        "MicrosoftAccess",
+        "Oracle",
+        "Athena",
+        "Hive",
+        "Impala",
+        "Presto",
+        "Trino",
+        "Vertica",
+        "Glue",
+        "MariaDB",
+        "Druid",
+        "Db2",
+        "Clickhouse",
+        "Databricks",
+        "AzureSQL",
+        "DynamoDB",
+        "SingleStore",
+        "SQLite",
+        "DeltaLake",
+        "Salesforce",
+        "PinotDB",
+        "Datalake",
+        "DomoDatabase",
+        "QueryLog",
+        "CustomDatabase",
+        "Dbt",
+        "SapHana",
+        "SapSuccessFactors",
+        "MongoDB",
+        "Cassandra",
+        "Couchbase",
+        "Greenplum",
+        "Doris",
+        "StarRocks",
+        "UnityCatalog",
+        "SAS",
+        "Teradata",
+        "SapErp",
+        "Synapse",
+        "Exasol",
+        "Cockroach",
+        "SSAS",
+        "Epic",
+        "ServiceNow",
+        "Dremio",
+        "MicrosoftFabric",
+        "BurstIQ",
+        "Informix",
+        "Iomete",
+        "QuestDB"
+      ]
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "votes": {
+      "$ref": "#/components/schemas/Votes"
+    },
+    "code": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TagLabel"
+      }
+    },
+    "extension": {
+      "type": "object"
+    },
+    "sourceUrl": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "lifeCycle": {
+      "$ref": "#/components/schemas/LifeCycle"
+    },
+    "certification": {
+      "$ref": "#/components/schemas/AssetCertification"
+    },
+    "sourceHash": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "processedLineage": {
+      "type": "boolean"
+    },
+    "entityStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Approved",
+        "Archived",
+        "Deprecated",
+        "Rejected",
+        "Unprocessed"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "system",
+        "user",
+        "automation"
+      ]
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "style": {
+      "$ref": "#/components/schemas/Style"
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "usageSummary": {
+      "$ref": "#/components/schemas/UsageDetails"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/openmetadata/main/json-schema/storedprocedure.json"
+}

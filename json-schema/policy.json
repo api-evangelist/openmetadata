@@ -1,0 +1,186 @@
+{
+  "required": [
+    "id",
+    "name",
+    "rules"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "fullyQualifiedName": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "href": {
+      "type": "string",
+      "format": "uri"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "version": {
+      "type": "number",
+      "format": "double"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "impersonatedBy": {
+      "type": "string"
+    },
+    "changeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "incrementalChangeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Rule"
+      }
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "location": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "allowDelete": {
+      "type": "boolean"
+    },
+    "allowEdit": {
+      "type": "boolean"
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "system",
+        "user",
+        "automation"
+      ]
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "extension": {
+      "type": "object"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "service": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "style": {
+      "$ref": "#/components/schemas/Style"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TagLabel"
+      }
+    },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataProducts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataContract": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "usageSummary": {
+      "$ref": "#/components/schemas/UsageDetails"
+    },
+    "entityStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Approved",
+        "Archived",
+        "Deprecated",
+        "Rejected",
+        "Unprocessed"
+      ]
+    },
+    "votes": {
+      "$ref": "#/components/schemas/Votes"
+    },
+    "lifeCycle": {
+      "$ref": "#/components/schemas/LifeCycle"
+    },
+    "certification": {
+      "$ref": "#/components/schemas/AssetCertification"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/openmetadata/main/json-schema/policy.json"
+}

@@ -1,0 +1,249 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "om": "https://open-metadata.org/schema/",
+    "schema": "https://schema.org/",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#",
+
+    "id": "@id",
+    "type": "@type",
+
+    "Table": "om:entity/data/table/Table",
+    "Dashboard": "om:entity/data/dashboard/Dashboard",
+    "Pipeline": "om:entity/data/pipeline/Pipeline",
+    "Topic": "om:entity/data/topic/Topic",
+    "MlModel": "om:entity/data/mlmodel/MlModel",
+    "Container": "om:entity/data/storageservice/objectstore/container/Container",
+    "SearchIndex": "om:entity/data/searchindex/SearchIndex",
+    "Database": "om:entity/data/database/Database",
+    "DatabaseSchema": "om:entity/data/databaseschema/DatabaseSchema",
+    "Chart": "om:entity/data/chart/Chart",
+    "StoredProcedure": "om:entity/data/storedprocedure/StoredProcedure",
+    "APICollection": "om:entity/data/apiCollection/APICollection",
+    "APIEndpoint": "om:entity/data/apiEndpoint/APIEndpoint",
+    "Glossary": "om:entity/data/glossary/Glossary",
+    "GlossaryTerm": "om:entity/data/glossary/GlossaryTerm",
+    "Tag": "om:entity/classification/tag/Tag",
+    "Classification": "om:entity/classification/Classification",
+    "Policy": "om:entity/policies/Policy",
+    "Domain": "om:entity/domains/domain/Domain",
+    "Team": "om:entity/teams/team/Team",
+    "User": "om:entity/teams/user/User",
+    "Role": "om:entity/teams/role/Role",
+    "Bot": "om:entity/bot/Bot",
+    "Persona": "om:entity/teams/persona/Persona",
+    "TestCase": "om:tests/testCase/TestCase",
+    "TestSuite": "om:tests/testSuite/TestSuite",
+    "TestDefinition": "om:tests/testDefinition/TestDefinition",
+    "IngestionPipeline": "om:entity/services/ingestionPipelines/IngestionPipeline",
+    "AIApplication": "om:entity/ai/aiApplication/AIApplication",
+    "LLMModel": "om:entity/ai/llmmodel/LLMModel",
+    "MCPServer": "om:entity/ai/mcpserver/MCPServer",
+    "PromptTemplate": "om:entity/ai/prompt/PromptTemplate",
+    "ChangeEvent": "om:type/ChangeEvent",
+    "EntityReference": "om:type/EntityReference",
+
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "dcterms:description",
+      "@type": "xsd:string"
+    },
+    "fullyQualifiedName": {
+      "@id": "om:type/fullyQualifiedName",
+      "@type": "xsd:string"
+    },
+    "displayName": {
+      "@id": "schema:alternateName",
+      "@type": "xsd:string"
+    },
+    "href": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "owner": {
+      "@id": "dcterms:creator",
+      "@type": "@id"
+    },
+    "owners": {
+      "@id": "dcterms:creator",
+      "@container": "@set"
+    },
+    "tags": {
+      "@id": "om:type/tags",
+      "@container": "@set"
+    },
+    "lineage": {
+      "@id": "prov:wasDerivedFrom",
+      "@container": "@set"
+    },
+    "upstreamLineage": {
+      "@id": "prov:wasDerivedFrom",
+      "@container": "@set"
+    },
+    "downstreamLineage": {
+      "@id": "prov:hadDerivation",
+      "@container": "@set"
+    },
+    "columns": {
+      "@id": "om:entity/data/table/Column",
+      "@container": "@list"
+    },
+    "schema": {
+      "@id": "om:type/schema",
+      "@type": "@id"
+    },
+    "service": {
+      "@id": "om:entity/services/ServiceType",
+      "@type": "@id"
+    },
+    "database": {
+      "@id": "om:entity/data/database/Database",
+      "@type": "@id"
+    },
+    "databaseSchema": {
+      "@id": "om:entity/data/databaseschema/DatabaseSchema",
+      "@type": "@id"
+    },
+    "domain": {
+      "@id": "om:entity/domains/domain/Domain",
+      "@type": "@id"
+    },
+    "glossaryTerms": {
+      "@id": "om:entity/data/glossary/GlossaryTerm",
+      "@container": "@set"
+    },
+    "version": {
+      "@id": "owl:versionInfo",
+      "@type": "xsd:string"
+    },
+    "updatedAt": {
+      "@id": "dcterms:modified",
+      "@type": "xsd:dateTime"
+    },
+    "createdAt": {
+      "@id": "dcterms:created",
+      "@type": "xsd:dateTime"
+    },
+    "updatedBy": {
+      "@id": "dcterms:contributor",
+      "@type": "xsd:string"
+    },
+    "deleted": {
+      "@id": "om:type/deleted",
+      "@type": "xsd:boolean"
+    },
+    "changeDescription": {
+      "@id": "om:type/ChangeDescription"
+    },
+    "testCases": {
+      "@id": "om:tests/testCase/TestCase",
+      "@container": "@set"
+    },
+    "dataProducts": {
+      "@id": "om:entity/domains/dataProduct/DataProduct",
+      "@container": "@set"
+    },
+    "extension": {
+      "@id": "om:type/customProperty"
+    },
+    "followers": {
+      "@id": "schema:follower",
+      "@container": "@set"
+    },
+    "votes": {
+      "@id": "om:type/votes"
+    },
+    "certification": {
+      "@id": "om:type/AssetCertification"
+    },
+    "lifeCycle": {
+      "@id": "om:type/LifeCycle"
+    }
+  },
+  "@graph": [
+    {
+      "@id": "om:entity/data/table/Table",
+      "@type": "owl:Class",
+      "rdfs:label": "Table",
+      "rdfs:comment": "A relational database table tracked in the OpenMetadata catalog.",
+      "rdfs:subClassOf": "dcat:Dataset"
+    },
+    {
+      "@id": "om:entity/data/dashboard/Dashboard",
+      "@type": "owl:Class",
+      "rdfs:label": "Dashboard",
+      "rdfs:comment": "A BI or analytics dashboard tracked in the OpenMetadata catalog.",
+      "rdfs:subClassOf": "dcat:Dataset"
+    },
+    {
+      "@id": "om:entity/data/pipeline/Pipeline",
+      "@type": "owl:Class",
+      "rdfs:label": "Pipeline",
+      "rdfs:comment": "A data pipeline or ETL workflow tracked in the OpenMetadata catalog.",
+      "rdfs:subClassOf": "prov:Activity"
+    },
+    {
+      "@id": "om:entity/data/topic/Topic",
+      "@type": "owl:Class",
+      "rdfs:label": "Topic",
+      "rdfs:comment": "A messaging or streaming topic tracked in the OpenMetadata catalog.",
+      "rdfs:subClassOf": "dcat:Dataset"
+    },
+    {
+      "@id": "om:entity/data/mlmodel/MlModel",
+      "@type": "owl:Class",
+      "rdfs:label": "ML Model",
+      "rdfs:comment": "A machine learning model tracked in the OpenMetadata catalog.",
+      "rdfs:subClassOf": "dcat:Dataset"
+    },
+    {
+      "@id": "om:entity/data/glossary/GlossaryTerm",
+      "@type": "owl:Class",
+      "rdfs:label": "Glossary Term",
+      "rdfs:comment": "A business glossary term with definition and asset mappings.",
+      "rdfs:subClassOf": "skos:Concept"
+    },
+    {
+      "@id": "om:type/EntityReference",
+      "@type": "owl:Class",
+      "rdfs:label": "Entity Reference",
+      "rdfs:comment": "A lightweight reference to any OpenMetadata entity by ID, type, and fully-qualified name."
+    },
+    {
+      "@id": "om:type/ChangeEvent",
+      "@type": "owl:Class",
+      "rdfs:label": "Change Event",
+      "rdfs:comment": "An event recording a change to a metadata entity, used for audit and event streaming.",
+      "rdfs:subClassOf": "prov:Activity"
+    },
+    {
+      "@id": "om:tests/testCase/TestCase",
+      "@type": "owl:Class",
+      "rdfs:label": "Test Case",
+      "rdfs:comment": "A data quality test assertion validating specific conditions on a data asset."
+    },
+    {
+      "@id": "om:entity/teams/team/Team",
+      "@type": "owl:Class",
+      "rdfs:label": "Team",
+      "rdfs:comment": "An organizational team that can own data assets and manage access in OpenMetadata.",
+      "rdfs:subClassOf": "schema:Organization"
+    },
+    {
+      "@id": "om:entity/teams/user/User",
+      "@type": "owl:Class",
+      "rdfs:label": "User",
+      "rdfs:comment": "An individual user in OpenMetadata who can own assets and be assigned roles.",
+      "rdfs:subClassOf": "schema:Person"
+    }
+  ]
+}

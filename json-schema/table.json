@@ -1,0 +1,343 @@
+{
+  "required": [
+    "columns",
+    "id",
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "fullyQualifiedName": {
+      "maxLength": 3072,
+      "minLength": 1,
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number",
+      "format": "double"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "impersonatedBy": {
+      "type": "string"
+    },
+    "href": {
+      "type": "string",
+      "format": "uri"
+    },
+    "tableType": {
+      "type": "string",
+      "enum": [
+        "Regular",
+        "External",
+        "Dynamic",
+        "View",
+        "SecureView",
+        "MaterializedView",
+        "Iceberg",
+        "Local",
+        "Partitioned",
+        "Foreign",
+        "Transient",
+        "Stream",
+        "Stage"
+      ]
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Column"
+      }
+    },
+    "tableConstraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TableConstraint"
+      }
+    },
+    "tablePartition": {
+      "$ref": "#/components/schemas/TablePartition"
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "databaseSchema": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "database": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "service": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "serviceType": {
+      "type": "string",
+      "enum": [
+        "BigQuery",
+        "BigTable",
+        "Mysql",
+        "Redshift",
+        "Snowflake",
+        "Postgres",
+        "Timescale",
+        "Mssql",
+        "MicrosoftAccess",
+        "Oracle",
+        "Athena",
+        "Hive",
+        "Impala",
+        "Presto",
+        "Trino",
+        "Vertica",
+        "Glue",
+        "MariaDB",
+        "Druid",
+        "Db2",
+        "Clickhouse",
+        "Databricks",
+        "AzureSQL",
+        "DynamoDB",
+        "SingleStore",
+        "SQLite",
+        "DeltaLake",
+        "Salesforce",
+        "PinotDB",
+        "Datalake",
+        "DomoDatabase",
+        "QueryLog",
+        "CustomDatabase",
+        "Dbt",
+        "SapHana",
+        "SapSuccessFactors",
+        "MongoDB",
+        "Cassandra",
+        "Couchbase",
+        "Greenplum",
+        "Doris",
+        "StarRocks",
+        "UnityCatalog",
+        "SAS",
+        "Teradata",
+        "SapErp",
+        "Synapse",
+        "Exasol",
+        "Cockroach",
+        "SSAS",
+        "Epic",
+        "ServiceNow",
+        "Dremio",
+        "MicrosoftFabric",
+        "BurstIQ",
+        "Informix",
+        "Iomete",
+        "QuestDB"
+      ]
+    },
+    "location": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "locationPath": {
+      "type": "string"
+    },
+    "schemaDefinition": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TagLabel"
+      }
+    },
+    "usageSummary": {
+      "$ref": "#/components/schemas/UsageDetails"
+    },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "joins": {
+      "$ref": "#/components/schemas/TableJoins"
+    },
+    "sampleData": {
+      "$ref": "#/components/schemas/TableData"
+    },
+    "tableProfilerConfig": {
+      "$ref": "#/components/schemas/TableProfilerConfig"
+    },
+    "customMetrics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/CustomMetric"
+      }
+    },
+    "profile": {
+      "$ref": "#/components/schemas/TableProfile"
+    },
+    "testSuite": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "dataModel": {
+      "$ref": "#/components/schemas/DataModel"
+    },
+    "changeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "incrementalChangeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "retentionPeriod": {
+      "type": "string"
+    },
+    "compressionEnabled": {
+      "type": "boolean"
+    },
+    "compressionCodec": {
+      "type": "string"
+    },
+    "compressionStrategy": {
+      "$ref": "#/components/schemas/CompressionStrategy"
+    },
+    "extension": {
+      "type": "object"
+    },
+    "sourceUrl": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataProducts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataContract": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "fileFormat": {
+      "type": "string",
+      "enum": [
+        "csv",
+        "csv.gz",
+        "tsv",
+        "avro",
+        "parquet",
+        "pq",
+        "pqt",
+        "parq",
+        "parquet.snappy",
+        "json",
+        "json.gz",
+        "json.zip",
+        "jsonl",
+        "jsonl.gz",
+        "jsonl.zip",
+        "MF4"
+      ]
+    },
+    "votes": {
+      "$ref": "#/components/schemas/Votes"
+    },
+    "lifeCycle": {
+      "$ref": "#/components/schemas/LifeCycle"
+    },
+    "certification": {
+      "$ref": "#/components/schemas/AssetCertification"
+    },
+    "sourceHash": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "processedLineage": {
+      "type": "boolean"
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pipelineObservability": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/PipelineObservability"
+      }
+    },
+    "entityStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Approved",
+        "Archived",
+        "Deprecated",
+        "Rejected",
+        "Unprocessed"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "system",
+        "user",
+        "automation"
+      ]
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "style": {
+      "$ref": "#/components/schemas/Style"
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/openmetadata/main/json-schema/table.json"
+}

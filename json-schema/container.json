@@ -1,0 +1,212 @@
+{
+  "required": [
+    "id",
+    "name",
+    "service"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "fullyQualifiedName": {
+      "maxLength": 3072,
+      "minLength": 1,
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number",
+      "format": "double"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "impersonatedBy": {
+      "type": "string"
+    },
+    "href": {
+      "type": "string",
+      "format": "uri"
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "service": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "parent": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataModel": {
+      "$ref": "#/components/schemas/ContainerDataModel"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "numberOfObjects": {
+      "type": "number",
+      "format": "double"
+    },
+    "size": {
+      "type": "number",
+      "format": "double"
+    },
+    "fileFormats": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "zip",
+          "gz",
+          "zstd",
+          "csv",
+          "tsv",
+          "json",
+          "parquet",
+          "avro",
+          "MF4"
+        ]
+      }
+    },
+    "serviceType": {
+      "type": "string",
+      "enum": [
+        "S3",
+        "ADLS",
+        "GCS",
+        "CustomStorage"
+      ]
+    },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TagLabel"
+      }
+    },
+    "changeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "incrementalChangeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "retentionPeriod": {
+      "type": "string"
+    },
+    "extension": {
+      "type": "object"
+    },
+    "sampleData": {
+      "$ref": "#/components/schemas/TableData"
+    },
+    "sourceUrl": {
+      "type": "string"
+    },
+    "fullPath": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataProducts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataContract": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "votes": {
+      "$ref": "#/components/schemas/Votes"
+    },
+    "lifeCycle": {
+      "$ref": "#/components/schemas/LifeCycle"
+    },
+    "certification": {
+      "$ref": "#/components/schemas/AssetCertification"
+    },
+    "sourceHash": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "entityStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Approved",
+        "Archived",
+        "Deprecated",
+        "Rejected",
+        "Unprocessed"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "system",
+        "user",
+        "automation"
+      ]
+    },
+    "style": {
+      "$ref": "#/components/schemas/Style"
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "usageSummary": {
+      "$ref": "#/components/schemas/UsageDetails"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/openmetadata/main/json-schema/container.json"
+}

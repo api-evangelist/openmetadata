@@ -1,0 +1,197 @@
+{
+  "required": [
+    "description",
+    "glossary",
+    "id",
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "style": {
+      "$ref": "#/components/schemas/Style"
+    },
+    "fullyQualifiedName": {
+      "maxLength": 3072,
+      "minLength": 1,
+      "type": "string"
+    },
+    "synonyms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "glossary": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "parent": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "relatedTerms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TermRelation"
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TermReference"
+      }
+    },
+    "conceptMappings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/ConceptMapping"
+      }
+    },
+    "version": {
+      "type": "number",
+      "format": "double"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "impersonatedBy": {
+      "type": "string"
+    },
+    "href": {
+      "type": "string",
+      "format": "uri"
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "usageCount": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TagLabel"
+      }
+    },
+    "changeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "incrementalChangeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "entityStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Approved",
+        "Archived",
+        "Deprecated",
+        "Rejected",
+        "Unprocessed"
+      ]
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "system",
+        "user",
+        "automation"
+      ]
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "mutuallyExclusive": {
+      "type": "boolean"
+    },
+    "extension": {
+      "type": "object"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataProducts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataContract": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "votes": {
+      "$ref": "#/components/schemas/Votes"
+    },
+    "childrenCount": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "service": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "usageSummary": {
+      "$ref": "#/components/schemas/UsageDetails"
+    },
+    "lifeCycle": {
+      "$ref": "#/components/schemas/LifeCycle"
+    },
+    "certification": {
+      "$ref": "#/components/schemas/AssetCertification"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/openmetadata/main/json-schema/glossaryterm.json"
+}

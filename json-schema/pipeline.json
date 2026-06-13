@@ -1,0 +1,223 @@
+{
+  "required": [
+    "id",
+    "name",
+    "service"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^((?!::).)*$",
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "fullyQualifiedName": {
+      "maxLength": 3072,
+      "minLength": 1,
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "dataProducts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "dataContract": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "version": {
+      "type": "number",
+      "format": "double"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "impersonatedBy": {
+      "type": "string"
+    },
+    "sourceUrl": {
+      "type": "string"
+    },
+    "concurrency": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "pipelineLocation": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Task"
+      }
+    },
+    "pipelineStatus": {
+      "$ref": "#/components/schemas/PipelineStatus"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Inactive"
+      ]
+    },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/TagLabel"
+      }
+    },
+    "href": {
+      "type": "string",
+      "format": "uri"
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "service": {
+      "$ref": "#/components/schemas/EntityReference"
+    },
+    "serviceType": {
+      "type": "string",
+      "enum": [
+        "Airflow",
+        "GluePipeline",
+        "KinesisFirehose",
+        "Airbyte",
+        "Fivetran",
+        "Flink",
+        "Dagster",
+        "Nifi",
+        "DomoPipeline",
+        "CustomPipeline",
+        "DatabricksPipeline",
+        "Spline",
+        "Spark",
+        "OpenLineage",
+        "KafkaConnect",
+        "DBTCloud",
+        "Matillion",
+        "Stitch",
+        "DataFactory",
+        "Wherescape",
+        "SSIS",
+        "Snowplow",
+        "Mulesoft",
+        "MicrosoftFabricPipeline"
+      ]
+    },
+    "usageSummary": {
+      "$ref": "#/components/schemas/UsageDetails"
+    },
+    "changeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "incrementalChangeDescription": {
+      "$ref": "#/components/schemas/ChangeDescription"
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "extension": {
+      "type": "object"
+    },
+    "scheduleInterval": {
+      "type": "string"
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "votes": {
+      "$ref": "#/components/schemas/Votes"
+    },
+    "lifeCycle": {
+      "$ref": "#/components/schemas/LifeCycle"
+    },
+    "certification": {
+      "$ref": "#/components/schemas/AssetCertification"
+    },
+    "sourceHash": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "entityStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Approved",
+        "Archived",
+        "Deprecated",
+        "Rejected",
+        "Unprocessed"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "system",
+        "user",
+        "automation"
+      ]
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "style": {
+      "$ref": "#/components/schemas/Style"
+    },
+    "experts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/EntityReference"
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/openmetadata/main/json-schema/pipeline.json"
+}
