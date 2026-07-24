@@ -1,0 +1,537 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions RDF API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: RDF
+  description: APIs for RDF and SPARQL operations
+paths:
+  /v1/rdf/debug/glossary-relations:
+    get:
+      tags:
+      - RDF
+      summary: Debug glossary term relations in RDF
+      description: Diagnostic endpoint to inspect what predicates are stored between glossary terms in the RDF store
+      operationId: debugGlossaryRelations
+      responses:
+        '200':
+          description: Debug information about glossary term relations
+          content:
+            application/json: {}
+        '503':
+          description: RDF service not enabled
+  /v1/rdf/graph/explore:
+    get:
+      tags:
+      - RDF
+      summary: Explore entity graph
+      description: Get graph data for an entity with relationships up to specified depth
+      operationId: exploreEntityGraph
+      parameters:
+      - name: entityId
+        in: query
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityType
+        in: query
+        description: Entity type
+        required: true
+        schema:
+          type: string
+      - name: depth
+        in: query
+        description: Depth of relationships to explore
+        schema:
+          type: integer
+          format: int32
+          default: 2
+      - name: entityTypes
+        in: query
+        description: Comma-separated entity types to keep in the graph
+        schema:
+          type: string
+      - name: relationshipTypes
+        in: query
+        description: Comma-separated relationship types to keep in the graph
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Graph data with nodes and edges
+          content:
+            application/json: {}
+        '404':
+          description: Entity not found
+        '503':
+          description: RDF service not enabled
+  /v1/rdf/graph/explore/export:
+    get:
+      tags:
+      - RDF
+      summary: Export explored entity graph
+      description: Export the currently explored entity graph in Turtle or JSON-LD format
+      operationId: exportEntityGraph
+      parameters:
+      - name: entityId
+        in: query
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityType
+        in: query
+        description: Entity type
+        required: true
+        schema:
+          type: string
+      - name: depth
+        in: query
+        description: Depth of relationships to explore
+        schema:
+          type: integer
+          format: int32
+          default: 2
+      - name: entityTypes
+        in: query
+        description: Comma-separated entity types to keep in the graph
+        schema:
+          type: string
+      - name: relationshipTypes
+        in: query
+        description: Comma-separated relationship types to keep in the graph
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: 'Export format: turtle or jsonld'
+        schema:
+          type: string
+          default: turtle
+      responses:
+        '200':
+          description: Entity graph exported successfully
+        '400':
+          description: Invalid request
+        '503':
+          description: RDF service not enabled
+  /v1/rdf/glossary/{id}/export:
+    get:
+      tags:
+      - RDF
+      summary: Export glossary as ontology
+      description: Export a glossary with all its terms and relationships as an ontology in RDF format (Turtle, RDF/XML, N-Triples, or JSON-LD). Includes SKOS vocabulary for semantic interoperability.
+      operationId: exportGlossaryAsOntology
+      parameters:
+      - name: id
+        in: path
+        description: Glossary ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: format
+        in: query
+        description: RDF format (turtle, rdfxml, ntriples, jsonld)
+        schema:
+          type: string
+          default: turtle
+      - name: includeRelations
+        in: query
+        description: Include term relations
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Glossary exported as ontology
+          content:
+            text/turtle: {}
+            application/rdf+xml: {}
+            application/n-triples: {}
+            application/ld+json: {}
+        '404':
+          description: Glossary not found
+        '503':
+          description: RDF service not enabled
+  /v1/rdf/search/similar/{entityType}/{id}:
+    get:
+      tags:
+      - RDF
+      summary: Find similar entities
+      description: Find entities similar to the given entity using semantic analysis
+      operationId: findSimilarEntities
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Maximum number of results
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: Similar entities
+          content:
+            application/json: {}
+        '404':
+          description: Entity not found
+        '503':
+          description: Service unavailable
+  /v1/rdf/entity/{entityType}/{id}:
+    get:
+      tags:
+      - RDF
+      summary: Get entity as RDF
+      description: Retrieve an entity in RDF format (JSON-LD, Turtle, RDF/XML, N-Triples)
+      operationId: getEntityAsRdf
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: format
+        in: query
+        description: RDF format
+        schema:
+          type: string
+          default: jsonld
+      responses:
+        '200':
+          description: Entity in requested RDF format
+          content:
+            application/ld+json: {}
+            text/turtle: {}
+            application/rdf+xml: {}
+            application/n-triples: {}
+        '404':
+          description: Entity not found
+        '503':
+          description: RDF service not enabled
+  /v1/rdf/inference/lineage/{entityId}:
+    get:
+      tags:
+      - RDF
+      summary: Get full lineage with inference
+      description: Get complete upstream and downstream lineage including transitive relationships
+      operationId: getFullLineage
+      parameters:
+      - name: entityId
+        in: path
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: entityType
+        in: query
+        description: Entity type
+        required: true
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: Direction (upstream, downstream, both)
+        schema:
+          type: string
+          default: both
+      responses:
+        '200':
+          description: Lineage retrieved successfully
+        '404':
+          description: Entity not found
+  /v1/rdf/glossary/graph:
+    get:
+      tags:
+      - RDF
+      summary: Get glossary term relationship graph
+      description: Get all glossary terms and their relationships as a graph. Supports filtering by glossary and pagination for large datasets.
+      operationId: getGlossaryTermGraph
+      parameters:
+      - name: glossaryId
+        in: query
+        description: Filter by glossary ID (UUID)
+        schema:
+          type: string
+          format: uuid
+      - name: relationTypes
+        in: query
+        description: Filter by relation types (comma-separated)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of terms to return
+        schema:
+          type: integer
+          format: int32
+          default: 500
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: includeIsolated
+        in: query
+        description: Include isolated terms (terms without relations)
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Graph data with nodes and edges
+          content:
+            application/json: {}
+        '503':
+          description: RDF service not enabled
+  /v1/rdf/status:
+    get:
+      tags:
+      - RDF
+      summary: Get RDF service status
+      description: Check RDF service status including inference configuration
+      operationId: getRdfStatus
+      responses:
+        '200':
+          description: RDF service status with inference information
+          content:
+            application/json: {}
+  /v1/rdf/search/recommendations/{userId}:
+    get:
+      tags:
+      - RDF
+      summary: Get personalized recommendations
+      description: Get entity recommendations based on user's interaction history
+      operationId: getRecommendations
+      parameters:
+      - name: userId
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: type
+        in: query
+        description: Entity type for recommendations
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of results
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: Recommended entities
+          content:
+            application/json: {}
+        '404':
+          description: User not found
+        '503':
+          description: Service unavailable
+  /v1/rdf/sparql:
+    get:
+      tags:
+      - RDF
+      summary: Execute SPARQL query via GET
+      description: Execute a SPARQL query against the RDF store using GET method
+      operationId: querySparqlGet
+      parameters:
+      - name: query
+        in: query
+        description: SPARQL query string
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Response format (json, xml, csv, tsv)
+        schema:
+          type: string
+          default: json
+      - name: inference
+        in: query
+        description: Enable inference/reasoning (none, rdfs, owl, custom)
+        schema:
+          type: string
+          default: none
+      responses:
+        '200':
+          description: Query executed successfully
+          content:
+            application/json: {}
+        '400':
+          description: Invalid query
+        '500':
+          description: Internal server error
+    post:
+      tags:
+      - RDF
+      summary: Execute SPARQL query via POST
+      description: Execute a SPARQL query against the RDF store using POST method
+      operationId: querySparqlPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SparqlQuery'
+      responses:
+        '200':
+          description: Query executed successfully
+          content:
+            application/json: {}
+        '400':
+          description: Invalid query
+        '500':
+          description: Internal server error
+  /v1/rdf/search/semantic:
+    get:
+      tags:
+      - RDF
+      summary: Semantic search across entities
+      description: Search for entities using semantic understanding and graph relationships
+      operationId: semanticSearch
+      parameters:
+      - name: q
+        in: query
+        description: Search query
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Entity type to search
+        schema:
+          type: string
+        example: table
+      - name: limit
+        in: query
+        description: Maximum number of results
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json: {}
+        '400':
+          description: Invalid request
+        '503':
+          description: Service unavailable
+  /v1/rdf/sparql/update:
+    post:
+      tags:
+      - RDF
+      summary: Execute SPARQL UPDATE
+      description: Execute a SPARQL UPDATE operation (INSERT, DELETE, etc.)
+      operationId: updateSparql
+      requestBody:
+        description: SPARQL UPDATE query
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SparqlQuery'
+        required: true
+      responses:
+        '200':
+          description: Update executed successfully
+        '400':
+          description: Invalid update query
+        '403':
+          description: Forbidden - insufficient permissions
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    SparqlQuery:
+      required:
+      - query
+      type: object
+      properties:
+        query:
+          type: string
+        format:
+          type: string
+          enum:
+          - json
+          - xml
+          - csv
+          - tsv
+          - turtle
+          - rdfxml
+          - ntriples
+          - jsonld
+        timeout:
+          maximum: 300000
+          exclusiveMaximum: false
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        defaultGraphUri:
+          type: string
+          format: uri
+        namedGraphUri:
+          type: array
+          items:
+            type: string
+            format: uri
+        inference:
+          type: string
+          enum:
+          - none
+          - rdfs
+          - owl
+          - custom
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

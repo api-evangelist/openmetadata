@@ -1,0 +1,2162 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Ingestion Pipelines API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Ingestion Pipelines
+  description: APIs related pipelines/workflows created by the system to ingest metadata.
+paths:
+  /v1/services/ingestionPipelines/{id}/followers:
+    put:
+      tags:
+      - Ingestion Pipelines
+      summary: Add a follower
+      description: Add a user identified by `userId` as followed of this ingestion pipeline
+      operationId: addFollowerToIngestionPipeline
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Ingestion Pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Ingestion Pipeline for instance {id} is not found
+  /v1/services/ingestionPipelines/{fqn}/pipelineStatus:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: List of pipeline status
+      description: Get a list of pipeline statuses for the given ingestion pipeline id. Optionally filter by `startTs` and `endTs`. When no time range is provided, the latest 5 runs are returned by default. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.
+      operationId: listPipelineStatuses_1
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter pipeline status after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter pipeline status before the given end timestamp
+        schema:
+          type: number
+      - name: limit
+        in: query
+        description: Maximum number of pipeline statuses to return
+        schema:
+          minimum: 1
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: List of pipeline status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineStatusList'
+    put:
+      tags:
+      - Ingestion Pipelines
+      summary: Add pipeline status
+      description: Add pipeline status of ingestion pipeline.
+      operationId: addPipelineStatus
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PipelineStatus'
+      responses:
+        '200':
+          description: 'Successfully updated the PipelineStatus. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+  /v1/services/ingestionPipelines/bulk/deploy:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Bulk deploy a list of Ingestion Pipeline
+      description: Bulk deploy a list of Ingestion Pipelines given a list of IDs
+      operationId: bulkDeployIngestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                format: uuid
+      responses:
+        '200':
+          description: List of Statuses of the deployed pipelines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PipelineServiceClientResponse'
+  /v1/services/ingestionPipelines/logs/{fqn}/{runId}/close:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Close log stream for a pipeline run
+      description: Close and finalize the log stream for a specific pipeline run identified by FQN and runId. This ensures any buffered data is written and the stream is properly closed.
+      operationId: closePipelineLogStream
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully closed log stream
+          content:
+            application/json: {}
+        '404':
+          description: Pipeline not found
+        '500':
+          description: Internal server error
+  /v1/services/ingestionPipelines:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: List ingestion pipelines for metadata operations
+      description: Get a list of airflow pipelines for metadata operations. Use `fields` parameter to get only necessary fields.  Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listIngestionPipelines
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers
+      - name: service
+        in: query
+        description: Filter Ingestion Pipelines by service fully qualified name
+        schema:
+          type: string
+          example: snowflakeWestCoast
+      - name: testSuite
+        in: query
+        description: Filter Ingestion Pipelines by test suite fully qualified name
+        schema:
+          type: string
+          example: service.db.schema.name.testSuite
+      - name: pipelineType
+        in: query
+        description: Filter Ingestion Pipelines by pipeline Type
+        schema:
+          type: string
+          example: elasticSearchReindex
+      - name: serviceType
+        in: query
+        description: Filter Ingestion Pipelines by service Type
+        schema:
+          type: string
+          example: messagingService
+      - name: applicationType
+        in: query
+        description: Filter Ingestion Pipelines by the type of the application
+        schema:
+          type: string
+          example: Automator
+      - name: limit
+        in: query
+        description: Limit the number ingestion returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of ingestion before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of ingestion after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: provider
+        in: query
+        description: List Ingestion Pipelines by provider..
+        schema:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+      responses:
+        '200':
+          description: List of ingestion workflows
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipelineList'
+    put:
+      tags:
+      - Ingestion Pipelines
+      summary: Create or update an ingestion pipeline
+      description: Create a new ingestion pipeline, if it does not exist or update an existing ingestion pipeline.
+      operationId: createOrUpdateIngestionPipeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIngestionPipeline'
+      responses:
+        '200':
+          description: The IngestionPipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Create an ingestion pipeline
+      description: Create a new ingestion pipeline.
+      operationId: createIngestionPipeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIngestionPipeline'
+      responses:
+        '200':
+          description: The Ingestion Pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+        '400':
+          description: Bad request
+  /v1/services/ingestionPipelines/name/{fqn}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Get an ingestion pipeline by fully qualified name
+      description: Get an ingestion by fully qualified name.
+      operationId: getSpecificIngestionPipelineByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: IngestionPipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+        '404':
+          description: Ingestion for instance {fqn} is not found
+    delete:
+      tags:
+      - Ingestion Pipelines
+      summary: Delete an ingestion pipeline by fully qualified name
+      description: Delete an ingestion pipeline by `fullyQualifiedName`.
+      operationId: deleteIngestionPipelineByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Ingestion for instance {fqn} is not found
+    patch:
+      tags:
+      - Ingestion Pipelines
+      summary: Update an ingestion pipeline using name.
+      description: Update an existing ingestion pipeline using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchIngestionPipeline
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/services/ingestionPipelines/{id}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Get an ingestion pipeline by Id
+      description: Get an ingestion pipeline by `Id`.
+      operationId: getIngestionPipelineByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The ingestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+        '404':
+          description: IngestionPipeline for instance {id} is not found
+    delete:
+      tags:
+      - Ingestion Pipelines
+      summary: Delete an ingestion pipeline by Id
+      description: Delete an ingestion pipeline by `Id`.
+      operationId: deleteIngestionPipeline
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Ingestion for instance {id} is not found
+    patch:
+      tags:
+      - Ingestion Pipelines
+      summary: Update an ingestion pipeline
+      description: Update an existing ingestion pipeline using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchIngestionPipeline_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/services/ingestionPipelines/async/{id}:
+    delete:
+      tags:
+      - Ingestion Pipelines
+      summary: Asynchronously delete an ingestion pipeline by Id
+      description: Asynchronously delete an ingestion pipeline by `Id`.
+      operationId: deleteIngestionPipelineAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Ingestion for instance {id} is not found
+  /v1/services/ingestionPipelines/{id}/followers/{userId}:
+    delete:
+      tags:
+      - Ingestion Pipelines
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the entity.
+      operationId: deleteFollower_18
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Entity
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/services/ingestionPipelines/{id}/pipelineStatus:
+    delete:
+      tags:
+      - Ingestion Pipelines
+      summary: Delete Pipeline Status
+      description: Delete the Pipeline Status for this Ingestion Pipeline.
+      operationId: deletePipelineStatus
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Ingestion Pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successfully deleted the Statuses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+  /v1/services/ingestionPipelines/{id}/pipelineStatus/{runId}:
+    delete:
+      tags:
+      - Ingestion Pipelines
+      summary: Delete pipeline status by run ID
+      description: Delete a specific pipeline status by its run ID for the given ingestion pipeline.
+      operationId: deletePipelineStatusByRunId
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Ingestion Pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: runId
+        in: path
+        description: Run ID of the pipeline status
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Pipeline status deleted successfully
+        '404':
+          description: Ingestion Pipeline or Pipeline Status not found
+  /v1/services/ingestionPipelines/deploy/{id}:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Deploy an ingestion pipeline run
+      description: Deploy a ingestion pipeline run by Id.
+      operationId: deployIngestion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The ingestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineServiceClientResponse'
+        '404':
+          description: Ingestion for instance {id} is not found
+  /v1/services/ingestionPipelines/logs/{id}/last/download:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Download all logs from last ingestion pipeline run as a stream
+      description: Stream all logs from last ingestion pipeline run by `Id` for download.
+      operationId: downloadLastIngestionLogs
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Log content as a downloadable stream
+          content:
+            application/octet-stream: {}
+        '404':
+          description: Logs for instance {id} is not found
+  /v1/services/ingestionPipelines/ip:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Check the airflow REST host IP
+      description: Check the Airflow REST host IP
+      operationId: checkAirflowHostIp
+      responses:
+        '200':
+          description: Pipeline Service host IP
+          content:
+            application/json: {}
+  /v1/services/ingestionPipelines/logs/{id}/last:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Retrieve all logs from last ingestion pipeline run
+      description: Get all logs from last ingestion pipeline run by `Id`.
+      operationId: getLastIngestionLogs
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: after
+        in: query
+        description: Returns log chunk after this cursor
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of lines to return
+        schema:
+          type: integer
+          format: int64
+          default: 1000
+      responses:
+        '200':
+          description: JSON object with the task instance name of the ingestion on each key and log in the value
+          content:
+            application/json: {}
+        '404':
+          description: Logs for instance {id} is not found
+  /v1/services/ingestionPipelines/logs/{fqn}/{runId}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Get logs for a pipeline run
+      description: Get logs for a specific pipeline run identified by FQN and runId with pagination support
+      operationId: getPipelineLogs
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns log chunk after this cursor
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of lines to return
+        schema:
+          type: integer
+          format: int64
+          default: 1000
+      responses:
+        '200':
+          description: Pipeline logs
+          content:
+            application/json: {}
+        '404':
+          description: Logs not found
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Write logs for a pipeline run
+      description: Write or append logs for a specific pipeline run identified by FQN and runId. Supports both simple text logs and structured log batches with compression.
+      operationId: writePipelineLogs
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Log content - either raw string or LogBatch object
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Successfully wrote logs
+          content:
+            application/json: {}
+        '404':
+          description: Pipeline not found
+        '500':
+          description: Internal server error
+  /v1/services/ingestionPipelines/{fqn}/pipelineStatus/{id}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Get pipeline status
+      description: Get pipeline status of ingestion pipeline
+      operationId: getPipelineStatus
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id of pipeline status run
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully updated state of the PipelineStatus.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineStatus'
+  /v1/services/ingestionPipelines/status:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Check the airflow REST status
+      description: Check that the Airflow REST endpoint is reachable and up and running
+      operationId: checkRestAirflowStatus
+      responses:
+        '200':
+          description: Status message
+          content:
+            application/json: {}
+  /v1/services/ingestionPipelines/{id}/versions/{version}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Get a version of the ingestion pipeline
+      description: Get a version of the ingestion pipeline by given `Id`
+      operationId: getSpecificIngestionPipelineVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Ingestion version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: IngestionPipelines
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+        '404':
+          description: IngestionPipeline for instance {id} and version  {version} is not found
+  /v1/services/ingestionPipelines/kill/{id}:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Mark as failed and kill any not-finished workflow or task for the ingestion pipeline
+      description: Kill an ingestion pipeline by Id.
+      operationId: killIngestionPipelineRuns
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The ingestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineServiceClientResponse'
+        '404':
+          description: Ingestion for instance {id} is not found
+  /v1/services/ingestionPipelines/history:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_44
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/services/ingestionPipelines/logs/{fqn}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: List available runs for a pipeline
+      description: Get a list of available run IDs for a pipeline
+      operationId: listPipelineRuns
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of runs to return
+        schema:
+          type: integer
+          format: int64
+          default: 10
+      responses:
+        '200':
+          description: List of run IDs
+          content:
+            application/json: {}
+        '404':
+          description: Pipeline not found
+  /v1/services/ingestionPipelines/{id}/versions:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: List ingestion workflow versions
+      description: Get a list of all the versions of a ingestion pipeline identified by `Id`
+      operationId: listAllIngestionPipelineVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of IngestionPipeline versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/services/ingestionPipelines/restore:
+    put:
+      tags:
+      - Ingestion Pipelines
+      summary: Restore a soft deleted ingestion pipeline
+      description: Restore a soft deleted ingestion pipeline.
+      operationId: restore_34
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the IngestionPipeline. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+  /v1/services/ingestionPipelines/logs/{fqn}/stream/{runId}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Stream logs for a pipeline run
+      description: Stream logs in real-time for a specific pipeline run using Server-Sent Events
+      operationId: streamPipelineLogs
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Log stream
+          content:
+            text/event-stream: {}
+        '404':
+          description: Pipeline or logs not found
+  /v1/services/ingestionPipelines/progress/{fqn}/stream/{runId}:
+    get:
+      tags:
+      - Ingestion Pipelines
+      summary: Stream progress updates for a pipeline run
+      description: Stream real-time progress updates for a specific pipeline run using Server-Sent Events
+      operationId: streamPipelineProgress
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Progress stream
+          content:
+            text/event-stream: {}
+        '404':
+          description: Pipeline not found
+  /v1/services/ingestionPipelines/metrics/{fqn}/{runId}:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Submit operation metrics batch
+      description: Submit a batch of operation metrics for a pipeline run
+      operationId: submitOperationMetrics
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Operation metrics batch
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationMetricsBatch'
+      responses:
+        '200':
+          description: Metrics accepted
+        '404':
+          description: Pipeline not found
+  /v1/services/ingestionPipelines/toggleIngestion/{id}:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Set an ingestion pipeline either as enabled or disabled
+      description: Toggle an ingestion pipeline state by Id.
+      operationId: toggleIngestionPipelineEnabled
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The ingestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionPipeline'
+        '404':
+          description: Ingestion for instance {id} is not found
+  /v1/services/ingestionPipelines/trigger/{id}:
+    post:
+      tags:
+      - Ingestion Pipelines
+      summary: Trigger an ingestion pipeline run
+      description: Trigger a ingestion pipeline run by id.
+      operationId: triggerIngestionPipelineRun
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The ingestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineServiceClientResponse'
+        '404':
+          description: Ingestion for instance {id} is not found
+  /v1/services/ingestionPipelines/progress/{fqn}/{runId}:
+    put:
+      tags:
+      - Ingestion Pipelines
+      summary: Update pipeline progress
+      description: Update real-time progress for a pipeline run
+      operationId: updatePipelineProgress
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the ingestion pipeline
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: path
+        description: Run ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Progress update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgressUpdate'
+      responses:
+        '200':
+          description: Progress updated
+        '404':
+          description: Pipeline not found
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    PipelineStatusList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineStatus'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    IngestionPipelineList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestionPipeline'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    OperationMetric:
+      required:
+      - category
+      - operation
+      - timestamp
+      type: object
+      properties:
+        category:
+          type: string
+        operation:
+          type: string
+        entityType:
+          type: string
+        entityFqn:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        durationMs:
+          type: integer
+          format: int32
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+    StackTraceError:
+      required:
+      - error
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        error:
+          type: string
+        stackTrace:
+          type: string
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    Progress:
+      type: object
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    FilterPattern:
+      type: object
+      properties:
+        includes:
+          type: array
+          items:
+            type: string
+        excludes:
+          type: array
+          items:
+            type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    OpenMetadataConnection:
+      required:
+      - hostPort
+      type: object
+      properties:
+        clusterName:
+          type: string
+        type:
+          type: string
+          enum:
+          - OpenMetadata
+        hostPort:
+          type: string
+        authProvider:
+          type: string
+          enum:
+          - basic
+          - azure
+          - google
+          - okta
+          - auth0
+          - aws-cognito
+          - custom-oidc
+          - ldap
+          - saml
+          - openmetadata
+        verifySSL:
+          type: string
+          enum:
+          - no-ssl
+          - ignore
+          - validate
+        sslConfig:
+          type: object
+        securityConfig:
+          $ref: '#/components/schemas/OpenMetadataJWTClientConfig'
+        secretsManagerProvider:
+          type: string
+          enum:
+          - db
+          - managed-aws
+          - aws
+          - managed-aws-ssm
+          - aws-ssm
+          - managed-azure-kv
+          - azure-kv
+          - in-memory
+          - gcp
+          - kubernetes
+        secretsManagerLoader:
+          type: string
+          enum:
+          - noop
+          - airflow
+          - env
+        apiVersion:
+          type: string
+        includeTopics:
+          type: boolean
+        includeTables:
+          type: boolean
+        includeDashboards:
+          type: boolean
+        includePipelines:
+          type: boolean
+        includeMlModels:
+          type: boolean
+        includeUsers:
+          type: boolean
+        includeTeams:
+          type: boolean
+        includeGlossaryTerms:
+          type: boolean
+        includeTags:
+          type: boolean
+        includePolicy:
+          type: boolean
+        includeMessagingServices:
+          type: boolean
+        enableVersionValidation:
+          type: boolean
+        includeDatabaseServices:
+          type: boolean
+        includePipelineServices:
+          type: boolean
+        limitRecords:
+          type: integer
+          format: int32
+        forceEntityOverwriting:
+          type: boolean
+        storeServiceConnection:
+          type: boolean
+        elasticsSearch:
+          $ref: '#/components/schemas/ElasticsSearch'
+        schemaFilterPattern:
+          $ref: '#/components/schemas/FilterPattern'
+        tableFilterPattern:
+          $ref: '#/components/schemas/FilterPattern'
+        databaseFilterPattern:
+          $ref: '#/components/schemas/FilterPattern'
+        supportsDataInsightExtraction:
+          type: boolean
+        supportsElasticSearchReindexingExtraction:
+          type: boolean
+        extraHeaders:
+          $ref: '#/components/schemas/ExtraHeaders'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    IngestionPipeline:
+      required:
+      - airflowConfig
+      - name
+      - pipelineType
+      - sourceConfig
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        pipelineType:
+          type: string
+          enum:
+          - metadata
+          - usage
+          - lineage
+          - profiler
+          - autoClassification
+          - TestSuite
+          - dataInsight
+          - elasticSearchReindex
+          - dbt
+          - application
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        sourceConfig:
+          $ref: '#/components/schemas/SourceConfig'
+        openMetadataServerConnection:
+          $ref: '#/components/schemas/OpenMetadataConnection'
+        airflowConfig:
+          $ref: '#/components/schemas/AirflowConfig'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        pipelineStatuses:
+          $ref: '#/components/schemas/PipelineStatus'
+        loggerLevel:
+          type: string
+          enum:
+          - DEBUG
+          - INFO
+          - WARN
+          - ERROR
+        raiseOnError:
+          type: boolean
+        deployed:
+          type: boolean
+        enabled:
+          type: boolean
+        enableStreamableLogs:
+          type: boolean
+        href:
+          type: string
+          format: uri
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        deleted:
+          type: boolean
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        applicationType:
+          type: string
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        processingEngine:
+          $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    SourceConfig:
+      type: object
+      properties:
+        config:
+          type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ComponentConfig:
+      type: object
+    JsonPatch:
+      type: object
+    PipelineServiceClientResponse:
+      required:
+      - code
+      - platform
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        reason:
+          type: string
+        platform:
+          type: string
+        version:
+          type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    AirflowConfig:
+      type: object
+      properties:
+        pausePipeline:
+          type: boolean
+        concurrency:
+          type: integer
+          format: int32
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        pipelineTimezone:
+          type: string
+        retries:
+          type: integer
+          format: int32
+        retryDelay:
+          type: integer
+          format: int32
+        pipelineCatchup:
+          type: boolean
+        scheduleInterval:
+          type: string
+        maxActiveRuns:
+          type: integer
+          format: int32
+        workflowTimeout:
+          type: integer
+          format: int32
+        workflowDefaultView:
+          type: string
+        workflowDefaultViewOrientation:
+          type: string
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+    ElasticsSearch:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/ComponentConfig'
+    OperationMetricsBatch:
+      required:
+      - metrics
+      - runId
+      - stepName
+      type: object
+      properties:
+        runId:
+          type: string
+        stepName:
+          type: string
+        batchTimestamp:
+          type: integer
+          format: int64
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperationMetric'
+    PipelineStatus:
+      type: object
+      properties:
+        runId:
+          type: string
+        pipelineState:
+          type: string
+          enum:
+          - queued
+          - success
+          - failed
+          - running
+          - partialSuccess
+          - stopped
+        startDate:
+          type: integer
+          format: int64
+        timestamp:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        status:
+          type: array
+          items:
+            $ref: '#/components/schemas/StepSummary'
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    StepSummary:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        records:
+          type: integer
+          format: int32
+        updated_records:
+          type: integer
+          format: int32
+        warnings:
+          type: integer
+          format: int32
+        errors:
+          type: integer
+          format: int32
+        filtered:
+          type: integer
+          format: int32
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StackTraceError'
+        progress:
+          $ref: '#/components/schemas/Progress'
+        operationMetrics:
+          $ref: '#/components/schemas/OperationMetrics'
+        sourceTimeMs:
+          type: number
+          format: double
+        sinkTimeMs:
+          type: number
+          format: double
+    ProgressUpdate:
+      required:
+      - runId
+      - timestamp
+      - updateType
+      type: object
+      properties:
+        runId:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        updateType:
+          type: string
+          enum:
+          - DISCOVERY
+          - PROCESSING
+          - STEP_COMPLETE
+          - PIPELINE_COMPLETE
+          - ERROR
+        stepName:
+          type: string
+        progress:
+          type: object
+          additionalProperties:
+            type: object
+        currentEntity:
+          type: string
+        message:
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ExtraHeaders:
+      type: object
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    CreateIngestionPipeline:
+      required:
+      - airflowConfig
+      - name
+      - pipelineType
+      - service
+      - sourceConfig
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        pipelineType:
+          type: string
+          enum:
+          - metadata
+          - usage
+          - lineage
+          - profiler
+          - autoClassification
+          - TestSuite
+          - dataInsight
+          - elasticSearchReindex
+          - dbt
+          - application
+        sourceConfig:
+          $ref: '#/components/schemas/SourceConfig'
+        airflowConfig:
+          $ref: '#/components/schemas/AirflowConfig'
+        loggerLevel:
+          type: string
+          enum:
+          - DEBUG
+          - INFO
+          - WARN
+          - ERROR
+        raiseOnError:
+          type: boolean
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        domains:
+          type: array
+          items:
+            type: string
+        processingEngine:
+          $ref: '#/components/schemas/EntityReference'
+        enableStreamableLogs:
+          type: boolean
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    OperationMetrics:
+      type: object
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    OpenMetadataJWTClientConfig:
+      required:
+      - jwtToken
+      type: object
+      properties:
+        jwtToken:
+          type: string
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

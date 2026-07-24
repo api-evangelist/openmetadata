@@ -1,0 +1,330 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Usage API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Usage
+  description: APIs related usage of data assets.
+paths:
+  /v1/usage/{entity}/{id}:
+    get:
+      tags:
+      - Usage
+      summary: Get usage by id
+      description: Get usage details for an entity identified by `id`.
+      operationId: getEntityUsageByID
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which usage is requested
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: id
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      - name: days
+        in: query
+        description: Usage for number of days going back from the given date (default=1, min=1, max=30)
+        schema:
+          type: integer
+          format: int32
+      - name: date
+        in: query
+        description: Usage for number of days going back from this date in ISO 8601 format. (default = currentDate)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Entity usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUsage'
+        '404':
+          description: Entity for instance {id} is not found
+    put:
+      tags:
+      - Usage
+      summary: Report usage
+      description: Report usage information for an entity on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.
+      operationId: reportEntityUsageWithID_1
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which usage is reported
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: id
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Usage information a given date
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyCount'
+      responses:
+        '200':
+          description: Usage information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUsage'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Usage
+      summary: Report usage
+      description: Report usage information for an entity on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.
+      operationId: reportEntityUsageWithID
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which usage is reported
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: id
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Usage information a given date
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyCount'
+      responses:
+        '200':
+          description: Usage information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUsage'
+        '400':
+          description: Bad request
+  /v1/usage/{entity}/name/{fqn}:
+    get:
+      tags:
+      - Usage
+      summary: Get usage by fully qualified name
+      description: Get usage details for an entity identified by fully qualified name.
+      operationId: getEntityUsageByFQN
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which usage is requested
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fqn
+        in: path
+        description: Fully qualified name of the entity that uniquely identifies an entity
+        required: true
+        schema:
+          type: string
+      - name: days
+        in: query
+        description: Usage for number of days going back from the given date (default=1, min=1, max=30)
+        schema:
+          type: integer
+          format: int32
+      - name: date
+        in: query
+        description: Usage for number of days going back from this date in ISO 8601 format (default = currentDate)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Entity usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUsage'
+        '404':
+          description: Entity for instance {fqn} is not found
+    put:
+      tags:
+      - Usage
+      summary: Report usage by fully qualified name
+      description: Report usage information for an entity by name on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.
+      operationId: reportEntityUsageWithFQN_1
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which usage is reported
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fqn
+        in: path
+        description: Fully qualified name of the entity that uniquely identifies an entity
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Usage information a given date
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyCount'
+      responses:
+        '200':
+          description: Usage information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUsage'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Usage
+      summary: Report usage by fully qualified name
+      description: Report usage information for an entity by name on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.
+      operationId: reportEntityUsageWithFQN
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which usage is reported
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fqn
+        in: path
+        description: Fully qualified name of the entity that uniquely identifies an entity
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Usage information a given date
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyCount'
+      responses:
+        '200':
+          description: Usage information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityUsage'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    DailyCount:
+      required:
+      - count
+      - date
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        date:
+          type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    EntityUsage:
+      required:
+      - entity
+      - usage
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/EntityReference'
+        usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageDetails'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

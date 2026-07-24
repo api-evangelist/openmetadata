@@ -1,0 +1,234 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Audit Logs API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Audit Logs
+  description: APIs for listing user initiated change events persisted for auditing
+paths:
+  /v1/audit/logs/export:
+    get:
+      tags:
+      - Audit Logs
+      summary: Export audit log events as JSON (async)
+      description: Initiates an asynchronous export of audit log events. Returns a job ID immediately. When the export is complete, the data will be sent via WebSocket on the csvExportChannel.
+      operationId: exportAuditLogs
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds (required)
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds (required)
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Maximum number of records to export (default 10000, max 100000)
+        schema:
+          maximum: 100000
+          minimum: 1
+          type: integer
+          format: int64
+          default: 10000
+      - name: userName
+        in: query
+        description: Filter by username
+        schema:
+          type: string
+      - name: actorType
+        in: query
+        description: Filter by actor type (USER, BOT, AGENT)
+        schema:
+          type: string
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: entityType
+        in: query
+        description: Filter by entity type
+        schema:
+          type: string
+      - name: eventType
+        in: query
+        description: Filter by event type
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: Search term to filter audit logs (searches across user_name, entity_fqn, service_name, entity_type)
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Export job initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVExportResponse'
+        '400':
+          description: Invalid parameters
+  /v1/audit/logs:
+    get:
+      tags:
+      - Audit Logs
+      summary: List audit log events
+      operationId: listAuditLogs
+      parameters:
+      - name: limit
+        in: query
+        description: Limit the number of results returned. (1 to 200)
+        schema:
+          maximum: 200
+          minimum: 1
+          type: integer
+          format: int64
+          default: 25
+      - name: after
+        in: query
+        description: Returns results after this cursor (for forward pagination)
+        schema:
+          type: string
+      - name: before
+        in: query
+        description: Returns results before this cursor (for backward pagination)
+        schema:
+          type: string
+      - name: userName
+        in: query
+        description: Filter by username
+        schema:
+          type: string
+      - name: actorType
+        in: query
+        description: Filter by actor type (USER, BOT, AGENT)
+        schema:
+          type: string
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: entityType
+        in: query
+        description: Filter by entity type
+        schema:
+          type: string
+      - name: entityFQN
+        in: query
+        description: Filter by entity fully qualified name
+        schema:
+          type: string
+      - name: eventType
+        in: query
+        description: Filter by event type
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter events after this timestamp (ms)
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: Filter events before this timestamp (ms)
+        schema:
+          type: integer
+          format: int64
+      - name: q
+        in: query
+        description: Search term to filter audit logs (searches across user_name, entity_fqn, service_name, entity_type)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of audit log events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+components:
+  schemas:
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

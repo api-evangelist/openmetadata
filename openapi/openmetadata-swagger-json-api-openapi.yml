@@ -1,0 +1,38 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Swagger.json API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Swagger.json
+paths:
+  /swagger.json:
+    get:
+      operationId: getOpenApiJson
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+      tags:
+      - Swagger.json
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

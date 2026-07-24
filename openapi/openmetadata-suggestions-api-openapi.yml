@@ -1,0 +1,549 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Suggestions API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Suggestions
+  description: Suggestions API supports ability to add suggestion for descriptions or tag labels for Entities.
+paths:
+  /v1/suggestions/accept-all:
+    put:
+      tags:
+      - Suggestions
+      summary: Accept all Suggestions from a user and an Entity
+      description: Accept a Suggestion and apply the changes to the entity.
+      operationId: acceptAllSuggestion
+      parameters:
+      - name: userId
+        in: query
+        description: user id
+        schema:
+          type: string
+      - name: entityFQN
+        in: query
+        description: fullyQualifiedName of entity
+        schema:
+          type: string
+      - name: suggestionType
+        in: query
+        description: Suggestion type being accepted
+        schema:
+          type: string
+          default: SuggestDescription
+      responses:
+        '200':
+          description: The suggestion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggestion'
+        '400':
+          description: Bad request
+  /v1/suggestions/{id}/accept:
+    put:
+      tags:
+      - Suggestions
+      summary: Accept a Suggestion
+      description: Accept a Suggestion and apply the changes to the entity.
+      operationId: acceptSuggestion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the suggestion
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The suggestion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggestion'
+        '400':
+          description: Bad request
+  /v1/suggestions:
+    get:
+      tags:
+      - Suggestions
+      summary: List Suggestions
+      description: Get a list of suggestions, optionally filtered by `entityLink` or `entityFQN`.
+      operationId: listSuggestions
+      parameters:
+      - name: limit
+        in: query
+        description: Limit the number of suggestions returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of threads before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of threads after this cursor
+        schema:
+          type: string
+      - name: entityFQN
+        in: query
+        description: Filter suggestions by entityFQN
+        schema:
+          type: string
+      - name: userId
+        in: query
+        description: Filter threads by user id or bot id. This filter requires a 'filterType' query param.
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter threads by whether they are accepted or rejected. By default status is OPEN.
+        schema:
+          type: string
+          default: Open
+      responses:
+        '200':
+          description: List of Suggestions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuggestionList'
+    post:
+      tags:
+      - Suggestions
+      summary: Create a Suggestion
+      description: Create a new Suggestion. A Suggestion is created about a data asset when a user suggests an update.
+      operationId: createSuggestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSuggestion'
+      responses:
+        '200':
+          description: The thread
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggestion'
+        '400':
+          description: Bad request
+  /v1/suggestions/{suggestionId}:
+    delete:
+      tags:
+      - Suggestions
+      summary: Delete a Suggestion by Id
+      description: Delete an existing Suggestion and all its relationships.
+      operationId: deleteSuggestion
+      parameters:
+      - name: suggestionId
+        in: path
+        description: ThreadId of the thread to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: thread with {threadId} is not found
+        '400':
+          description: Bad request
+  /v1/suggestions/{entityType}/name/{entityFQN}:
+    delete:
+      tags:
+      - Suggestions
+      summary: Delete a Suggestions by entityFQN
+      description: Delete an existing Suggestions and all its relationships.
+      operationId: deleteSuggestions
+      parameters:
+      - name: entityType
+        in: path
+        description: entity type
+        required: true
+        schema:
+          type: string
+      - name: entityFQN
+        in: path
+        description: fullyQualifiedName of entity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: thread with {threadId} is not found
+        '400':
+          description: Bad request
+  /v1/suggestions/{id}:
+    get:
+      tags:
+      - Suggestions
+      summary: Get a suggestion by Id
+      description: Get a suggestion by `Id`.
+      operationId: getSuggestionByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Thread
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The Suggestion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggestion'
+        '404':
+          description: Suggestion for instance {id} is not found
+    put:
+      tags:
+      - Suggestions
+      summary: Update a suggestion by `Id`.
+      description: Update an existing suggestion using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: updateSuggestion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Suggestion
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Suggestion'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/suggestions/reject-all:
+    put:
+      tags:
+      - Suggestions
+      summary: Reject all Suggestions from a user and an Entity
+      description: Reject all Suggestions from a user and an Entity
+      operationId: rejectAllSuggestion
+      parameters:
+      - name: userId
+        in: query
+        description: user id
+        schema:
+          type: string
+      - name: entityFQN
+        in: query
+        description: fullyQualifiedName of entity
+        schema:
+          type: string
+      - name: suggestionType
+        in: query
+        description: Suggestion type being rejected
+        schema:
+          type: string
+          default: SuggestDescription
+      responses:
+        '200':
+          description: The suggestion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggestion'
+        '400':
+          description: Bad request
+  /v1/suggestions/{id}/reject:
+    put:
+      tags:
+      - Suggestions
+      summary: Reject a Suggestion
+      description: Close a Suggestion without making any changes to the entity.
+      operationId: rejectSuggestion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the suggestion
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The Suggestion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggestion'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    Suggestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - SuggestDescription
+          - SuggestTagLabel
+        href:
+          type: string
+          format: uri
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        createdAt:
+          type: integer
+          format: int64
+        createdBy:
+          $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        status:
+          type: string
+          enum:
+          - Open
+          - Accepted
+          - Rejected
+        description:
+          type: string
+        tagLabels:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    CreateSuggestion:
+      type: object
+      properties:
+        description:
+          type: string
+        tagLabels:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        type:
+          type: string
+          enum:
+          - SuggestDescription
+          - SuggestTagLabel
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    SuggestionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Suggestion'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

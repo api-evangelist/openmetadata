@@ -1,0 +1,1162 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Workflow Definitions API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Workflow Definitions
+  description: A `Workflow Definition` is a configured workflow setup for a given governance task.
+paths:
+  /v1/governance/workflowDefinitions:
+    get:
+      tags:
+      - Workflow Definitions
+      summary: List Workflow Definitions
+      description: Get a list of Workflow Definitions. Use `fields` parameter to get only necessary fields. Use cursor-based pagination tom limit the number of entries in the list using `limit` and `before` or `after` query params.
+      operationId: listWorkflowDefinitions
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: limit
+        in: query
+        description: Limit the number of Workflow Definitions returned. Default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns the list of Workflow Definitions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns the list of Workflow Definitions after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of Workflow Definitions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinitionList'
+    put:
+      tags:
+      - Workflow Definitions
+      summary: Create or update Workflow Definition
+      description: Create a Workflow Definition, if it does not exist or update an existing Workflow Definition.
+      operationId: createOrUpdateWorkflowDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkflowDefinition'
+      responses:
+        '200':
+          description: The updated Workflow Definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+    post:
+      tags:
+      - Workflow Definitions
+      summary: Create a Workflow Definition
+      description: Create a Workflow Definition.
+      operationId: createWorkflowDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkflowDefinition'
+      responses:
+        '200':
+          description: The Workflow Definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+        '400':
+          description: Bad request
+  /v1/governance/workflowDefinitions/name/{fqn}:
+    get:
+      tags:
+      - Workflow Definitions
+      summary: Get a Workflow Definition by fully qualified name
+      description: Get a Workflow Definition by `fullyQualifiedName`.
+      operationId: getWorkflowDefinitionByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the Workflow Definition
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The Workflow Definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+        '404':
+          description: Workflow Definition for instance {fqn} is not found
+    delete:
+      tags:
+      - Workflow Definitions
+      summary: Delete a Workflow Definition by fully qualified name
+      description: Delete a Workflow Definition by `fullyQualifiedName`.
+      operationId: deleteWorkflowDefinitionByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Fully qualified name of the Workflow Definition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Workflow Definition for instance {fqn} is not found
+    patch:
+      tags:
+      - Workflow Definitions
+      summary: Update a Workflow Definition by name.
+      description: Update an existing Workflow Definition using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchWorkflowDefinition
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the Workflow Definition
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/governance/workflowDefinitions/{id}:
+    get:
+      tags:
+      - Workflow Definitions
+      summary: Get a Workflow Definition by Id
+      description: Get a Workflow Definition by `Id`.
+      operationId: getWorkflowDefinitionByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The Workflow Definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+        '404':
+          description: Workflow Definition for instance {id} is not found
+    delete:
+      tags:
+      - Workflow Definitions
+      summary: Delete a Workflow Definition by Id
+      description: Delete a Workflow Definition by `Id`.
+      operationId: deleteWorkflowDefinition
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Workflow Definition for instance {id} is not found
+    patch:
+      tags:
+      - Workflow Definitions
+      summary: Update a Workflow Definition by Id
+      description: Update an existing Workflow Definition using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchWorkflowDefinition_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/governance/workflowDefinitions/async/{id}:
+    delete:
+      tags:
+      - Workflow Definitions
+      summary: Asynchronously delete a Workflow Definition by Id
+      description: Asynchronously delete a Workflow Definition by `Id`.
+      operationId: deleteWorkflowDefinitionAsync
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Workflow Definition for instance {id} is not found
+  /v1/governance/workflowDefinitions/{id}/versions/{version}:
+    get:
+      tags:
+      - Workflow Definitions
+      summary: Get a version of the Workflow Definition
+      description: Get a version of the Workflow Definition by given `Id`
+      operationId: getSpecificWorkflowDefinitionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: WorkflowDefinition version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+        '404':
+          description: Workflow Definition for instance {id} and version {version} is not found
+  /v1/governance/workflowDefinitions/history:
+    get:
+      tags:
+      - Workflow Definitions
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_31
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/governance/workflowDefinitions/{id}/versions:
+    get:
+      tags:
+      - Workflow Definitions
+      summary: List Workflow Definition versions
+      description: Get a list of all the versions of a Workflow Definition identified by `Id`
+      operationId: listAllWorkflowDefinitionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of Workflow Definition versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/governance/workflowDefinitions/{id}/redeploy:
+    post:
+      tags:
+      - Workflow Definitions
+      summary: Get a Workflow Definition by Id
+      description: Get a Workflow Definition by `Id`.
+      operationId: getWorkflowDefinitionByID_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Workflow Definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The Workflow Definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+  /v1/governance/workflowDefinitions/restore:
+    put:
+      tags:
+      - Workflow Definitions
+      summary: Restore a soft deleted Workflow Definition.
+      description: Restore a soft deleted Workflow Definition.
+      operationId: restore_23
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the Workflow Definition. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDefinition'
+  /v1/governance/workflowDefinitions/name/{fqn}/resume:
+    put:
+      tags:
+      - Workflow Definitions
+      summary: Resume a suspended Workflow Definition
+      description: Resume a suspended Workflow Definition to continue its execution.
+      operationId: resumeWorkflow
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the Workflow Definition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workflow resumed successfully
+          content:
+            application/json: {}
+        '404':
+          description: Workflow Definition named '{fqn}' is not found
+  /v1/governance/workflowDefinitions/name/{fqn}/suspend:
+    put:
+      tags:
+      - Workflow Definitions
+      summary: Suspend a Workflow Definition
+      description: Suspend a Workflow Definition to temporarily stop its execution.
+      operationId: suspendWorkflow
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the Workflow Definition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workflow suspended successfully
+          content:
+            application/json: {}
+        '404':
+          description: Workflow Definition named '{fqn}' is not found
+  /v1/governance/workflowDefinitions/name/{fqn}/trigger:
+    post:
+      tags:
+      - Workflow Definitions
+      summary: Start a new instance of a Workflow Definition
+      description: Start a new instance of a Workflow Definition.
+      operationId: triggerWorkflow
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the Workflow Definition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Workflow triggered successfully
+          content:
+            application/json: {}
+        '400':
+          description: Workflow is suspended or cannot be triggered
+        '404':
+          description: Workflow Definition named '{fqn}' is not found
+  /v1/governance/workflowDefinitions/validate:
+    post:
+      tags:
+      - Workflow Definitions
+      summary: Validate a Workflow Definition
+      description: Validates a Workflow Definition for cycles, node ID conflicts, user task requirements, and updatedBy namespace configuration. This is useful for workflow builders to test their configuration before saving.
+      operationId: validateWorkflowDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkflowDefinition'
+      responses:
+        '200':
+          description: Workflow Definition is valid
+          content:
+            application/json: {}
+        '400':
+          description: Workflow Definition validation failed
+          content:
+            application/json: {}
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    EdgeDefinition:
+      required:
+      - from
+      - to
+      type: object
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+        condition:
+          type: string
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    JsonPatch:
+      type: object
+    WorkflowDefinition:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        deployed:
+          type: boolean
+        suspended:
+          type: boolean
+        config:
+          $ref: '#/components/schemas/WorkflowConfiguration'
+        trigger:
+          $ref: '#/components/schemas/WorkflowTriggerInterface'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowNodeDefinitionInterface'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDefinition'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    WorkflowTriggerInterface:
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          type: object
+        output:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+      discriminator:
+        propertyName: type
+    WorkflowDefinitionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowDefinition'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    WorkflowConfiguration:
+      required:
+      - storeStageStatus
+      type: object
+      properties:
+        storeStageStatus:
+          type: boolean
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    WorkflowNodeDefinitionInterface:
+      type: object
+      properties:
+        subType:
+          type: string
+        inputNamespaceMap:
+          type: object
+        input:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        type:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        config:
+          type: object
+        output:
+          type: array
+          items:
+            type: string
+      discriminator:
+        propertyName: subType
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    CreateWorkflowDefinition:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        type:
+          type: string
+          enum:
+          - eventBasedEntity
+          - noOp
+          - periodicBatchEntity
+        config:
+          $ref: '#/components/schemas/WorkflowConfiguration'
+        trigger:
+          $ref: '#/components/schemas/WorkflowTriggerInterface'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowNodeDefinitionInterface'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDefinition'
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

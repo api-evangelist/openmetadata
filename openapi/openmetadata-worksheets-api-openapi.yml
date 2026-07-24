@@ -1,0 +1,1628 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Worksheets API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Worksheets
+  description: A `Worksheet` is an individual sheet or tab within a Spreadsheet.
+paths:
+  /v1/drives/worksheets/{id}/followers:
+    put:
+      tags:
+      - Worksheets
+      summary: Add a follower
+      description: Add a user identified by `userId` as follower of this worksheet
+      operationId: addFollowerToWorksheet
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Worksheet for instance {id} is not found
+  /v1/drives/worksheets/bulk:
+    put:
+      tags:
+      - Worksheets
+      summary: Bulk create or update worksheets
+      description: Create or update multiple worksheets in a single operation.
+      operationId: bulkCreateOrUpdateWorksheets
+      parameters:
+      - name: async
+        in: query
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateWorksheet'
+      responses:
+        '200':
+          description: Bulk operation results
+        '202':
+          description: Bulk operation accepted for async processing
+        '400':
+          description: Bad request
+  /v1/drives/worksheets:
+    get:
+      tags:
+      - Worksheets
+      summary: List worksheets
+      description: Get a list of worksheets, optionally filtered by `service` or `spreadsheet` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listWorksheets
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,spreadsheet,columns,sampleData,usageSummary,tags,extension,domains,sourceHash,lifeCycle,votes,followers,rowCount
+      - name: service
+        in: query
+        description: Filter worksheets by service name
+        schema:
+          type: string
+          example: googleDrive
+      - name: spreadsheet
+        in: query
+        description: Filter worksheets by spreadsheet fully qualified name
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit the number worksheets returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of worksheets before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of worksheets after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of worksheets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorksheetList'
+    put:
+      tags:
+      - Worksheets
+      summary: Create or update a worksheet
+      description: Create a new worksheet, if it does not exist or update an existing worksheet.
+      operationId: createOrUpdateWorksheet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorksheet'
+      responses:
+        '200':
+          description: The worksheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worksheet'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Worksheets
+      summary: Create a worksheet
+      description: Create a new worksheet under an existing `spreadsheet`.
+      operationId: createWorksheet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorksheet'
+      responses:
+        '200':
+          description: The worksheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worksheet'
+        '400':
+          description: Bad request
+  /v1/drives/worksheets/name/{fqn}:
+    get:
+      tags:
+      - Worksheets
+      summary: Get a worksheet by fully qualified name
+      description: Get a worksheet by fully qualified name.
+      operationId: getWorksheetByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the worksheet
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,spreadsheet,columns,sampleData,usageSummary,tags,extension,domains,sourceHash,lifeCycle,votes,followers,rowCount
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The worksheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worksheet'
+        '404':
+          description: Worksheet for instance {fqn} is not found
+    delete:
+      tags:
+      - Worksheets
+      summary: Delete a worksheet by fully qualified name
+      description: Delete a worksheet by `fullyQualifiedName`.
+      operationId: deleteWorksheetByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Fully qualified name of the worksheet
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Worksheet for instance {fqn} is not found
+    patch:
+      tags:
+      - Worksheets
+      summary: Update a worksheet by name.
+      description: Update an existing worksheet using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchWorksheet
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the worksheet
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/drives/worksheets/{id}:
+    get:
+      tags:
+      - Worksheets
+      summary: Get a worksheet by Id
+      description: Get a worksheet by `Id`.
+      operationId: getWorksheetByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,spreadsheet,columns,sampleData,usageSummary,tags,extension,domains,sourceHash,lifeCycle,votes,followers,rowCount
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The worksheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worksheet'
+        '404':
+          description: Worksheet for instance {id} is not found
+    delete:
+      tags:
+      - Worksheets
+      summary: Delete a worksheet by Id
+      description: Delete a worksheet by `Id`.
+      operationId: deleteWorksheet
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Worksheet for instance {id} is not found
+    patch:
+      tags:
+      - Worksheets
+      summary: Update a worksheet
+      description: Update an existing worksheet using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchWorksheet_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/drives/worksheets/async/{id}:
+    delete:
+      tags:
+      - Worksheets
+      summary: Asynchronously delete a worksheet by Id
+      description: Asynchronously delete a worksheet by `Id`.
+      operationId: deleteWorksheetAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete related entities. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Worksheet for instance {id} is not found
+  /v1/drives/worksheets/{id}/followers/{userId}:
+    delete:
+      tags:
+      - Worksheets
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the worksheet.
+      operationId: removeFollowerFromWorksheet
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/drives/worksheets/{id}/versions/{version}:
+    get:
+      tags:
+      - Worksheets
+      summary: Get a specific version of the worksheet
+      description: Get a specific version of the worksheet identified by `Id`
+      operationId: getSpecificWorksheetVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Worksheet version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: Worksheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worksheet'
+        '404':
+          description: Worksheet for instance {id} and version {version} is not found
+  /v1/drives/worksheets/history:
+    get:
+      tags:
+      - Worksheets
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_27
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/drives/worksheets/{id}/versions:
+    get:
+      tags:
+      - Worksheets
+      summary: List worksheet versions
+      description: Get a list of all the versions of a worksheet identified by `Id`
+      operationId: listAllWorksheetVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of worksheet versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/drives/worksheets/restore:
+    put:
+      tags:
+      - Worksheets
+      summary: Restore a soft deleted worksheet by id
+      description: Restore a soft deleted worksheet by id.
+      operationId: restoreWorksheetById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: Successfully restored the worksheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worksheet'
+  /v1/drives/worksheets/{id}/vote:
+    put:
+      tags:
+      - Worksheets
+      summary: Update Vote for a worksheet
+      description: Update vote for a worksheet
+      operationId: updateVoteForWorksheet
+      parameters:
+      - name: id
+        in: path
+        description: Id of the worksheet
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Worksheet for instance {id} is not found
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    CreateWorksheet:
+      required:
+      - name
+      - spreadsheet
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        spreadsheet:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        service:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        worksheetId:
+          type: string
+        index:
+          type: integer
+          format: int32
+        rowCount:
+          type: integer
+          format: int32
+        columnCount:
+          type: integer
+          format: int32
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        isHidden:
+          type: boolean
+        sourceUrl:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        domains:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        extension:
+          type: object
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
+    Worksheet:
+      required:
+      - id
+      - name
+      - service
+      - spreadsheet
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        spreadsheet:
+          $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - GoogleDrive
+          - SharePoint
+          - Sftp
+          - CustomDrive
+        worksheetId:
+          type: string
+        index:
+          type: integer
+          format: int32
+        rowCount:
+          type: integer
+          format: int32
+        columnCount:
+          type: integer
+          format: int32
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        sampleData:
+          $ref: '#/components/schemas/TableData'
+        isHidden:
+          type: boolean
+        sourceUrl:
+          type: string
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        extension:
+          type: object
+        votes:
+          $ref: '#/components/schemas/Votes'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    CustomMetricProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+          format: double
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    CardinalityDistribution:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
+          type: boolean
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    WorksheetList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Worksheet'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TableData:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    JsonPatch:
+      type: object
+    CustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Column:
+      required:
+      - dataType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        arrayDataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        dataLength:
+          type: integer
+          format: int32
+        precision:
+          type: integer
+          format: int32
+        scale:
+          type: integer
+          format: int32
+        dataTypeDisplay:
+          type: string
+        description:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        constraint:
+          type: string
+          enum:
+          - 'NULL'
+          - NOT_NULL
+          - UNIQUE
+          - PRIMARY_KEY
+        ordinalPosition:
+          type: integer
+          format: int32
+        jsonSchema:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        profile:
+          $ref: '#/components/schemas/ColumnProfile'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetric'
+        extension:
+          type: object
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    Histogram:
+      type: object
+      properties:
+        boundaries:
+          type: array
+          items:
+            type: object
+        frequencies:
+          type: array
+          items:
+            type: object
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

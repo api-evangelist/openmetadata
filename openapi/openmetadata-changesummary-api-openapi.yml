@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions ChangeSummary API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: ChangeSummary
+  description: APIs to retrieve change summary metadata for entities. Change summary tracks who changed each field, the source of the change (e.g., Suggested for AI-generated, Manual for user edits), and when the change occurred.
+paths:
+  /v1/changeSummary/{entityType}/name/{fqn}:
+    get:
+      tags:
+      - ChangeSummary
+      summary: Get change summary for an entity by fully qualified name
+      description: Returns the change summary map for the specified entity identified by its fully qualified name (FQN). Use fieldPrefix to filter entries (e.g., 'columns.' for column-level changes only).
+      operationId: getChangeSummaryByFqn
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type (e.g., table, topic, dashboard)
+        required: true
+        schema:
+          type: string
+      - name: fqn
+        in: path
+        description: Fully qualified name of the entity
+        required: true
+        schema:
+          type: string
+      - name: fieldPrefix
+        in: query
+        description: Filter entries by field name prefix (e.g., 'columns.' to get only column-level changes)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit the number of entries returned (1-1000)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int64
+          default: 10
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        '200':
+          description: Change summary map
+        '404':
+          description: Entity not found
+  /v1/changeSummary/{entityType}/{id}:
+    get:
+      tags:
+      - ChangeSummary
+      summary: Get change summary for an entity by ID
+      description: Returns the change summary map for the specified entity, showing who changed each field, the source of the change (Manual, Suggested, Automated, etc.), and when it was changed. Use fieldPrefix to filter entries (e.g., 'columns.' for column-level changes only).
+      operationId: getChangeSummaryById
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type (e.g., table, topic, dashboard)
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fieldPrefix
+        in: query
+        description: Filter entries by field name prefix (e.g., 'columns.' to get only column-level changes)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit the number of entries returned (1-1000)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int64
+          default: 10
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        '200':
+          description: Change summary map
+        '404':
+          description: Entity not found
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

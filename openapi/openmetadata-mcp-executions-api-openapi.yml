@@ -1,0 +1,451 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions MCP Executions API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: MCP Executions
+  description: '`MCP Executions` are time-series records of MCP server execution sessions, capturing tool calls, resource accesses, data lineage, compliance checks, and audit trails for AI governance.'
+paths:
+  /v1/mcpExecutions:
+    get:
+      tags:
+      - MCP Executions
+      summary: List MCP executions
+      description: Get a list of MCP executions, optionally filtered by serverId, startTs and endTs.
+      operationId: listMcpExecutions
+      parameters:
+      - name: serverId
+        in: query
+        description: Filter by MCP server ID
+        schema:
+          type: string
+          format: uuid
+      - name: startTs
+        in: query
+        description: Filter executions after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter executions before the given end timestamp
+        schema:
+          type: number
+      - name: limit
+        in: query
+        description: Limit the number of executions returned
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: List of MCP executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpExecutionList'
+    post:
+      tags:
+      - MCP Executions
+      summary: Create an MCP execution
+      description: Create a new MCP execution record.
+      operationId: createMcpExecution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/McpExecution'
+      responses:
+        '200':
+          description: MCP Execution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpExecution'
+        '400':
+          description: Bad request
+  /v1/mcpExecutions/{id}:
+    get:
+      tags:
+      - MCP Executions
+      summary: Get an MCP execution by Id
+      description: Get an MCP execution by `Id`.
+      operationId: getMcpExecutionByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the MCP Execution
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The execution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpExecution'
+        '404':
+          description: Execution for instance {id} is not found
+    delete:
+      tags:
+      - MCP Executions
+      summary: Delete an MCP execution by Id
+      description: Delete an MCP execution by `Id`.
+      operationId: deleteMcpExecution
+      parameters:
+      - name: id
+        in: path
+        description: Id of the MCP Execution
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Execution for instance {id} is not found
+  /v1/mcpExecutions/{serverId}/{timestamp}:
+    delete:
+      tags:
+      - MCP Executions
+      summary: Delete MCP execution data at a timestamp
+      description: Delete MCP execution data for a server at a specific timestamp.
+      operationId: deleteMcpExecutionData
+      parameters:
+      - name: serverId
+        in: path
+        description: ID of the MCP Server
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: timestamp
+        in: path
+        description: Timestamp of the execution to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successfully deleted MCP Execution Data
+components:
+  schemas:
+    Parameters__2:
+      type: object
+    McpResourceAccessRecord:
+      type: object
+      properties:
+        resourceName:
+          type: string
+        resourceUri:
+          type: string
+        accessType:
+          type: string
+          enum:
+          - Read
+          - Write
+          - Delete
+        success:
+          type: boolean
+        timestamp:
+          type: integer
+          format: int64
+        bytesTransferred:
+          type: integer
+          format: int32
+    McpExecutionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpExecution'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Arguments__1:
+      type: object
+    McpComplianceCheckRecord:
+      type: object
+      properties:
+        checkName:
+          type: string
+        passed:
+          type: boolean
+        details:
+          type: string
+        severity:
+          type: string
+          enum:
+          - Info
+          - Warning
+          - Error
+          - Critical
+        timestamp:
+          type: integer
+          format: int64
+    McpDataAccessRecord:
+      type: object
+      properties:
+        dataSource:
+          $ref: '#/components/schemas/EntityReference'
+        accessType:
+          type: string
+          enum:
+          - Read
+          - Write
+          - Delete
+        recordCount:
+          type: integer
+          format: int32
+        columns:
+          type: array
+          items:
+            type: string
+        piiAccessed:
+          type: boolean
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+        timestamp:
+          type: integer
+          format: int64
+    McpExecution:
+      required:
+      - server
+      - serverId
+      - status
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        server:
+          $ref: '#/components/schemas/EntityReference'
+        serverId:
+          type: string
+          format: uuid
+        timestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        durationMs:
+          type: number
+          format: double
+        status:
+          type: string
+          enum:
+          - Running
+          - Success
+          - Failed
+          - Timeout
+          - Cancelled
+        executedBy:
+          type: string
+        applicationContext:
+          $ref: '#/components/schemas/EntityReference'
+        sessionId:
+          type: string
+        toolCalls:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpToolCallRecord'
+        resourceAccesses:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpResourceAccessRecord'
+        promptUses:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpPromptUseRecord'
+        dataAccessed:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpDataAccessRecord'
+        complianceChecks:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpComplianceCheckRecord'
+        metrics:
+          $ref: '#/components/schemas/McpExecutionMetrics'
+        errorMessage:
+          type: string
+        errorStack:
+          type: string
+        environment:
+          type: string
+          enum:
+          - Development
+          - Testing
+          - Staging
+          - Production
+        serverVersion:
+          type: string
+        protocolVersion:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/Metadata__1'
+        deleted:
+          type: boolean
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Metadata__1:
+      type: object
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    McpToolCallRecord:
+      type: object
+      properties:
+        toolName:
+          type: string
+        parameters:
+          $ref: '#/components/schemas/Parameters__2'
+        result:
+          type: string
+        success:
+          type: boolean
+        latencyMs:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+        dataAccessed:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpDataAccessRecord'
+    McpPromptUseRecord:
+      type: object
+      properties:
+        promptName:
+          type: string
+        arguments:
+          $ref: '#/components/schemas/Arguments__1'
+        timestamp:
+          type: integer
+          format: int64
+        tokensGenerated:
+          type: integer
+          format: int32
+    McpExecutionMetrics:
+      type: object
+      properties:
+        totalToolCalls:
+          type: integer
+          format: int32
+        successfulToolCalls:
+          type: integer
+          format: int32
+        totalResourceAccesses:
+          type: integer
+          format: int32
+        totalPromptUses:
+          type: integer
+          format: int32
+        piiDataAccessed:
+          type: boolean
+        highSensitivityDataAccessed:
+          type: boolean
+        highRiskOperations:
+          type: integer
+          format: int32
+        complianceViolations:
+          type: integer
+          format: int32
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

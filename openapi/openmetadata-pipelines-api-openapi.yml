@@ -1,0 +1,2306 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Pipelines API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Pipelines
+  description: A `Pipeline` enables the flow of data from source to destination through a series of processing steps. ETL is a type of pipeline where the series of steps Extract, Transform and Load the data.
+paths:
+  /v1/pipelines/{fqn}/status/bulk:
+    put:
+      tags:
+      - Pipelines
+      summary: Add bulk status data
+      description: Add multiple status records to the pipeline in a single request.
+      operationId: addBulkStatusData
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              maxItems: 1000
+              minItems: 0
+              type: array
+              items:
+                $ref: '#/components/schemas/PipelineStatus'
+      responses:
+        '200':
+          description: The pipeline with the latest status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '400':
+          description: Bad request
+  /v1/pipelines/{id}/followers:
+    put:
+      tags:
+      - Pipelines
+      summary: Add a follower
+      description: Add a user identified by `userId` as follower of this pipeline
+      operationId: addFollower_9
+      parameters:
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Pipeline for instance {id} is not found
+  /v1/pipelines/{fqn}/status:
+    get:
+      tags:
+      - Pipelines
+      summary: List pipeline status
+      description: Get a list of pipeline status. Use `limit` and `before` or `after` query params for cursor-based pagination. Filter by execution status using comma-separated values (e.g., 'Failed,Successful'). Search by task name using the `search` parameter.
+      operationId: listPipelineStatuses
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter pipeline statues after the given start timestamp
+        required: true
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter pipeline statues before the given end timestamp
+        required: true
+        schema:
+          type: number
+      - name: limit
+        in: query
+        description: Limit the number of pipeline statuses returned. If not provided, returns all results.
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int64
+      - name: before
+        in: query
+        description: Returns list of pipeline statuses before this cursor (timestamp)
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of pipeline statuses after this cursor (timestamp)
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by execution status. Supports multiple comma-separated values (e.g., 'Failed,Successful')
+        schema:
+          type: string
+          example: Failed,Successful
+      - name: search
+        in: query
+        description: Search pipeline statuses by task name
+        schema:
+          type: string
+      - name: minDuration
+        in: query
+        description: Filter pipeline statuses by minimum duration in milliseconds
+        schema:
+          type: number
+      - name: maxDuration
+        in: query
+        description: Filter pipeline statuses by maximum duration in milliseconds
+        schema:
+          type: number
+      responses:
+        '200':
+          description: List of pipeline statuses.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineStatusList'
+    put:
+      tags:
+      - Pipelines
+      summary: Add status data
+      description: Add status data to the pipeline.
+      operationId: addStatusData
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PipelineStatus'
+      responses:
+        '200':
+          description: The pipeline with a the new status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '400':
+          description: Bad request
+  /v1/pipelines/bulk:
+    put:
+      tags:
+      - Pipelines
+      summary: Bulk create or update pipelines
+      description: Create or update multiple pipelines in a single operation. Returns a BulkOperationResult with success/failure details for each pipeline.
+      operationId: bulkCreateOrUpdatePipelines
+      parameters:
+      - name: async
+        in: query
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreatePipeline'
+      responses:
+        '200':
+          description: Bulk operation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResult'
+        '202':
+          description: Bulk operation accepted for async processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResult'
+        '400':
+          description: Bad request
+  /v1/pipelines:
+    get:
+      tags:
+      - Pipelines
+      summary: List pipelines
+      description: Get a list of pipelines, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listPipelines
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tasks,pipelineStatus,followers,tags,extension,scheduleInterval,domains,sourceHash
+      - name: service
+        in: query
+        description: Filter pipelines by service name
+        schema:
+          type: string
+          example: airflow
+      - name: limit
+        in: query
+        description: Limit the number pipelines returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of pipelines before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of pipelines after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of pipelines
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineList'
+    put:
+      tags:
+      - Pipelines
+      summary: Create or update a pipeline
+      description: Create a new pipeline, if it does not exist or update an existing pipeline.
+      operationId: createOrUpdatePipeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePipeline'
+      responses:
+        '200':
+          description: The pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Pipelines
+      summary: Create a pipeline
+      description: Create a new pipeline.
+      operationId: createPipeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePipeline'
+      responses:
+        '200':
+          description: The pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '400':
+          description: Bad request
+  /v1/pipelines/name/{fqn}:
+    get:
+      tags:
+      - Pipelines
+      summary: Get a pipeline by fully qualified name
+      description: Get a pipeline by fully qualified name.
+      operationId: getPipelineByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tasks,pipelineStatus,followers,tags,extension,scheduleInterval,domains,sourceHash
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '404':
+          description: Pipeline for instance {fqn} is not found
+    delete:
+      tags:
+      - Pipelines
+      summary: Delete a pipeline by fully qualified name
+      description: Delete a pipeline by `fullyQualifiedName`.
+      operationId: deletePipelineByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Pipeline for instance {fqn} is not found
+    patch:
+      tags:
+      - Pipelines
+      summary: Update a pipeline by name.
+      description: Update an existing pipeline using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchPipeline
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the pipeline
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/pipelines/{id}:
+    get:
+      tags:
+      - Pipelines
+      summary: Get a pipeline by Id
+      description: Get a pipeline by `Id`.
+      operationId: getPipelineWithID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tasks,pipelineStatus,followers,tags,extension,scheduleInterval,domains,sourceHash
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '404':
+          description: Pipeline for instance {id} is not found
+    delete:
+      tags:
+      - Pipelines
+      summary: Delete a pipeline by Id
+      description: Delete a pipeline by `Id`.
+      operationId: deletePipeline
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Pipeline for instance {id} is not found
+    patch:
+      tags:
+      - Pipelines
+      summary: Update a pipeline
+      description: Update an existing pipeline using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchPipeline_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/pipelines/async/{id}:
+    delete:
+      tags:
+      - Pipelines
+      summary: Asynchronously delete a pipeline by Id
+      description: Asynchronously delete a pipeline by `Id`.
+      operationId: deletePipelineAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Pipeline for instance {id} is not found
+  /v1/pipelines/{id}/followers/{userId}:
+    delete:
+      tags:
+      - Pipelines
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the pipeline.
+      operationId: deleteFollower_12
+      parameters:
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/pipelines/{fqn}/status/{timestamp}:
+    delete:
+      tags:
+      - Pipelines
+      summary: Delete pipeline status
+      description: Delete pipeline status for a pipeline.
+      operationId: DeletePipelineStatus
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      - name: timestamp
+        in: path
+        description: Timestamp of the pipeline status
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successfully deleted the PipelineStatus
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+  /v1/pipelines/executionTrend:
+    get:
+      tags:
+      - Pipelines
+      summary: Get pipeline execution trend
+      description: Get day-wise pipeline execution trend showing succeeded and failed counts from the database.
+      operationId: getPipelineExecutionTrend
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp for trend analysis
+        required: true
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: End timestamp for trend analysis
+        required: true
+        schema:
+          type: number
+      - name: pipelineFqn
+        in: query
+        description: Filter by specific pipeline FQN
+        schema:
+          type: string
+      - name: serviceType
+        in: query
+        description: Filter by service type
+        schema:
+          type: string
+      - name: service
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by execution status (Successful, Failed, Pending, Skipped)
+        schema:
+          type: string
+      - name: domain
+        in: query
+        description: Filter by domain ID or fully qualified name
+        schema:
+          type: string
+      - name: owner
+        in: query
+        description: Filter by owner ID or name
+        schema:
+          type: string
+      - name: tier
+        in: query
+        description: Filter by tier (e.g., Tier.Tier1)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of trend data points to return
+        schema:
+          type: integer
+          format: int64
+          default: 30
+      - name: offset
+        in: query
+        description: Offset for pagination (default = 0)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: Pipeline execution trend data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineExecutionTrendList'
+        '400':
+          description: Bad request
+  /v1/pipelines/metrics:
+    get:
+      tags:
+      - Pipelines
+      summary: Get aggregated pipeline metrics
+      description: Get aggregated metrics about pipelines from the database. Optionally filter results using the q parameter.
+      operationId: getPipelineMetrics
+      parameters:
+      - name: q
+        in: query
+        description: Search query to filter the aggregation results
+        schema:
+          type: string
+      - name: serviceType
+        in: query
+        description: Filter by service type
+        schema:
+          type: string
+      - name: service
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by execution status (Successful, Failed, Pending, Skipped)
+        schema:
+          type: string
+      - name: domain
+        in: query
+        description: Filter by domain ID or fully qualified name
+        schema:
+          type: string
+      - name: owner
+        in: query
+        description: Filter by owner ID or name
+        schema:
+          type: string
+      - name: tier
+        in: query
+        description: Filter by tier (e.g., Tier.Tier1)
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter results after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter results before the given end timestamp
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Pipeline metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineMetrics'
+  /v1/pipelines/name/{fqn}/observability:
+    get:
+      tags:
+      - Pipelines
+      summary: Get pipeline observability data
+      description: Get observability data for all tables associated with this pipeline.
+      operationId: getPipelineObservability_1
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the pipeline
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by execution status (Successful, Failed, Running, Pending, Skipped)
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter pipeline observability data after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter pipeline observability data before the given end timestamp
+        schema:
+          type: number
+      - name: serviceType
+        in: query
+        description: Filter by service type
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Search tables by name or FQN
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit the number of tables returned
+        schema:
+          type: integer
+          format: int64
+          default: 10
+      - name: before
+        in: query
+        description: Returns list before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Pipeline observability data grouped by tables
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineObservabilityResponse'
+        '404':
+          description: Pipeline for instance {fqn} is not found
+  /v1/pipelines/runtimeTrend:
+    get:
+      tags:
+      - Pipelines
+      summary: Get pipeline runtime trend
+      description: Get day-wise pipeline runtime trend showing max, min, and average runtime from the database.
+      operationId: getPipelineRuntimeTrend
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp for trend analysis
+        required: true
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: End timestamp for trend analysis
+        required: true
+        schema:
+          type: number
+      - name: pipelineFqn
+        in: query
+        description: Filter by specific pipeline FQN
+        schema:
+          type: string
+      - name: serviceType
+        in: query
+        description: Filter by service type
+        schema:
+          type: string
+      - name: service
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by execution status (Successful, Failed, Pending, Skipped)
+        schema:
+          type: string
+      - name: domain
+        in: query
+        description: Filter by domain ID or fully qualified name
+        schema:
+          type: string
+      - name: owner
+        in: query
+        description: Filter by owner ID or name
+        schema:
+          type: string
+      - name: tier
+        in: query
+        description: Filter by tier (e.g., Tier.Tier1)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of trend data points to return
+        schema:
+          type: integer
+          format: int64
+          default: 30
+      - name: offset
+        in: query
+        description: Offset for pagination (default = 0)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: Pipeline runtime trend data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineRuntimeTrendList'
+        '400':
+          description: Bad request
+  /v1/pipelines/{id}/versions/{version}:
+    get:
+      tags:
+      - Pipelines
+      summary: Get a version of the pipeline
+      description: Get a version of the pipeline by given `Id`
+      operationId: getSpecificPipelineVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Pipeline version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '404':
+          description: Pipeline for instance {id} and version {version} is not found
+  /v1/pipelines/history:
+    get:
+      tags:
+      - Pipelines
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_35
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/pipelines/summary:
+    get:
+      tags:
+      - Pipelines
+      summary: List pipeline summaries with impacted assets count
+      description: Get a paginated list of pipeline summaries including impacted assets count
+      operationId: listPipelineSummaries
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+      - name: service
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Search pipelines by name or FQN
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by execution status (Successful, Failed, Pending, Skipped)
+        schema:
+          type: string
+      - name: domain
+        in: query
+        description: Filter by domain ID or fully qualified name
+        schema:
+          type: string
+      - name: owner
+        in: query
+        description: Filter by owner ID or name
+        schema:
+          type: string
+      - name: tier
+        in: query
+        description: Filter by tier (e.g., Tier.Tier1)
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter results after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter results before the given end timestamp
+        schema:
+          type: number
+      - name: limit
+        in: query
+        description: Limit the number of results (1 to 1000, default = 10)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of pipeline summaries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineSummaryList'
+  /v1/pipelines/{id}/versions:
+    get:
+      tags:
+      - Pipelines
+      summary: List pipeline versions
+      description: Get a list of all the versions of a pipeline identified by `Id`
+      operationId: listAllPipelineVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the pipeline
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of pipeline versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/pipelines/restore:
+    put:
+      tags:
+      - Pipelines
+      summary: Restore a soft deleted pipeline
+      description: Restore a soft deleted pipeline.
+      operationId: restore_26
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the Pipeline '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+  /v1/pipelines/{id}/vote:
+    put:
+      tags:
+      - Pipelines
+      summary: Update Vote for a Entity
+      description: Update vote for a Entity
+      operationId: updateVoteForEntity_12
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Entity
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: model for instance {id} is not found
+components:
+  schemas:
+    PipelineRuntimeTrend:
+      required:
+      - date
+      - timestamp
+      - totalPipelines
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        date:
+          type: string
+        maxRuntime:
+          type: number
+          format: double
+        minRuntime:
+          type: number
+          format: double
+        avgRuntime:
+          type: number
+          format: double
+        totalPipelines:
+          type: integer
+          format: int32
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    PipelineObservabilityResponse:
+      required:
+      - pipelineFqn
+      - pipelineId
+      - tableObservabilityData
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          format: uuid
+        pipelineFqn:
+          type: string
+        tableObservabilityData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TableObservabilityData'
+        paging:
+          $ref: '#/components/schemas/Paging'
+    CreatePipeline:
+      required:
+      - name
+      - service
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        sourceUrl:
+          type: string
+        concurrency:
+          type: integer
+          format: int32
+        pipelineLocation:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        state:
+          type: string
+          enum:
+          - Active
+          - Inactive
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        extension:
+          type: object
+        scheduleInterval:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    PipelineStatusList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineStatus'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    StackTraceError:
+      required:
+      - error
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        error:
+          type: string
+        stackTrace:
+          type: string
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    Progress:
+      type: object
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    TableObservabilityData:
+      required:
+      - observabilityData
+      - tableFqn
+      - tableId
+      type: object
+      properties:
+        tableId:
+          type: string
+          format: uuid
+        tableFqn:
+          type: string
+        observabilityData:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineObservability'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    PipelineList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pipeline'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ServiceBreakdown:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        serviceType:
+          type: string
+        count:
+          type: integer
+          format: int32
+    BulkResponse:
+      type: object
+      properties:
+        request:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    PipelineSummaryList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineSummary'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    PipelineRuntimeTrendList:
+      required:
+      - data
+      - dataAvailable
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineRuntimeTrend'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        startDate:
+          type: string
+        endDate:
+          type: string
+        dataAvailable:
+          type: boolean
+        errorMessage:
+          type: string
+    JsonPatch:
+      type: object
+    PipelineObservability:
+      required:
+      - pipeline
+      type: object
+      properties:
+        pipeline:
+          $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - Airflow
+          - GluePipeline
+          - KinesisFirehose
+          - Airbyte
+          - Fivetran
+          - Flink
+          - Dagster
+          - Nifi
+          - DomoPipeline
+          - CustomPipeline
+          - DatabricksPipeline
+          - Spline
+          - Spark
+          - OpenLineage
+          - KafkaConnect
+          - DBTCloud
+          - Matillion
+          - Stitch
+          - DataFactory
+          - Wherescape
+          - SSIS
+          - Snowplow
+          - Mulesoft
+          - MicrosoftFabricPipeline
+        scheduleInterval:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+        lastRunTime:
+          type: integer
+          format: int64
+        lastRunStatus:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Pending
+          - Skipped
+          - Running
+        averageRunTime:
+          type: number
+          format: double
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    Task:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        sourceUrl:
+          type: string
+        downstreamTasks:
+          type: array
+          items:
+            type: string
+        taskType:
+          type: string
+        taskSQL:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    PipelineStatus:
+      type: object
+      properties:
+        runId:
+          type: string
+        pipelineState:
+          type: string
+          enum:
+          - queued
+          - success
+          - failed
+          - running
+          - partialSuccess
+          - stopped
+        startDate:
+          type: integer
+          format: int64
+        timestamp:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        status:
+          type: array
+          items:
+            $ref: '#/components/schemas/StepSummary'
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    PipelineSummary:
+      required:
+      - impactedAssetsCount
+      - pipelineFqn
+      - pipelineId
+      - pipelineName
+      - serviceType
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          format: uuid
+        pipelineName:
+          type: string
+        pipelineFqn:
+          type: string
+        serviceType:
+          type: string
+          enum:
+          - Airflow
+          - GluePipeline
+          - KinesisFirehose
+          - Airbyte
+          - Fivetran
+          - Flink
+          - Dagster
+          - Nifi
+          - DomoPipeline
+          - CustomPipeline
+          - DatabricksPipeline
+          - Spline
+          - Spark
+          - OpenLineage
+          - KafkaConnect
+          - DBTCloud
+          - Matillion
+          - Stitch
+          - DataFactory
+          - Wherescape
+          - SSIS
+          - Snowplow
+          - Mulesoft
+          - MicrosoftFabricPipeline
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+        lastRunTime:
+          type: integer
+          format: int64
+        lastRunStatus:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Pending
+          - Skipped
+          - Running
+        scheduleInterval:
+          type: string
+        impactedAssetsCount:
+          type: integer
+          format: int32
+        impactedAssets:
+          type: array
+          items:
+            type: string
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    StepSummary:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        records:
+          type: integer
+          format: int32
+        updated_records:
+          type: integer
+          format: int32
+        warnings:
+          type: integer
+          format: int32
+        errors:
+          type: integer
+          format: int32
+        filtered:
+          type: integer
+          format: int32
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StackTraceError'
+        progress:
+          $ref: '#/components/schemas/Progress'
+        operationMetrics:
+          $ref: '#/components/schemas/OperationMetrics'
+        sourceTimeMs:
+          type: number
+          format: double
+        sinkTimeMs:
+          type: number
+          format: double
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    PipelineExecutionTrend:
+      required:
+      - date
+      - timestamp
+      - totalCount
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        date:
+          type: string
+        successCount:
+          type: integer
+          format: int32
+        failedCount:
+          type: integer
+          format: int32
+        pendingCount:
+          type: integer
+          format: int32
+        skippedCount:
+          type: integer
+          format: int32
+        runningCount:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    PipelineMetrics:
+      required:
+      - dataAvailable
+      - totalPipelines
+      type: object
+      properties:
+        totalPipelines:
+          type: integer
+          format: int32
+        serviceCount:
+          type: integer
+          format: int32
+        activePipelines:
+          type: integer
+          format: int32
+        inactivePipelines:
+          type: integer
+          format: int32
+        failedPipelines:
+          type: integer
+          format: int32
+        successfulPipelines:
+          type: integer
+          format: int32
+        pipelinesWithoutStatus:
+          type: integer
+          format: int32
+        serviceBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceBreakdown'
+        dataAvailable:
+          type: boolean
+        errorMessage:
+          type: string
+    OperationMetrics:
+      type: object
+    PipelineExecutionTrendList:
+      required:
+      - data
+      - dataAvailable
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineExecutionTrend'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        startDate:
+          type: string
+        endDate:
+          type: string
+        totalSuccessful:
+          type: integer
+          format: int32
+        totalFailed:
+          type: integer
+          format: int32
+        totalExecutions:
+          type: integer
+          format: int32
+        dataAvailable:
+          type: boolean
+        errorMessage:
+          type: string
+    Pipeline:
+      required:
+      - id
+      - name
+      - service
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        sourceUrl:
+          type: string
+        concurrency:
+          type: integer
+          format: int32
+        pipelineLocation:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        pipelineStatus:
+          $ref: '#/components/schemas/PipelineStatus'
+        state:
+          type: string
+          enum:
+          - Active
+          - Inactive
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - Airflow
+          - GluePipeline
+          - KinesisFirehose
+          - Airbyte
+          - Fivetran
+          - Flink
+          - Dagster
+          - Nifi
+          - DomoPipeline
+          - CustomPipeline
+          - DatabricksPipeline
+          - Spline
+          - Spark
+          - OpenLineage
+          - KafkaConnect
+          - DBTCloud
+          - Matillion
+          - Stitch
+          - DataFactory
+          - Wherescape
+          - SSIS
+          - Snowplow
+          - Mulesoft
+          - MicrosoftFabricPipeline
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        extension:
+          type: object
+        scheduleInterval:
+          type: string
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

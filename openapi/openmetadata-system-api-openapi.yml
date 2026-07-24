@@ -1,0 +1,64 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions System API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: System
+  description: System diagnostics providing a performance snapshot for load test correlation
+paths:
+  /v1/system/diagnostics:
+    get:
+      tags:
+      - System
+      summary: Get system diagnostics
+      description: Returns a structured performance snapshot including JVM, Jetty thread pool, database connection pool, bulk executor, and per-endpoint latency breakdown.
+      operationId: getSystemDiagnostics
+      responses:
+        '200':
+          description: Diagnostics snapshot
+  /v1/system/version:
+    get:
+      tags:
+      - System
+      summary: Get version of metadata service
+      description: Get the build version of OpenMetadata service and build timestamp.
+      operationId: getCatalogVersion
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenMetadataServerVersion'
+components:
+  schemas:
+    OpenMetadataServerVersion:
+      type: object
+      properties:
+        version:
+          type: string
+        revision:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

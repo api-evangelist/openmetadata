@@ -1,0 +1,256 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Data Quality API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Data Quality
+  description: APIs to retrieve dimensional test case results data.
+paths:
+  /v1/dataQuality/testCases/dimensionResults/{fqn}/dimensions:
+    get:
+      tags:
+      - Data Quality
+      summary: List available dimensions for a test case
+      description: Get a list of available dimensions and their distinct values for a test case. This helps in understanding what dimensional breakdowns are available for filtering.
+      operationId: listAvailableDimensions
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the test case
+        required: true
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Start timestamp to list dimensions from
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: End timestamp to list dimensions to
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Map of dimension names to their available values
+          content:
+            application/json:
+              example:
+                column:
+                - address
+                - email
+                - phone
+                tier:
+                - Bronze
+                - Silver
+                - Gold
+  /v1/dataQuality/testCases/dimensionResults/{fqn}:
+    get:
+      tags:
+      - Data Quality
+      summary: List test case dimensional results
+      description: Get a list of dimensional results for a specific test case. Results can be filtered by time range and specific dimension values. Use `startTs` and `endTs` to filter results within a time range. Use `dimensionalityKey` to filter results for a specific dimension value combination. Use `dimensionName` to filter results for all values of a specific dimension (e.g., 'column' to get all column dimension results).
+      operationId: listTestCaseDimensionResults
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the test case
+        required: true
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Start timestamp to list dimensional results from
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: End timestamp to list dimensional results to
+        schema:
+          type: number
+      - name: dimensionalityKey
+        in: query
+        description: Filter by specific dimension key (e.g., 'column=address')
+        schema:
+          type: string
+      - name: dimensionName
+        in: query
+        description: Filter by dimension name (e.g., 'column' to get all column dimension results)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of test case dimensional results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCaseDimensionResultList'
+components:
+  schemas:
+    TestCaseDimensionResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseDimensionResult'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TestCaseDimensionResult:
+      required:
+      - dimensionKey
+      - dimensionValues
+      - id
+      - testCaseResultId
+      - testCaseStatus
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        testCaseResultId:
+          type: string
+          format: uuid
+        testCase:
+          $ref: '#/components/schemas/EntityReference'
+        timestamp:
+          type: integer
+          format: int64
+        dimensionValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/DimensionValue'
+        dimensionKey:
+          type: string
+        testCaseStatus:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        result:
+          type: string
+        testResultValue:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultValue'
+        passedRows:
+          type: integer
+          format: int32
+        failedRows:
+          type: integer
+          format: int32
+        passedRowsPercentage:
+          type: number
+          format: double
+        failedRowsPercentage:
+          type: number
+          format: double
+        impactScore:
+          type: number
+          format: double
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    DimensionValue:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    TestResultValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        predictedValue:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

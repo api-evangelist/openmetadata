@@ -1,0 +1,175 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Query Cost Record Manager API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Query Cost Record Manager
+  description: APIs to query cost records from usage workflow.
+paths:
+  /v1/queryCostRecord:
+    post:
+      tags:
+      - Query Cost Record Manager
+      summary: Create query cost record
+      description: Create query cost record
+      operationId: createQueryCostRecord
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQueryCostRecord'
+      responses:
+        '200':
+          description: Create query cost record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateQueryCostRecord'
+  /v1/queryCostRecord/{id}:
+    get:
+      tags:
+      - Query Cost Record Manager
+      summary: Get query cost record by id
+      description: Get query cost record by id
+      operationId: getQueryCostRecord
+      parameters:
+      - name: id
+        in: path
+        description: Get query cost record by id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The query cost record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryCostRecord'
+  /v1/queryCostRecord/service/{serviceName}:
+    get:
+      tags:
+      - Query Cost Record Manager
+      summary: Get Query Cost By Service
+      description: Get Query Cost By Service
+      operationId: getQueryCostByService
+      parameters:
+      - name: serviceName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Create query cost record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateQueryCostRecord'
+components:
+  schemas:
+    CreateQueryCostRecord:
+      required:
+      - cost
+      - count
+      - queryReference
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        jsonSchema:
+          type: string
+        queryReference:
+          $ref: '#/components/schemas/EntityReference'
+        cost:
+          type: number
+          format: double
+        count:
+          type: number
+          format: double
+        totalDuration:
+          type: number
+          format: double
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    QueryCostRecord:
+      required:
+      - cost
+      - count
+      - queryReference
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        timestamp:
+          type: integer
+          format: int64
+        jsonSchema:
+          type: string
+        queryReference:
+          $ref: '#/components/schemas/EntityReference'
+        cost:
+          type: number
+          format: double
+        updatedBy:
+          $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        updatedAt:
+          type: integer
+          format: int64
+        count:
+          type: number
+          format: double
+        totalDuration:
+          type: number
+          format: double
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

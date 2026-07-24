@@ -1,0 +1,1059 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Feeds API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Feeds
+  description: Feeds API supports `Activity Feeds` and `Conversation Threads`.
+paths:
+  /v1/feed/{id}/posts:
+    get:
+      tags:
+      - Feeds
+      summary: Get all the posts of a thread
+      description: Get all the posts of an existing thread.
+      operationId: getAllPostOfThread
+      parameters:
+      - name: id
+        in: path
+        description: Id of the thread
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The posts of the given thread.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostList'
+    post:
+      tags:
+      - Feeds
+      summary: Add post to a thread
+      description: Add a post to an existing thread.
+      operationId: addPostToThread
+      parameters:
+      - name: id
+        in: path
+        description: Id of the thread
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+      responses:
+        '200':
+          description: The post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        '400':
+          description: Bad request
+  /v1/feed/tasks/{id}/close:
+    put:
+      tags:
+      - Feeds
+      summary: Close a task
+      description: Close a task without making any changes to the entity.
+      operationId: closeTask
+      parameters:
+      - name: id
+        in: path
+        description: Id of the task thread
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloseTask'
+      responses:
+        '200':
+          description: The task thread.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        '400':
+          description: Bad request
+  /v1/feed:
+    get:
+      tags:
+      - Feeds
+      summary: List threads
+      description: Get a list of threads, optionally filtered by `entityLink`.
+      operationId: listThreads
+      parameters:
+      - name: limitPosts
+        in: query
+        description: Limit the number of posts sorted by chronological order (1 to 1000000, default = 3)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int64
+          default: 3
+      - name: limit
+        in: query
+        description: Limit the number of threads returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of threads before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of threads after this cursor
+        schema:
+          type: string
+      - name: entityLink
+        in: query
+        description: Filter threads by entity link of entity about which this thread is created
+        schema:
+          type: string
+          example: <E#/{entityType}/{entityFQN}/{fieldName}>
+      - name: userId
+        in: query
+        description: Filter threads by user id. This filter requires a 'filterType' query param. The default filter type is 'OWNER'. This filter cannot be combined with the entityLink filter.
+        schema:
+          type: string
+      - name: filterType
+        in: query
+        description: Filter type definition for the user filter. It can take one of 'OWNER', 'FOLLOWS', 'MENTIONS'. This must be used with the 'user' query param
+        schema:
+          type: string
+          enum:
+          - OWNER
+          - MENTIONS
+          - FOLLOWS
+          - ASSIGNED_TO
+          - ASSIGNED_BY
+          - OWNER_OR_FOLLOWS
+      - name: resolved
+        in: query
+        description: Filter threads by whether they are resolved or not. By default resolved is false
+        schema:
+          type: boolean
+          default: false
+      - name: type
+        in: query
+        description: The type of thread to filter the results. It can take one of 'Conversation', 'Task', 'Announcement'
+        schema:
+          type: string
+          enum:
+          - Conversation
+          - Task
+          - Announcement
+          - Chatbot
+      - name: taskStatus
+        in: query
+        description: The status of tasks to filter the results. It can take one of 'Open', 'Closed'. This filter will take effect only when type is set to Task
+        schema:
+          type: string
+          enum:
+          - Open
+          - Closed
+      - name: activeAnnouncement
+        in: query
+        description: Whether to filter results by announcements that are currently active. This filter will take effect only when type is set to Announcement
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of threads
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreadList'
+    post:
+      tags:
+      - Feeds
+      summary: Create a thread
+      description: Create a new thread. A thread is created about a data asset when a user posts the first post.
+      operationId: createThread
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateThread'
+      responses:
+        '200':
+          description: The thread
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        '400':
+          description: Bad request
+  /v1/feed/{threadId}/posts/{postId}:
+    delete:
+      tags:
+      - Feeds
+      summary: Delete a post from its thread
+      description: Delete a post from an existing thread.
+      operationId: deletePostFromThread
+      parameters:
+      - name: threadId
+        in: path
+        description: ThreadId of the post to be deleted
+        required: true
+        schema:
+          type: string
+      - name: postId
+        in: path
+        description: PostId of the post to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: post with {postId} is not found
+        '400':
+          description: Bad request
+    patch:
+      tags:
+      - Feeds
+      summary: Update post of a thread by `Id`.
+      description: Update a post of an existing thread using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchPostOfThread
+      parameters:
+      - name: threadId
+        in: path
+        description: Id of the thread
+        required: true
+        schema:
+          type: string
+      - name: postId
+        in: path
+        description: Id of the post
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        '400':
+          description: Bad request
+        '404':
+          description: post with {postId} is not found
+  /v1/feed/{threadId}:
+    delete:
+      tags:
+      - Feeds
+      summary: Delete a thread by Id
+      description: Delete an existing thread and all its relationships.
+      operationId: deleteThread
+      parameters:
+      - name: threadId
+        in: path
+        description: ThreadId of the thread to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: thread with {threadId} is not found
+        '400':
+          description: Bad request
+  /v1/feed/{id}:
+    get:
+      tags:
+      - Feeds
+      summary: Get a thread by Id
+      description: Get a thread by `Id`.
+      operationId: getThreadByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Thread
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The thread
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        '404':
+          description: Thread for instance {id} is not found
+    patch:
+      tags:
+      - Feeds
+      summary: Update a thread by `Id`.
+      description: Update an existing thread using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchThread
+      parameters:
+      - name: id
+        in: path
+        description: Id of the thread
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/feed/tasks/{id}:
+    get:
+      tags:
+      - Feeds
+      summary: Get a task thread by task Id
+      description: Get a task thread by `task Id`.
+      operationId: getTaskByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the task thread
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The task thread
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        '404':
+          description: Task for instance {id} is not found
+  /v1/feed/count:
+    get:
+      tags:
+      - Feeds
+      summary: Count of threads
+      description: Get a count of threads, optionally filtered by `entityLink` for each of the entities.
+      operationId: countThreads
+      parameters:
+      - name: entityLink
+        in: query
+        description: Filter threads by entity link
+        schema:
+          type: string
+          example: <E#/{entityType}/{entityFQN}/{fieldName}>
+      responses:
+        '200':
+          description: Count of threads
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreadCountList'
+  /v1/feed/tasks/{id}/resolve:
+    put:
+      tags:
+      - Feeds
+      summary: Resolve a task
+      description: Resolve a task.
+      operationId: resolveTask
+      parameters:
+      - name: id
+        in: path
+        description: Id of the task thread
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveTask'
+      responses:
+        '200':
+          description: The task thread
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ThreadList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Thread'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ChangeSummaryMap:
+      type: object
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    ResolveTask:
+      required:
+      - newValue
+      type: object
+      properties:
+        newValue:
+          type: string
+        testCaseFailureReason:
+          type: string
+          enum:
+          - FalsePositive
+          - MissingData
+          - Duplicates
+          - OutOfBounds
+          - Other
+        testCaseFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+    ChatbotDetails:
+      type: object
+      properties:
+        query:
+          type: string
+    AnnouncementDetails:
+      required:
+      - endTime
+      - startTime
+      type: object
+      properties:
+        description:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+    Thread:
+      required:
+      - about
+      - id
+      - message
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - Conversation
+          - Task
+          - Announcement
+          - Chatbot
+        href:
+          type: string
+          format: uri
+        threadTs:
+          type: integer
+          format: int64
+        about:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        entityRef:
+          $ref: '#/components/schemas/EntityReference'
+        entityUrlLink:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        generatedBy:
+          type: string
+          enum:
+          - user
+          - system
+        cardStyle:
+          type: string
+          enum:
+          - default
+          - logicalTestCaseAdded
+          - entityCreated
+          - entityDeleted
+          - entitySoftDeleted
+          - description
+          - tags
+          - owner
+          - testCaseResult
+          - customProperties
+          - assets
+          - domain
+        fieldOperation:
+          type: string
+          enum:
+          - added
+          - updated
+          - deleted
+          - none
+        feedInfo:
+          $ref: '#/components/schemas/FeedInfo'
+        addressedTo:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        createdBy:
+          type: string
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        impersonatedBy:
+          type: string
+        resolved:
+          type: boolean
+        message:
+          type: string
+        postsCount:
+          type: integer
+          format: int32
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reaction'
+        task:
+          $ref: '#/components/schemas/TaskDetails'
+        announcement:
+          $ref: '#/components/schemas/AnnouncementDetails'
+        chatbot:
+          $ref: '#/components/schemas/ChatbotDetails'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    CreateTaskDetails:
+      required:
+      - assignees
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - RequestDescription
+          - UpdateDescription
+          - RequestTag
+          - UpdateTag
+          - RequestApproval
+          - RequestTestCaseFailureResolution
+          - RecognizerFeedbackApproval
+          - Generic
+        assignees:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        oldValue:
+          type: string
+        suggestion:
+          type: string
+    JsonPatch:
+      type: object
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    RecognizerInfo:
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        matchPattern:
+          type: string
+        confidenceScore:
+          type: number
+          format: double
+    Reaction:
+      required:
+      - reactionType
+      - user
+      type: object
+      properties:
+        reactionType:
+          type: string
+          enum:
+          - thumbsUp
+          - thumbsDown
+          - hooray
+          - laugh
+          - confused
+          - heart
+          - rocket
+          - eyes
+        user:
+          $ref: '#/components/schemas/EntityReference'
+    RecognizerFeedback:
+      required:
+      - entityLink
+      - feedbackType
+      - tagFQN
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        tagFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        feedbackType:
+          type: string
+          enum:
+          - FALSE_POSITIVE
+          - INCORRECT_CLASSIFICATION
+          - OVERLY_BROAD
+          - CONTEXT_SPECIFIC
+        userReason:
+          type: string
+          enum:
+          - NOT_SENSITIVE_DATA
+          - WRONG_DATA_TYPE
+          - INTERNAL_IDENTIFIER
+          - PUBLIC_INFORMATION
+          - TEST_DATA
+          - ENCRYPTED_DATA
+          - OTHER
+        userComments:
+          type: string
+        suggestedTag:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        sampleValues:
+          type: array
+          items:
+            type: string
+        recognizerInfo:
+          $ref: '#/components/schemas/RecognizerInfo'
+        createdBy:
+          $ref: '#/components/schemas/EntityReference'
+        createdAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - PENDING
+          - REVIEWED
+          - APPLIED
+          - REJECTED
+        resolution:
+          $ref: '#/components/schemas/Resolution'
+    Resolution:
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+          - ADDED_TO_EXCEPTION_LIST
+          - PATTERN_ADJUSTED
+          - THRESHOLD_INCREASED
+          - RECOGNIZER_DISABLED_FOR_ENTITY
+          - NO_ACTION_NEEDED
+        resolvedBy:
+          $ref: '#/components/schemas/EntityReference'
+        resolvedAt:
+          type: integer
+          format: int64
+        resolutionNotes:
+          type: string
+    ThreadCount:
+      type: object
+      properties:
+        conversationCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        openTaskCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        closedTaskCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        totalTaskCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        mentionCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        totalAnnouncementCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        activeAnnouncementCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        inactiveAnnouncementCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+    CreateThread:
+      required:
+      - about
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        addressedTo:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        about:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        type:
+          type: string
+          enum:
+          - Conversation
+          - Task
+          - Announcement
+          - Chatbot
+        taskDetails:
+          $ref: '#/components/schemas/CreateTaskDetails'
+        announcementDetails:
+          $ref: '#/components/schemas/AnnouncementDetails'
+        chatbotDetails:
+          $ref: '#/components/schemas/ChatbotDetails'
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+    Post:
+      required:
+      - from
+      - id
+      - message
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        postTs:
+          type: integer
+          format: int64
+        from:
+          type: string
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reaction'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ThreadCountList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreadCount'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    TaskDetails:
+      required:
+      - assignees
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        type:
+          type: string
+          enum:
+          - RequestDescription
+          - UpdateDescription
+          - RequestTag
+          - UpdateTag
+          - RequestApproval
+          - RequestTestCaseFailureResolution
+          - RecognizerFeedbackApproval
+          - Generic
+        assignees:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        status:
+          type: string
+          enum:
+          - Open
+          - Closed
+        closedBy:
+          type: string
+        closedAt:
+          type: integer
+          format: int64
+        oldValue:
+          type: string
+        suggestion:
+          type: string
+        newValue:
+          type: string
+        testCaseResolutionStatusId:
+          type: string
+          format: uuid
+        feedback:
+          $ref: '#/components/schemas/RecognizerFeedback'
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+    CreatePost:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+    CloseTask:
+      required:
+      - comment
+      type: object
+      properties:
+        comment:
+          type: string
+        testCaseFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    FeedInfo:
+      type: object
+      properties:
+        headerMessage:
+          type: string
+        fieldName:
+          type: string
+        entitySpecificInfo:
+          type: object
+    PostList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

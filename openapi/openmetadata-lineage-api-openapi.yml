@@ -1,0 +1,1207 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Lineage API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Lineage
+  description: The `Lineage` for a given data asset, has information of the input datasets used and the ETL pipeline that created it.
+paths:
+  /v1/lineage:
+    put:
+      tags:
+      - Lineage
+      summary: Add a lineage edge
+      description: Add a lineage edge with from entity as upstream node and to entity as downstream node.
+      operationId: addLineageEdge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLineage'
+      responses:
+        '404':
+          description: Entity for instance {id} is not found
+  /v1/lineage/{fromEntity}/{fromId}/{toEntity}/{toId}:
+    delete:
+      tags:
+      - Lineage
+      summary: Delete a lineage edge
+      description: Delete a lineage edge with from entity as upstream node and to entity as downstream node.
+      operationId: deleteLineageEdge
+      parameters:
+      - name: fromEntity
+        in: path
+        description: Entity type of upstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fromId
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      - name: toEntity
+        in: path
+        description: Entity type for downstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: toId
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      responses:
+        '404':
+          description: Entity for instance {fromId} is not found
+    patch:
+      tags:
+      - Lineage
+      summary: Patch a lineage edge
+      description: Patch a lineage edge with from entity as upstream node and to entity as downstream node.
+      operationId: patchLineageEdge
+      parameters:
+      - name: fromEntity
+        in: path
+        description: Entity type of upstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fromId
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      - name: toEntity
+        in: path
+        description: Entity type for downstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: toId
+        in: path
+        description: Entity id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        '404':
+          description: Entity for instance {fromId} is not found
+  /v1/lineage/{fromEntity}/name/{fromFQN}/{toEntity}/name/{toFQN}:
+    delete:
+      tags:
+      - Lineage
+      summary: Delete a lineage edge by FQNs
+      description: Delete a lineage edge with from entity as upstream node and to entity as downstream node.
+      operationId: deleteLineageEdgeByName
+      parameters:
+      - name: fromEntity
+        in: path
+        description: Entity type of upstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fromFQN
+        in: path
+        description: Entity FQN
+        required: true
+        schema:
+          type: string
+      - name: toEntity
+        in: path
+        description: Entity type for downstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: toFQN
+        in: path
+        description: Entity FQN
+        required: true
+        schema:
+          type: string
+      responses:
+        '404':
+          description: Entity for instance {fromFQN} is not found
+  /v1/lineage/{entityType}/{entityId}/type/{lineageSource}:
+    delete:
+      tags:
+      - Lineage
+      summary: Delete a lineage edge by Type
+      description: Delete a lineage edge with from entity as upstream node and to entity as downstream node by source of lineage
+      operationId: deleteLineageEdgeByType
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type of upstream entity of the edge
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: entityId
+        in: path
+        description: Entity ID
+        required: true
+        schema:
+          type: string
+      - name: lineageSource
+        in: path
+        description: Lineage Type
+        required: true
+        schema:
+          type: string
+          example: ViewLineage
+      responses:
+        '404':
+          description: Entity for instance {entityFQN} is not found
+  /v1/lineage/export:
+    get:
+      tags:
+      - Lineage
+      summary: Export lineage
+      operationId: exportLineage
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: upstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: downstreamDepth
+        in: query
+        description: downstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: type
+        in: query
+        description: entity type
+        schema:
+          type: string
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/lineage/exportAsync:
+    get:
+      tags:
+      - Lineage
+      summary: Export lineage
+      operationId: exportLineage_1
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: upstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: downstreamDepth
+        in: query
+        description: downstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: type
+        in: query
+        description: entity type
+        schema:
+          type: string
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVExportMessage'
+  /v1/lineage/exportByEntityCountAsync:
+    get:
+      tags:
+      - Lineage
+      summary: Export lineage by entity count
+      operationId: exportLineageByEntityCount
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        required: true
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: Direction of lineage traversal
+        required: true
+        schema:
+          type: string
+          enum:
+          - Upstream
+          - Downstream
+      - name: from
+        in: query
+        description: Starting offset for pagination (0-based)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Number of entities to return in this page
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: nodeDepth
+        in: query
+        description: Filter entities by specific node depth level (optional)
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: maxDepth
+        in: query
+        description: Maximum depth to traverse in the specified direction
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: upstreamDepth
+        in: query
+        description: Maximum upstream depth to compute pagination info for
+        schema:
+          type: integer
+          format: int32
+      - name: downstreamDepth
+        in: query
+        description: Maximum downstream depth to compute pagination info for
+        schema:
+          type: integer
+          format: int32
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+          default: false
+      - name: entityType
+        in: query
+        description: entity type
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Source Fields to Include
+        schema:
+          type: string
+          default: '*'
+      responses:
+        '200':
+          description: export response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVExportMessage'
+  /v1/lineage/{entity}/{id}:
+    get:
+      tags:
+      - Lineage
+      summary: Get lineage by Id
+      description: Get lineage details for an entity identified by `Id`.
+      operationId: getLineage
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which lineage is requested
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: id
+        in: path
+        description: Id of the entity
+        required: true
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: Upstream depth of lineage (default=1, min=0, max=3)
+        schema:
+          maximum: 3
+          minimum: 0
+          type: integer
+          format: int32
+          default: 1
+      - name: downstreamDepth
+        in: query
+        description: Upstream depth of lineage (default=1, min=0, max=3)
+        schema:
+          maximum: 3
+          minimum: 0
+          type: integer
+          format: int32
+          default: 1
+      responses:
+        '200':
+          description: Entity lineage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityLineage'
+        '404':
+          description: Entity for instance {id} is not found
+  /v1/lineage/{entity}/name/{fqn}:
+    get:
+      tags:
+      - Lineage
+      summary: Get lineage by fully qualified name
+      description: Get lineage details for an entity identified by fully qualified name.
+      operationId: getLineageByFQN
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type for which lineage is requested
+        required: true
+        schema:
+          type: string
+          example: table, report, metrics, or dashboard
+      - name: fqn
+        in: path
+        description: Fully qualified name of the entity that uniquely identifies an entity
+        required: true
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: Upstream depth of lineage (default=1, min=0, max=3)
+        schema:
+          maximum: 3
+          minimum: 0
+          type: integer
+          format: int32
+          default: 1
+      - name: downstreamDepth
+        in: query
+        description: Upstream depth of lineage (default=1, min=0, max=3)
+        schema:
+          maximum: 3
+          minimum: 0
+          type: integer
+          format: int32
+          default: 1
+      responses:
+        '200':
+          description: Entity lineage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityLineage'
+        '404':
+          description: Entity for instance {fqn} is not found
+  /v1/lineage/getLineageByEntityCount:
+    get:
+      tags:
+      - Lineage
+      summary: Get lineage with entity count based pagination
+      description: Get lineage entities with pagination support, optionally filtered by node depth
+      operationId: getLineageByEntityCount
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        required: true
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: Direction of lineage traversal
+        required: true
+        schema:
+          type: string
+          enum:
+          - Upstream
+          - Downstream
+      - name: from
+        in: query
+        description: Starting offset for pagination (0-based)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Number of entities to return in this page
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: nodeDepth
+        in: query
+        description: Filter entities by specific node depth level (optional)
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: maxDepth
+        in: query
+        description: Maximum depth to traverse in the specified direction
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: upstreamDepth
+        in: query
+        description: Maximum upstream depth to use when calculating pagination info
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: downstreamDepth
+        in: query
+        description: Maximum downstream depth to use when calculating pagination info
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+          default: false
+      - name: entityType
+        in: query
+        description: entity type
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Source Fields to Include
+        schema:
+          type: string
+          default: '*'
+      - name: column_filter
+        in: query
+        description: Column-level lineage filter. Supports filtering by column names, tags, or glossary terms (e.g., 'columnName:customer_id', 'tag:PII', 'glossary:BusinessTerm')
+        schema:
+          type: string
+      - name: preserve_paths
+        in: query
+        description: When true, preserves all nodes in the path to filtered results. When false, only returns nodes matching the filter. Default is false.
+        schema:
+          type: boolean
+          default: false
+      - name: include_pagination_info
+        in: query
+        description: When true, includes pagination totals and depth counts in the entity-count response.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: lineage response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchLineageResult'
+  /v1/lineage/getLineageEdge/{fromId}/{toId}:
+    get:
+      tags:
+      - Lineage
+      summary: Get  a lineage edge
+      description: Get a lineage edge with from entity as upstream node and to entity as downstream node.
+      operationId: getLineageEdge
+      parameters:
+      - name: fromId
+        in: path
+        description: Entity FQN
+        required: true
+        schema:
+          type: string
+      - name: toId
+        in: path
+        description: Entity FQN
+        required: true
+        schema:
+          type: string
+      responses:
+        '404':
+          description: Entity for instance {fromId} is not found
+  /v1/lineage/getPaginationInfo:
+    get:
+      tags:
+      - Lineage
+      summary: Get lineage pagination information
+      description: Get pagination information showing total entities per layer and across depth
+      operationId: getLineagePaginationInfo
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: upstreamDepth
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: downstreamDepth
+        in: query
+        description: downstreamDepth
+        schema:
+          type: integer
+          format: int32
+          default: 10000
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+          default: false
+      - name: type
+        in: query
+        description: entity type
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pagination info response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineagePaginationInfo'
+  /v1/lineage/getDataQualityLineage:
+    get:
+      tags:
+      - Lineage
+      summary: Search Data Quality lineage
+      operationId: searchDataQualityLineage
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: upstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/lineage/getPlatformLineage:
+    get:
+      tags:
+      - Lineage
+      summary: Get Platform Lineage
+      operationId: getPlatformLineage
+      parameters:
+      - name: view
+        in: query
+        description: view (service or domain)
+        schema:
+          pattern: service|domain|dataProduct|all
+          type: string
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/lineage/getLineage:
+    get:
+      tags:
+      - Lineage
+      summary: Search lineage
+      operationId: searchLineage
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: upstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: downstreamDepth
+        in: query
+        description: downstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: fields
+        in: query
+        description: Source Fields to Include
+        schema:
+          type: string
+          default: '*'
+      - name: type
+        in: query
+        description: entity type
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: From field to paginate the results, defaults to 0
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 10
+        schema:
+          type: integer
+          format: int32
+          default: 1000
+      - name: column_filter
+        in: query
+        description: Column-level lineage filter. Supports filtering by column names, tags, or glossary terms (e.g., 'columnName:customer_id', 'tag:PII', 'glossary:BusinessTerm')
+        schema:
+          type: string
+      - name: preserve_paths
+        in: query
+        description: When true, preserves all nodes in the path to filtered results. When false, only returns nodes matching the filter. Default is true.
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/lineage/getLineage/{direction}:
+    get:
+      tags:
+      - Lineage
+      summary: Search lineage with Direction
+      operationId: searchLineageWithDirection
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: direction
+        in: path
+        description: Direction
+        required: true
+        schema:
+          type: string
+      - name: upstreamDepth
+        in: query
+        description: upstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: downstreamDepth
+        in: query
+        description: downstreamDepth
+        schema:
+          type: integer
+          format: int32
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: fields
+        in: query
+        description: Source Fields to Include
+        schema:
+          type: string
+          default: '*'
+      - name: type
+        in: query
+        description: entity type
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: From field to paginate the results, defaults to 0
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 10
+        schema:
+          type: integer
+          format: int32
+          default: 1000
+      - name: column_filter
+        in: query
+        description: Column-level lineage filter. Supports filtering by column names, tags, or glossary terms (e.g., 'columnName:customer_id', 'tag:PII', 'glossary:BusinessTerm')
+        schema:
+          type: string
+      - name: preserve_paths
+        in: query
+        description: When true, preserves all nodes in the path to filtered results. When false, only returns nodes matching the filter. Default is true.
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+components:
+  schemas:
+    SearchLineageResult:
+      type: object
+      properties:
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NodeInformation'
+        upstreamEdges:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EsLineageData'
+        downstreamEdges:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EsLineageData'
+        paginationInfo:
+          $ref: '#/components/schemas/LineagePaginationInfo'
+    CSVExportMessage:
+      type: object
+      properties:
+        jobId:
+          type: string
+        status:
+          type: string
+        data:
+          type: string
+        error:
+          type: string
+        progress:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        message:
+          type: string
+    EntityLineage:
+      required:
+      - entity
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/EntityReference'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        upstreamEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Edge'
+        downstreamEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Edge'
+    DepthInfo:
+      required:
+      - depth
+      - entityCount
+      type: object
+      properties:
+        depth:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        entityCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+    SearchResponse:
+      type: object
+    LineagePaginationInfo:
+      required:
+      - downstreamDepthInfo
+      - maxDownstreamDepth
+      - maxUpstreamDepth
+      - totalDownstreamEntities
+      - totalUpstreamEntities
+      - upstreamDepthInfo
+      type: object
+      properties:
+        totalUpstreamEntities:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        totalDownstreamEntities:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        upstreamDepthInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepthInfo'
+        downstreamDepthInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepthInfo'
+        maxUpstreamDepth:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        maxDownstreamDepth:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+    LineageDetails:
+      type: object
+      properties:
+        sqlQuery:
+          type: string
+        columnsLineage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnLineage'
+        pipeline:
+          $ref: '#/components/schemas/EntityReference'
+        description:
+          type: string
+        source:
+          type: string
+          enum:
+          - Manual
+          - ViewLineage
+          - QueryLineage
+          - PipelineLineage
+          - DashboardLineage
+          - DbtLineage
+          - SparkLineage
+          - OpenLineage
+          - ExternalTableLineage
+          - CrossDatabaseLineage
+          - ChildAssets
+        createdAt:
+          type: integer
+          format: int64
+        createdBy:
+          type: string
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        assetEdges:
+          type: integer
+          format: int32
+        tempLineageTables:
+          type: array
+          items:
+            $ref: '#/components/schemas/TempLineageTable'
+    TempLineageTable:
+      required:
+      - fromEntity
+      - toEntity
+      type: object
+      properties:
+        fromEntity:
+          type: string
+        toEntity:
+          type: string
+    RelationshipRef:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        fqnHash:
+          type: string
+        type:
+          type: string
+    LayerPaging:
+      type: object
+      properties:
+        entityDownstreamCount:
+          type: integer
+          format: int32
+        entityUpstreamCount:
+          type: integer
+          format: int32
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    EsLineageData:
+      type: object
+      properties:
+        fromEntity:
+          $ref: '#/components/schemas/RelationshipRef'
+        toEntity:
+          $ref: '#/components/schemas/RelationshipRef'
+        pipeline:
+          type: object
+        sqlQuery:
+          type: string
+        sqlQueryKey:
+          type: string
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnLineage'
+        description:
+          type: string
+        source:
+          type: string
+        docId:
+          type: string
+        docUniqueId:
+          type: string
+        pipelineEntityType:
+          type: string
+        createdAt:
+          type: integer
+          format: int64
+        createdBy:
+          type: string
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        assetEdges:
+          type: integer
+          format: int32
+        tempLineageTables:
+          type: array
+          items:
+            $ref: '#/components/schemas/TempLineageTable'
+    JsonPatch:
+      type: object
+    AddLineage:
+      required:
+      - edge
+      type: object
+      properties:
+        edge:
+          $ref: '#/components/schemas/EntitiesEdge'
+    Edge:
+      required:
+      - fromEntity
+      - toEntity
+      type: object
+      properties:
+        fromEntity:
+          type: string
+          format: uuid
+        toEntity:
+          type: string
+          format: uuid
+        description:
+          type: string
+        lineageDetails:
+          $ref: '#/components/schemas/LineageDetails'
+    ColumnLineage:
+      type: object
+      properties:
+        fromColumns:
+          type: array
+          items:
+            type: string
+        toColumn:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        function:
+          type: string
+    NodeInformation:
+      type: object
+      properties:
+        entity:
+          type: object
+          additionalProperties:
+            type: object
+        paging:
+          $ref: '#/components/schemas/LayerPaging'
+        nodeDepth:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+    EntitiesEdge:
+      required:
+      - fromEntity
+      - toEntity
+      type: object
+      properties:
+        fromEntity:
+          $ref: '#/components/schemas/EntityReference'
+        toEntity:
+          $ref: '#/components/schemas/EntityReference'
+        description:
+          type: string
+        lineageDetails:
+          $ref: '#/components/schemas/LineageDetails'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

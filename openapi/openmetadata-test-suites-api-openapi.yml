@@ -1,0 +1,1447 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Test Suites API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Test Suites
+  description: '`TestSuite` is a set of test cases grouped together to capture data quality.'
+paths:
+  /v1/dataQuality/testSuites:
+    get:
+      tags:
+      - Test Suites
+      summary: List test suites
+      description: Get a list of test suites. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listTestSuites
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,reviewers,tests,summary
+      - name: limit
+        in: query
+        description: Limit the number test definitions returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: testSuiteType
+        in: query
+        description: Returns executable or logical test suites. If omitted, returns all test suites.
+        schema:
+          type: string
+          example: basic
+      - name: includeEmptyTestSuites
+        in: query
+        description: Include empty test suite in the response.
+        schema:
+          type: boolean
+          example: true
+          default: true
+      - name: before
+        in: query
+        description: Returns list of test definitions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of test definitions after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of test definitions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteList'
+    put:
+      tags:
+      - Test Suites
+      summary: Update logical test suite
+      description: Create a logical TestSuite, if it does not exist or update an existing test suite.
+      operationId: createOrUpdateLogicalTestSuite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestSuite'
+      responses:
+        '200':
+          description: 'The updated test definition '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+    post:
+      tags:
+      - Test Suites
+      summary: Create a logical test suite
+      description: Create a logical test suite.
+      operationId: createLogicalTestSuite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestSuite'
+      responses:
+        '200':
+          description: The test suite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+        '400':
+          description: Bad request
+  /v1/dataQuality/testSuites/basic:
+    put:
+      tags:
+      - Test Suites
+      summary: Create or Update Basic test suite
+      description: Create a Basic TestSuite if it does not exist or update an existing one.
+      operationId: createOrUpdateBasicTestSuite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestSuite'
+      responses:
+        '200':
+          description: 'The updated test definition '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+    post:
+      tags:
+      - Test Suites
+      summary: Create a basic test suite
+      description: Create a basic test suite.
+      operationId: createBasicTestSuite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestSuite'
+      responses:
+        '200':
+          description: Basic test suite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+        '400':
+          description: Bad request
+  /v1/dataQuality/testSuites/executable:
+    put:
+      tags:
+      - Test Suites
+      summary: Create or Update Executable test suite
+      description: Create an Executable TestSuite if it does not exist or update an existing one.
+      operationId: createOrUpdateExecutableTestSuite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestSuite'
+      responses:
+        '200':
+          description: 'The updated test definition '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+  /v1/dataQuality/testSuites/name/{name}:
+    get:
+      tags:
+      - Test Suites
+      summary: Get a test suite by name
+      description: Get a test suite by  name.
+      operationId: getTestSuiteByName
+      parameters:
+      - name: name
+        in: path
+        description: Name of the test suite
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,reviewers,tests,summary
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The test suite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+        '404':
+          description: Test Suite for instance {name} is not found
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a logical test suite
+      description: Delete a logical test suite by `name`.
+      operationId: deleteLogicalTestSuite
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the logical entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: FQN of the logical test suite
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Logical Test suite for instance {name} is not found
+  /v1/dataQuality/testSuites/{id}:
+    get:
+      tags:
+      - Test Suites
+      summary: Get a test suite by Id
+      description: Get a Test Suite by `Id`.
+      operationId: get_5
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,reviewers,tests,summary
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The Test suite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+        '404':
+          description: Test Suite for instance {id} is not found
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a logical test suite
+      description: Delete a logical test suite by `id`.
+      operationId: deleteLogicalTestSuite_1
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the logical entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the logical test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Logical test suite for instance {id} is not found
+    patch:
+      tags:
+      - Test Suites
+      summary: Update a test suite
+      description: Update an existing testSuite using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchTestSuite
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/dataQuality/testSuites/async/{id}:
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a logical test suite asynchronously
+      description: Delete a logical test suite by `id` asynchronously.
+      operationId: deleteLogicalTestSuiteAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the logical entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the logical test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Logical test suite for instance {id} is not found
+  /v1/dataQuality/testSuites/basic/name/{name}:
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a test suite
+      description: Delete a test suite by `name`.
+      operationId: deleteTestSuiteByName
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the test suite
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test suite for instance {name} is not found
+  /v1/dataQuality/testSuites/basic/{id}:
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a test suite
+      description: Delete a test suite by `Id`.
+      operationId: deleteTestSuite
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test suite for instance {id} is not found
+  /v1/dataQuality/testSuites/executable/name/{name}:
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a test suite
+      description: Delete a test suite by `name`.
+      operationId: deleteTestSuiteByName_1
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the test suite
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test suite for instance {name} is not found
+  /v1/dataQuality/testSuites/executable/{id}:
+    delete:
+      tags:
+      - Test Suites
+      summary: Delete a test suite
+      description: Delete a test suite by `Id`.
+      operationId: deleteTestSuite_1
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test suite for instance {id} is not found
+  /v1/dataQuality/testSuites/dataQualityReport:
+    get:
+      tags:
+      - Test Suites
+      summary: Get Data Quality Report
+      description: 'Use the search service to perform data quality aggregation. You can use the `q` parameter to filter the results.
+
+        the `aggregationQuery` is of the form `bucketName=<bucketName>:aggType=<aggType>:field=<field>`. You can sperate aggregation
+
+        query with a comma `,` to perform nested aggregations.
+
+        For example, `bucketName=table:aggType=terms:field=databaseName,bucketName=<bucketName>:aggType=<aggType>:field=<field>`
+
+        '
+      operationId: getDataQualityReport
+      parameters:
+      - name: q
+        in: query
+        description: Search query to filter the aggregation results
+        schema:
+          type: string
+      - name: aggregationQuery
+        in: query
+        description: Aggregation query to perform aggregation on the search results
+        schema:
+          type: string
+      - name: index
+        in: query
+        description: Index to perform the aggregation against
+        schema:
+          type: string
+      - name: domain
+        in: query
+        description: Filter by domain fully qualified name
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Data Quality Report Results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataQualityReport'
+  /v1/dataQuality/testSuites/executionSummary:
+    get:
+      tags:
+      - Test Suites
+      summary: Get the execution summary of test suites
+      description: Get the execution summary of test suites.
+      operationId: getExecutionSummaryOfTestSuites
+      parameters:
+      - name: testSuiteId
+        in: query
+        description: get summary for a specific test suite
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Tests Execution Summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSummary'
+  /v1/dataQuality/testSuites/{id}/versions/{version}:
+    get:
+      tags:
+      - Test Suites
+      summary: Get a version of the test suite
+      description: Get a version of the test suite by given `id`
+      operationId: getSpecificTestSuiteVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Test Suite version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: TestSuite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+        '404':
+          description: Test Suite for instance {id} and version {version} is not found
+  /v1/dataQuality/testSuites/history:
+    get:
+      tags:
+      - Test Suites
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_23
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/dataQuality/testSuites/search/list:
+    get:
+      tags:
+      - Test Suites
+      summary: List test suite using search service
+      description: Get a list of test suite using the search service. Use `fields` parameter to get only necessary fields. Use offset/limit pagination to limit the number entries in the list using `limit` and `offset` query params.Use the `tests` field to get the test cases linked to the test suite and/or use the `summary` field to get a summary of test case executions.
+      operationId: listTestSuiteFromSearchService
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,reviewers,tests,summary
+      - name: limit
+        in: query
+        description: Limit the number test suite returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Returns list of test suite after this offset (default = 0)
+        schema:
+          type: string
+          default: '0'
+      - name: testSuiteType
+        in: query
+        description: Returns executable or logical test suites. If omitted, returns all test suites.
+        schema:
+          type: string
+          example: executable
+      - name: includeEmptyTestSuites
+        in: query
+        description: Include empty test suite in the response.
+        schema:
+          type: boolean
+          example: true
+          default: true
+      - name: domain
+        in: query
+        description: Filter a test suite by domain.
+        schema:
+          type: string
+      - name: fullyQualifiedName
+        in: query
+        description: Filter a test suite by fully qualified name.
+        schema:
+          type: string
+      - name: owner
+        in: query
+        description: Filter test suites by owner.
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: sortField
+        in: query
+        description: Field used to sort the test cases listing
+        schema:
+          type: string
+      - name: sortNestedPath
+        in: query
+        description: Set this field if your mapping is nested and you want to sort on a nested field
+        schema:
+          type: string
+      - name: sortNestedMode
+        in: query
+        description: Set this field if your mapping is nested and you want to sort on a nested field
+        schema:
+          type: string
+          example: min,max,avg,sum,median
+      - name: sortType
+        in: query
+        description: Sort type
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+      - name: q
+        in: query
+        description: search query term to use in list
+        schema:
+          type: string
+      - name: queryString
+        in: query
+        description: raw elasticsearch query to use in list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of test suites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuiteList'
+  /v1/dataQuality/testSuites/{id}/versions:
+    get:
+      tags:
+      - Test Suites
+      summary: List test suite versions
+      description: Get a list of all the versions of a test suite identified by `id`
+      operationId: listAllTestSuiteVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test suite
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of test suite versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/dataQuality/testSuites/restore:
+    put:
+      tags:
+      - Test Suites
+      summary: Restore a soft deleted test suite
+      description: Restore a soft deleted test suite.
+      operationId: restore_19
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: Successfully restored the TestSuite.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSuite'
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    DataQualityReport:
+      required:
+      - data
+      - metadata
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/DataQualityReportMetadata'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Datum'
+    TestSuiteConnection:
+      type: object
+      properties:
+        config:
+          type: object
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    TestSuite:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        tests:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        connection:
+          $ref: '#/components/schemas/TestSuiteConnection'
+        testConnectionResult:
+          $ref: '#/components/schemas/TestConnectionResult'
+        pipelines:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - TestSuite
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        basic:
+          type: boolean
+        executable:
+          type: boolean
+        basicEntityReference:
+          $ref: '#/components/schemas/EntityReference'
+        executableEntityReference:
+          $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        summary:
+          $ref: '#/components/schemas/TestSummary'
+        testCaseResultSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultSummary'
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        inherited:
+          type: boolean
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultSummary:
+      type: object
+      properties:
+        testCaseName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        status:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        timestamp:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ColumnTestSummaryDefinition:
+      type: object
+      properties:
+        success:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        aborted:
+          type: integer
+          format: int32
+        queued:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TestConnectionResult:
+      required:
+      - steps
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Running
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestConnectionStepResult'
+    JsonPatch:
+      type: object
+    CreateTestSuite:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        basicEntityReference:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        executableEntityReference:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    DataQualityReportMetadata:
+      type: object
+      properties:
+        keys:
+          type: array
+          items:
+            type: string
+        dimensions:
+          type: array
+          items:
+            type: string
+        metrics:
+          type: array
+          items:
+            type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    TestSummary:
+      type: object
+      properties:
+        success:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        aborted:
+          type: integer
+          format: int32
+        queued:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        columnTestSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnTestSummaryDefinition'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Datum:
+      type: object
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TestSuiteList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuite'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    TestConnectionStepResult:
+      required:
+      - mandatory
+      - name
+      - passed
+      type: object
+      properties:
+        name:
+          type: string
+        mandatory:
+          type: boolean
+        passed:
+          type: boolean
+        message:
+          type: string
+        errorLog:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

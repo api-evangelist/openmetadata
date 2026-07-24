@@ -1,0 +1,1258 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Drive Services API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Drive Services
+  description: '`Drive Service` is a cloud file storage service such as Google Drive, OneDrive, SharePoint, Box, or Dropbox where documents, spreadsheets, and other files are stored.'
+paths:
+  /v1/services/driveServices/{id}/followers:
+    put:
+      tags:
+      - Drive Services
+      summary: Add a follower
+      description: Add a user identified by `userId` as follower of this drive service
+      operationId: addFollowerToDriveService
+      parameters:
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Drive service for instance {id} is not found
+  /v1/services/driveServices/{id}/testConnectionResult:
+    put:
+      tags:
+      - Drive Services
+      summary: Add test connection result
+      description: Add test connection result to the service.
+      operationId: addTestConnectionResult_3
+      parameters:
+      - name: id
+        in: path
+        description: Id of the service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestConnectionResult'
+      responses:
+        '200':
+          description: Successfully updated the service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+  /v1/services/driveServices:
+    get:
+      tags:
+      - Drive Services
+      summary: List drive services
+      description: Get a list of drive services.
+      operationId: listDriveServices
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: pipelines,owners,tags,domains,followers
+      - name: domain
+        in: query
+        description: Filter services by domain
+        schema:
+          type: string
+          example: Marketing
+      - name: limit
+        in: query
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of drive services before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of drive services after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of drive service instances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveServiceList'
+    put:
+      tags:
+      - Drive Services
+      summary: Update drive service
+      description: Create a new drive service or update an existing one.
+      operationId: createOrUpdateDriveService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDriveService'
+      responses:
+        '200':
+          description: Drive service created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Drive Services
+      summary: Create a drive service
+      description: Create a new drive service.
+      operationId: createDriveService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDriveService'
+      responses:
+        '200':
+          description: Drive service created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+        '400':
+          description: Bad request
+  /v1/services/driveServices/name/{name}:
+    delete:
+      tags:
+      - Drive Services
+      summary: Delete a drive service by name
+      description: Delete a drive service by `name`. If entities (directories, files) belong to the service, it can't be deleted.
+      operationId: deleteDriveServiceByName
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the drive service
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Drive service for instance {name} is not found
+  /v1/services/driveServices/{id}:
+    get:
+      tags:
+      - Drive Services
+      summary: Get a drive service
+      description: Get a drive service by `Id`.
+      operationId: getDriveServiceByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: pipelines,owners,tags,domains,followers
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: Drive service instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+        '404':
+          description: Drive service for instance {id} is not found
+    delete:
+      tags:
+      - Drive Services
+      summary: Delete a drive service by Id
+      description: Delete a drive service. If entities (directories, files) belong to the service, it can't be deleted.
+      operationId: deleteDriveService
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Drive service for instance {id} is not found
+    patch:
+      tags:
+      - Drive Services
+      summary: Update a drive service
+      description: Update an existing drive service using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchDriveService
+      parameters:
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/services/driveServices/async/{id}:
+    delete:
+      tags:
+      - Drive Services
+      summary: Asynchronously delete a drive service by Id
+      description: Asynchronously delete a drive service. If entities (directories, files) belong to the service, it can't be deleted.
+      operationId: deleteDriveServiceAsync
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Drive service for instance {id} is not found
+  /v1/services/driveServices/{id}/followers/{userId}:
+    delete:
+      tags:
+      - Drive Services
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the drive service.
+      operationId: deleteFollowerFromDriveService
+      parameters:
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/services/driveServices/name/{name}/export:
+    get:
+      tags:
+      - Drive Services
+      summary: Export drive service in CSV format
+      description: Export drive service to CSV file.
+      operationId: exportDriveService
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Drive Service
+        required: true
+        schema:
+          type: string
+      - name: recursive
+        in: query
+        description: If true, export will include child entities (directories, files, spreadsheets, worksheets)
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Exported csv with drive service
+          content:
+            application/json: {}
+  /v1/services/driveServices/name/{fqn}:
+    get:
+      tags:
+      - Drive Services
+      summary: Get a drive service by name
+      description: Get a drive service by fully qualified name.
+      operationId: getDriveServiceByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the drive service
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: pipelines,owners,tags,domains,followers
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: Drive service instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+        '404':
+          description: Drive service for instance {fqn} is not found
+  /v1/services/driveServices/{id}/versions/{version}:
+    get:
+      tags:
+      - Drive Services
+      summary: Get a version of the drive service
+      description: Get a version of the drive service by given `Id`
+      operationId: getSpecificDriveServiceVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Drive service version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: Drive service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+        '404':
+          description: Drive service for instance {id} and version {version} is not found
+  /v1/services/driveServices/name/{name}/import:
+    put:
+      tags:
+      - Drive Services
+      summary: Import service from CSV to update drive service (no creation allowed)
+      description: Import a CSV file generated by the export service endpoint.
+      operationId: importDriveService
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Drive Service
+        required: true
+        schema:
+          type: string
+      - name: dryRun
+        in: query
+        description: Dry-run when true is used for validating the CSV without really importing it. (default=true)
+        schema:
+          type: boolean
+          default: true
+      - name: recursive
+        in: query
+        description: If true, recursive import
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          text/plain; charset=UTF-8:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: CSV import result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvImportResult'
+  /v1/services/driveServices/history:
+    get:
+      tags:
+      - Drive Services
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_43
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/services/driveServices/{id}/versions:
+    get:
+      tags:
+      - Drive Services
+      summary: List drive service versions
+      description: Get a list of all the versions of a drive service identified by `Id`
+      operationId: listAllDriveServiceVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the drive service
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of drive service versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/services/driveServices/restore:
+    put:
+      tags:
+      - Drive Services
+      summary: Restore a soft deleted drive service
+      description: Restore a soft deleted drive service.
+      operationId: restore_33
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: Successfully restored the drive service.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriveService'
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TestConnectionResult:
+      required:
+      - steps
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Running
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestConnectionStepResult'
+    JsonPatch:
+      type: object
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    DriveConnection:
+      type: object
+      properties:
+        config:
+          type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    DriveService:
+      required:
+      - id
+      - name
+      - serviceType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        serviceType:
+          type: string
+          enum:
+          - GoogleDrive
+          - SharePoint
+          - Sftp
+          - CustomDrive
+        description:
+          type: string
+        connection:
+          $ref: '#/components/schemas/DriveConnection'
+        pipelines:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        testConnectionResult:
+          $ref: '#/components/schemas/TestConnectionResult'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    TestConnectionStepResult:
+      required:
+      - mandatory
+      - name
+      - passed
+      type: object
+      properties:
+        name:
+          type: string
+        mandatory:
+          type: boolean
+        passed:
+          type: boolean
+        message:
+          type: string
+        errorLog:
+          type: string
+    CreateDriveService:
+      required:
+      - name
+      - serviceType
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        serviceType:
+          type: string
+          enum:
+          - GoogleDrive
+          - SharePoint
+          - Sftp
+          - CustomDrive
+        connection:
+          $ref: '#/components/schemas/DriveConnection'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        domains:
+          type: array
+          items:
+            type: string
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    DriveServiceList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DriveService'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

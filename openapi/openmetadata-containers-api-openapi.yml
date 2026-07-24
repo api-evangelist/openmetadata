@@ -1,0 +1,1856 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Containers API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Containers
+  description: A Container is an abstraction for any path(including the top level eg. bucket in S3) storing data in an Object store such as S3, GCP, Azure. It maps a tree-like structure, where each Container can have a parent and a list of sub-folders, and it can be structured - where it contains structured data, or unstructured where no schema for its data is defined.
+paths:
+  /v1/containers/{id}/followers:
+    put:
+      tags:
+      - Containers
+      summary: Add a follower
+      description: Add a user identified by `userId` as follower of this container
+      operationId: addFollower_12
+      parameters:
+      - name: id
+        in: path
+        description: Id of the container
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: container for instance {id} is not found
+  /v1/containers/{id}/sampleData:
+    get:
+      tags:
+      - Containers
+      summary: Get sample data
+      description: Get sample data from the container.
+      operationId: getSampleData_3
+      parameters:
+      - name: id
+        in: path
+        description: Id of the container
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successfully retrieved the Container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+    put:
+      tags:
+      - Containers
+      summary: Add sample data
+      description: Add sample data to the container.
+      operationId: addSampleData_3
+      parameters:
+      - name: id
+        in: path
+        description: Id of the container
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TableData'
+      responses:
+        '200':
+          description: Successfully updated the Container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+    delete:
+      tags:
+      - Containers
+      summary: Delete sample data
+      description: Delete sample data from the container.
+      operationId: deleteSampleData_2
+      parameters:
+      - name: id
+        in: path
+        description: Id of the container
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successfully updated the Container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+  /v1/containers/bulk:
+    put:
+      tags:
+      - Containers
+      summary: Bulk create or update containers
+      description: Create or update multiple containers in a single operation. Returns a BulkOperationResult with success/failure details for each container.
+      operationId: bulkCreateOrUpdateContainers
+      parameters:
+      - name: async
+        in: query
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateContainer'
+      responses:
+        '200':
+          description: Bulk operation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResult'
+        '202':
+          description: Bulk operation accepted for async processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResult'
+        '400':
+          description: Bad request
+  /v1/containers:
+    get:
+      tags:
+      - Containers
+      summary: List Containers
+      description: Get a list of containers, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listContainers
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: parent,dataModel,owners,tags,followers,extension,domains,sourceHash,sampleData
+      - name: service
+        in: query
+        description: Filter Containers by Object Store Service name
+        schema:
+          type: string
+          example: s3West
+      - name: root
+        in: query
+        description: Filter by Containers at the root level. E.g., without parent
+        schema:
+          type: boolean
+          example: true
+          default: false
+      - name: limit
+        in: query
+        description: Limit the number containers returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of containers before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of containers after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of containers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerList'
+    put:
+      tags:
+      - Containers
+      summary: Create or update a Container
+      description: Create a new Container, if it does not exist or update an existing container.
+      operationId: createOrUpdateContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContainer'
+      responses:
+        '200':
+          description: The Container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Containers
+      summary: Create a Container
+      description: Create a new Container.
+      operationId: createContainer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContainer'
+      responses:
+        '200':
+          description: Container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+        '400':
+          description: Bad request
+  /v1/containers/name/{fqn}:
+    get:
+      tags:
+      - Containers
+      summary: Get an Container by name
+      description: Get an Container by fully qualified name.
+      operationId: getContainerByFQN
+      parameters:
+      - name: fqn
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: parent,dataModel,owners,tags,followers,extension,domains,sourceHash,sampleData
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+        '404':
+          description: Container for instance {id} is not found
+    delete:
+      tags:
+      - Containers
+      summary: Delete a Container by fully qualified name
+      description: Delete a Container by `fullyQualifiedName`.
+      operationId: deleteContainerByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Name of the Container
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: container for instance {fqn} is not found
+    patch:
+      tags:
+      - Containers
+      summary: Update a Container using name.
+      description: Update an existing Container using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchContainer
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the Container
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/containers/{id}:
+    get:
+      tags:
+      - Containers
+      summary: Get an Object Store Container
+      description: Get an Object Store container by `id`.
+      operationId: getContainerByID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: parent,dataModel,owners,tags,followers,extension,domains,sourceHash,sampleData
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+        '404':
+          description: Container for instance {id} is not found
+    delete:
+      tags:
+      - Containers
+      summary: Delete a Container
+      description: Delete a Container by `id`.
+      operationId: deleteContainer
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Container Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: container for instance {id} is not found
+    patch:
+      tags:
+      - Containers
+      summary: Update a Container
+      description: Update an existing Container using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchContainer_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Container
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/containers/async/{id}:
+    delete:
+      tags:
+      - Containers
+      summary: Asynchronously delete a Container
+      description: Asynchronously delete a Container by `id`.
+      operationId: deleteContainerAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Container Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: container for instance {id} is not found
+  /v1/containers/{id}/followers/{userId}:
+    delete:
+      tags:
+      - Containers
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the container.
+      operationId: deleteFollower_28
+      parameters:
+      - name: id
+        in: path
+        description: Id of the container
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/containers/{id}/versions/{version}:
+    get:
+      tags:
+      - Containers
+      summary: Get a version of the Container
+      description: Get a version of the Container by given `id`
+      operationId: getSpecificContainerVersion
+      parameters:
+      - name: id
+        in: path
+        description: Container Id
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: Container version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: Container
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+        '404':
+          description: Container for instance {id} and version {version} is not found
+  /v1/containers/name/{fqn}/ancestors:
+    get:
+      tags:
+      - Containers
+      summary: List ancestor containers (parent chain)
+      description: Return the ordered chain of ancestor containers from root (immediate child of the storage service) down to the immediate parent of the given container. Resolved via a single batched fetch — useful for rendering breadcrumbs without N sequential parent lookups.
+      operationId: listContainerAncestors
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the container
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ordered list of ancestor container references
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityReference'
+  /v1/containers/name/{fqn}/children:
+    get:
+      tags:
+      - Containers
+      summary: List children containers
+      description: Get a list of children containers with pagination.
+      operationId: listContainerChildren
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the container
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit the number of children returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Returns list of children after the given offset
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted children.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: q
+        in: query
+        description: Optional case-insensitive substring filter on the child container name.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of children containers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerList'
+  /v1/containers/history:
+    get:
+      tags:
+      - Containers
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_54
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/containers/{id}/versions:
+    get:
+      tags:
+      - Containers
+      summary: List Container versions
+      description: Get a list of all the versions of a container identified by `id`
+      operationId: listAllContainerVersion
+      parameters:
+      - name: id
+        in: path
+        description: Container Id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of Container versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/containers/restore:
+    put:
+      tags:
+      - Containers
+      summary: Restore a soft deleted Container.
+      description: Restore a soft deleted Container.
+      operationId: restore_44
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the Container '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Container'
+  /v1/containers/{id}/vote:
+    put:
+      tags:
+      - Containers
+      summary: Update Vote for a Entity
+      description: Update vote for a Entity
+      operationId: updateVoteForEntity_16
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Entity
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: model for instance {id} is not found
+components:
+  schemas:
+    ContainerDataModel:
+      required:
+      - columns
+      type: object
+      properties:
+        isPartitioned:
+          type: boolean
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    CreateContainer:
+      required:
+      - name
+      - service
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        service:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        parent:
+          $ref: '#/components/schemas/EntityReference'
+        dataModel:
+          $ref: '#/components/schemas/ContainerDataModel'
+        prefix:
+          type: string
+        numberOfObjects:
+          type: number
+          format: double
+        size:
+          type: number
+          format: double
+        fileFormats:
+          type: array
+          items:
+            type: string
+            enum:
+            - zip
+            - gz
+            - zstd
+            - csv
+            - tsv
+            - json
+            - parquet
+            - avro
+            - MF4
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        extension:
+          type: object
+        sourceUrl:
+          type: string
+        fullPath:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    CustomMetricProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+          format: double
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    CardinalityDistribution:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
+          type: boolean
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    BulkResponse:
+      type: object
+      properties:
+        request:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    TableData:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    JsonPatch:
+      type: object
+    CustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    ContainerList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Container'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Column:
+      required:
+      - dataType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        arrayDataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        dataLength:
+          type: integer
+          format: int32
+        precision:
+          type: integer
+          format: int32
+        scale:
+          type: integer
+          format: int32
+        dataTypeDisplay:
+          type: string
+        description:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        constraint:
+          type: string
+          enum:
+          - 'NULL'
+          - NOT_NULL
+          - UNIQUE
+          - PRIMARY_KEY
+        ordinalPosition:
+          type: integer
+          format: int32
+        jsonSchema:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        profile:
+          $ref: '#/components/schemas/ColumnProfile'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetric'
+        extension:
+          type: object
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    Histogram:
+      type: object
+      properties:
+        boundaries:
+          type: array
+          items:
+            type: object
+        frequencies:
+          type: array
+          items:
+            type: object
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Container:
+      required:
+      - id
+      - name
+      - service
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        parent:
+          $ref: '#/components/schemas/EntityReference'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataModel:
+          $ref: '#/components/schemas/ContainerDataModel'
+        prefix:
+          type: string
+        numberOfObjects:
+          type: number
+          format: double
+        size:
+          type: number
+          format: double
+        fileFormats:
+          type: array
+          items:
+            type: string
+            enum:
+            - zip
+            - gz
+            - zstd
+            - csv
+            - tsv
+            - json
+            - parquet
+            - avro
+            - MF4
+        serviceType:
+          type: string
+          enum:
+          - S3
+          - ADLS
+          - GCS
+          - CustomStorage
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        retentionPeriod:
+          type: string
+        extension:
+          type: object
+        sampleData:
+          $ref: '#/components/schemas/TableData'
+        sourceUrl:
+          type: string
+        fullPath:
+          type: string
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

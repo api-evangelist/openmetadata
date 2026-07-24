@@ -1,0 +1,1357 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Columns API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Columns
+  description: Columns represent individual data fields within tables and dashboard data models. This API provides operations to update column metadata such as tags, glossary terms, descriptions, and other properties using the column's fully qualified name.
+paths:
+  /v1/columns/bulk-update-async:
+    post:
+      tags:
+      - Columns
+      summary: Bulk update columns asynchronously
+      description: Update multiple columns across different entities asynchronously. This endpoint accepts a list of column updates and processes them in the background. Returns a job ID that can be used to track progress via WebSocket notifications. Updates are applied to column metadata including description, display name, tags, and glossary terms.
+      operationId: bulkUpdateColumnsAsync
+      requestBody:
+        description: Bulk column update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkColumnUpdateRequest'
+      responses:
+        '200':
+          description: Bulk update job initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVImportResponse'
+        '400':
+          description: Bad request
+  /v1/columns/bulk-update-preview:
+    post:
+      tags:
+      - Columns
+      summary: Preview bulk column updates (dry-run)
+      description: Preview what columns will be updated without making actual changes. Returns a detailed diff showing current vs new values for each matching column. Use this to review changes before executing the actual bulk update. Supports both search-based (columnName + filters) and explicit (columnUpdates list) modes.
+      operationId: bulkUpdateColumnsPreview
+      requestBody:
+        description: Bulk column update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkColumnUpdateRequest'
+      responses:
+        '200':
+          description: Preview of column updates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkColumnUpdatePreview'
+        '400':
+          description: Bad request
+  /v1/columns/export:
+    get:
+      tags:
+      - Columns
+      summary: Export unique column names to CSV
+      description: Export all unique column names across entity types to CSV format. The CSV includes column metadata (name, displayName, description, tags, glossaryTerms) for bulk editing. Supports filtering by entity types, service, database, schema, and domain.
+      operationId: exportUniqueColumns
+      parameters:
+      - name: columnName
+        in: query
+        description: Column name to filter by
+        schema:
+          type: string
+        example: order_id
+      - name: entityTypes
+        in: query
+        description: Filter by entity types (comma-separated)
+        schema:
+          type: string
+        example: table,dashboardDataModel
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+        example: sample_data
+      - name: databaseName
+        in: query
+        description: Filter by database name
+        schema:
+          type: string
+        example: ecommerce_db
+      - name: schemaName
+        in: query
+        description: Filter by schema name
+        schema:
+          type: string
+        example: shopify
+      - name: domainId
+        in: query
+        description: Filter by domain ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: CSV export of unique columns
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+  /v1/columns/name/{fqn}:
+    get:
+      tags:
+      - Columns
+      summary: Get a column by fully qualified name
+      description: Retrieve a single column by its fully qualified name. The parent entity type must be specified. Supports field projection via the 'fields' parameter (e.g. tags, customMetrics, extension, profile).
+      operationId: getColumnByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the column
+        required: true
+        schema:
+          type: string
+        example: sample_data.ecommerce_db.shopify.dim_address.address_id
+      - name: entityType
+        in: query
+        description: Entity type of the parent entity (table or dashboardDataModel)
+        required: true
+        schema:
+          type: string
+          enum:
+          - table
+          - dashboardDataModel
+        example: table
+      - name: fields
+        in: query
+        description: 'Fields to include in the response (comma-separated). Supported: tags, customMetrics, extension, profile'
+        schema:
+          type: string
+          example: tags,customMetrics,extension,profile
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The column
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Column'
+        '400':
+          description: Bad request
+        '404':
+          description: Column not found
+    put:
+      tags:
+      - Columns
+      summary: Update a column by fully qualified name
+      description: "Update column metadata such as display name, description, tags, glossary terms, and other properties. This API works for columns in both tables and dashboard data models. The column is identified by its fully qualified name and the parent entity type is specified. \n\nTag Management Examples:\n• Add tags: {\"tags\": [{\"tagFQN\": \"PersonalData.PII\", \"source\": \"Classification\"}]}\n• Remove specific tag: {\"tags\": []} (specify only tags you want to keep)\n• Remove all tags: {\"tags\": []}\n• Mix classifications and glossary terms: {\"tags\": [{\"tagFQN\": \"PII.Sensitive\", \"source\": \"Classification\"}, {\"tagFQN\": \"Glossary.CustomerData\", \"source\": \"Glossary\"}]}\n• Don't change tags: omit the 'tags' field entirely\n\nValidation Rules:\n• Invalid or non-existent tags/glossary terms will result in a 404 error\n• All tags and glossary terms must exist and be valid before the request succeeds"
+      operationId: updateColumnByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the column
+        required: true
+        schema:
+          type: string
+        example: sample_data.ecommerce_db.shopify.dim_address.address_id
+      - name: entityType
+        in: query
+        description: Entity type of the parent entity (table or dashboardDataModel)
+        required: true
+        schema:
+          type: string
+          enum:
+          - table
+          - dashboardDataModel
+        example: table
+      requestBody:
+        description: Column update payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateColumn'
+      responses:
+        '200':
+          description: The updated column
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Column'
+        '400':
+          description: Bad request
+        '404':
+          description: Column not found
+  /v1/columns/grid:
+    get:
+      tags:
+      - Columns
+      summary: Get column grid with metadata grouping
+      description: Returns unique columns with metadata variations grouped for grid-based editing. Uses scalable Elasticsearch/OpenSearch aggregations with cursor-based pagination. Columns with the same name but different metadata (description, tags, etc.) are grouped by metadata hash, allowing efficient bulk editing of similar columns.
+      operationId: getColumnGrid
+      parameters:
+      - name: size
+        in: query
+        description: Number of columns per batch (max 10000)
+        schema:
+          type: integer
+          format: int32
+          default: 1000
+        example: 1000
+      - name: cursor
+        in: query
+        description: Cursor for pagination
+        schema:
+          type: string
+      - name: columnNamePattern
+        in: query
+        description: Column name pattern (wildcard search)
+        schema:
+          type: string
+        example: order
+      - name: entityTypes
+        in: query
+        description: Filter by entity types (comma-separated)
+        schema:
+          type: string
+        example: table,dashboardDataModel
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+        example: sample_data
+      - name: serviceTypes
+        in: query
+        description: Filter by service types (comma-separated)
+        schema:
+          type: string
+        example: BigQuery,Mysql,Postgres
+      - name: databaseName
+        in: query
+        description: Filter by database name
+        schema:
+          type: string
+        example: ecommerce_db
+      - name: schemaName
+        in: query
+        description: Filter by schema name
+        schema:
+          type: string
+        example: shopify
+      - name: domainId
+        in: query
+        description: Filter by domain ID
+        schema:
+          type: string
+      - name: hasConflicts
+        in: query
+        description: Show only columns with conflicting metadata
+        schema:
+          type: boolean
+          default: false
+      - name: hasMissingMetadata
+        in: query
+        description: Show only columns with missing metadata
+        schema:
+          type: boolean
+          default: false
+      - name: metadataStatus
+        in: query
+        description: 'Filter by metadata status: MISSING (no description AND no tags), INCOMPLETE (has description OR tags, but not both), COMPLETE (has both description AND tags)'
+        schema:
+          type: string
+          enum:
+          - MISSING
+          - INCOMPLETE
+          - COMPLETE
+      - name: tags
+        in: query
+        description: Filter by classification tags at column level (comma-separated tag FQNs)
+        schema:
+          type: string
+        example: PII.Sensitive,PersonalData.Email
+      - name: glossaryTerms
+        in: query
+        description: Filter by glossary terms at column level (comma-separated glossary term FQNs)
+        schema:
+          type: string
+        example: Business.CustomerData,Business.Revenue
+      responses:
+        '200':
+          description: Column grid response with grouped metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColumnGridResponse'
+        '400':
+          description: Bad request
+  /v1/columns/import:
+    post:
+      tags:
+      - Columns
+      summary: Import column metadata from CSV (with dry-run)
+      description: Import column metadata updates from CSV. Each row should contain column name and metadata fields. The system will search for all occurrences of each column name and apply the updates. Supports dry-run mode to preview changes before applying.
+      operationId: importUniqueColumns
+      parameters:
+      - name: dryRun
+        in: query
+        description: Dry-run mode for validation without applying changes
+        schema:
+          type: boolean
+          default: true
+      - name: entityTypes
+        in: query
+        description: Filter by entity types (comma-separated)
+        schema:
+          type: string
+        example: table,dashboardDataModel
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: databaseName
+        in: query
+        description: Filter by database name
+        schema:
+          type: string
+      - name: schemaName
+        in: query
+        description: Filter by schema name
+        schema:
+          type: string
+      - name: domainId
+        in: query
+        description: Filter by domain ID
+        schema:
+          type: string
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: CSV import result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvImportResult'
+        '400':
+          description: Bad request
+  /v1/columns/import-async:
+    post:
+      tags:
+      - Columns
+      summary: Import column metadata from CSV asynchronously
+      description: Import column metadata updates from CSV asynchronously. Returns a job ID for tracking progress via WebSocket notifications.
+      operationId: importUniqueColumnsAsync
+      parameters:
+      - name: entityTypes
+        in: query
+        description: Filter by entity types (comma-separated)
+        schema:
+          type: string
+        example: table,dashboardDataModel
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+      - name: databaseName
+        in: query
+        description: Filter by database name
+        schema:
+          type: string
+      - name: schemaName
+        in: query
+        description: Filter by schema name
+        schema:
+          type: string
+      - name: domainId
+        in: query
+        description: Filter by domain ID
+        schema:
+          type: string
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Async import job initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVImportResponse'
+        '400':
+          description: Bad request
+  /v1/columns/search:
+    get:
+      tags:
+      - Columns
+      summary: Search and group columns by name
+      description: Search for columns across different entity types and group them by exact column name match. This endpoint helps identify unique column names and their occurrences across tables, dashboard data models, containers, and search indexes. Supports filtering by entity type, service, database, schema, and domain.
+      operationId: searchColumns
+      parameters:
+      - name: columnName
+        in: query
+        description: Column name to search for
+        schema:
+          type: string
+        example: order_id
+      - name: entityTypes
+        in: query
+        description: Filter by entity types (comma-separated)
+        schema:
+          type: string
+        example: table,dashboardDataModel
+      - name: serviceName
+        in: query
+        description: Filter by service name
+        schema:
+          type: string
+        example: sample_data
+      - name: databaseName
+        in: query
+        description: Filter by database name
+        schema:
+          type: string
+        example: ecommerce_db
+      - name: schemaName
+        in: query
+        description: Filter by schema name
+        schema:
+          type: string
+        example: shopify
+      - name: domainId
+        in: query
+        description: Filter by domain ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of grouped columns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupedColumnsResponse'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ColumnChild:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        dataType:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnChild'
+    BulkColumnUpdateRequest:
+      type: object
+      properties:
+        columnName:
+          type: string
+        entityTypes:
+          type: array
+          items:
+            type: string
+        serviceName:
+          type: string
+        databaseName:
+          type: string
+        schemaName:
+          type: string
+        domainId:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        columnUpdates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnUpdate'
+        dryRun:
+          type: boolean
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
+    BulkColumnUpdatePreview:
+      required:
+      - columnPreviews
+      - totalColumns
+      type: object
+      properties:
+        totalColumns:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        columnPreviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnUpdatePreview'
+    ColumnMetadataGroup:
+      required:
+      - groupId
+      - occurrenceCount
+      - occurrences
+      type: object
+      properties:
+        groupId:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        dataType:
+          type: string
+        metadataStatus:
+          type: string
+          enum:
+          - MISSING
+          - INCOMPLETE
+          - INCONSISTENT
+          - COMPLETE
+        occurrenceCount:
+          minimum: 1
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        occurrences:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnOccurrenceRef'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnChild'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    ColumnOccurrenceRef:
+      required:
+      - columnFQN
+      - entityFQN
+      - entityType
+      type: object
+      properties:
+        columnFQN:
+          type: string
+        entityType:
+          type: string
+        entityFQN:
+          type: string
+        entityDisplayName:
+          type: string
+        serviceName:
+          type: string
+        databaseName:
+          type: string
+        schemaName:
+          type: string
+    ColumnGridResponse:
+      required:
+      - columns
+      - totalOccurrences
+      - totalUniqueColumns
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnGridItem'
+        totalUniqueColumns:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        totalOccurrences:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        cursor:
+          type: string
+    ColumnUpdate:
+      required:
+      - columnFQN
+      - entityType
+      type: object
+      properties:
+        columnFQN:
+          type: string
+        entityType:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+    CustomMetricProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+          format: double
+    CardinalityDistribution:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
+          type: boolean
+    CustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+    ColumnGridItem:
+      required:
+      - columnName
+      - groups
+      - hasVariations
+      - totalOccurrences
+      type: object
+      properties:
+        columnName:
+          type: string
+        totalOccurrences:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        hasVariations:
+          type: boolean
+        metadataStatus:
+          type: string
+          enum:
+          - MISSING
+          - INCOMPLETE
+          - INCONSISTENT
+          - COMPLETE
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnMetadataGroup'
+    ColumnUpdatePreview:
+      required:
+      - columnFQN
+      - currentValues
+      - entityFQN
+      - entityType
+      - hasChanges
+      - newValues
+      type: object
+      properties:
+        columnFQN:
+          type: string
+        entityType:
+          type: string
+        entityFQN:
+          type: string
+        entityDisplayName:
+          type: string
+        serviceName:
+          type: string
+        databaseName:
+          type: string
+        schemaName:
+          type: string
+        currentValues:
+          $ref: '#/components/schemas/ColumnMetadata'
+        newValues:
+          $ref: '#/components/schemas/ColumnMetadata'
+        hasChanges:
+          type: boolean
+    CSVImportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+    Column:
+      required:
+      - dataType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        arrayDataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        dataLength:
+          type: integer
+          format: int32
+        precision:
+          type: integer
+          format: int32
+        scale:
+          type: integer
+          format: int32
+        dataTypeDisplay:
+          type: string
+        description:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        constraint:
+          type: string
+          enum:
+          - 'NULL'
+          - NOT_NULL
+          - UNIQUE
+          - PRIMARY_KEY
+        ordinalPosition:
+          type: integer
+          format: int32
+        jsonSchema:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        profile:
+          $ref: '#/components/schemas/ColumnProfile'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetric'
+        extension:
+          type: object
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    GroupedColumnsResponse:
+      required:
+      - columnName
+      - occurrences
+      - totalCount
+      type: object
+      properties:
+        columnName:
+          type: string
+        occurrences:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnOccurrence'
+        totalCount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+    Histogram:
+      type: object
+      properties:
+        boundaries:
+          type: array
+          items:
+            type: object
+        frequencies:
+          type: array
+          items:
+            type: object
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    UpdateColumn:
+      type: object
+      properties:
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        constraint:
+          type: string
+          enum:
+          - 'NULL'
+          - NOT_NULL
+          - UNIQUE
+          - PRIMARY_KEY
+        removeConstraint:
+          type: boolean
+        extension:
+          type: object
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    ColumnOccurrence:
+      required:
+      - columnFQN
+      - entityFQN
+      - entityType
+      type: object
+      properties:
+        columnFQN:
+          type: string
+        entityType:
+          type: string
+        entityFQN:
+          type: string
+        entityDisplayName:
+          type: string
+        serviceName:
+          type: string
+        databaseName:
+          type: string
+        schemaName:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        dataType:
+          type: string
+    ColumnMetadata:
+      type: object
+      properties:
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

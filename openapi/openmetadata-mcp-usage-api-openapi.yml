@@ -1,0 +1,148 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions MCP Usage API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: MCP Usage
+  description: MCP tool-call usage counters and breakdowns.
+paths:
+  /v1/mcp/usage/breakdown/tools:
+    get:
+      tags:
+      - MCP Usage
+      summary: Per-tool call counts
+      description: Counts MCP requests per tool name in the supplied window. Admin only.
+      operationId: getMcpUsageByTool
+      parameters:
+      - name: startTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/mcp/usage/breakdown/users:
+    get:
+      tags:
+      - MCP Usage
+      summary: Per-user call counts
+      description: Counts MCP requests per principal in the supplied window. Bot principals (suffix 'Bot') are excluded. Admin only.
+      operationId: getMcpUsageByUser
+      parameters:
+      - name: startTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/mcp/usage/history:
+    get:
+      tags:
+      - MCP Usage
+      summary: Daily MCP usage counts
+      description: Returns a map of UTC start-of-day (epoch millis) to call count. Empty days are filled with 0 so the series is continuous. Admin access required.
+      operationId: getMcpUsageHistory
+      parameters:
+      - name: startTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/mcp/usage/me:
+    get:
+      tags:
+      - MCP Usage
+      summary: Self-service MCP usage counters
+      description: Returns the calling user's total MCP call count and per-tool breakdown for the supplied window. Any authenticated user.
+      operationId: getMcpUsageForMe
+      parameters:
+      - name: startTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/mcp/usage/summary:
+    get:
+      tags:
+      - MCP Usage
+      summary: Get aggregate MCP usage counters
+      description: Returns total/success/failed counts and unique-user count for the supplied window. Defaults to the last 30 days. Admin access required.
+      operationId: getMcpUsageSummary
+      parameters:
+      - name: startTs
+        in: query
+        description: Window start (epoch millis). Defaults to 30 days ago.
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: Window end exclusive (epoch millis). Defaults to now.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Aggregate counters
+          content:
+            application/json: {}
+        '403':
+          description: Forbidden. Admin only.
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

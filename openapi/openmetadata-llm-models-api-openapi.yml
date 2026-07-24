@@ -1,0 +1,1496 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions LLM Models API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: LLM Models
+  description: '`LLM Models` are Large Language Model instances such as GPT-4, Claude, Llama, or custom-trained models used for AI applications.'
+paths:
+  /v1/llmModels/{id}/followers:
+    put:
+      tags:
+      - LLM Models
+      summary: Add a follower
+      description: Add a user identified by `userId` as follower of this model
+      operationId: addFollower_2
+      parameters:
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: model for instance {id} is not found
+  /v1/llmModels:
+    get:
+      tags:
+      - LLM Models
+      summary: List LLM models
+      description: Get a list of LLM models, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listLLMModels
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers,tags,extension,domains
+      - name: service
+        in: query
+        description: Filter LLM Models by service name
+        schema:
+          type: string
+          example: openai
+      - name: limit
+        in: query
+        description: Limit the number models returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of models before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of models after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModelList'
+    put:
+      tags:
+      - LLM Models
+      summary: Create or update an LLM model
+      description: Create a new LLM model, if it does not exist or update an existing model.
+      operationId: createOrUpdateLLMModel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLLMModel'
+      responses:
+        '200':
+          description: The model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModel'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - LLM Models
+      summary: Create an LLM model
+      description: Create a new LLM model.
+      operationId: createLLMModel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLLMModel'
+      responses:
+        '200':
+          description: LLM Model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModel'
+        '400':
+          description: Bad request
+  /v1/llmModels/{id}:
+    get:
+      tags:
+      - LLM Models
+      summary: Get an LLM model by Id
+      description: Get an LLM model by `Id`.
+      operationId: getLLMModelByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers,tags,extension,domains
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModel'
+        '404':
+          description: Model for instance {id} is not found
+    delete:
+      tags:
+      - LLM Models
+      summary: Delete an LLM model by Id
+      description: Delete an LLM model by `Id`.
+      operationId: deleteLLMModel
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: model for instance {id} is not found
+    patch:
+      tags:
+      - LLM Models
+      summary: Update an LLM model
+      description: Update an existing LLM model using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchLLMModel_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/llmModels/name/{fqn}:
+    get:
+      tags:
+      - LLM Models
+      summary: Get an LLM model by fully qualified name
+      description: Get an LLM model by fully qualified name.
+      operationId: getLLMModelByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of LLM Model
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers,tags,extension,domains
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModel'
+        '404':
+          description: Model for instance {fqn} is not found
+    delete:
+      tags:
+      - LLM Models
+      summary: Delete an LLM model by fully qualified name
+      description: Delete an LLM model by `fullyQualifiedName`.
+      operationId: deleteLLMModelByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Name of the LLM Model
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: model for instance {fqn} is not found
+    patch:
+      tags:
+      - LLM Models
+      summary: Update an LLM model by name.
+      description: Update an existing LLM model using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchLLMModel
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the LLM Model
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/llmModels/async/{id}:
+    delete:
+      tags:
+      - LLM Models
+      summary: Delete an LLM model asynchronously by Id
+      description: Delete an LLM model by `Id` asynchronously.
+      operationId: deleteAsyncLLMModel
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: model for instance {id} is not found
+  /v1/llmModels/{id}/followers/{userId}:
+    delete:
+      tags:
+      - LLM Models
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the model.
+      operationId: deleteFollower_2
+      parameters:
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/llmModels/{id}/versions/{version}:
+    get:
+      tags:
+      - LLM Models
+      summary: Get a version of the LLM model
+      description: Get a version of the LLM model by given `id`
+      operationId: getSpecificLLMModelVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: LLM Model version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: LLMModel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModel'
+        '404':
+          description: LLM Model for instance {id} and version {version} is not found
+  /v1/llmModels/history:
+    get:
+      tags:
+      - LLM Models
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_2
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/llmModels/{id}/versions:
+    get:
+      tags:
+      - LLM Models
+      summary: List LLM model versions
+      description: Get a list of all the versions of an LLM Model identified by `id`
+      operationId: listAllLLMModelVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the LLM Model
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of LLM Model versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/llmModels/restore:
+    put:
+      tags:
+      - LLM Models
+      summary: Restore a soft deleted LLM model
+      description: Restore a soft deleted LLM Model.
+      operationId: restore_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the LLMModel '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LLMModel'
+components:
+  schemas:
+    DeploymentInfo:
+      type: object
+      properties:
+        deploymentType:
+          type: string
+          enum:
+          - API
+          - SelfHosted
+          - Hybrid
+          - OnPremise
+        endpoint:
+          type: string
+        region:
+          type: string
+        availabilityZones:
+          type: array
+          items:
+            type: string
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    Hyperparameters:
+      type: object
+      properties:
+        learningRate:
+          type: number
+          format: double
+        batchSize:
+          type: integer
+          format: int32
+        epochs:
+          type: integer
+          format: int32
+        optimizer:
+          type: string
+        warmupSteps:
+          type: integer
+          format: int32
+        weightDecay:
+          type: number
+          format: double
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    TrainingMetadata:
+      type: object
+      properties:
+        baseModel:
+          type: string
+        trainingType:
+          type: string
+          enum:
+          - FullFineTune
+          - LoRA
+          - QLoRA
+          - PrefixTuning
+          - PromptTuning
+          - RLHF
+        trainingDatasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        validationDatasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataLineage:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataLineage'
+        trainingPeriod:
+          $ref: '#/components/schemas/TrainingPeriod'
+        trainingCost:
+          $ref: '#/components/schemas/TrainingCost'
+        hyperparameters:
+          $ref: '#/components/schemas/Hyperparameters'
+        trainingMetrics:
+          $ref: '#/components/schemas/TrainingMetrics'
+        trainedBy:
+          type: string
+        trainingJobId:
+          type: string
+    LLMModel:
+      required:
+      - baseModel
+      - id
+      - modelType
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        modelType:
+          type: string
+          enum:
+          - BaseModel
+          - FineTuned
+          - Quantized
+          - Distilled
+          - Adapter
+          - Custom
+        baseModel:
+          type: string
+        modelVersion:
+          type: string
+        modelProvider:
+          type: string
+        providerModelId:
+          type: string
+        capabilities:
+          type: array
+          items:
+            type: string
+            enum:
+            - TextGeneration
+            - CodeGeneration
+            - Embeddings
+            - Chat
+            - Vision
+            - Audio
+            - FunctionCalling
+            - ToolUse
+        modelSpecifications:
+          $ref: '#/components/schemas/ModelSpecifications'
+        trainingMetadata:
+          $ref: '#/components/schemas/TrainingMetadata'
+        modelEvaluation:
+          $ref: '#/components/schemas/ModelEvaluation'
+        usedByAgents:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        governanceStatus:
+          type: string
+          enum:
+          - Approved
+          - PendingReview
+          - Rejected
+          - Unauthorized
+        certifications:
+          type: array
+          items:
+            type: string
+        regulatoryCompliance:
+          type: array
+          items:
+            type: string
+        costMetrics:
+          $ref: '#/components/schemas/CostMetrics'
+        deploymentInfo:
+          $ref: '#/components/schemas/DeploymentInfo'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domain:
+          $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    ModelEvaluation:
+      type: object
+      properties:
+        evaluatedAt:
+          type: integer
+          format: int64
+        evaluationDataset:
+          $ref: '#/components/schemas/EntityReference'
+        accuracyMetrics:
+          $ref: '#/components/schemas/AccuracyMetrics'
+        biasMetrics:
+          $ref: '#/components/schemas/BiasMetrics__1'
+        fairnessMetrics:
+          $ref: '#/components/schemas/FairnessMetrics'
+        robustnessMetrics:
+          $ref: '#/components/schemas/RobustnessMetrics'
+        safetyMetrics:
+          $ref: '#/components/schemas/SafetyMetrics__1'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    CostMetrics:
+      type: object
+      properties:
+        inputCostPer1kTokens:
+          type: number
+          format: double
+        outputCostPer1kTokens:
+          type: number
+          format: double
+        currency:
+          type: string
+        estimatedMonthlyUsage:
+          type: integer
+          format: int32
+        estimatedMonthlyCost:
+          type: number
+          format: double
+    CreateLLMModel:
+      required:
+      - baseModel
+      - name
+      - service
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        baseModel:
+          type: string
+        modelVersion:
+          type: string
+        modelProvider:
+          type: string
+        modelSpecifications:
+          $ref: '#/components/schemas/ModelSpecifications'
+        trainingMetadata:
+          $ref: '#/components/schemas/TrainingMetadata'
+        modelEvaluation:
+          $ref: '#/components/schemas/ModelEvaluation'
+        costMetrics:
+          $ref: '#/components/schemas/CostMetrics'
+        deploymentInfo:
+          $ref: '#/components/schemas/DeploymentInfo'
+        governanceStatus:
+          type: string
+          enum:
+          - Approved
+          - PendingReview
+          - Rejected
+          - Unauthorized
+        certifications:
+          type: array
+          items:
+            type: string
+        regulatoryCompliance:
+          type: array
+          items:
+            type: string
+        service:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    RobustnessMetrics:
+      type: object
+      properties:
+        adversarialRobustness:
+          type: number
+          format: double
+        outlierSensitivity:
+          type: number
+          format: double
+        noiseRobustness:
+          type: number
+          format: double
+    BiasMetrics__1:
+      type: object
+      properties:
+        overallBiasScore:
+          type: number
+          format: double
+        demographicParity:
+          type: number
+          format: double
+        equalizedOdds:
+          type: number
+          format: double
+        disparateImpact:
+          type: number
+          format: double
+        dimensionScores:
+          $ref: '#/components/schemas/DimensionScores__1'
+        testMethod:
+          type: string
+        testDataset:
+          $ref: '#/components/schemas/EntityReference'
+    JsonPatch:
+      type: object
+    SafetyMetrics__1:
+      type: object
+      properties:
+        toxicityScore:
+          type: number
+          format: double
+        harmfulContentRate:
+          type: number
+          format: double
+        piiLeakageRisk:
+          type: number
+          format: double
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    DataLineage:
+      type: object
+      properties:
+        dataset:
+          $ref: '#/components/schemas/EntityReference'
+        recordCount:
+          type: integer
+          format: int32
+        dateRange:
+          $ref: '#/components/schemas/DateRange'
+        columns:
+          type: array
+          items:
+            type: string
+        piiHandling:
+          type: string
+        dataTransformations:
+          type: array
+          items:
+            type: string
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+    TrainingMetrics:
+      type: object
+      properties:
+        finalLoss:
+          type: number
+          format: double
+        accuracy:
+          type: number
+          format: double
+        perplexity:
+          type: number
+          format: double
+        validationLoss:
+          type: number
+          format: double
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    FairnessMetrics:
+      type: object
+      properties:
+        groupFairness:
+          type: number
+          format: double
+        individualFairness:
+          type: number
+          format: double
+        counterfactualFairness:
+          type: number
+          format: double
+    DateRange:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        end:
+          type: integer
+          format: int64
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TrainingCost:
+      type: object
+      properties:
+        totalCost:
+          type: number
+          format: double
+        currency:
+          type: string
+        computeHours:
+          type: number
+          format: double
+        resourceType:
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    DimensionScores__1:
+      type: object
+      properties:
+        gender:
+          type: number
+          format: double
+        race:
+          type: number
+          format: double
+        age:
+          type: number
+          format: double
+        religion:
+          type: number
+          format: double
+        disability:
+          type: number
+          format: double
+        nationality:
+          type: number
+          format: double
+        socioeconomic:
+          type: number
+          format: double
+    TrainingPeriod:
+      type: object
+      properties:
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        durationHours:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    ModelSpecifications:
+      type: object
+      properties:
+        contextWindow:
+          type: integer
+          format: int32
+        maxOutputTokens:
+          type: integer
+          format: int32
+        parametersCount:
+          type: string
+        architecture:
+          type: string
+        quantization:
+          type: string
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    LLMModelList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LLMModel'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    AccuracyMetrics:
+      type: object
+      properties:
+        accuracy:
+          type: number
+          format: double
+        precision:
+          type: number
+          format: double
+        recall:
+          type: number
+          format: double
+        f1Score:
+          type: number
+          format: double
+        bleuScore:
+          type: number
+          format: double
+        rougeScore:
+          type: number
+          format: double
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

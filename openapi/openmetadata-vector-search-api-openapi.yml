@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Vector Search API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Vector Search
+  description: APIs for vector-based semantic search.
+paths:
+  /v1/search/vector/query:
+    post:
+      tags:
+      - Vector Search
+      summary: Vector semantic search
+      description: Search entities using vector embeddings with full filter support.
+      operationId: vectorSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VectorSearchRequest'
+      responses:
+        '200':
+          description: Vector search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VectorSearchResponse'
+components:
+  schemas:
+    VectorSearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        filters:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        size:
+          type: integer
+          format: int32
+        from:
+          type: integer
+          format: int32
+        k:
+          type: integer
+          format: int32
+        threshold:
+          type: number
+          format: double
+    VectorSearchResponse:
+      type: object
+      properties:
+        tookMillis:
+          type: integer
+          format: int64
+        hits:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        totalHits:
+          type: integer
+          format: int64
+        hasMore:
+          type: boolean
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

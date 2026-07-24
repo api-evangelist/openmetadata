@@ -1,0 +1,425 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Agent Executions
+  description: '`Agent Executions` are time-series records of AI agent execution runs, capturing observability metrics, governance checks, and performance data.'
+paths:
+  /v1/agentExecutions:
+    get:
+      tags:
+      - Agent Executions
+      summary: List agent executions
+      description: Get a list of agent executions, optionally filtered by agentId, startTs and endTs.
+      operationId: listAgentExecutions
+      parameters:
+      - name: agentId
+        in: query
+        description: Filter by agent ID
+        schema:
+          type: string
+          format: uuid
+      - name: startTs
+        in: query
+        description: Filter executions after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter executions before the given end timestamp
+        schema:
+          type: number
+      - name: limit
+        in: query
+        description: Limit the number of executions returned
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: List of agent executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentExecutionList'
+    post:
+      tags:
+      - Agent Executions
+      summary: Create an agent execution
+      description: Create a new agent execution record.
+      operationId: createAgentExecution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentExecution'
+      responses:
+        '200':
+          description: Agent Execution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentExecution'
+        '400':
+          description: Bad request
+  /v1/agentExecutions/{id}:
+    get:
+      tags:
+      - Agent Executions
+      summary: Get an agent execution by Id
+      description: Get an agent execution by `Id`.
+      operationId: getAgentExecutionByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Agent Execution
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The execution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentExecution'
+        '404':
+          description: Execution for instance {id} is not found
+    delete:
+      tags:
+      - Agent Executions
+      summary: Delete an agent execution by Id
+      description: Delete an agent execution by `Id`.
+      operationId: deleteAgentExecution
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Agent Execution
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: execution for instance {id} is not found
+  /v1/agentExecutions/{agentId}/{timestamp}:
+    delete:
+      tags:
+      - Agent Executions
+      summary: Delete agent execution data at a timestamp
+      description: Delete agent execution data for an agent at a specific timestamp.
+      operationId: deleteAgentExecutionData
+      parameters:
+      - name: agentId
+        in: path
+        description: ID of the AI Agent
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: timestamp
+        in: path
+        description: Timestamp of the execution to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successfully deleted Agent Execution Data
+components:
+  schemas:
+    ComplianceCheck:
+      type: object
+      properties:
+        checkName:
+          type: string
+        passed:
+          type: boolean
+        details:
+          type: string
+        severity:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+    ExecutionMetrics:
+      type: object
+      properties:
+        totalRowsProcessed:
+          type: integer
+          format: int32
+        totalBytesProcessed:
+          type: integer
+          format: int32
+        cpuTime:
+          type: number
+          format: double
+        memoryUsed:
+          type: integer
+          format: int32
+        cost:
+          type: number
+          format: double
+    AgentExecution:
+      required:
+      - agent
+      - agentId
+      - status
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        agent:
+          $ref: '#/components/schemas/EntityReference'
+        agentId:
+          type: string
+          format: uuid
+        timestamp:
+          type: integer
+          format: int64
+        endTimestamp:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Running
+          - Success
+          - Failed
+          - Timeout
+          - Cancelled
+          - PartialSuccess
+        input:
+          type: string
+        output:
+          type: string
+        modelCalls:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelCall'
+        dataAccessed:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataAccess'
+        toolCalls:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCall'
+        metrics:
+          $ref: '#/components/schemas/ExecutionMetrics'
+        errorMessage:
+          type: string
+        errorStack:
+          type: string
+        complianceChecks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceCheck'
+        executedBy:
+          type: string
+        sessionId:
+          type: string
+        environment:
+          type: string
+          enum:
+          - Development
+          - Staging
+          - Production
+        agentVersion:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        deleted:
+          type: boolean
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    ModelCall:
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/EntityReference'
+        prompt:
+          type: string
+        response:
+          type: string
+        inputTokens:
+          type: integer
+          format: int32
+        outputTokens:
+          type: integer
+          format: int32
+        latencyMs:
+          type: number
+          format: double
+        cost:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+        purpose:
+          type: string
+    DataAccess:
+      required:
+      - accessType
+      - dataSource
+      type: object
+      properties:
+        dataSource:
+          $ref: '#/components/schemas/EntityReference'
+        accessType:
+          type: string
+          enum:
+          - Read
+          - Write
+          - Update
+          - Delete
+        columns:
+          type: array
+          items:
+            type: string
+        recordCount:
+          type: integer
+          format: int32
+        query:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        piiAccessed:
+          type: boolean
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+    Metadata:
+      type: object
+    ToolCall:
+      type: object
+      properties:
+        tool:
+          $ref: '#/components/schemas/EntityReference'
+        parameters:
+          $ref: '#/components/schemas/Parameters__1'
+        result:
+          type: string
+        success:
+          type: boolean
+        latencyMs:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+    AgentExecutionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentExecution'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Parameters__1:
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

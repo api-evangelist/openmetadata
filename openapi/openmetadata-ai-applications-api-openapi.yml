@@ -1,0 +1,1704 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions AI Applications API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: AI Applications
+  description: '`AI Applications` are autonomous software entities that use LLM models to perform tasks, make decisions, and interact with data sources.'
+paths:
+  /v1/aiApplications/{id}/followers:
+    put:
+      tags:
+      - AI Applications
+      summary: Add a follower
+      description: Add a user identified by `userId` as follower of this application
+      operationId: addFollower
+      parameters:
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: application for instance {id} is not found
+  /v1/aiApplications:
+    get:
+      tags:
+      - AI Applications
+      summary: List AI applications
+      description: Get a list of AI applications. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listAIApplications
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers,tags,extension,domains
+      - name: limit
+        in: query
+        description: Limit the number applications returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of applications before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of applications after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplicationList'
+    put:
+      tags:
+      - AI Applications
+      summary: Create or update an AI application
+      description: Create a new AI application, if it does not exist or update an existing application.
+      operationId: createOrUpdateAIApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAIApplication'
+      responses:
+        '200':
+          description: The application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplication'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - AI Applications
+      summary: Create an AI application
+      description: Create a new AI application.
+      operationId: createAIApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAIApplication'
+      responses:
+        '200':
+          description: AI Application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplication'
+        '400':
+          description: Bad request
+  /v1/aiApplications/{id}:
+    get:
+      tags:
+      - AI Applications
+      summary: Get an AI application by Id
+      description: Get an AI application by `Id`.
+      operationId: getAIApplicationByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers,tags,extension,domains
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplication'
+        '404':
+          description: Application for instance {id} is not found
+    delete:
+      tags:
+      - AI Applications
+      summary: Delete an AI application by Id
+      description: Delete an AI application by `Id`.
+      operationId: deleteAIApplication
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: application for instance {id} is not found
+    patch:
+      tags:
+      - AI Applications
+      summary: Update an AI application
+      description: Update an existing AI application using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchAIApplication_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/aiApplications/name/{fqn}:
+    get:
+      tags:
+      - AI Applications
+      summary: Get an AI application by fully qualified name
+      description: Get an AI application by fully qualified name.
+      operationId: getAIApplicationByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of AI Application
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,followers,tags,extension,domains
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplication'
+        '404':
+          description: Application for instance {fqn} is not found
+    delete:
+      tags:
+      - AI Applications
+      summary: Delete an AI application by fully qualified name
+      description: Delete an AI application by `fullyQualifiedName`.
+      operationId: deleteAIApplicationByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Name of the AI Application
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: application for instance {fqn} is not found
+    patch:
+      tags:
+      - AI Applications
+      summary: Update an AI application by name.
+      description: Update an existing AI application using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchAIApplication
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the AI Application
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/aiApplications/async/{id}:
+    delete:
+      tags:
+      - AI Applications
+      summary: Asynchronously delete an AI application by Id
+      description: Asynchronously delete an AI application by `Id`.
+      operationId: deleteAIApplicationAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: AI Application for instance {id} is not found
+  /v1/aiApplications/{id}/followers/{userId}:
+    delete:
+      tags:
+      - AI Applications
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the application.
+      operationId: deleteFollower
+      parameters:
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/aiApplications/{id}/versions/{version}:
+    get:
+      tags:
+      - AI Applications
+      summary: Get a version of the AI application
+      description: Get a version of the AI application by given `id`
+      operationId: getSpecificAIApplicationVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: AI Application version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: AIApplication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplication'
+        '404':
+          description: AI Application for instance {id} and version {version} is not found
+  /v1/aiApplications/history:
+    get:
+      tags:
+      - AI Applications
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/aiApplications/{id}/versions:
+    get:
+      tags:
+      - AI Applications
+      summary: List AI application versions
+      description: Get a list of all the versions of an AI Application identified by `id`
+      operationId: listAllAIApplicationVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the AI Application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of AI Application versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/aiApplications/restore:
+    put:
+      tags:
+      - AI Applications
+      summary: Restore a soft deleted AI application
+      description: Restore a soft deleted AI Application.
+      operationId: restore
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the AIApplication '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIApplication'
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    DimensionScores:
+      type: object
+      properties:
+        gender:
+          type: number
+          format: double
+        race:
+          type: number
+          format: double
+        age:
+          type: number
+          format: double
+        religion:
+          type: number
+          format: double
+        disability:
+          type: number
+          format: double
+        socioeconomic:
+          type: number
+          format: double
+    DataClassification:
+      type: object
+      properties:
+        accessesPII:
+          type: boolean
+        accessesSensitiveData:
+          type: boolean
+        dataCategories:
+          type: array
+          items:
+            type: string
+        dataRetentionPeriod:
+          type: string
+    AIComplianceRecord:
+      required:
+      - framework
+      - status
+      type: object
+      properties:
+        framework:
+          type: string
+          enum:
+          - EU_AI_Act
+          - Singapore_Model_AI_Governance
+          - Canada_AIDA
+          - US_AI_Bill_of_Rights
+          - NIST_AI_RMF
+          - ISO_IEC_42001
+          - UK_AI_Regulation
+          - China_AI_Regulations
+          - Custom
+        assessedBy:
+          type: string
+        assessedAt:
+          type: integer
+          format: int64
+        nextReviewDate:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Compliant
+          - PartiallyCompliant
+          - NonCompliant
+          - UnderReview
+          - NotApplicable
+        euAIAct:
+          $ref: '#/components/schemas/EUAIActCompliance'
+        ethicalAssessment:
+          $ref: '#/components/schemas/EthicalAIAssessment'
+        scopeAndDeployment:
+          $ref: '#/components/schemas/ScopeAndDeployment'
+        verification:
+          $ref: '#/components/schemas/Verification'
+        notes:
+          type: string
+        remediationRequired:
+          type: array
+          items:
+            type: string
+    ModelConfiguration:
+      required:
+      - model
+      - purpose
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/EntityReference'
+        purpose:
+          type: string
+          enum:
+          - Primary
+          - Reasoning
+          - Embedding
+          - CodeGeneration
+          - Fallback
+          - CostOptimization
+        selectionCriteria:
+          $ref: '#/components/schemas/SelectionCriteria'
+        parameters:
+          $ref: '#/components/schemas/Parameters'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    AccountabilityMeasures:
+      type: object
+      properties:
+        hasOwner:
+          type: boolean
+        subjectToHumanOversight:
+          type: boolean
+        auditTrailEnabled:
+          type: boolean
+    FrameworkInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+          - LangChain
+          - LlamaIndex
+          - AutoGen
+          - CrewAI
+          - Semantic Kernel
+          - Haystack
+          - Custom
+        version:
+          type: string
+        language:
+          type: string
+          enum:
+          - Python
+          - TypeScript
+          - JavaScript
+          - Java
+          - C#
+          - Go
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    AIApplicationList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AIApplication'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    HighRiskSystems:
+      type: object
+      properties:
+        criticalInfrastructure:
+          type: boolean
+        educationVocationalTraining:
+          type: boolean
+        employment:
+          type: boolean
+        essentialPrivateServices:
+          type: boolean
+        essentialPublicServices:
+          type: boolean
+        lawEnforcement:
+          type: boolean
+        migrationAsylumBorderControl:
+          type: boolean
+        administrationOfJustice:
+          type: boolean
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    TransparencyObligations:
+      type: object
+      properties:
+        usersInformed:
+          type: boolean
+        deepfakeLabeling:
+          type: boolean
+        emotionRecognitionDisclosure:
+          type: boolean
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ScopeAndDeployment:
+      type: object
+      properties:
+        scope:
+          type: string
+          enum:
+          - Internal
+          - External
+          - Both
+        deploymentRegions:
+          type: array
+          items:
+            type: string
+        affectedUserCount:
+          type: integer
+          format: int32
+    JsonPatch:
+      type: object
+    AIApplication:
+      required:
+      - applicationType
+      - id
+      - modelConfigurations
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        applicationType:
+          type: string
+          enum:
+          - Chatbot
+          - Agent
+          - Copilot
+          - Assistant
+          - RAG
+          - CodeGenerator
+          - DataAnalyst
+          - AutomationBot
+          - MultiAgent
+          - Custom
+        developmentStage:
+          type: string
+          enum:
+          - Proposal
+          - Development
+          - Testing
+          - Staging
+          - Production
+          - Deprecated
+          - Unauthorized
+        modelConfigurations:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelConfiguration'
+        primaryModel:
+          $ref: '#/components/schemas/EntityReference'
+        promptTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        mcpServers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        knowledgeBases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        upstreamApplications:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downstreamApplications:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        framework:
+          $ref: '#/components/schemas/FrameworkInfo'
+        governanceMetadata:
+          $ref: '#/components/schemas/GovernanceMetadata'
+        biasMetrics:
+          $ref: '#/components/schemas/BiasMetrics'
+        performanceMetrics:
+          $ref: '#/components/schemas/PerformanceMetrics'
+        qualityMetrics:
+          $ref: '#/components/schemas/QualityMetrics'
+        safetyMetrics:
+          $ref: '#/components/schemas/SafetyMetrics'
+        testSuites:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        sourceCode:
+          type: string
+        deploymentUrl:
+          type: string
+        documentation:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domain:
+          $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+    EthicalAIAssessment:
+      type: object
+      properties:
+        privacyLevel:
+          type: string
+          enum:
+          - Public
+          - Sensitive
+          - PersonalData
+        fairnessRisk:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+        biasMitigationCoverage:
+          type: string
+          enum:
+          - None
+          - Partial
+          - Full
+        reliabilitySafetyRisk:
+          type: string
+          enum:
+          - Low
+          - Moderate
+          - High
+        transparencyLevel:
+          type: string
+          enum:
+          - None
+          - Partial
+          - FullDisclosure
+        accountabilityMeasures:
+          $ref: '#/components/schemas/AccountabilityMeasures'
+        environmentalConsciousness:
+          type: string
+          enum:
+          - LowRisk
+          - MediumRisk
+          - HighRisk
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    Verification:
+      type: object
+      properties:
+        isVerified:
+          type: boolean
+        verifiedBy:
+          type: string
+        verifiedAt:
+          type: integer
+          format: int64
+        verificationNotes:
+          type: string
+        certificateUrl:
+          type: string
+    PerformanceMetrics:
+      type: object
+      properties:
+        totalExecutions:
+          type: integer
+          format: int32
+        successRate:
+          type: number
+          format: double
+        averageLatencyMs:
+          type: number
+          format: double
+        p95LatencyMs:
+          type: number
+          format: double
+        p99LatencyMs:
+          type: number
+          format: double
+        averageCost:
+          type: number
+          format: double
+        totalCost:
+          type: number
+          format: double
+        currency:
+          type: string
+        lastExecutionAt:
+          type: integer
+          format: int64
+    ConformityAssessment:
+      type: object
+      properties:
+        assessmentRequired:
+          type: boolean
+        assessmentType:
+          type: string
+          enum:
+          - Internal
+          - ThirdParty
+          - NotRequired
+        assessmentBody:
+          type: string
+        certificateNumber:
+          type: string
+        validUntil:
+          type: integer
+          format: int64
+    CreateAIApplication:
+      required:
+      - applicationType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        applicationType:
+          type: string
+          enum:
+          - Chatbot
+          - Agent
+          - Copilot
+          - Assistant
+          - RAG
+          - CodeGenerator
+          - DataAnalyst
+          - AutomationBot
+          - MultiAgent
+          - Custom
+        developmentStage:
+          type: string
+          enum:
+          - Proposal
+          - Development
+          - Testing
+          - Staging
+          - Production
+          - Deprecated
+          - Unauthorized
+        modelConfigurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelConfiguration'
+        primaryModel:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        promptTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        knowledgeBases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        upstreamApplications:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downstreamApplications:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        framework:
+          $ref: '#/components/schemas/FrameworkInfo'
+        governanceMetadata:
+          $ref: '#/components/schemas/GovernanceMetadata'
+        biasMetrics:
+          $ref: '#/components/schemas/BiasMetrics'
+        performanceMetrics:
+          $ref: '#/components/schemas/PerformanceMetrics'
+        qualityMetrics:
+          $ref: '#/components/schemas/QualityMetrics'
+        safetyMetrics:
+          $ref: '#/components/schemas/SafetyMetrics'
+        testSuites:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        sourceCode:
+          type: string
+        deploymentUrl:
+          type: string
+        documentation:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    EUAIActCompliance:
+      type: object
+      properties:
+        riskClassification:
+          type: string
+          enum:
+          - Minimal
+          - Limited
+          - High
+          - Unacceptable
+        riskRationale:
+          type: string
+        prohibitedPractices:
+          $ref: '#/components/schemas/ProhibitedPractices'
+        highRiskSystems:
+          $ref: '#/components/schemas/HighRiskSystems'
+        conformityAssessment:
+          $ref: '#/components/schemas/ConformityAssessment'
+        transparencyObligations:
+          $ref: '#/components/schemas/TransparencyObligations'
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    RiskAssessment:
+      type: object
+      properties:
+        riskLevel:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+        riskFactors:
+          type: array
+          items:
+            type: string
+        mitigations:
+          type: array
+          items:
+            type: string
+        assessedBy:
+          type: string
+        assessedAt:
+          type: integer
+          format: int64
+    BiasMetrics:
+      type: object
+      properties:
+        lastEvaluatedAt:
+          type: integer
+          format: int64
+        evaluationMethod:
+          type: string
+        overallBiasScore:
+          type: number
+          format: double
+        demographicParity:
+          type: number
+          format: double
+        equalizedOdds:
+          type: number
+          format: double
+        disparateImpact:
+          type: number
+          format: double
+        dimensionScores:
+          $ref: '#/components/schemas/DimensionScores'
+        testDataset:
+          $ref: '#/components/schemas/EntityReference'
+        biasDetected:
+          type: boolean
+        remediationSteps:
+          type: array
+          items:
+            type: string
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    Parameters:
+      type: object
+    ProhibitedPractices:
+      type: object
+      properties:
+        subliminalManipulativeTechniques:
+          type: boolean
+        exploitationOfVulnerabilities:
+          type: boolean
+        socialScoringSystem:
+          type: boolean
+        riskAssessmentCriminalOffences:
+          type: boolean
+        facialRecognitionDatabaseCreation:
+          type: boolean
+        emotionInferenceWorkplaceEducation:
+          type: boolean
+        biometricCategorisation:
+          type: boolean
+        realTimeBiometricIdentification:
+          type: boolean
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    GovernanceMetadata:
+      type: object
+      properties:
+        registrationStatus:
+          type: string
+          enum:
+          - Registered
+          - Unregistered
+          - PendingApproval
+          - Approved
+          - Rejected
+        registeredBy:
+          type: string
+        registeredAt:
+          type: integer
+          format: int64
+        approvedBy:
+          type: string
+        approvedAt:
+          type: integer
+          format: int64
+        riskAssessment:
+          $ref: '#/components/schemas/RiskAssessment'
+        dataClassification:
+          $ref: '#/components/schemas/DataClassification'
+        governancePolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        aiCompliance:
+          $ref: '#/components/schemas/AICompliance'
+        intakeNotes:
+          type: string
+        approvalComments:
+          type: string
+    SafetyMetrics:
+      type: object
+      properties:
+        piiLeakageRate:
+          type: number
+          format: double
+        harmfulContentRate:
+          type: number
+          format: double
+        promptInjectionAttempts:
+          type: integer
+          format: int32
+        blockedRequests:
+          type: integer
+          format: int32
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    SelectionCriteria:
+      type: object
+      properties:
+        queryTypes:
+          type: array
+          items:
+            type: string
+        maxTokens:
+          type: integer
+          format: int32
+        costThreshold:
+          type: number
+          format: double
+    AICompliance:
+      type: object
+      properties:
+        complianceRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AIComplianceRecord'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    QualityMetrics:
+      type: object
+      properties:
+        answerRelevancy:
+          type: number
+          format: double
+        contextPrecision:
+          type: number
+          format: double
+        faithfulness:
+          type: number
+          format: double
+        hallucinationRate:
+          type: number
+          format: double
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

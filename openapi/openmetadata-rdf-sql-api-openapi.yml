@@ -1,0 +1,101 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions RDF SQL API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: RDF SQL
+  description: Execute SQL queries over RDF data
+paths:
+  /v1/rdf/sql/query:
+    post:
+      tags:
+      - RDF SQL
+      summary: Execute SQL query over RDF data
+      description: Translates SQL to SPARQL and executes against RDF store
+      operationId: executeSqlOverRdf
+      parameters:
+      - name: format
+        in: query
+        description: Result format
+        schema:
+          type: string
+          default: application/sparql-results+json
+          enum:
+          - application/sparql-results+json
+          - application/sparql-results+xml
+          - text/csv
+          - text/tab-separated-values
+      requestBody:
+        description: SQL query to execute
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: Query results
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid SQL query
+        '503':
+          description: RDF support not enabled
+  /v1/rdf/sql/translate:
+    post:
+      tags:
+      - RDF SQL
+      summary: Translate SQL to SPARQL
+      description: Translates SQL query to SPARQL without executing
+      operationId: translateSqlToSparql
+      requestBody:
+        description: SQL query to translate
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: SPARQL translation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationResponse'
+        '400':
+          description: Invalid SQL query
+        '503':
+          description: RDF support not enabled
+components:
+  schemas:
+    TranslationResponse:
+      type: object
+      properties:
+        sqlQuery:
+          type: string
+          description: Original SQL query
+        sparqlQuery:
+          type: string
+          description: Translated SPARQL query
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

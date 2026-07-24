@@ -1,0 +1,256 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Workflow Instance States API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Workflow Instance States
+  description: A Workflow Instance State is a specific state of a Workflow Instance.
+paths:
+  /v1/governance/workflowInstanceStates/{id}:
+    get:
+      tags:
+      - Workflow Instance States
+      summary: Get a Workflow Instance State by id
+      description: Get a Workflow Instance State by id
+      operationId: getWorkflowInstanceStateById
+      parameters:
+      - name: id
+        in: path
+        description: Workflow Instance State ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The Workflow Instance State
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowInstanceState'
+  /v1/governance/workflowInstanceStates:
+    get:
+      tags:
+      - Workflow Instance States
+      summary: List the Workflow Instance States
+      description: Get a list of all the workflow instances states, filtered by `startTs` and `endTs` of the creation. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.
+      operationId: listWorkflowInstanceStates
+      parameters:
+      - name: limit
+        in: query
+        description: Limit the number of Workflow Instance States returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Returns list of Workflow Instance States at the offset
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter Workflow Instance States after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter Workflow Instance States before the given end timestamp
+        schema:
+          type: number
+      - name: latest
+        in: query
+        description: Only list the latest Workflow Instance States
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: List of Workflow Instances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowInstanceStateResultList'
+  /v1/governance/workflowInstanceStates/{workflowDefinitionName}/{workflowInstanceId}:
+    get:
+      tags:
+      - Workflow Instance States
+      summary: Get all the Workflow Instance States for a Workflow Instance id
+      description: Get all the Workflow Instance States for a Workflow Instancee id
+      operationId: getWorkflowInstanceStatesForAWorkflowInstanceId
+      parameters:
+      - name: workflowDefinitionName
+        in: path
+        description: Workflow Definition Name
+        required: true
+        schema:
+          type: string
+      - name: workflowInstanceId
+        in: path
+        description: Workflow Instance ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Limit the number of Workflow Instance States returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Returns list of Workflow Instance States at the offset
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter Workflow Instance States after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter Workflow Instance States before the given end timestamp
+        schema:
+          type: number
+      - name: latest
+        in: query
+        description: Only list the latest Workflow Instance States
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: The Workflow Instance States
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowInstanceStateResultList'
+components:
+  schemas:
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    WorkflowInstanceStateResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowInstanceState'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Stage:
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        startedAt:
+          type: integer
+          format: int64
+        endedAt:
+          type: integer
+          format: int64
+        tasks:
+          type: array
+          items:
+            type: string
+            format: uuid
+        variables:
+          type: object
+          additionalProperties:
+            type: object
+    WorkflowInstanceState:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        workflowInstanceId:
+          type: string
+          format: uuid
+        workflowInstanceExecutionId:
+          type: string
+          format: uuid
+        workflowDefinitionId:
+          type: string
+          format: uuid
+        stage:
+          $ref: '#/components/schemas/Stage'
+        timestamp:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - RUNNING
+          - FINISHED
+          - FAILURE
+          - EXCEPTION
+        exception:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

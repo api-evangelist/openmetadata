@@ -1,0 +1,110 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Search Reindex API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Search Reindex
+  description: APIs related to search reindexing failures and status.
+paths:
+  /v1/search/reindex/failures:
+    get:
+      tags:
+      - Search Reindex
+      summary: Get reindex failures
+      description: Get paginated list of failures from the last reindexing run. Use `offset` and `limit` for pagination.
+      operationId: getReindexFailures
+      parameters:
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: limit
+        in: query
+        description: Limit the number of results returned
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: entityType
+        in: query
+        description: Filter by entity type
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of reindex failures
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReindexFailuresResponse'
+components:
+  schemas:
+    ReindexFailuresResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of failure records
+          items:
+            $ref: '#/components/schemas/SearchIndexFailureRecord'
+        total:
+          type: integer
+          description: Total number of failures
+          format: int32
+        offset:
+          type: integer
+          description: Current offset
+          format: int32
+        limit:
+          type: integer
+          description: Page size limit
+          format: int32
+      description: Response containing paginated reindex failures
+    SearchIndexFailureRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        jobId:
+          type: string
+        serverId:
+          type: string
+        entityType:
+          type: string
+        entityId:
+          type: string
+        entityFqn:
+          type: string
+        failureStage:
+          type: string
+        errorMessage:
+          type: string
+        stackTrace:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+      description: List of failure records
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

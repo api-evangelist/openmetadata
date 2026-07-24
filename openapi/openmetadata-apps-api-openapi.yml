@@ -1,0 +1,2899 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Apps API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Apps
+  description: Apps marketplace holds to application available for Open-metadata
+paths:
+  /v1/apps/marketplace:
+    get:
+      tags:
+      - Apps
+      summary: List application
+      description: Get a list of applications. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listApplications
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tags
+      - name: limit
+        in: query
+        description: Limit the number of installed applications returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of tests before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of tests after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of KPIs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppMarketPlaceDefinitionList'
+    put:
+      tags:
+      - Apps
+      summary: Create Or Update App
+      description: Create or Update App, it it does not exist or update an existing KPI.
+      operationId: createOrUpdateApp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppMarketPlaceDefinitionReq'
+      responses:
+        '200':
+          description: 'The updated Application Objective '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+    post:
+      tags:
+      - Apps
+      summary: Create a Application
+      description: Create a application
+      operationId: createApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppMarketPlaceDefinitionReq'
+      responses:
+        '200':
+          description: The Application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppMarketPlaceDefinition'
+        '400':
+          description: Bad request
+  /v1/apps/marketplace/name/{name}:
+    get:
+      tags:
+      - Apps
+      summary: Get a App by name
+      description: Get a App by `name`.
+      operationId: getAppByName
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tags
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The App
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppMarketPlaceDefinition'
+        '404':
+          description: App for instance {name} is not found
+    delete:
+      tags:
+      - Apps
+      summary: Delete a App by name
+      description: Delete a App by `name`.
+      operationId: deleteAppByName
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: App for instance {name} is not found
+  /v1/apps/marketplace/{id}:
+    get:
+      tags:
+      - Apps
+      summary: Get a app by Id
+      description: Get a app by `Id`.
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tags
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The App
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppMarketPlaceDefinition'
+        '404':
+          description: App for instance {id} is not found
+    delete:
+      tags:
+      - Apps
+      summary: Delete a App by Id
+      description: Delete a App by `Id`.
+      operationId: deleteApp
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: App for instance {id} is not found
+    patch:
+      tags:
+      - Apps
+      summary: Updates a App
+      description: Update an existing App using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchApplication_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/apps/marketplace/async/{id}:
+    delete:
+      tags:
+      - Apps
+      summary: Asynchronously delete a App by Id
+      description: Asynchronously delete a App by `Id`.
+      operationId: deleteAppAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: App for instance {id} is not found
+  /v1/apps/marketplace/{id}/versions/{version}:
+    get:
+      tags:
+      - Apps
+      summary: Get a version of the App
+      description: Get a version of the App by given `id`
+      operationId: getSpecificAppVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: KPI version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: App
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '404':
+          description: App for instance {id} and version {version} is not found
+  /v1/apps/marketplace/history:
+    get:
+      tags:
+      - Apps
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_7
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/apps/marketplace/{id}/versions:
+    get:
+      tags:
+      - Apps
+      summary: List Installed Application versions
+      description: Get a list of all the versions of a application identified by `id`
+      operationId: listAllInstalledApplications
+      parameters:
+      - name: id
+        in: path
+        description: Id of the app
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of installed application versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/apps/marketplace/name/{fqn}:
+    patch:
+      tags:
+      - Apps
+      summary: Updates an App by name.
+      description: Update an existing App using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchApplication
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/apps/marketplace/restore:
+    put:
+      tags:
+      - Apps
+      summary: Restore a soft deleted KPI
+      description: Restore a soft deleted App.
+      operationId: restore_6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the App. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppMarketPlaceDefinition'
+  /v1/apps/configure/{name}:
+    post:
+      tags:
+      - Apps
+      summary: Configure an Application
+      description: Schedule a application to be run on demand.
+      operationId: configureApplication
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The Application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '404':
+          description: Application for instance {id} is not found
+  /v1/apps:
+    get:
+      tags:
+      - Apps
+      summary: List installed application
+      description: Get a list of applications. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listInstalledApplications
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: limit
+        in: query
+        description: Limit the number of installed applications returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of tests before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of tests after this cursor
+        schema:
+          type: string
+      - name: agentType
+        in: query
+        description: Filter by agent type(s). Can be a single value or comma-separated values
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: List of Installed Applications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppList'
+    put:
+      tags:
+      - Apps
+      summary: Create Or Update App
+      description: Create or Update App, it it does not exist or update an existing KPI.
+      operationId: createOrUpdateApp_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApp'
+      responses:
+        '200':
+          description: 'The updated Application Objective '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+    post:
+      tags:
+      - Apps
+      summary: Create a Application
+      description: Create a application
+      operationId: createApplication_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApp'
+      responses:
+        '200':
+          description: The Application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '400':
+          description: Bad request
+  /v1/apps/name/{name}:
+    get:
+      tags:
+      - Apps
+      summary: Get a App by name
+      description: Get a App by `name`.
+      operationId: getAppByName_1
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The App
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '404':
+          description: App for instance {name} is not found
+    delete:
+      tags:
+      - Apps
+      summary: Delete a App by name
+      description: Delete a App by `name`.
+      operationId: uninstallAppByName
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: System entity {name} of type SystemApp can not be deleted.
+        '404':
+          description: App for instance {name} is not found
+  /v1/apps/{id}:
+    get:
+      tags:
+      - Apps
+      summary: Get a app by Id
+      description: Get a app by `Id`.
+      operationId: get_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The App
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '404':
+          description: App for instance {id} is not found
+    delete:
+      tags:
+      - Apps
+      summary: Delete a App by Id
+      description: Delete a App by `Id`.
+      operationId: uninstallAppByName_1
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: System entity {name} of type SystemApp can not be deleted.
+        '404':
+          description: App for instance {id} is not found
+    patch:
+      tags:
+      - Apps
+      summary: Updates a App
+      description: Update an existing App using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchApplication_3
+      parameters:
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/apps/async/{id}:
+    delete:
+      tags:
+      - Apps
+      summary: Asynchronously delete a App by Id
+      description: Asynchronously delete a App by `Id`.
+      operationId: uninstallAppByNameAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: System entity {name} of type SystemApp can not be deleted.
+        '404':
+          description: App for instance {id} is not found
+  /v1/apps/deploy/{name}:
+    post:
+      tags:
+      - Apps
+      summary: Deploy App to Quartz or Ingestion
+      description: Deploy App to Quartz or Ingestion.
+      operationId: deployApplicationToQuartzOrIngestion
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Application trigger status code
+          content:
+            application/json: {}
+        '404':
+          description: Application for instance {id} is not found
+  /v1/apps/name/{name}/logs:
+    get:
+      tags:
+      - Apps
+      summary: Retrieve all logs from last ingestion pipeline run for the application
+      description: Get all logs from last ingestion pipeline run by `Id`.
+      operationId: getLastLogs
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns log chunk after this cursor
+        schema:
+          type: string
+          default: ''
+      - name: runId
+        in: query
+        description: Pipeline run ID to fetch logs for a specific run. If not provided, returns logs for the latest run.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of lines to return (only applies to streamable logs)
+        schema:
+          type: integer
+          format: int64
+          default: 1000
+      responses:
+        '200':
+          description: JSON object with the task instance name of the ingestion on each key and log in the value
+          content:
+            application/json: {}
+        '404':
+          description: Logs for instance {id} is not found
+  /v1/apps/{id}/versions/{version}:
+    get:
+      tags:
+      - Apps
+      summary: Get a version of the App
+      description: Get a version of the App by given `id`
+      operationId: getSpecificAppVersion_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the App
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: App version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: App
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '404':
+          description: App for instance {id} and version {version} is not found
+  /v1/apps/installed:
+    get:
+      tags:
+      - Apps
+      summary: List Entity Reference for installed application
+      description: 'Get a list of applications '
+      operationId: listInstalledAppsInformation
+      responses:
+        '200':
+          description: List of Installed Applications Entity Reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppRefList'
+  /v1/apps/name/{name}/extension:
+    get:
+      tags:
+      - Apps
+      summary: List App Extension data
+      description: Get a list of applications Extension data. Use cursor-based pagination to limit the number entries in the list using `offset` query params.
+      operationId: listAppExtension
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit records. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Offset records. (0 to 1000000, default = 0)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: startTs
+        in: query
+        description: Filter pipeline status after the given start timestamp
+        schema:
+          type: number
+      - name: extensionType
+        in: query
+        description: Get the extension type
+        schema:
+          type: string
+      - name: byName
+        in: query
+        description: List extensions by name instead of id
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: List of Installed Applications Runs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppExtension'
+  /v1/apps/name/{name}/status:
+    get:
+      tags:
+      - Apps
+      summary: List App Run Records
+      description: Get a list of applications Run Record. Use cursor-based pagination to limit the number entries in the list using `offset` query params.
+      operationId: listAppRunRecords
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit records. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Offset records. (0 to 1000000, default = 0)
+        schema:
+          maximum: 1000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: startTs
+        in: query
+        description: Filter pipeline status after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter pipeline status before the given end timestamp
+        schema:
+          type: number
+      responses:
+        '200':
+          description: List of Installed Applications Runs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppRunList'
+  /v1/apps/history:
+    get:
+      tags:
+      - Apps
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_8
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/apps/name/{name}/runs/latest:
+    get:
+      tags:
+      - Apps
+      summary: Get Latest App Run Record
+      description: Get a latest applications Run Record.
+      operationId: latestAppRunRecord
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns log chunk after this cursor
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: List of Installed Applications Runs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppRunRecord'
+  /v1/apps/name/{name}/live-indexing-queue:
+    get:
+      tags:
+      - Apps
+      summary: List Search Index Retry Queue
+      description: Get the current live indexing retry queue entries for the SearchIndexingApplication.
+      operationId: listSearchIndexRetryQueue
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit records. (1 to 1000, default = 10)
+        schema:
+          maximum: 1000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Offset records. (0 to 1000000, default = 0)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: List of retry queue records
+          content:
+            application/json: {}
+  /v1/apps/{id}/versions:
+    get:
+      tags:
+      - Apps
+      summary: List Installed Application versions
+      description: Get a list of all the versions of a application identified by `id`
+      operationId: listAllInstalledApplications_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the app
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of installed application versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/apps/name/{fqn}:
+    patch:
+      tags:
+      - Apps
+      summary: Updates a App by name.
+      description: Update an existing App using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchApplication_2
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/apps/restore:
+    put:
+      tags:
+      - Apps
+      summary: Restore a soft deleted KPI
+      description: Restore a soft deleted App.
+      operationId: restore_7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the App. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+  /v1/apps/schedule/{name}:
+    post:
+      tags:
+      - Apps
+      summary: Schedule an Application
+      description: Schedule a application to be run on demand.
+      operationId: scheduleApplication
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The Application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '404':
+          description: Application for instance {id} is not found
+  /v1/apps/stop/{name}:
+    post:
+      tags:
+      - Apps
+      summary: Stop a Application run
+      description: Stop a application run by name.
+      operationId: stopApplicationRun
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      - name: runId
+        in: query
+        description: Pipeline run ID to stop a specific run
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Application stopped status code
+          content:
+            application/json: {}
+        '404':
+          description: Application for instance {id} is not found
+  /v1/apps/trigger/{name}:
+    post:
+      tags:
+      - Apps
+      summary: Trigger an Application run
+      description: Trigger a Application run by name.
+      operationId: triggerApplicationRun
+      parameters:
+      - name: name
+        in: path
+        description: Name of the App
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Configuration payload. Keys will be added to the current configuration. Delete keys by setting them to null.
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+      responses:
+        '200':
+          description: Application trigger status code
+          content:
+            application/json: {}
+        '404':
+          description: Application for instance {id} is not found
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    CreateEventSubscription:
+      required:
+      - alertType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        className:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        enabled:
+          type: boolean
+        batchSize:
+          type: integer
+          format: int32
+        alertType:
+          type: string
+          enum:
+          - Notification
+          - Observability
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+          - Custom
+        trigger:
+          $ref: '#/components/schemas/TriggerConfig'
+        resources:
+          type: array
+          items:
+            type: string
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        retries:
+          type: integer
+          format: int32
+        pollInterval:
+          type: integer
+          format: int32
+        input:
+          $ref: '#/components/schemas/AlertFilteringInput'
+        notificationTemplate:
+          $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    StatusType:
+      type: object
+      properties:
+        family:
+          type: string
+          enum:
+          - INFORMATIONAL
+          - SUCCESSFUL
+          - REDIRECTION
+          - CLIENT_ERROR
+          - SERVER_ERROR
+          - OTHER
+        statusCode:
+          type: integer
+          format: int32
+        reasonPhrase:
+          type: string
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    EntityStats:
+      type: object
+    AppList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/App'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    Response:
+      type: object
+      properties:
+        closed:
+          type: boolean
+        length:
+          type: integer
+          format: int32
+        location:
+          type: string
+          format: uri
+        language:
+          type: object
+          properties:
+            language:
+              type: string
+            displayName:
+              type: string
+            country:
+              type: string
+            variant:
+              type: string
+            script:
+              type: string
+            unicodeLocaleAttributes:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            unicodeLocaleKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            displayLanguage:
+              type: string
+            displayScript:
+              type: string
+            displayCountry:
+              type: string
+            displayVariant:
+              type: string
+            extensionKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            iso3Language:
+              type: string
+            iso3Country:
+              type: string
+        date:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: object
+        status:
+          type: integer
+          format: int32
+        entity:
+          type: object
+        cookies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NewCookie'
+        links:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        statusInfo:
+          $ref: '#/components/schemas/StatusType'
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        allowedMethods:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        entityTag:
+          $ref: '#/components/schemas/EntityTag'
+        stringHeaders:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        headers:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: object
+    Link:
+      type: object
+      properties:
+        type:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: string
+        uri:
+          type: string
+          format: uri
+        title:
+          type: string
+        uriBuilder:
+          $ref: '#/components/schemas/UriBuilder'
+        rel:
+          type: string
+        rels:
+          type: array
+          items:
+            type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    FilterPattern:
+      type: object
+      properties:
+        includes:
+          type: array
+          items:
+            type: string
+        excludes:
+          type: array
+          items:
+            type: string
+    TriggerConfig:
+      required:
+      - triggerType
+      type: object
+      properties:
+        triggerType:
+          type: string
+          enum:
+          - RealTime
+          - Scheduled
+        scheduleInfo:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Monthly
+          - Custom
+        cronExpression:
+          type: string
+    OpenMetadataConnection:
+      required:
+      - hostPort
+      type: object
+      properties:
+        clusterName:
+          type: string
+        type:
+          type: string
+          enum:
+          - OpenMetadata
+        hostPort:
+          type: string
+        authProvider:
+          type: string
+          enum:
+          - basic
+          - azure
+          - google
+          - okta
+          - auth0
+          - aws-cognito
+          - custom-oidc
+          - ldap
+          - saml
+          - openmetadata
+        verifySSL:
+          type: string
+          enum:
+          - no-ssl
+          - ignore
+          - validate
+        sslConfig:
+          type: object
+        securityConfig:
+          $ref: '#/components/schemas/OpenMetadataJWTClientConfig'
+        secretsManagerProvider:
+          type: string
+          enum:
+          - db
+          - managed-aws
+          - aws
+          - managed-aws-ssm
+          - aws-ssm
+          - managed-azure-kv
+          - azure-kv
+          - in-memory
+          - gcp
+          - kubernetes
+        secretsManagerLoader:
+          type: string
+          enum:
+          - noop
+          - airflow
+          - env
+        apiVersion:
+          type: string
+        includeTopics:
+          type: boolean
+        includeTables:
+          type: boolean
+        includeDashboards:
+          type: boolean
+        includePipelines:
+          type: boolean
+        includeMlModels:
+          type: boolean
+        includeUsers:
+          type: boolean
+        includeTeams:
+          type: boolean
+        includeGlossaryTerms:
+          type: boolean
+        includeTags:
+          type: boolean
+        includePolicy:
+          type: boolean
+        includeMessagingServices:
+          type: boolean
+        enableVersionValidation:
+          type: boolean
+        includeDatabaseServices:
+          type: boolean
+        includePipelineServices:
+          type: boolean
+        limitRecords:
+          type: integer
+          format: int32
+        forceEntityOverwriting:
+          type: boolean
+        storeServiceConnection:
+          type: boolean
+        elasticsSearch:
+          $ref: '#/components/schemas/ElasticsSearch'
+        schemaFilterPattern:
+          $ref: '#/components/schemas/FilterPattern'
+        tableFilterPattern:
+          $ref: '#/components/schemas/FilterPattern'
+        databaseFilterPattern:
+          $ref: '#/components/schemas/FilterPattern'
+        supportsDataInsightExtraction:
+          type: boolean
+        supportsElasticSearchReindexingExtraction:
+          type: boolean
+        extraHeaders:
+          $ref: '#/components/schemas/ExtraHeaders'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    AppRunRecord:
+      type: object
+      properties:
+        appId:
+          type: string
+          format: uuid
+        appName:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        extension:
+          type: string
+        status:
+          type: string
+          enum:
+          - started
+          - running
+          - completed
+          - failed
+          - active
+          - activeError
+          - stopped
+          - stopInProgress
+          - success
+          - pending
+        runType:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+        executionTime:
+          type: integer
+          format: int64
+        failureContext:
+          $ref: '#/components/schemas/FailureContext'
+        successContext:
+          $ref: '#/components/schemas/SuccessContext'
+        scheduleInfo:
+          $ref: '#/components/schemas/AppSchedule'
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    AppSchedule:
+      required:
+      - scheduleTimeline
+      type: object
+      properties:
+        scheduleTimeline:
+          type: string
+          enum:
+          - Hourly
+          - Daily
+          - Weekly
+          - Monthly
+          - Custom
+          - None
+        cronExpression:
+          type: string
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ComponentConfig:
+      type: object
+    AppMarketPlaceDefinitionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppMarketPlaceDefinition'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    UriBuilder:
+      type: object
+    AppExtension:
+      required:
+      - appId
+      - appName
+      - extension
+      type: object
+      properties:
+        appId:
+          type: string
+          format: uuid
+        appName:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        extension:
+          type: string
+          enum:
+          - status
+          - limits
+          - custom
+    JsonPatch:
+      type: object
+    StepStats:
+      type: object
+      properties:
+        totalRecords:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        successRecords:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        failedRecords:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        warningRecords:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        vectorSuccessRecords:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        vectorFailedRecords:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        totalTimeMs:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int64
+        readerTimeMs:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int64
+        processTimeMs:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int64
+        sinkTimeMs:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int64
+        vectorTimeMs:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int64
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    AppRunList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppRunRecord'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ElasticsSearch:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/ComponentConfig'
+    NewCookie:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        version:
+          type: integer
+          format: int32
+        path:
+          type: string
+        domain:
+          type: string
+        comment:
+          type: string
+        maxAge:
+          type: integer
+          format: int32
+        expiry:
+          type: string
+          format: date-time
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+        sameSite:
+          type: string
+          enum:
+          - NONE
+          - LAX
+          - STRICT
+    AlertFilteringInput:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentsInput'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentsInput'
+    ArgumentsInput:
+      type: object
+      properties:
+        name:
+          type: string
+        effect:
+          type: string
+          enum:
+          - include
+          - exclude
+        prefixCondition:
+          type: string
+          enum:
+          - AND
+          - OR
+        arguments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Argument'
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    App:
+      required:
+      - appType
+      - className
+      - id
+      - name
+      - permission
+      - runtime
+      - scheduleType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        features:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        developer:
+          type: string
+        developerUrl:
+          type: string
+        privacyPolicyUrl:
+          type: string
+        supportEmail:
+          type: string
+        className:
+          type: string
+        sourcePythonClass:
+          type: string
+        appType:
+          type: string
+          enum:
+          - internal
+          - external
+        agentType:
+          type: string
+          enum:
+          - CollateAI
+          - CollateAITierAgent
+          - CollateAIQualityAgent
+          - Metadata
+        scheduleType:
+          type: string
+          enum:
+          - Live
+          - Scheduled
+          - ScheduledOrManual
+          - NoSchedule
+          - OnlyManual
+        permission:
+          type: string
+          enum:
+          - All
+        bot:
+          $ref: '#/components/schemas/EntityReference'
+        runtime:
+          type: object
+        allowConfiguration:
+          type: boolean
+        system:
+          type: boolean
+        appConfiguration:
+          type: object
+        privateConfiguration:
+          type: object
+        enabled:
+          type: boolean
+        pipelines:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        appSchedule:
+          $ref: '#/components/schemas/AppSchedule'
+        openMetadataServerConnection:
+          $ref: '#/components/schemas/OpenMetadataConnection'
+        appLogoUrl:
+          type: string
+          format: uri
+        appScreenshots:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        supportsInterrupt:
+          type: boolean
+        eventSubscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        supportsIngestionRunner:
+          type: boolean
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        allowConcurrentExecution:
+          type: boolean
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    Argument:
+      type: object
+      properties:
+        name:
+          type: string
+        input:
+          type: array
+          items:
+            type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    SubscriptionDestination:
+      required:
+      - category
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+          enum:
+          - Users
+          - Teams
+          - Admins
+          - Assignees
+          - Owners
+          - Mentions
+          - Followers
+          - External
+        type:
+          type: string
+          enum:
+          - Webhook
+          - Slack
+          - MsTeams
+          - GChat
+          - Email
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+        statusDetails:
+          type: object
+        timeout:
+          type: integer
+          format: int32
+        readTimeout:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        config:
+          type: object
+        notifyDownstream:
+          type: boolean
+        downstreamDepth:
+          minimum: 1
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+    Stats:
+      type: object
+      properties:
+        jobStats:
+          $ref: '#/components/schemas/StepStats'
+        readerStats:
+          $ref: '#/components/schemas/StepStats'
+        processStats:
+          $ref: '#/components/schemas/StepStats'
+        sinkStats:
+          $ref: '#/components/schemas/StepStats'
+        vectorStats:
+          $ref: '#/components/schemas/StepStats'
+        entityStats:
+          $ref: '#/components/schemas/EntityStats'
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    AppRefList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    EntityTag:
+      type: object
+      properties:
+        value:
+          type: string
+        weak:
+          type: boolean
+    ExtraHeaders:
+      type: object
+    FailureContext:
+      type: object
+      properties:
+        failure:
+          $ref: '#/components/schemas/IndexingError'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    IndexingError:
+      type: object
+      properties:
+        errorSource:
+          type: string
+          enum:
+          - Job
+          - Reader
+          - Processor
+          - Sink
+        lastFailedCursor:
+          type: string
+        message:
+          type: string
+        failedEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        reason:
+          type: string
+        stackTrace:
+          type: string
+        submittedCount:
+          type: integer
+          format: int32
+        successCount:
+          type: integer
+          format: int32
+        failedCount:
+          type: integer
+          format: int32
+    SuccessContext:
+      type: object
+      properties:
+        stats:
+          $ref: '#/components/schemas/Stats'
+    CreateApp:
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        bot:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        appConfiguration:
+          type: object
+        appSchedule:
+          $ref: '#/components/schemas/AppSchedule'
+        domains:
+          type: array
+          items:
+            type: string
+        supportsInterrupt:
+          type: boolean
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        allowBotImpersonation:
+          type: boolean
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    OpenMetadataJWTClientConfig:
+      required:
+      - jwtToken
+      type: object
+      properties:
+        jwtToken:
+          type: string
+    CreateAppMarketPlaceDefinitionReq:
+      required:
+      - appType
+      - className
+      - name
+      - permission
+      - scheduleType
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        features:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        developer:
+          type: string
+        developerUrl:
+          type: string
+        privacyPolicyUrl:
+          type: string
+        supportEmail:
+          type: string
+        className:
+          type: string
+        sourcePythonClass:
+          type: string
+        appType:
+          type: string
+          enum:
+          - internal
+          - external
+        agentType:
+          type: string
+          enum:
+          - CollateAI
+          - CollateAITierAgent
+          - CollateAIQualityAgent
+          - Metadata
+        scheduleType:
+          type: string
+          enum:
+          - Live
+          - Scheduled
+          - ScheduledOrManual
+          - NoSchedule
+          - OnlyManual
+        permission:
+          type: string
+          enum:
+          - All
+        runtime:
+          type: object
+        allowConfiguration:
+          type: boolean
+        appConfiguration:
+          type: object
+        appLogoUrl:
+          type: string
+          format: uri
+        appScreenshots:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        system:
+          type: boolean
+        domains:
+          type: array
+          items:
+            type: string
+        supportsInterrupt:
+          type: boolean
+        eventSubscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateEventSubscription'
+        enabled:
+          type: boolean
+        supportsIngestionRunner:
+          type: boolean
+        allowConcurrentExecution:
+          type: boolean
+        allowBotImpersonation:
+          type: boolean
+        extension:
+          type: object
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    AppMarketPlaceDefinition:
+      required:
+      - appType
+      - className
+      - id
+      - name
+      - permission
+      - scheduleType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        features:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        developer:
+          type: string
+        developerUrl:
+          type: string
+        privacyPolicyUrl:
+          type: string
+        supportEmail:
+          type: string
+        className:
+          type: string
+        sourcePythonClass:
+          type: string
+        appType:
+          type: string
+          enum:
+          - internal
+          - external
+        agentType:
+          type: string
+          enum:
+          - CollateAI
+          - CollateAITierAgent
+          - CollateAIQualityAgent
+          - Metadata
+        scheduleType:
+          type: string
+          enum:
+          - Live
+          - Scheduled
+          - ScheduledOrManual
+          - NoSchedule
+          - OnlyManual
+        permission:
+          type: string
+          enum:
+          - All
+        runtime:
+          type: object
+        allowConfiguration:
+          type: boolean
+        allowConcurrentExecution:
+          type: boolean
+        appConfiguration:
+          type: object
+        appLogoUrl:
+          type: string
+          format: uri
+        appScreenshots:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        system:
+          type: boolean
+        enabled:
+          type: boolean
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        supportsInterrupt:
+          type: boolean
+        eventSubscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateEventSubscription'
+        supportsIngestionRunner:
+          type: boolean
+        allowBotImpersonation:
+          type: boolean
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

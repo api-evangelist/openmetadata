@@ -1,0 +1,1402 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Search API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Search
+  description: APIs related to search and suggest.
+paths:
+  /v1/search/aggregate:
+    get:
+      tags:
+      - Search
+      summary: Get aggregated fields
+      description: Get aggregated fields from entities.
+      operationId: getAggregateFields
+      parameters:
+      - name: index
+        in: query
+        schema:
+          type: string
+          default: table
+      - name: field
+        in: query
+        description: Field in an entity.
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: value for searching in aggregation
+        schema:
+          type: string
+          default: ''
+      - name: sourceFields
+        in: query
+        description: List of fields to fetch from _source per bucket.
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search Query Text, Pass *text* for substring match; Pass without wildcards for exact match. <br/> 1. For listing all tables or topics pass q=* <br/>2. For search tables or topics pass q=*search_term* <br/>3. For searching field names such as search by columnNames pass q=columnNames:address, for searching deleted entities, use q=deleted:true <br/>4. For searching by tag names pass q=tags.tagFQN:user.email <br/>5. When user selects a filter pass q=query_text AND tags.tagFQN:user.email AND platform:MYSQL <br/>6. Search with multiple values of same filter q=tags.tagFQN:user.email AND tags.tagFQN:user.address <br/>NOTE: logic operators such as AND, OR and NOT must be in uppercase '
+        required: true
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 10
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: deleted
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: queryText
+        in: query
+        description: Free-text search query to scope aggregation results
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Table Aggregate API
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Suggest'
+    post:
+      tags:
+      - Search
+      summary: Get aggregated Search Request
+      description: Get aggregated fields from entities.
+      operationId: aggregateSearchRequest
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/AggregationRequest'
+      responses:
+        '200':
+          description: Table Aggregate API
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/stats/orphan:
+    delete:
+      tags:
+      - Search
+      summary: Clean orphan indexes
+      description: Delete all orphan indexes (indexes with zero aliases) from the search cluster.
+      operationId: cleanOrphanIndexes
+      responses:
+        '200':
+          description: Cleanup result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrphanCleanupResponse'
+        '409':
+          description: Conflict - Search indexing is currently running
+  /v1/search/export:
+    get:
+      tags:
+      - Search
+      summary: Export search results as CSV (streaming)
+      description: Exports the current search results as a streaming CSV download. The response is streamed directly to the client without buffering the entire result set in memory.
+      operationId: exportSearchResults
+      parameters:
+      - name: q
+        in: query
+        description: Search Query Text
+        schema:
+          type: string
+          default: '*'
+      - name: index
+        in: query
+        description: ElasticSearch Index name, defaults to table
+        schema:
+          type: string
+          default: table
+      - name: deleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: post_filter
+        in: query
+        description: Elasticsearch query that will be used as a post_filter
+        schema:
+          type: string
+      - name: sort_field
+        in: query
+        description: Sort the search results by field
+        schema:
+          type: string
+          default: _score
+      - name: sort_order
+        in: query
+        description: Sort order asc for ascending or desc for descending, defaults to desc
+        schema:
+          type: string
+          default: desc
+      - name: size
+        in: query
+        description: Maximum number of rows to export. When null, exports all matching results up to the hard cap.
+        schema:
+          type: integer
+          format: int32
+      - name: from
+        in: query
+        description: Starting offset for export. Use with size to export a specific page of results (e.g., from=30&size=15 for page 3).
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: CSV file stream
+          content:
+            text/csv; charset=utf-8: {}
+  /v1/search/entityTypeCounts:
+    get:
+      tags:
+      - Search
+      summary: Get exact entity type counts
+      description: Get exact counts of entities by type for a given search query. This endpoint provides accurate counts when searching across all entity types.
+      operationId: getEntityTypeCounts
+      parameters:
+      - name: q
+        in: query
+        description: Search query text
+        required: true
+        schema:
+          type: string
+      - name: index
+        in: query
+        description: Index to search in (all, dataAsset, table, etc.)
+        schema:
+          type: string
+          default: dataAsset
+      - name: deleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: post_filter
+        in: query
+        description: Elasticsearch query that will be used as a post_filter
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Entity type counts response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/stats:
+    get:
+      tags:
+      - Search
+      summary: Get search cluster statistics
+      description: Get statistics about the search cluster including indexes, shards, and orphan indexes.
+      operationId: getSearchStats
+      responses:
+        '200':
+          description: Search statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchStatsResponse'
+  /v1/search/preview:
+    post:
+      tags:
+      - Search
+      summary: Preview Search Results
+      description: Preview search results based on provided SearchSettings without saving changes.
+      operationId: previewSearch
+      requestBody:
+        description: Preview request containing search settings
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreviewSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: Search preview response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/reindexEntities:
+    post:
+      tags:
+      - Search
+      summary: Only Reindex the selected entities in Elasticsearch.
+      description: 'Only Reindex the selected entities in Elasticsearch. Maximum 500 entities per request. Job timeout: 30 minutes.'
+      operationId: reindexOnlySelectedEntities.
+      parameters:
+      - name: timeoutMinutes
+        in: query
+        description: 'Job timeout in minutes (default: 30, max: 60)'
+        schema:
+          type: integer
+          format: int32
+          default: 5
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityReference'
+      responses:
+        '200':
+          description: Reindex process started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: Bad request - too many entities or invalid input.
+  /v1/search/query:
+    get:
+      tags:
+      - Search
+      summary: Search entities
+      description: Search entities using query text. Use query params `from` and `size` for pagination. Use `sort_field` to sort the results in `sort_order`.
+      operationId: searchEntitiesWithQuery
+      parameters:
+      - name: q
+        in: query
+        description: 'Search Query Text, Pass *text* for substring match; Pass without wildcards for exact match. <br/> 1. For listing all tables or topics pass q=* <br/>2. For search tables or topics pass q=*search_term* <br/>3. For searching field names such as search by columnNames pass q=columnNames:address , for searching deleted entities, use q=deleted:true <br/> 4. For searching by tag names pass q=tags.tagFQN:user.email <br/>5. When user selects a filter pass q=query_text AND q=tags.tagFQN:user.email AND platform:MYSQL <br/>6. Search with multiple values of same filter q=tags.tagFQN:user.email AND tags.tagFQN:user.address <br/> 7. Search by service version and type q=service.type:databaseService AND version:0.1 <br/> 8. Search Tables with Specific Constraints q=tableConstraints.constraintType.keyword:PRIMARY_KEY AND NOT tier.tagFQN:Tier.Tier1 <br/> 9. Search with owners q=owner.displayName.keyword:owner_name <br/> NOTE: logic operators such as AND, OR and NOT must be in uppercase '
+        required: true
+        schema:
+          type: string
+          default: '*'
+      - name: index
+        in: query
+        description: ElasticSearch Index name, defaults to table_search_index
+        schema:
+          type: string
+          default: table
+      - name: deleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+      - name: from
+        in: query
+        description: From field to paginate the results, defaults to 0
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 10
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: search_after
+        in: query
+        description: 'Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2. Each value carried as its own parameter so values containing '','' (e.g. a glossary term FQN) are safe.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: sort_field
+        in: query
+        description: Sort the search results by field, available fields to sort weekly_stats , daily_stats, monthly_stats, last_updated_timestamp
+        schema:
+          type: string
+          default: _score
+      - name: sort_order
+        in: query
+        description: Sort order asc for ascending or desc for descending, defaults to desc
+        schema:
+          type: string
+          default: desc
+      - name: track_total_hits
+        in: query
+        description: Track Total Hits
+        schema:
+          type: boolean
+          default: false
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: post_filter
+        in: query
+        description: Elasticsearch query that will be used as a post_filter
+        schema:
+          type: string
+      - name: fetch_source
+        in: query
+        description: Get document body for each hit
+        schema:
+          type: boolean
+          default: true
+      - name: include_source_fields
+        in: query
+        description: Get only selected fields of the document body for each hit. Empty value will return all fields
+        schema:
+          type: array
+          items:
+            type: string
+      - name: exclude_source_fields
+        in: query
+        description: Exclude specified fields from the document body for each hit. Use this to exclude heavy fields like 'columns' for better performance
+        schema:
+          type: array
+          items:
+            type: string
+      - name: getHierarchy
+        in: query
+        description: Fetch search results in hierarchical order of children elements. By default hierarchy is not fetched. Currently only supported for glossary_term_search_index.
+        schema:
+          type: boolean
+          default: false
+      - name: explain
+        in: query
+        description: Explain the results of the query. Defaults to false. Only for debugging purposes.
+        schema:
+          type: boolean
+          default: false
+      - name: include_aggregations
+        in: query
+        description: Include aggregations in the search response. Defaults to true. Set to false to skip aggregations for faster response times when only search results are needed.
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/fieldQuery:
+    get:
+      tags:
+      - Search
+      summary: Search entities
+      operationId: searchEntitiesWithSpecificFieldAndValue
+      parameters:
+      - name: fieldName
+        in: query
+        description: field name
+        schema:
+          type: string
+      - name: fieldValue
+        in: query
+        description: field value
+        schema:
+          type: string
+      - name: index
+        in: query
+        description: Search Index name, defaults to table_search_index
+        schema:
+          type: string
+          default: table
+      - name: deleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+          default: false
+      - name: from
+        in: query
+        description: From field to paginate the results, defaults to 0
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 10
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/sourceUrl:
+    get:
+      tags:
+      - Search
+      summary: Search entities
+      operationId: searchEntitiesWithSourceUrl
+      parameters:
+      - name: sourceUrl
+        in: query
+        description: source url
+        schema:
+          type: string
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/get/{index}/doc/{id}:
+    get:
+      tags:
+      - Search
+      summary: Search entities in ES index with Id
+      operationId: searchEntityInEsIndexWithId
+      parameters:
+      - name: id
+        in: path
+        description: document Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: index
+        in: path
+        description: Index Name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/nlq/query:
+    get:
+      tags:
+      - Search
+      summary: Search entities using Natural Language Query (NLQ)
+      description: Search entities using Natural Language Queries (NLQ) with full search capabilities.
+      operationId: searchEntitiesWithNLQ
+      parameters:
+      - name: q
+        in: query
+        description: NLQ query string in natural language
+        schema:
+          type: string
+      - name: index
+        in: query
+        description: ElasticSearch Index name, defaults to table_search_index
+        schema:
+          type: string
+          default: table
+      - name: deleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+          default: false
+      - name: from
+        in: query
+        description: From field to paginate the results, defaults to 0
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 10
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: search_after
+        in: query
+        description: 'Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: sort_field
+        in: query
+        description: Sort the search results by field
+        schema:
+          type: string
+          default: _score
+      - name: sort_order
+        in: query
+        description: Sort order asc for ascending or desc for descending, defaults to desc
+        schema:
+          type: string
+          default: desc
+      - name: track_total_hits
+        in: query
+        description: Track Total Hits
+        schema:
+          type: boolean
+          default: false
+      - name: query_filter
+        in: query
+        description: Additional filters to apply
+        schema:
+          type: string
+      - name: post_filter
+        in: query
+        description: Post-filters to apply
+        schema:
+          type: string
+      - name: fetch_source
+        in: query
+        description: Get document body for each hit
+        schema:
+          type: boolean
+          default: true
+      - name: include_source_fields
+        in: query
+        description: Get only selected fields of the document body
+        schema:
+          type: array
+          items:
+            type: string
+      - name: exclude_source_fields
+        in: query
+        description: Exclude specified fields from the document body for each hit
+        schema:
+          type: array
+          items:
+            type: string
+      - name: getHierarchy
+        in: query
+        description: Fetch results in hierarchical order
+        schema:
+          type: boolean
+          default: false
+      - name: explain
+        in: query
+        description: Explain the results of the query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: NLQ search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/search/templates:
+    put:
+      tags:
+      - Search
+      summary: Sync all index templates
+      description: Create or update index templates for all entity types from indexMapping.json. Templates ensure proper mappings when ES/OS auto-creates indices.
+      operationId: syncAllIndexTemplates
+      responses:
+        '200':
+          description: Sync result
+        '403':
+          description: Admin only
+  /v1/search/templates/{entityType}:
+    put:
+      tags:
+      - Search
+      summary: Sync index template for a specific entity type
+      description: Create or update index template for a specific entity type from indexMapping.json.
+      operationId: syncIndexTemplateByEntityType
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Template synced
+        '400':
+          description: Invalid entity type
+        '403':
+          description: Admin only
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    Range:
+      type: object
+      properties:
+        gt:
+          type: number
+          format: double
+        gte:
+          type: number
+          format: double
+        lt:
+          type: number
+          format: double
+        lte:
+          type: number
+          format: double
+    TitleSection:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+          format: int32
+    AllowedFieldValueBoostFields:
+      required:
+      - entityType
+      - fields
+      type: object
+      properties:
+        entityType:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field__1'
+    ExtensionFieldGuidelines:
+      required:
+      - header
+      - sections
+      type: object
+      properties:
+        header:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuidelineSection'
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryExample'
+    FieldBoost:
+      required:
+      - field
+      type: object
+      properties:
+        field:
+          type: string
+        boost:
+          type: number
+          format: double
+        matchType:
+          type: string
+          enum:
+          - exact
+          - phrase
+          - fuzzy
+          - standard
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    GlobalSettings:
+      type: object
+      properties:
+        enableAccessControl:
+          type: boolean
+        maxAggregateSize:
+          type: integer
+          format: int32
+        maxResultHits:
+          type: integer
+          format: int32
+        maxAnalyzedOffset:
+          type: integer
+          format: int32
+        aggregations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Aggregation'
+        highlightFields:
+          type: array
+          items:
+            type: string
+        termBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TermBoost'
+        fieldValueBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValueBoost'
+        keywordWeight:
+          type: number
+          format: double
+        semanticWeight:
+          type: number
+          format: double
+    AdditionalSettings:
+      type: object
+    PreviewSearchRequest:
+      required:
+      - index
+      - query
+      - searchSettings
+      type: object
+      properties:
+        query:
+          type: string
+        index:
+          type: string
+        searchSettings:
+          $ref: '#/components/schemas/SearchSettings'
+        from:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        sortField:
+          type: string
+        sortOrder:
+          type: string
+          enum:
+          - asc
+          - desc
+        trackTotalHits:
+          type: boolean
+        queryFilter:
+          type: string
+        postFilter:
+          type: string
+        fetchSource:
+          type: boolean
+        includeSourceFields:
+          type: array
+          items:
+            type: string
+        explain:
+          type: boolean
+    Aggregation:
+      required:
+      - name
+      - type
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - terms
+          - range
+          - histogram
+          - date_histogram
+          - filters
+          - missing
+          - nested
+          - reverse_nested
+          - top_hits
+          - max
+          - min
+          - avg
+          - sum
+          - stats
+        field:
+          type: string
+        script:
+          type: string
+    AggregationRequest:
+      required:
+      - fieldName
+      type: object
+      properties:
+        query:
+          type: string
+        index:
+          type: string
+        fieldName:
+          type: string
+        fieldValue:
+          type: string
+        deleted:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        sourceFields:
+          type: array
+          items:
+            type: string
+        queryText:
+          type: string
+        topHits:
+          $ref: '#/components/schemas/TopHits'
+    SearchResponse:
+      type: object
+    SearchStatsResponse$OrphanIndex:
+      type: object
+      properties:
+        name:
+          type: string
+        sizeInBytes:
+          type: integer
+          format: int32
+        sizeFormatted:
+          type: string
+    SearchStatsResponse$IndexStats:
+      type: object
+      properties:
+        name:
+          type: string
+        documents:
+          type: integer
+          format: int32
+        primaryShards:
+          type: integer
+          format: int32
+        replicaShards:
+          type: integer
+          format: int32
+        sizeInBytes:
+          type: integer
+          format: int32
+        sizeFormatted:
+          type: string
+        health:
+          type: string
+        aliases:
+          type: array
+          items:
+            type: string
+    FieldValueBoost:
+      required:
+      - factor
+      - field
+      type: object
+      properties:
+        field:
+          type: string
+        factor:
+          type: number
+          format: double
+        modifier:
+          type: string
+          enum:
+          - none
+          - log
+          - log1p
+          - log2p
+          - ln
+          - ln1p
+          - ln2p
+          - square
+          - sqrt
+          - reciprocal
+        missing:
+          type: number
+          format: double
+        condition:
+          $ref: '#/components/schemas/Condition'
+    SearchSettings:
+      type: object
+      properties:
+        globalSettings:
+          $ref: '#/components/schemas/GlobalSettings'
+        assetTypeConfigurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTypeConfiguration'
+        defaultConfiguration:
+          $ref: '#/components/schemas/AssetTypeConfiguration'
+        allowedFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedSearchFields'
+        allowedFieldValueBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedFieldValueBoostFields'
+        nlqConfiguration:
+          $ref: '#/components/schemas/NLQConfiguration'
+    QueryExample:
+      required:
+      - esQuery
+      - query
+      type: object
+      properties:
+        description:
+          type: string
+        query:
+          type: string
+        esQuery:
+          type: string
+        entityTypes:
+          type: array
+          items:
+            type: string
+    MatchTypeBoostMultipliers:
+      type: object
+      properties:
+        exactMatchMultiplier:
+          type: number
+          format: double
+        phraseMatchMultiplier:
+          type: number
+          format: double
+        fuzzyMatchMultiplier:
+          type: number
+          format: double
+    AllowedSearchFields:
+      required:
+      - entityType
+      - fields
+      type: object
+      properties:
+        entityType:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+    GuidelineSection:
+      required:
+      - guidelines
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        guidelines:
+          type: array
+          items:
+            type: string
+    Suggest:
+      type: object
+      properties:
+        completion:
+          type: boolean
+        phrase:
+          type: boolean
+        term:
+          type: boolean
+    TermBoost:
+      required:
+      - boost
+      - field
+      - value
+      type: object
+      properties:
+        field:
+          type: string
+        value:
+          type: string
+        boost:
+          type: number
+          format: double
+    AssetTypeConfiguration:
+      required:
+      - assetType
+      type: object
+      properties:
+        assetType:
+          type: string
+        searchFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldBoost'
+        highlightFields:
+          type: array
+          items:
+            type: string
+        aggregations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Aggregation'
+        termBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TermBoost'
+        fieldValueBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValueBoost'
+        scoreMode:
+          type: string
+          enum:
+          - multiply
+          - sum
+          - avg
+          - first
+          - max
+          - min
+        boostMode:
+          type: string
+          enum:
+          - multiply
+          - replace
+          - sum
+          - avg
+          - max
+          - min
+        additionalSettings:
+          $ref: '#/components/schemas/AdditionalSettings'
+        matchTypeBoostMultipliers:
+          $ref: '#/components/schemas/MatchTypeBoostMultipliers'
+    OrphanCleanupResponse:
+      type: object
+      properties:
+        deletedIndexes:
+          type: array
+          items:
+            type: string
+        deletedCount:
+          type: integer
+          format: int32
+    SearchStatsResponse:
+      type: object
+      properties:
+        clusterHealth:
+          type: string
+        totalIndexes:
+          type: integer
+          format: int32
+        totalDocuments:
+          type: integer
+          format: int32
+        totalSizeInBytes:
+          type: integer
+          format: int32
+        totalSizeFormatted:
+          type: string
+        totalPrimaryShards:
+          type: integer
+          format: int32
+        totalReplicaShards:
+          type: integer
+          format: int32
+        indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchStatsResponse$IndexStats'
+        orphanIndexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchStatsResponse$OrphanIndex'
+        isSearchIndexingRunning:
+          type: boolean
+        expectedIndexCount:
+          type: integer
+          format: int32
+        missingIndexes:
+          type: array
+          items:
+            type: string
+    MappingConfiguration:
+      type: object
+      properties:
+        includeMappings:
+          type: boolean
+        mappingSection:
+          $ref: '#/components/schemas/TitleSection'
+        fieldInterpretations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldInterpretation'
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    TopHits:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int32
+        sortField:
+          type: string
+        sortOrder:
+          type: string
+          enum:
+          - asc
+          - desc
+    PromptSection:
+      required:
+      - content
+      - section
+      type: object
+      properties:
+        section:
+          type: string
+        content:
+          type: string
+        order:
+          type: integer
+          format: int32
+    NLQConfiguration:
+      type: object
+      properties:
+        promptTemplate:
+          type: string
+        globalInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptSection'
+        entitySpecificInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitySpecificInstruction'
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryExample'
+        mappingConfiguration:
+          $ref: '#/components/schemas/MappingConfiguration'
+        extensionFieldGuidelines:
+          $ref: '#/components/schemas/ExtensionFieldGuidelines'
+    Field:
+      required:
+      - dataType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 128
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - RECORD
+          - 'NULL'
+          - BOOLEAN
+          - INT
+          - LONG
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - STRING
+          - ARRAY
+          - MAP
+          - ENUM
+          - UNION
+          - FIXED
+          - ERROR
+          - UNKNOWN
+        dataTypeDisplay:
+          type: string
+        description:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+    Condition:
+      type: object
+      properties:
+        range:
+          $ref: '#/components/schemas/Range'
+    FieldInterpretation:
+      required:
+      - explanation
+      - pattern
+      type: object
+      properties:
+        pattern:
+          type: string
+        explanation:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    EntitySpecificInstruction:
+      required:
+      - entityType
+      - sections
+      type: object
+      properties:
+        entityType:
+          type: string
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptSection'
+    Field__1:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

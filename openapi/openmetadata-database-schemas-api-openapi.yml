@@ -1,0 +1,1652 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Database Schemas API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Database Schemas
+  description: A `Database Schema` is collection of tables, views, stored procedures, and other database objects.
+paths:
+  /v1/databaseSchemas/{id}/databaseSchemaProfilerConfig:
+    get:
+      tags:
+      - Database Schemas
+      summary: Get databaseSchema profile config
+      description: Get databaseSchema profile config to the table.
+      operationId: getDataProfilerConfig_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the databaseSchema
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: 'Successfully updated the DatabaseSchema '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+    put:
+      tags:
+      - Database Schemas
+      summary: Add databaseSchema profile config
+      description: Add databaseSchema profile config to the table.
+      operationId: addDataProfilerConfig_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the databaseSchema
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatabaseSchemaProfilerConfig'
+      responses:
+        '200':
+          description: 'Successfully updated the DatabaseSchema '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+    delete:
+      tags:
+      - Database Schemas
+      summary: Delete database profiler config
+      description: delete database profile config to the database.
+      operationId: delete DataProfilerConfig_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the table
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successfully deleted the Database profiler config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+  /v1/databaseSchemas/{id}/followers:
+    put:
+      tags:
+      - Database Schemas
+      summary: Add a follower
+      description: Add a user identified by `userId` as followed of this Database Schema
+      operationId: addFollowerToDatabaseSchema
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Database Schema
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Id of the user to be added as follower
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Dashboard Service for instance {id} is not found
+  /v1/databaseSchemas/bulk:
+    put:
+      tags:
+      - Database Schemas
+      summary: Bulk create or update databaseSchemas
+      description: Create or update multiple databaseSchemas in a single operation. Returns a BulkOperationResult with success/failure details for each databaseSchema.
+      operationId: bulkCreateOrUpdateDatabaseSchemas
+      parameters:
+      - name: async
+        in: query
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateDatabaseSchema'
+      responses:
+        '200':
+          description: Bulk operation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResult'
+        '202':
+          description: Bulk operation accepted for async processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkOperationResult'
+        '400':
+          description: Bad request
+  /v1/databaseSchemas:
+    get:
+      tags:
+      - Database Schemas
+      summary: List database schemas
+      description: Get a list of database schemas, optionally filtered by `database` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listDBSchemas
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tables,usageSummary,tags,certification,extension,domains,sourceHash,followers
+      - name: database
+        in: query
+        description: Filter schemas by database name
+        schema:
+          type: string
+          example: customerDatabase
+      - name: databaseSchemaRegex
+        in: query
+        description: Filter schemas by regex pattern applied to the schema `name` by default. To apply the regex to the fullyQualifiedName instead, set `regexFilterByFqn=true`. For better performance use in combination with the `database` query filter.
+        schema:
+          type: string
+          example: finance_.*
+      - name: limit
+        in: query
+        description: Limit the number schemas returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of schemas before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of schemas after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: regexFilterByFqn
+        in: query
+        description: When true, regex filters match against fullyQualifiedName instead of name. Default is false.
+        schema:
+          type: boolean
+          example: false
+          default: false
+      - name: regexMode
+        in: query
+        description: Controls how regex filters are applied. 'include' returns matching entities, 'exclude' returns non-matching entities. Default is 'include'.
+        schema:
+          type: string
+          default: include
+          enum:
+          - include
+          - exclude
+      responses:
+        '200':
+          description: List of database schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchemaList'
+    put:
+      tags:
+      - Database Schemas
+      summary: Create or update schema
+      description: Create a database schema, if it does not exist or update an existing database schema.
+      operationId: createOrUpdateDBSchema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseSchema'
+      responses:
+        '200':
+          description: 'The updated schema '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+    post:
+      tags:
+      - Database Schemas
+      summary: Create a schema
+      description: Create a schema under an existing `service`.
+      operationId: createDBSchema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseSchema'
+      responses:
+        '200':
+          description: The database schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+        '400':
+          description: Bad request
+  /v1/databaseSchemas/name/{fqn}:
+    get:
+      tags:
+      - Database Schemas
+      summary: Get a schema by fully qualified name
+      description: Get a database schema by fully qualified name.
+      operationId: getDBSchemaByFQN
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the database schema
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tables,usageSummary,tags,certification,extension,domains,sourceHash,followers
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+        '404':
+          description: Database schema for instance {fqn} is not found
+    delete:
+      tags:
+      - Database Schemas
+      summary: Delete a schema by fully qualified name
+      description: Delete a schema by `fullyQualifiedName`. Schema can only be deleted if it has no tables.
+      operationId: deleteDBSchemaByFQN
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: fqn
+        in: path
+        description: Name of the DBSchema
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Schema for instance {fqn} is not found
+    patch:
+      tags:
+      - Database Schemas
+      summary: Update a database schema by name.
+      description: Update an existing database schema using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchDBSchema
+      parameters:
+      - name: fqn
+        in: path
+        description: Database schema name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/databaseSchemas/{id}:
+    get:
+      tags:
+      - Database Schemas
+      summary: Get a schema by Id
+      description: Get a database schema by `Id`.
+      operationId: getDBSchemaByID
+      parameters:
+      - name: id
+        in: path
+        description: Database schema Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,tables,usageSummary,tags,certification,extension,domains,sourceHash,followers
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+        '404':
+          description: Schema for instance {id} is not found
+    delete:
+      tags:
+      - Database Schemas
+      summary: Delete a schema by Id
+      description: Delete a schema by `Id`. Schema can only be deleted if it has no tables.
+      operationId: deleteDBSchema
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Database schema Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Schema for instance {id} is not found
+    patch:
+      tags:
+      - Database Schemas
+      summary: Update a database schema
+      description: Update an existing database schema using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchDBSchema_1
+      parameters:
+      - name: id
+        in: path
+        description: Database schema Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/databaseSchemas/async/{id}:
+    delete:
+      tags:
+      - Database Schemas
+      summary: Asynchronously delete a schema by Id
+      description: Asynchronously delete a schema by `Id`. Schema can only be deleted if it has no tables.
+      operationId: deleteDBSchemaAsync
+      parameters:
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Database schema Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Schema for instance {id} is not found
+  /v1/databaseSchemas/{id}/followers/{userId}:
+    delete:
+      tags:
+      - Database Schemas
+      summary: Remove a follower
+      description: Remove the user identified `userId` as a follower of the entity.
+      operationId: deleteFollower_7
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Entity
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: userId
+        in: path
+        description: Id of the user being removed as follower
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+  /v1/databaseSchemas/name/{name}/export:
+    get:
+      tags:
+      - Database Schemas
+      summary: Export database schema in CSV format
+      operationId: exportDatabaseSchema
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Database schema
+        required: true
+        schema:
+          type: string
+      - name: recursive
+        in: query
+        description: If true, export will include child entities (schemas, tables, columns)
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Exported csv with tables from the database schema
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/databaseSchemas/name/{name}/exportAsync:
+    get:
+      tags:
+      - Database Schemas
+      summary: Export database schema in CSV format
+      operationId: exportDatabaseSchema_1
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Database schema
+        required: true
+        schema:
+          type: string
+      - name: recursive
+        in: query
+        description: If true, export will include child entities (schemas, tables, columns)
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Exported csv with tables from the database schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVExportResponse'
+  /v1/databaseSchemas/{id}/versions/{version}:
+    get:
+      tags:
+      - Database Schemas
+      summary: Get a version of the schema
+      description: Get a version of the database schema by given `Id`
+      operationId: getSpecificDBSchemaVersion
+      parameters:
+      - name: id
+        in: path
+        description: Database schema Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Database schema version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: database schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+        '404':
+          description: Database schema for instance {id} and version {version} is not found
+  /v1/databaseSchemas/name/{name}/import:
+    put:
+      tags:
+      - Database Schemas
+      summary: Import tables from CSV to update database schema (no creation allowed)
+      operationId: importDatabaseSchema
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Database schema
+        required: true
+        schema:
+          type: string
+      - name: dryRun
+        in: query
+        description: Dry-run when true is used for validating the CSV without really importing it. (default=true)
+        schema:
+          type: boolean
+          default: true
+      - name: recursive
+        in: query
+        description: If true, recursive import
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          text/plain; charset=UTF-8:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Import result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvImportResult'
+  /v1/databaseSchemas/name/{name}/importAsync:
+    put:
+      tags:
+      - Database Schemas
+      summary: Import tables from CSV to update database schema asynchronously (no creation allowed)
+      operationId: importDatabaseSchemaAsync
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Database schema
+        required: true
+        schema:
+          type: string
+      - name: dryRun
+        in: query
+        description: Dry-run when true is used for validating the CSV without really importing it. (default=true)
+        schema:
+          type: boolean
+          default: true
+      - name: recursive
+        in: query
+        description: If true, recursive import
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          text/plain; charset=UTF-8:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Import initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvImportResult'
+  /v1/databaseSchemas/history:
+    get:
+      tags:
+      - Database Schemas
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_14
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/databaseSchemas/{id}/versions:
+    get:
+      tags:
+      - Database Schemas
+      summary: List schema versions
+      description: Get a list of all the versions of a schema identified by `Id`
+      operationId: listAllDBSchemaVersion
+      parameters:
+      - name: id
+        in: path
+        description: Database schema Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of schema versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/databaseSchemas/restore:
+    put:
+      tags:
+      - Database Schemas
+      summary: Restore a soft deleted database schema.
+      description: Restore a soft deleted database schema.
+      operationId: restore_13
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the DatabaseSchema '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseSchema'
+  /v1/databaseSchemas/entityRelationship:
+    get:
+      tags:
+      - Database Schemas
+      summary: Search Schema Entity Relationship
+      operationId: searchSchemaEntityRelationship
+      parameters:
+      - name: fqn
+        in: query
+        description: fqn
+        schema:
+          type: string
+      - name: query_filter
+        in: query
+        description: Elasticsearch query that will be combined with the query_string query generator from the `query` argument
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Source Fields to Include
+        schema:
+          type: string
+          default: '*'
+      - name: offset
+        in: query
+        description: Offset for pagination
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: limit
+        in: query
+        description: Limit the number of tables returned. (1 to 1000000, default = 10)
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: from
+        in: query
+        description: From field to paginate the results, defaults to 0
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Size field to limit the no.of results returned, defaults to 1000
+        schema:
+          type: integer
+          format: int32
+          default: 1000
+      - name: includeDeleted
+        in: query
+        description: Filter documents by deleted param. By default deleted is false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+  /v1/databaseSchemas/{id}/vote:
+    put:
+      tags:
+      - Database Schemas
+      summary: Update Vote for a Entity
+      description: Update vote for a Entity
+      operationId: updateVoteForEntity_3
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Entity
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: model for instance {id} is not found
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    DatabaseSchema:
+      required:
+      - database
+      - id
+      - name
+      - service
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - BigQuery
+          - BigTable
+          - Mysql
+          - Redshift
+          - Snowflake
+          - Postgres
+          - Timescale
+          - Mssql
+          - MicrosoftAccess
+          - Oracle
+          - Athena
+          - Hive
+          - Impala
+          - Presto
+          - Trino
+          - Vertica
+          - Glue
+          - MariaDB
+          - Druid
+          - Db2
+          - Clickhouse
+          - Databricks
+          - AzureSQL
+          - DynamoDB
+          - SingleStore
+          - SQLite
+          - DeltaLake
+          - Salesforce
+          - PinotDB
+          - Datalake
+          - DomoDatabase
+          - QueryLog
+          - CustomDatabase
+          - Dbt
+          - SapHana
+          - SapSuccessFactors
+          - MongoDB
+          - Cassandra
+          - Couchbase
+          - Greenplum
+          - Doris
+          - StarRocks
+          - UnityCatalog
+          - SAS
+          - Teradata
+          - SapErp
+          - Synapse
+          - Exasol
+          - Cockroach
+          - SSAS
+          - Epic
+          - ServiceNow
+          - Dremio
+          - MicrosoftFabric
+          - BurstIQ
+          - Informix
+          - Iomete
+          - QuestDB
+        database:
+          $ref: '#/components/schemas/EntityReference'
+        tables:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        retentionPeriod:
+          type: string
+        extension:
+          type: object
+        sourceUrl:
+          type: string
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        databaseSchemaProfilerConfig:
+          $ref: '#/components/schemas/DatabaseSchemaProfilerConfig'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    ProfileSampleConfig:
+      type: object
+      properties:
+        sampleConfigType:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        config:
+          type: object
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    SearchResponse:
+      type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    BulkResponse:
+      type: object
+      properties:
+        request:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    CreateDatabaseSchema:
+      required:
+      - database
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        database:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        retentionPeriod:
+          type: string
+        extension:
+          type: object
+        sourceUrl:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    JsonPatch:
+      type: object
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    DatabaseSchemaProfilerConfig:
+      type: object
+      properties:
+        sampleDataCount:
+          type: integer
+          format: int32
+        sampleDataStorageConfig:
+          $ref: '#/components/schemas/SampleDataStorageConfig'
+        randomizedSample:
+          type: boolean
+        profileSampleConfig:
+          $ref: '#/components/schemas/ProfileSampleConfig'
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+    SampleDataStorageConfig:
+      type: object
+      properties:
+        config:
+          type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    DatabaseSchemaList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatabaseSchema'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

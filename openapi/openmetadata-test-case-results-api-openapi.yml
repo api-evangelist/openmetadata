@@ -1,0 +1,1204 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Test Case Results API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Test Case Results
+  description: Test case results are the results of running a test case on a dataset. This resource provides APIs to manage test case results.
+paths:
+  /v1/dataQuality/testCases/testCaseResults/{fqn}:
+    get:
+      tags:
+      - Test Case Results
+      summary: List of test case results for a given test case
+      description: Get a list of all the test case results for the given testCase FQN, optionally filtered by  `startTimestamp` and `endTimestamp`. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.
+      operationId: listTestCaseResults
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the test case
+        required: true
+        schema:
+          type: string
+      - name: startTs
+        in: query
+        description: Filter testCase results after the given start timestamp
+        schema:
+          type: number
+      - name: endTs
+        in: query
+        description: Filter testCase results before the given end timestamp
+        schema:
+          type: number
+      responses:
+        '200':
+          description: List of testCase results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCaseResultList'
+    post:
+      tags:
+      - Test Case Results
+      summary: Add test case result data to a testCase
+      description: Add test case result data to the testCase.
+      operationId: addTestCaseResult
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the test case
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestCaseResult'
+      responses:
+        '200':
+          description: 'Successfully created the TestCase. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCaseResult'
+  /v1/dataQuality/testCases/testCaseResults/{fqn}/{timestamp}:
+    delete:
+      tags:
+      - Test Case Results
+      summary: Delete test case result
+      description: Delete testCase result for a testCase.
+      operationId: DeleteTestCaseResult
+      parameters:
+      - name: fqn
+        in: path
+        description: Fully qualified name of the test case
+        required: true
+        schema:
+          type: string
+      - name: timestamp
+        in: path
+        description: Timestamp of the testCase result
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successfully deleted the TestCaseResult
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCase'
+    patch:
+      tags:
+      - Test Case Results
+      summary: Update a test case result
+      description: Update an existing test case using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchTestCaseResult
+      parameters:
+      - name: fqn
+        in: path
+        description: fqn of the test case
+        required: true
+        schema:
+          type: string
+      - name: timestamp
+        in: path
+        description: Timestamp of the testCase result
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/dataQuality/testCases/testCaseResults/search/latest:
+    get:
+      tags:
+      - Test Case Results
+      summary: Latest test case results using search service
+      description: 'Get latest test case results from the search service. Use `testCaseFQN` to filter the results by test case fully qualified name. Use `testCaseStatus` to filter the results by test case status. Use `fields` to get only necessary fields. '
+      operationId: latestTestCaseResultsFromSearchService
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: testCase,testDefinition
+      - name: testCaseStatus
+        in: query
+        description: Status of the test case -- one of Success, Failed, Aborted, Queued
+        schema:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+      - name: testCaseFQN
+        in: query
+        description: FullyQualifiedName of the test case
+        schema:
+          type: string
+      - name: testSuiteId
+        in: query
+        description: FullyQualifiedName of the test case
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: search query term to use in list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of test case results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCaseResultList'
+  /v1/dataQuality/testCases/testCaseResults/search/list:
+    get:
+      tags:
+      - Test Case Results
+      summary: List test case results using search service
+      description: 'List test case results from the search service. Use `startTimestamp` and `endTimestamp` to filter the results by timestamp. Use `testCaseFQN` to filter the results by test case fully qualified name. Use `testCaseStatus` to filter the results by test case status. Use `fields` to get only necessary fields. '
+      operationId: listTestCaseResultsFromSearchService
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: testCase,testDefinition
+      - name: limit
+        in: query
+        description: Limit the number tests case results returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Returns list of tests after this offset
+        schema:
+          type: string
+          default: '0'
+      - name: startTimestamp
+        in: query
+        description: Start timestamp to list test case from
+        schema:
+          type: number
+      - name: endTimestamp
+        in: query
+        description: End timestamp to list test case from
+        schema:
+          type: number
+      - name: testCaseStatus
+        in: query
+        description: Status of the test case -- one of Success, Failed, Aborted, Queued
+        schema:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+      - name: testCaseFQN
+        in: query
+        description: FullyQualifiedName of the test case
+        schema:
+          type: string
+      - name: testSuiteId
+        in: query
+        description: Test Suite Id the test case belongs to
+        schema:
+          type: string
+      - name: entityFQN
+        in: query
+        description: Entity FQN the test case belongs to
+        schema:
+          type: string
+      - name: latest
+        in: query
+        description: Get the latest test case result for each test case -- requires `testSuiteId`
+        schema:
+          type: boolean
+          example: false
+          default: false
+          enum:
+          - true
+          - false
+      - name: testCaseType
+        in: query
+        description: Filter for test case result by type (e.g. column, table, all)
+        schema:
+          type: string
+          example: all
+          default: all
+          enum:
+          - column
+          - table
+          - all
+      - name: dataQualityDimension
+        in: query
+        description: Filter for test case by data quality dimension (e.g. OpenMetadata, dbt, etc.)
+        schema:
+          type: string
+          enum:
+          - Completeness
+          - Accuracy
+          - Consistency
+          - Validity
+          - Uniqueness
+          - Integrity
+          - SQL
+      - name: q
+        in: query
+        description: search query term to use in list
+        schema:
+          type: string
+      - name: queryString
+        in: query
+        description: raw elasticsearch query to use in list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of test case results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestCaseResultList'
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    DimensionValue:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    TestSuiteConnection:
+      type: object
+      properties:
+        config:
+          type: object
+    ChangeSummaryMap:
+      type: object
+    TestSuite:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        tests:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        connection:
+          $ref: '#/components/schemas/TestSuiteConnection'
+        testConnectionResult:
+          $ref: '#/components/schemas/TestConnectionResult'
+        pipelines:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - TestSuite
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        basic:
+          type: boolean
+        executable:
+          type: boolean
+        basicEntityReference:
+          $ref: '#/components/schemas/EntityReference'
+        executableEntityReference:
+          $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        summary:
+          $ref: '#/components/schemas/TestSummary'
+        testCaseResultSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultSummary'
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        inherited:
+          type: boolean
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    CreateTestCaseResult:
+      required:
+      - testCaseStatus
+      - testResultValue
+      - timestamp
+      type: object
+      properties:
+        fqn:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        testCaseStatus:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        result:
+          type: string
+        sampleData:
+          type: string
+        testResultValue:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultValue'
+        passedRows:
+          type: integer
+          format: int64
+        failedRows:
+          type: integer
+          format: int64
+        passedRowsPercentage:
+          type: number
+          format: double
+        failedRowsPercentage:
+          type: number
+          format: double
+        incidentId:
+          type: string
+          format: uuid
+        maxBound:
+          type: number
+          format: double
+        minBound:
+          type: number
+          format: double
+        dimensionResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseDimensionResult'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    TestCaseResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseResult'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TestCaseDimensionResult:
+      required:
+      - dimensionKey
+      - dimensionValues
+      - id
+      - testCaseResultId
+      - testCaseStatus
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        testCaseResultId:
+          type: string
+          format: uuid
+        testCase:
+          $ref: '#/components/schemas/EntityReference'
+        timestamp:
+          type: integer
+          format: int64
+        dimensionValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/DimensionValue'
+        dimensionKey:
+          type: string
+        testCaseStatus:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        result:
+          type: string
+        testResultValue:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultValue'
+        passedRows:
+          type: integer
+          format: int32
+        failedRows:
+          type: integer
+          format: int32
+        passedRowsPercentage:
+          type: number
+          format: double
+        failedRowsPercentage:
+          type: number
+          format: double
+        impactScore:
+          type: number
+          format: double
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultSummary:
+      type: object
+      properties:
+        testCaseName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        status:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        timestamp:
+          type: integer
+          format: int64
+    ColumnTestSummaryDefinition:
+      type: object
+      properties:
+        success:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        aborted:
+          type: integer
+          format: int32
+        queued:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+    TableData:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TestConnectionResult:
+      required:
+      - steps
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Running
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestConnectionStepResult'
+    JsonPatch:
+      type: object
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    TestSummary:
+      type: object
+      properties:
+        success:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        aborted:
+          type: integer
+          format: int32
+        queued:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        columnTestSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnTestSummaryDefinition'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    TestCaseResult:
+      required:
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        testCaseFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        testCaseStatus:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        result:
+          type: string
+        sampleData:
+          type: string
+        testResultValue:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestResultValue'
+        passedRows:
+          type: integer
+          format: int64
+        failedRows:
+          type: integer
+          format: int64
+        passedRowsPercentage:
+          type: number
+          format: double
+        failedRowsPercentage:
+          type: number
+          format: double
+        incidentId:
+          type: string
+          format: uuid
+        maxBound:
+          type: number
+          format: double
+        minBound:
+          type: number
+          format: double
+        testCase:
+          $ref: '#/components/schemas/EntityReference'
+        testDefinition:
+          $ref: '#/components/schemas/EntityReference'
+        dimensionResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseDimensionResult'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TestResultValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        predictedValue:
+          type: string
+    TestCaseParameterValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    TestConnectionStepResult:
+      required:
+      - mandatory
+      - name
+      - passed
+      type: object
+      properties:
+        name:
+          type: string
+        mandatory:
+          type: boolean
+        passed:
+          type: boolean
+        message:
+          type: string
+        errorLog:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    TestCase:
+      required:
+      - entityLink
+      - name
+      - testDefinition
+      - testSuite
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        testDefinition:
+          $ref: '#/components/schemas/EntityReference'
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        entityFQN:
+          type: string
+        testSuite:
+          $ref: '#/components/schemas/EntityReference'
+        testSuites:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestSuite'
+        parameterValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseParameterValue'
+        testCaseResult:
+          $ref: '#/components/schemas/TestCaseResult'
+        testCaseStatus:
+          type: string
+          enum:
+          - Success
+          - Failed
+          - Aborted
+          - Queued
+        version:
+          type: number
+          format: double
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        createdBy:
+          type: string
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        computePassedFailedRowCount:
+          type: boolean
+        incidentId:
+          type: string
+          format: uuid
+        failedRowsSample:
+          $ref: '#/components/schemas/TableData'
+        inspectionQuery:
+          type: string
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        useDynamicAssertion:
+          type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        dimensionColumns:
+          type: array
+          items:
+            type: string
+        topDimensions:
+          maximum: 50
+          exclusiveMaximum: false
+          minimum: 1
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,2108 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Events API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Events
+  description: The `Events` are changes to metadata and are sent when entities are created, modified, or updated. External systems can subscribe to events using event subscription API over Webhooks, Slack, or Microsoft Teams.
+paths:
+  /v1/events:
+    get:
+      tags:
+      - Events
+      summary: Get change events
+      description: Get a list of change events matching event types, entity type, from a given date
+      operationId: listChangeEvents
+      parameters:
+      - name: entityCreated
+        in: query
+        description: List of comma separated entities requested for `entityCreated` event. When set to `*` all entities will be returned
+        schema:
+          type: string
+          example: table,dashboard,...
+      - name: entityUpdated
+        in: query
+        description: List of comma separated entities requested for `entityUpdated` event. When set to `*` all entities will be returned
+        schema:
+          type: string
+          example: table,dashboard,...
+      - name: entityRestored
+        in: query
+        description: List of comma separated entities requested for `entityRestored` event. When set to `*` all entities will be returned
+        schema:
+          type: string
+          example: table,dashboard,...
+      - name: entityDeleted
+        in: query
+        description: List of comma separated entities requested for `entityCreated` event. When set to `*` all entities will be returned
+        schema:
+          type: string
+          example: table,dashboard,...
+      - name: timestamp
+        in: query
+        description: Events starting from this unix timestamp in milliseconds
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 1426349294842
+      responses:
+        '200':
+          description: Entity events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventList'
+        '404':
+          description: Entity for instance {id} is not found
+  /v1/events/subscriptions/{id}/processedEvents:
+    get:
+      tags:
+      - Events
+      summary: Check If the Publisher Processed All Events
+      description: Return a boolean 'true' or 'false' to indicate if the publisher processed all events
+      operationId: checkIfThePublisherProcessedALlEvents
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of Event Subscription versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/events/subscriptions:
+    get:
+      tags:
+      - Events
+      summary: List all available Event Subscriptions
+      description: Get a list of All available Event Subscriptions
+      operationId: listEventSubscriptions
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,filteringRules
+      - name: limit
+        in: query
+        description: 'Limit the number event subscriptions returned. (1 to 1000000, default = 10) '
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: alertType
+        in: query
+        description: alertType filter. Notification / Observability
+        schema:
+          type: string
+      - name: notificationTemplate
+        in: query
+        description: Filter subscriptions by notification template ID. Returns only subscriptions using the specified template.
+        schema:
+          type: string
+          format: uuid
+      - name: before
+        in: query
+        description: Returns list of event subscriptions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of event subscriptions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of Event Subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscriptionList'
+    put:
+      tags:
+      - Events
+      summary: Updated an existing or create a new Event Subscription
+      description: Updated an existing or create a new Event Subscription
+      operationId: createOrUpdateEventSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventSubscription'
+      responses:
+        '200':
+          description: create Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEventSubscription'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Events
+      summary: Create a new Event Subscription
+      description: Create a new Event Subscription
+      operationId: createEventSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventSubscription'
+      responses:
+        '200':
+          description: Event Subscription Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEventSubscription'
+        '400':
+          description: Bad request
+  /v1/events/subscriptions/{id}:
+    get:
+      tags:
+      - Events
+      summary: Get a event Subscription by ID
+      description: Get a event Subscription by given Id
+      operationId: getEventSubscriptionByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,filteringRules
+      responses:
+        '200':
+          description: Entity events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '404':
+          description: Entity for instance {id} is not found
+    delete:
+      tags:
+      - Events
+      summary: Delete an Event Subscription by Id
+      description: Delete an Event Subscription
+      operationId: deleteEventSubscription
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Entity events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '404':
+          description: Entity for instance {id} is not found
+    patch:
+      tags:
+      - Events
+      summary: Update an Event Subscriptions
+      description: Update an existing Event Subscriptions using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchEventSubscription_1
+      parameters:
+      - name: id
+        in: path
+        description: Id of the event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/events/subscriptions/async/{id}:
+    delete:
+      tags:
+      - Events
+      summary: Asynchronously delete an Event Subscription by Id
+      description: Asynchronously delete an Event Subscription
+      operationId: deleteEventSubscriptionAsync
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Entity events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '404':
+          description: Entity for instance {id} is not found
+  /v1/events/subscriptions/name/{name}:
+    delete:
+      tags:
+      - Events
+      summary: Delete an Event Subscription by name
+      description: Delete an Event Subscription by given `name`.
+      operationId: deleteEventSubscriptionByName
+      parameters:
+      - name: name
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Entity for instance {name} is not found
+  /v1/events/subscriptions/id/{eventSubscriptionId}/destinations:
+    get:
+      tags:
+      - Events
+      summary: Get the destinations for a specific Event Subscription
+      description: Retrieve the status of all destinations associated with the given Event Subscription ID
+      operationId: getAllDestinationForEventSubscription
+      parameters:
+      - name: eventSubscriptionId
+        in: path
+        description: ID of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Returns the destinations for the Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDestination'
+        '404':
+          description: Event Subscription for instance {eventSubscriptionId} is not found
+  /v1/events/subscriptions/name/{eventSubscriptionName}/destinations:
+    get:
+      tags:
+      - Events
+      summary: Get the destinations for a specific Event Subscription by its name
+      description: Retrieve the status of all destinations associated with the given Event Subscription's fully qualified name (FQN)
+      operationId: getAllDestinationForEventSubscriptionByName
+      parameters:
+      - name: eventSubscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the destinations for the Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDestination'
+        '404':
+          description: Event Subscription with the name {fqn} is not found
+  /v1/events/subscriptions/listAllFailedEvents:
+    get:
+      tags:
+      - Events
+      summary: Get all failed events
+      description: Retrieve all failed events, optionally filtered by source, and apply a limit.
+      operationId: getAllFailedEvents
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of failed events to retrieve
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: source
+        in: query
+        description: Source of the failed events
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Failed events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/id/{subscriptionId}/diagnosticInfo:
+    get:
+      tags:
+      - Events
+      summary: Get event subscription diagnostic info
+      description: Retrieve diagnostic information for a given event subscription ID, including current and latest offsets, unprocessed events count, and more.
+      operationId: getEventSubscriptionDiagnosticInfoById
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of unprocessed events returned
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: subscriptionId
+        in: path
+        description: UUID of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: listCountOnly
+        in: query
+        description: Return only count if true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Event subscription diagnostic info retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscriptionDiagnosticInfo'
+        '404':
+          description: Event subscription not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/name/{subscriptionName}/diagnosticInfo:
+    get:
+      tags:
+      - Events
+      summary: Get event subscription diagnostic info by name
+      description: Retrieve diagnostic information for a given event subscription name, including current and latest offsets, unprocessed events count, and more.
+      operationId: getEventSubscriptionDiagnosticInfoByName
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of unprocessed events returned
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: subscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      - name: listCountOnly
+        in: query
+        description: Return only count if true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Event subscription diagnostic info retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscriptionDiagnosticInfo'
+        '404':
+          description: Event subscription not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/id/{subscriptionId}/eventsRecord:
+    get:
+      tags:
+      - Events
+      summary: Get event subscription events record
+      description: Retrieve the total count, pending count, failed count, and successful count of events for a given event subscription ID.
+      operationId: getEventSubscriptionEventsRecordById
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: UUID of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Event subscription events record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsRecord'
+        '404':
+          description: Event subscription not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/name/{subscriptionName}/eventsRecord:
+    get:
+      tags:
+      - Events
+      summary: Get event subscription events record by name
+      description: Retrieve the total count, pending count, failed count, and successful count of events for a given event subscription name.
+      operationId: getEventSubscriptionEventsRecordByName
+      parameters:
+      - name: subscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event subscription events record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsRecord'
+        '404':
+          description: Event subscription not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/{eventSubscriptionId}/status/{destinationId}:
+    get:
+      tags:
+      - Events
+      summary: Get Event Subscription status by Id
+      description: Get a event Subscription status by given Name
+      operationId: getEventSubscriptionStatusById
+      parameters:
+      - name: eventSubscriptionId
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: destinationId
+        in: path
+        description: Destination Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Return the current status of the Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionStatus'
+        '404':
+          description: Entity for instance {id} is not found
+  /v1/events/subscriptions/name/{eventSubscriptionName}/status/{destinationId}:
+    get:
+      tags:
+      - Events
+      summary: Get Event Subscription status
+      description: Get a event Subscription status by given Name
+      operationId: getEventSubscriptionStatus
+      parameters:
+      - name: eventSubscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      - name: destinationId
+        in: path
+        description: Destination Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Return the current status of the Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionStatus'
+        '404':
+          description: Entity for instance {id} is not found
+  /v1/events/subscriptions/{id}/versions/{version}:
+    get:
+      tags:
+      - Events
+      summary: Get a version of the Event Subscription
+      description: Get a version of the Event Subscription by given `Id`
+      operationId: getSpecificEventSubscriptionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Event Subscription version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: Get specific version of Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '404':
+          description: Event Subscription for instance {id} and version {version} is not found
+  /v1/events/subscriptions/id/{id}/listEvents:
+    get:
+      tags:
+      - Events
+      summary: Retrieve events based on various filters
+      description: Retrieve failed, successfully sent, or unprocessed change events, identified by alert ID, with an optional limit. If status is not provided, retrieves data from all statuses in ascending timestamp.
+      operationId: getEvents
+      parameters:
+      - name: status
+        in: query
+        description: Status of events to retrieve (failed, successful)
+        schema:
+          type: string
+          enum:
+          - failed
+          - successful
+      - name: id
+        in: path
+        description: ID of the alert or destination
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Maximum number of events to retrieve
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        '200':
+          description: Events retrieved successfully
+        '404':
+          description: Entity not found
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/name/{eventSubscriptionName}:
+    get:
+      tags:
+      - Events
+      summary: Get an Event Subscription by name
+      description: Get an Event Subscription by name.
+      operationId: getEventSubscriptionByName
+      parameters:
+      - name: eventSubscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners,filteringRules
+      responses:
+        '200':
+          description: Event Subscription with request name is returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '404':
+          description: Event Subscription for instance {eventSubscriptionName} is not found
+  /v1/events/subscriptions/id/{id}/failedEvents:
+    get:
+      tags:
+      - Events
+      summary: Get failed events for a subscription by id
+      description: Retrieve failed events for a given subscription id.
+      operationId: getFailedEventsBySubscriptionId
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Maximum number of failed events to retrieve
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: source
+        in: query
+        description: Source of the failed events
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Failed events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Event subscription not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/name/{eventSubscriptionName}/failedEvents:
+    get:
+      tags:
+      - Events
+      summary: Get failed events for a subscription by name
+      description: Retrieve failed events for a given subscription name.
+      operationId: getFailedEventsBySubscriptionName
+      parameters:
+      - name: eventSubscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of failed events to retrieve
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: source
+        in: query
+        description: Source of the failed events
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Failed events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Event subscription not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/id/{id}/listSuccessfullySentChangeEvents:
+    get:
+      tags:
+      - Events
+      summary: Get successfully sent change events for an alert
+      description: Retrieve successfully sent change events for a specific alert, identified by its ID, with an optional limit.
+      operationId: getSuccessfullySentChangeEventsForAlert
+      parameters:
+      - name: id
+        in: path
+        description: ID of the alert to retrieve change events for
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Maximum number of change events to retrieve
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        '200':
+          description: Successfully sent change events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Alert not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/name/{eventSubscriptionName}/listSuccessfullySentChangeEvents:
+    get:
+      tags:
+      - Events
+      summary: Get successfully sent change events for an alert by name
+      description: Retrieve successfully sent change events for a specific alert, identified by its name, with an optional limit.
+      operationId: getSuccessfullySentChangeEventsForAlertByName
+      parameters:
+      - name: eventSubscriptionName
+        in: path
+        description: Name of the alert to retrieve change events for
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of change events to retrieve
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          default: 15
+      - name: paginationOffset
+        in: query
+        description: Offset for pagination (starting point for records)
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        '200':
+          description: Successfully sent change events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeEvent'
+        '404':
+          description: Alert not found
+        '500':
+          description: Internal server error
+  /v1/events/subscriptions/{alertType}/resources:
+    get:
+      tags:
+      - Events
+      summary: Get list of Event Subscriptions Resources used in filtering Event Subscription
+      description: Get list of EventSubscription functions used in filtering conditions in Event Subscription
+      operationId: listEventSubscriptionResources
+      parameters:
+      - name: alertType
+        in: path
+        description: AlertType
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListFilterResourceDescriptor'
+  /v1/events/subscriptions/{id}/versions:
+    get:
+      tags:
+      - Events
+      summary: List Event Subscription versions
+      description: Get a list of all the versions of an Event Subscription identified by `Id`
+      operationId: listAllEventSubscriptionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event Subscription
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of Event Subscription versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/events/subscriptions/name/{fqn}:
+    patch:
+      tags:
+      - Events
+      summary: Update an Event Subscriptions by name.
+      description: Update an existing Event Subscriptions using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchEventSubscription
+      parameters:
+      - name: fqn
+        in: path
+        description: Name of the event Subscription
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/events/subscriptions/testDestination:
+    post:
+      tags:
+      - Events
+      summary: Send a test message alert to external destinations.
+      description: Send a test message alert to external destinations of the alert.
+      operationId: testDestination
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventSubscriptionDestinationTestRequest'
+      responses:
+        '200':
+          description: Test message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+  /v1/events/subscriptions/name/{eventSubscriptionName}/syncOffset:
+    put:
+      tags:
+      - Events
+      summary: Sync Offset for a specific Event Subscription by its name
+      description: Sync Offset for a specific Event Subscription by its name
+      operationId: syncOffsetForEventSubscriptionByName
+      parameters:
+      - name: eventSubscriptionName
+        in: path
+        description: Name of the Event Subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the destinations for the Event Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDestination'
+        '404':
+          description: Event Subscription with the name {fqn} is not found
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ResultListFilterResourceDescriptor:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterResourceDescriptor'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    StatusType:
+      type: object
+      properties:
+        family:
+          type: string
+          enum:
+          - INFORMATIONAL
+          - SUCCESSFUL
+          - REDIRECTION
+          - CLIENT_ERROR
+          - SERVER_ERROR
+          - OTHER
+        statusCode:
+          type: integer
+          format: int32
+        reasonPhrase:
+          type: string
+    CreateEventSubscription:
+      required:
+      - alertType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        className:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        enabled:
+          type: boolean
+        batchSize:
+          type: integer
+          format: int32
+        alertType:
+          type: string
+          enum:
+          - Notification
+          - Observability
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+          - Custom
+        trigger:
+          $ref: '#/components/schemas/TriggerConfig'
+        resources:
+          type: array
+          items:
+            type: string
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        retries:
+          type: integer
+          format: int32
+        pollInterval:
+          type: integer
+          format: int32
+        input:
+          $ref: '#/components/schemas/AlertFilteringInput'
+        notificationTemplate:
+          $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    Response:
+      type: object
+      properties:
+        closed:
+          type: boolean
+        length:
+          type: integer
+          format: int32
+        location:
+          type: string
+          format: uri
+        language:
+          type: object
+          properties:
+            language:
+              type: string
+            displayName:
+              type: string
+            country:
+              type: string
+            variant:
+              type: string
+            script:
+              type: string
+            unicodeLocaleAttributes:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            unicodeLocaleKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            displayLanguage:
+              type: string
+            displayScript:
+              type: string
+            displayCountry:
+              type: string
+            displayVariant:
+              type: string
+            extensionKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            iso3Language:
+              type: string
+            iso3Country:
+              type: string
+        date:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: object
+        status:
+          type: integer
+          format: int32
+        entity:
+          type: object
+        cookies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NewCookie'
+        links:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        statusInfo:
+          $ref: '#/components/schemas/StatusType'
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        allowedMethods:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        entityTag:
+          $ref: '#/components/schemas/EntityTag'
+        stringHeaders:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        headers:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: object
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    Link:
+      type: object
+      properties:
+        type:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: string
+        uri:
+          type: string
+          format: uri
+        title:
+          type: string
+        uriBuilder:
+          $ref: '#/components/schemas/UriBuilder'
+        rel:
+          type: string
+        rels:
+          type: array
+          items:
+            type: string
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    EventFilterRule:
+      required:
+      - condition
+      - effect
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        effect:
+          type: string
+          enum:
+          - include
+          - exclude
+        condition:
+          type: string
+        arguments:
+          type: array
+          items:
+            type: string
+        inputType:
+          type: string
+          enum:
+          - static
+          - runtime
+          - none
+        prefixCondition:
+          type: string
+          enum:
+          - AND
+          - OR
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    TriggerConfig:
+      required:
+      - triggerType
+      type: object
+      properties:
+        triggerType:
+          type: string
+          enum:
+          - RealTime
+          - Scheduled
+        scheduleInfo:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Monthly
+          - Custom
+        cronExpression:
+          type: string
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    FilteringRules:
+      required:
+      - resources
+      type: object
+      properties:
+        resources:
+          type: array
+          items:
+            type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+    EventSubscriptionDiagnosticInfo:
+      type: object
+      properties:
+        latestOffset:
+          type: integer
+          format: int64
+        currentOffset:
+          type: integer
+          format: int64
+        startingOffset:
+          type: integer
+          format: int64
+        hasProcessedAllEvents:
+          type: boolean
+        successfulEventsCount:
+          type: integer
+          format: int64
+        failedEventsCount:
+          type: integer
+          format: int64
+        relevantUnprocessedEventsCount:
+          type: integer
+          format: int64
+        totalUnprocessedEventsCount:
+          type: integer
+          format: int64
+        relevantUnprocessedEventsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeEvent'
+        totalUnprocessedEventsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeEvent'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    UriBuilder:
+      type: object
+    EventsRecord:
+      type: object
+      properties:
+        totalEventsCount:
+          type: integer
+          format: int64
+        pendingEventsCount:
+          type: integer
+          format: int64
+        successfulEventsCount:
+          type: integer
+          format: int64
+        failedEventsCount:
+          type: integer
+          format: int64
+    JsonPatch:
+      type: object
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    NewCookie:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        version:
+          type: integer
+          format: int32
+        path:
+          type: string
+        domain:
+          type: string
+        comment:
+          type: string
+        maxAge:
+          type: integer
+          format: int32
+        expiry:
+          type: string
+          format: date-time
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+        sameSite:
+          type: string
+          enum:
+          - NONE
+          - LAX
+          - STRICT
+    SubscriptionStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - disabled
+          - failed
+          - retryLimitReached
+          - awaitingRetry
+          - active
+        lastSuccessfulAt:
+          type: integer
+          format: int64
+        lastFailedAt:
+          type: integer
+          format: int64
+        lastFailedStatusCode:
+          type: integer
+          format: int32
+        lastFailedReason:
+          type: string
+        nextAttempt:
+          type: integer
+          format: int64
+        timestamp:
+          type: integer
+          format: int64
+    EventSubscription:
+      required:
+      - alertType
+      - destinations
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        className:
+          type: string
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        href:
+          type: string
+          format: uri
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        alertType:
+          type: string
+          enum:
+          - Notification
+          - Observability
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+          - Custom
+        trigger:
+          $ref: '#/components/schemas/TriggerConfig'
+        filteringRules:
+          $ref: '#/components/schemas/FilteringRules'
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+        notificationTemplate:
+          $ref: '#/components/schemas/EntityReference'
+        enabled:
+          type: boolean
+        batchSize:
+          type: integer
+          format: int32
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        retries:
+          type: integer
+          format: int32
+        pollInterval:
+          type: integer
+          format: int32
+        input:
+          $ref: '#/components/schemas/AlertFilteringInput'
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        deleted:
+          type: boolean
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    AlertFilteringInput:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentsInput'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentsInput'
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    ArgumentsInput:
+      type: object
+      properties:
+        name:
+          type: string
+        effect:
+          type: string
+          enum:
+          - include
+          - exclude
+        prefixCondition:
+          type: string
+          enum:
+          - AND
+          - OR
+        arguments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Argument'
+    Argument:
+      type: object
+      properties:
+        name:
+          type: string
+        input:
+          type: array
+          items:
+            type: string
+    EventSubscriptionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSubscription'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    SubscriptionDestination:
+      required:
+      - category
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+          enum:
+          - Users
+          - Teams
+          - Admins
+          - Assignees
+          - Owners
+          - Mentions
+          - Followers
+          - External
+        type:
+          type: string
+          enum:
+          - Webhook
+          - Slack
+          - MsTeams
+          - GChat
+          - Email
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+        statusDetails:
+          type: object
+        timeout:
+          type: integer
+          format: int32
+        readTimeout:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        config:
+          type: object
+        notifyDownstream:
+          type: boolean
+        downstreamDepth:
+          minimum: 1
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    EntityTag:
+      type: object
+      properties:
+        value:
+          type: string
+        weak:
+          type: boolean
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    FilterResourceDescriptor:
+      type: object
+      properties:
+        name:
+          type: string
+        supportedFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+        supportedActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+    EventList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeEvent'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    EventSubscriptionDestinationTestRequest:
+      type: object
+      properties:
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

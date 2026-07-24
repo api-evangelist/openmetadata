@@ -1,0 +1,1367 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Test Definitions API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Test Definitions
+  description: '`Test Definition` is a definition of a type of test using which test cases are created that run against data to capture data quality.'
+paths:
+  /v1/dataQuality/testDefinitions:
+    get:
+      tags:
+      - Test Definitions
+      summary: List test definitions
+      description: Get a list of test definitions, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listTestDefinitions
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: limit
+        in: query
+        description: Limit the number test definitions returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of test definitions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of test definitions after this cursor
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: entityType
+        in: query
+        description: Filter by entityType.
+        schema:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+      - name: testPlatform
+        in: query
+        description: Filter by a test platform
+        schema:
+          type: string
+          enum:
+          - OpenMetadata
+          - GreatExpectations
+          - dbt
+          - Deequ
+          - Soda
+          - Other
+      - name: supportedDataType
+        in: query
+        description: Filter tests definition by supported data type
+        schema:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+      - name: supportedService
+        in: query
+        description: Filter test definitions by supported service. Returns test definitions that either have an empty supportedServices list (supporting all services) or include the specified service.
+        schema:
+          type: string
+      - name: enabled
+        in: query
+        description: Filter by enabled status (true/false). If not specified, returns all test definitions.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of test definitions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinitionList'
+    put:
+      tags:
+      - Test Definitions
+      summary: Update test definition
+      description: Create a test definition, if it does not exist, or update an existing test definition.
+      operationId: createOrUpdateTestDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestDefinition'
+      responses:
+        '200':
+          description: 'The updated test definition '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinition'
+    post:
+      tags:
+      - Test Definitions
+      summary: Create a test definition
+      description: Create a Test definition.
+      operationId: createTestDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestDefinition'
+      responses:
+        '200':
+          description: The test definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinition'
+        '400':
+          description: Bad request
+  /v1/dataQuality/testDefinitions/name/{name}:
+    get:
+      tags:
+      - Test Definitions
+      summary: Get a test definition by name
+      description: Get a test definition by `name`.
+      operationId: getTestDefinitionByName
+      parameters:
+      - name: name
+        in: path
+        description: Name of the test definition
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The test definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinition'
+        '404':
+          description: Test Definition for instance {name} is not found
+    delete:
+      tags:
+      - Test Definitions
+      summary: Delete a test definition
+      description: Delete a test definition by `name`.
+      operationId: deleteTestDefinitionByName
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the test definition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test definition for instance {name} is not found
+  /v1/dataQuality/testDefinitions/{id}:
+    get:
+      tags:
+      - Test Definitions
+      summary: Get a test definition by Id
+      description: Get a Test Definition by `Id`.
+      operationId: get_4
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: owners
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      - name: includeRelations
+        in: query
+        description: 'Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity''s include value.'
+        schema:
+          type: string
+          example: owners:non-deleted,followers:all
+      responses:
+        '200':
+          description: The Test definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinition'
+        '404':
+          description: Test Definition for instance {id} is not found
+    delete:
+      tags:
+      - Test Definitions
+      summary: Delete a test definition
+      description: Delete a test definition by `id`.
+      operationId: deleteTestDefinition
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the test definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test definition for instance {id} is not found
+    patch:
+      tags:
+      - Test Definitions
+      summary: Update a test definition
+      description: Update an existing Test Definition using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchTestDefinition
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/dataQuality/testDefinitions/async/{id}:
+    delete:
+      tags:
+      - Test Definitions
+      summary: Asynchronously delete a test definition
+      description: Asynchronously delete a test definition by `id`.
+      operationId: deleteTestDefinitionAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: recursive
+        in: query
+        description: Recursively delete this entity and it's children. (Default `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the test definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Test definition for instance {id} is not found
+  /v1/dataQuality/testDefinitions/{id}/versions/{version}:
+    get:
+      tags:
+      - Test Definitions
+      summary: Get a version of the test definition
+      description: Get a version of the test definition by given `Id`
+      operationId: getSpecificTestDefinitionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: Test Definition version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: TestDefinition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinition'
+        '404':
+          description: Test Definition for instance {id} and version {version} is not found
+  /v1/dataQuality/testDefinitions/history:
+    get:
+      tags:
+      - Test Definitions
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_22
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/dataQuality/testDefinitions/{id}/versions:
+    get:
+      tags:
+      - Test Definitions
+      summary: List test definition versions
+      description: Get a list of all the versions of a test definition identified by `Id`
+      operationId: listAllTestDefinitionVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the test definition
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of test definition versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/dataQuality/testDefinitions/restore:
+    put:
+      tags:
+      - Test Definitions
+      summary: Restore a soft deleted test definition
+      description: Restore a soft deleted TestDefinition.
+      operationId: restore_18
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the TestDefinition. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestDefinition'
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TestCaseParameterValidationRule:
+      type: object
+      properties:
+        parameterField:
+          type: string
+        rule:
+          type: string
+          enum:
+          - EQUALS
+          - NOT_EQUALS
+          - GREATER_THAN_OR_EQUALS
+          - LESS_THAN_OR_EQUALS
+    JsonPatch:
+      type: object
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    TestDefinition:
+      required:
+      - name
+      - testPlatforms
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        entityType:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+        testPlatforms:
+          type: array
+          items:
+            type: string
+            enum:
+            - OpenMetadata
+            - GreatExpectations
+            - dbt
+            - Deequ
+            - Soda
+            - Other
+        supportedDataTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - NUMBER
+            - TINYINT
+            - SMALLINT
+            - INT
+            - BIGINT
+            - BYTEINT
+            - BYTES
+            - FLOAT
+            - DOUBLE
+            - DECIMAL
+            - NUMERIC
+            - TIMESTAMP
+            - TIMESTAMPZ
+            - TIME
+            - DATE
+            - DATETIME
+            - INTERVAL
+            - STRING
+            - MEDIUMTEXT
+            - TEXT
+            - CHAR
+            - LONG
+            - VARCHAR
+            - BOOLEAN
+            - BINARY
+            - VARBINARY
+            - ARRAY
+            - BLOB
+            - LONGBLOB
+            - MEDIUMBLOB
+            - MAP
+            - STRUCT
+            - UNION
+            - SET
+            - GEOGRAPHY
+            - ENUM
+            - JSON
+            - UUID
+            - VARIANT
+            - GEOMETRY
+            - BYTEA
+            - AGGREGATEFUNCTION
+            - ERROR
+            - FIXED
+            - RECORD
+            - 'NULL'
+            - SUPER
+            - HLLSKETCH
+            - PG_LSN
+            - PG_SNAPSHOT
+            - TSQUERY
+            - TXID_SNAPSHOT
+            - XML
+            - MACADDR
+            - TSVECTOR
+            - UNKNOWN
+            - CIDR
+            - INET
+            - CLOB
+            - ROWID
+            - LOWCARDINALITY
+            - YEAR
+            - POINT
+            - POLYGON
+            - TUPLE
+            - SPATIAL
+            - TABLE
+            - NTEXT
+            - IMAGE
+            - IPV4
+            - IPV6
+            - DATETIMERANGE
+            - HLL
+            - LARGEINT
+            - QUANTILE_STATE
+            - AGG_STATE
+            - BITMAP
+            - UINT
+            - BIT
+            - MONEY
+            - MEASURE HIDDEN
+            - MEASURE VISIBLE
+            - MEASURE
+            - KPI
+            - HEIRARCHY
+            - HIERARCHYID
+        parameterDefinition:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseParameter'
+        dataQualityDimension:
+          type: string
+          enum:
+          - Completeness
+          - Accuracy
+          - Consistency
+          - Validity
+          - Uniqueness
+          - Integrity
+          - SQL
+          - NoDimension
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        supportsRowLevelPassedFailed:
+          type: boolean
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        supportsDynamicAssertion:
+          type: boolean
+        enabled:
+          type: boolean
+        supportedServices:
+          type: array
+          items:
+            type: string
+        sqlExpression:
+          type: string
+        validatorClass:
+          type: string
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        impersonatedBy:
+          type: string
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TestCaseParameter:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - NUMBER
+          - INT
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - TIMESTAMP
+          - TIME
+          - DATE
+          - DATETIME
+          - ARRAY
+          - MAP
+          - SET
+          - STRING
+          - BOOLEAN
+        description:
+          type: string
+        required:
+          type: boolean
+        optionValues:
+          type: array
+          items:
+            type: object
+        validationRule:
+          $ref: '#/components/schemas/TestCaseParameterValidationRule'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    TestDefinitionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestDefinition'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    CreateTestDefinition:
+      required:
+      - entityType
+      - name
+      - testPlatforms
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        entityType:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+        testPlatforms:
+          type: array
+          items:
+            type: string
+            enum:
+            - OpenMetadata
+            - GreatExpectations
+            - dbt
+            - Deequ
+            - Soda
+            - Other
+        supportedDataTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - NUMBER
+            - TINYINT
+            - SMALLINT
+            - INT
+            - BIGINT
+            - BYTEINT
+            - BYTES
+            - FLOAT
+            - DOUBLE
+            - DECIMAL
+            - NUMERIC
+            - TIMESTAMP
+            - TIMESTAMPZ
+            - TIME
+            - DATE
+            - DATETIME
+            - INTERVAL
+            - STRING
+            - MEDIUMTEXT
+            - TEXT
+            - CHAR
+            - LONG
+            - VARCHAR
+            - BOOLEAN
+            - BINARY
+            - VARBINARY
+            - ARRAY
+            - BLOB
+            - LONGBLOB
+            - MEDIUMBLOB
+            - MAP
+            - STRUCT
+            - UNION
+            - SET
+            - GEOGRAPHY
+            - ENUM
+            - JSON
+            - UUID
+            - VARIANT
+            - GEOMETRY
+            - BYTEA
+            - AGGREGATEFUNCTION
+            - ERROR
+            - FIXED
+            - RECORD
+            - 'NULL'
+            - SUPER
+            - HLLSKETCH
+            - PG_LSN
+            - PG_SNAPSHOT
+            - TSQUERY
+            - TXID_SNAPSHOT
+            - XML
+            - MACADDR
+            - TSVECTOR
+            - UNKNOWN
+            - CIDR
+            - INET
+            - CLOB
+            - ROWID
+            - LOWCARDINALITY
+            - YEAR
+            - POINT
+            - POLYGON
+            - TUPLE
+            - SPATIAL
+            - TABLE
+            - NTEXT
+            - IMAGE
+            - IPV4
+            - IPV6
+            - DATETIMERANGE
+            - HLL
+            - LARGEINT
+            - QUANTILE_STATE
+            - AGG_STATE
+            - BITMAP
+            - UINT
+            - BIT
+            - MONEY
+            - MEASURE HIDDEN
+            - MEASURE VISIBLE
+            - MEASURE
+            - KPI
+            - HEIRARCHY
+            - HIERARCHYID
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        parameterDefinition:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseParameter'
+        dataQualityDimension:
+          type: string
+          enum:
+          - Completeness
+          - Accuracy
+          - Consistency
+          - Validity
+          - Uniqueness
+          - Integrity
+          - SQL
+          - NoDimension
+        supportedServices:
+          type: array
+          items:
+            type: string
+        domains:
+          type: array
+          items:
+            type: string
+        sqlExpression:
+          type: string
+        validatorClass:
+          type: string
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

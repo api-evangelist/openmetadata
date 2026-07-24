@@ -1,0 +1,852 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Permissions API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Permissions
+  description: APIs related to getting access permission for a User.
+paths:
+  /v1/permissions/debug/me:
+    get:
+      tags:
+      - Permissions
+      summary: Debug permissions for the current user
+      description: Get detailed information about your own permissions including direct roles, team-based permissions, and inherited permissions with their sources
+      operationId: debugMyPermissions
+      responses:
+        '200':
+          description: Permission debug information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionDebugInfo'
+  /v1/permissions/debug/evaluate:
+    get:
+      tags:
+      - Permissions
+      summary: Debug permission evaluation for a specific operation
+      description: Get step-by-step evaluation of permissions for a user attempting a specific operation on a resource, showing which policies were evaluated and why the decision was made. Only admins can debug other users' permission evaluations.
+      operationId: debugPermissionEvaluation
+      parameters:
+      - name: user
+        in: query
+        description: Name of the user to evaluate permissions for
+        required: true
+        schema:
+          type: string
+      - name: resource
+        in: query
+        description: Type of resource (e.g., table, database, pipeline)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: query
+        description: UUID or Fully Qualified Name (FQN) of the specific resource instance (optional)
+        schema:
+          type: string
+      - name: operation
+        in: query
+        description: Operation to check (e.g., VIEW_ALL, EDIT_ALL, DELETE)
+        required: true
+        schema:
+          type: string
+          enum:
+          - All
+          - Create
+          - BulkCreate
+          - CreateIngestionPipelineAutomator
+          - CreateTests
+          - Delete
+          - ViewAll
+          - ViewBasic
+          - ViewUsage
+          - ViewTests
+          - ViewQueries
+          - ViewDataProfile
+          - ViewProfilerGlobalConfiguration
+          - ViewSampleData
+          - ViewTestCaseFailedRowsSample
+          - ViewCustomFields
+          - EditAll
+          - BulkUpdate
+          - EditCustomFields
+          - EditDataProfile
+          - EditDescription
+          - EditDisplayName
+          - EditLineage
+          - EditEntityRelationship
+          - EditPolicy
+          - EditOwners
+          - EditQueries
+          - EditReviewers
+          - EditRole
+          - EditSampleData
+          - EditStatus
+          - EditTags
+          - EditGlossaryTerms
+          - EditTeams
+          - EditTier
+          - EditCertification
+          - EditTests
+          - EditUsage
+          - EditUsers
+          - EditLifeCycle
+          - EditKnowledgePanel
+          - EditPage
+          - EditIngestionPipelineStatus
+          - EditUserNotificationTemplate
+          - DeleteTestCaseFailedRowsSample
+          - Deploy
+          - Trigger
+          - Kill
+          - GenerateToken
+          - EditScim
+          - CreateScim
+          - DeleteScim
+          - ViewScim
+          - Impersonate
+          - AuditLogs
+          - ViewTestDefinitionLibrary
+          - EditTestDefinitionLibrary
+      responses:
+        '200':
+          description: Permission evaluation debug information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionEvaluationDebugInfo'
+        '403':
+          description: Forbidden - Admin access required
+  /v1/permissions/debug/user/{username}:
+    get:
+      tags:
+      - Permissions
+      summary: Debug permissions for a user
+      description: Get detailed information about a user's permissions including direct roles, team-based permissions, and inherited permissions with their sources. Only admins can debug other users' permissions.
+      operationId: debugUserPermissions
+      parameters:
+      - name: username
+        in: path
+        description: Username of the user
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Permission debug information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionDebugInfo'
+        '403':
+          description: Forbidden - Admin access required
+        '404':
+          description: User not found
+  /v1/permissions/view/{entityType}:
+    get:
+      tags:
+      - Permissions
+      summary: Get permissions for a given entity type at field level.
+      operationId: getEntityTypeFieldPermissions
+      parameters:
+      - name: entityType
+        in: path
+        description: Type of the entity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Permissions for logged in user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePermissionList'
+  /v1/permissions/{resource}:
+    get:
+      tags:
+      - Permissions
+      summary: Get permissions a given resource/entity type for logged in user
+      operationId: getResourceTypePermission
+      parameters:
+      - name: user
+        in: query
+        description: Permission for user specified in this query param. If not specified, the user is defaulted to the logged in user
+        schema:
+          type: string
+          example: john
+      - name: resource
+        in: path
+        description: Type of the resource
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Permissions for logged in user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePermissionList'
+  /v1/permissions/{resource}/name/{name}:
+    get:
+      tags:
+      - Permissions
+      summary: Get permissions for a given entity name for a logged in user
+      operationId: getResourcePermissionByName
+      parameters:
+      - name: user
+        in: query
+        description: Permission for user specified in this query param. If not specified, the user is defaulted to the logged in user
+        schema:
+          type: string
+          example: john
+      - name: resource
+        in: path
+        description: Type of the resource
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        description: Name of the entity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Permissions for logged in user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePermissionList'
+  /v1/permissions/{resource}/{id}:
+    get:
+      tags:
+      - Permissions
+      summary: Get permissions for a given entity for a logged in user
+      operationId: getResourcePermission
+      parameters:
+      - name: user
+        in: query
+        description: Permission for user specified in this query param. If not specified, the user is defaulted to the logged in user
+        schema:
+          type: string
+          example: john
+      - name: resource
+        in: path
+        description: Type of the resource
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Id of the entity
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Permissions for logged in user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePermissionList'
+  /v1/permissions/policies:
+    get:
+      tags:
+      - Permissions
+      summary: Get permissions for a set of policies
+      operationId: getPermissionsForPolicies
+      parameters:
+      - name: ids
+        in: query
+        description: List of policy of ids
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Permissions for a set of policies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePermissionList'
+  /v1/permissions:
+    get:
+      tags:
+      - Permissions
+      summary: Get permissions for logged in user
+      operationId: getResourcePermissions
+      parameters:
+      - name: user
+        in: query
+        description: Permission for user specified in this query param. If not specified, the user is defaulted to the logged in user
+        schema:
+          type: string
+          example: john
+      responses:
+        '200':
+          description: Permissions for logged in user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcePermissionList'
+components:
+  schemas:
+    PermissionEvaluationDebugInfo:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/EntityReference'
+        resource:
+          type: string
+        resourceId:
+          type: string
+        operation:
+          type: string
+          enum:
+          - All
+          - Create
+          - BulkCreate
+          - CreateIngestionPipelineAutomator
+          - CreateTests
+          - Delete
+          - ViewAll
+          - ViewBasic
+          - ViewUsage
+          - ViewTests
+          - ViewQueries
+          - ViewDataProfile
+          - ViewProfilerGlobalConfiguration
+          - ViewSampleData
+          - ViewTestCaseFailedRowsSample
+          - ViewCustomFields
+          - EditAll
+          - BulkUpdate
+          - EditCustomFields
+          - EditDataProfile
+          - EditDescription
+          - EditDisplayName
+          - EditLineage
+          - EditEntityRelationship
+          - EditPolicy
+          - EditOwners
+          - EditQueries
+          - EditReviewers
+          - EditRole
+          - EditSampleData
+          - EditStatus
+          - EditTags
+          - EditGlossaryTerms
+          - EditTeams
+          - EditTier
+          - EditCertification
+          - EditTests
+          - EditUsage
+          - EditUsers
+          - EditLifeCycle
+          - EditKnowledgePanel
+          - EditPage
+          - EditIngestionPipelineStatus
+          - EditUserNotificationTemplate
+          - DeleteTestCaseFailedRowsSample
+          - Deploy
+          - Trigger
+          - Kill
+          - GenerateToken
+          - EditScim
+          - CreateScim
+          - DeleteScim
+          - ViewScim
+          - Impersonate
+          - AuditLogs
+          - ViewTestDefinitionLibrary
+          - EditTestDefinitionLibrary
+        allowed:
+          type: boolean
+        finalDecision:
+          type: string
+        evaluationSteps:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyEvaluationStep'
+        summary:
+          $ref: '#/components/schemas/EvaluationSummary'
+    EvaluationSummary:
+      type: object
+      properties:
+        totalPoliciesEvaluated:
+          type: integer
+          format: int32
+        totalRulesEvaluated:
+          type: integer
+          format: int32
+        matchingRules:
+          type: integer
+          format: int32
+        denyRules:
+          type: integer
+          format: int32
+        allowRules:
+          type: integer
+          format: int32
+        appliedPolicies:
+          type: array
+          items:
+            type: string
+        reasonsForDecision:
+          type: array
+          items:
+            type: string
+        evaluationTimeMs:
+          type: integer
+          format: int64
+    ResourcePermissionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourcePermission'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    RolePermission:
+      type: object
+      properties:
+        role:
+          $ref: '#/components/schemas/EntityReference'
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyInfo'
+        inheritedFrom:
+          type: string
+        defaultRole:
+          type: boolean
+    ConditionEvaluation:
+      type: object
+      properties:
+        condition:
+          type: string
+        result:
+          type: boolean
+        evaluationDetails:
+          type: string
+    ResourcePermission:
+      required:
+      - permissions
+      - resource
+      type: object
+      properties:
+        resource:
+          type: string
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+    DirectRolePermission:
+      type: object
+      properties:
+        role:
+          $ref: '#/components/schemas/EntityReference'
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyInfo'
+        source:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    PermissionSummary:
+      type: object
+      properties:
+        totalRoles:
+          type: integer
+          format: int32
+        totalPolicies:
+          type: integer
+          format: int32
+        totalRules:
+          type: integer
+          format: int32
+        directRoles:
+          type: integer
+          format: int32
+        inheritedRoles:
+          type: integer
+          format: int32
+        teamCount:
+          type: integer
+          format: int32
+        maxHierarchyDepth:
+          type: integer
+          format: int32
+        effectiveOperations:
+          type: array
+          items:
+            type: string
+        deniedOperations:
+          type: array
+          items:
+            type: string
+    Permission:
+      type: object
+      properties:
+        operation:
+          type: string
+          enum:
+          - All
+          - Create
+          - BulkCreate
+          - CreateIngestionPipelineAutomator
+          - CreateTests
+          - Delete
+          - ViewAll
+          - ViewBasic
+          - ViewUsage
+          - ViewTests
+          - ViewQueries
+          - ViewDataProfile
+          - ViewProfilerGlobalConfiguration
+          - ViewSampleData
+          - ViewTestCaseFailedRowsSample
+          - ViewCustomFields
+          - EditAll
+          - BulkUpdate
+          - EditCustomFields
+          - EditDataProfile
+          - EditDescription
+          - EditDisplayName
+          - EditLineage
+          - EditEntityRelationship
+          - EditPolicy
+          - EditOwners
+          - EditQueries
+          - EditReviewers
+          - EditRole
+          - EditSampleData
+          - EditStatus
+          - EditTags
+          - EditGlossaryTerms
+          - EditTeams
+          - EditTier
+          - EditCertification
+          - EditTests
+          - EditUsage
+          - EditUsers
+          - EditLifeCycle
+          - EditKnowledgePanel
+          - EditPage
+          - EditIngestionPipelineStatus
+          - EditUserNotificationTemplate
+          - DeleteTestCaseFailedRowsSample
+          - Deploy
+          - Trigger
+          - Kill
+          - GenerateToken
+          - EditScim
+          - CreateScim
+          - DeleteScim
+          - ViewScim
+          - Impersonate
+          - AuditLogs
+          - ViewTestDefinitionLibrary
+          - EditTestDefinitionLibrary
+        access:
+          type: string
+          enum:
+          - deny
+          - allow
+          - conditionalDeny
+          - conditionalAllow
+          - notAllow
+        rule:
+          $ref: '#/components/schemas/Rule'
+        policy:
+          type: string
+        role:
+          type: string
+    RuleInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        effect:
+          type: string
+        operations:
+          type: array
+          items:
+            type: string
+        resources:
+          type: array
+          items:
+            type: string
+        condition:
+          type: string
+        matches:
+          type: boolean
+    InheritedPermission:
+      type: object
+      properties:
+        permissionType:
+          type: string
+        source:
+          $ref: '#/components/schemas/EntityReference'
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyInfo'
+        description:
+          type: string
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    PermissionDebugInfo:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/EntityReference'
+        directRoles:
+          type: array
+          items:
+            $ref: '#/components/schemas/DirectRolePermission'
+        teamPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamPermission'
+        inheritedPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/InheritedPermission'
+        summary:
+          $ref: '#/components/schemas/PermissionSummary'
+    TeamPermission:
+      type: object
+      properties:
+        team:
+          $ref: '#/components/schemas/EntityReference'
+        teamHierarchy:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        rolePermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RolePermission'
+        directPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyInfo'
+        teamType:
+          type: string
+        hierarchyLevel:
+          type: integer
+          format: int32
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    PolicyEvaluationStep:
+      type: object
+      properties:
+        stepNumber:
+          type: integer
+          format: int32
+        source:
+          type: string
+        sourceEntity:
+          $ref: '#/components/schemas/EntityReference'
+        policy:
+          $ref: '#/components/schemas/EntityReference'
+        rule:
+          type: string
+        effect:
+          type: string
+        matched:
+          type: boolean
+        matchReason:
+          type: string
+        conditionEvaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionEvaluation'
+    PolicyInfo:
+      type: object
+      properties:
+        policy:
+          $ref: '#/components/schemas/EntityReference'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleInfo'
+        effect:
+          type: string
+    Rule:
+      required:
+      - effect
+      - name
+      - operations
+      - resources
+      type: object
+      properties:
+        name:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        effect:
+          type: string
+          enum:
+          - allow
+          - deny
+        operations:
+          type: array
+          items:
+            type: string
+            enum:
+            - All
+            - Create
+            - BulkCreate
+            - CreateIngestionPipelineAutomator
+            - CreateTests
+            - Delete
+            - ViewAll
+            - ViewBasic
+            - ViewUsage
+            - ViewTests
+            - ViewQueries
+            - ViewDataProfile
+            - ViewProfilerGlobalConfiguration
+            - ViewSampleData
+            - ViewTestCaseFailedRowsSample
+            - ViewCustomFields
+            - EditAll
+            - BulkUpdate
+            - EditCustomFields
+            - EditDataProfile
+            - EditDescription
+            - EditDisplayName
+            - EditLineage
+            - EditEntityRelationship
+            - EditPolicy
+            - EditOwners
+            - EditQueries
+            - EditReviewers
+            - EditRole
+            - EditSampleData
+            - EditStatus
+            - EditTags
+            - EditGlossaryTerms
+            - EditTeams
+            - EditTier
+            - EditCertification
+            - EditTests
+            - EditUsage
+            - EditUsers
+            - EditLifeCycle
+            - EditKnowledgePanel
+            - EditPage
+            - EditIngestionPipelineStatus
+            - EditUserNotificationTemplate
+            - DeleteTestCaseFailedRowsSample
+            - Deploy
+            - Trigger
+            - Kill
+            - GenerateToken
+            - EditScim
+            - CreateScim
+            - DeleteScim
+            - ViewScim
+            - Impersonate
+            - AuditLogs
+            - ViewTestDefinitionLibrary
+            - EditTestDefinitionLibrary
+        resources:
+          type: array
+          items:
+            type: string
+        condition:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

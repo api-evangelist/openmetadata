@@ -1,0 +1,2100 @@
+openapi: 3.0.1
+info:
+  title: OpenMetadata APIs Agent Executions Users API
+  description: Common types and API definition for OpenMetadata
+  contact:
+    name: OpenMetadata
+    url: https://open-metadata.org
+    email: openmetadata-dev@googlegroups.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: '1.13'
+servers:
+- url: /api
+  description: Current Host
+- url: http://localhost:8585/api
+  description: Endpoint URL
+security:
+- BearerAuth: []
+tags:
+- name: Users
+  description: A `User` represents a user of OpenMetadata. A user can be part of 0 or more teams. A special type of user called Bot is used for automation. A user can be an owner of zero or more data assets. A user can also follow zero or more data assets.
+paths:
+  /v1/users/changePassword:
+    put:
+      tags:
+      - Users
+      summary: Change Password For User
+      description: Create a new user.
+      operationId: changeUserPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+  /v1/users/checkEmailVerified:
+    post:
+      tags:
+      - Users
+      summary: Check if a mail is verified
+      description: Check if a mail is already in use
+      operationId: checkEmailIsVerified
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailRequest'
+      responses:
+        '200':
+          description: Return true or false
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '400':
+          description: Bad request
+  /v1/users/registrationConfirmation:
+    put:
+      tags:
+      - Users
+      summary: Confirm User Email
+      description: Confirm User Email
+      operationId: confirmUserEmail
+      parameters:
+      - name: token
+        in: query
+        description: Token sent for Email Confirmation
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'The user '
+        '400':
+          description: Bad request
+  /v1/users/security/token:
+    get:
+      tags:
+      - Users
+      summary: Get personal access token to User
+      description: Get a personal access token
+      operationId: getPersonalAccessToken
+      parameters:
+      - name: username
+        in: query
+        description: User Name of the User for which to get. (Default = `false`)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'List Of Personal Access Tokens '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalAccessTokenList'
+        '400':
+          description: Bad request
+    put:
+      tags:
+      - Users
+      summary: Provide access token to User
+      description: Provide access token to User
+      operationId: createPersonalAccessToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonalToken'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalAccessToken'
+        '400':
+          description: Bad request
+  /v1/users:
+    get:
+      tags:
+      - Users
+      summary: List users
+      description: Get a list of users. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.
+      operationId: listUsers
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: profile,roles,teams,follows,owns,domains,personas,defaultPersona,personaPreferences
+      - name: team
+        in: query
+        description: Filter users by team
+        schema:
+          type: string
+          example: Legal
+      - name: limit
+        in: query
+        description: Limit the number users returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of users before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of users after this cursor
+        schema:
+          type: string
+      - name: isAdmin
+        in: query
+        description: Returns list of admin users if set to true
+        schema:
+          type: boolean
+      - name: isBot
+        in: query
+        description: Returns list of bot users if set to true
+        schema:
+          type: boolean
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+    put:
+      tags:
+      - Users
+      summary: Update user
+      description: Create or Update a user.
+      operationId: createOrUpdateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUser'
+        '400':
+          description: Bad request
+    post:
+      tags:
+      - Users
+      summary: Create a user
+      description: Create a new user.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+  /v1/users/name/{name}:
+    get:
+      tags:
+      - Users
+      summary: Get a user by name
+      description: Get a user by `name`.
+      operationId: getUserByFQN
+      parameters:
+      - name: name
+        in: path
+        description: Name of the user
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: profile,roles,teams,follows,owns,domains,personas,defaultPersona,personaPreferences
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User for instance {name} is not found
+    delete:
+      tags:
+      - Users
+      summary: Delete a user
+      description: Users can't be deleted but are soft-deleted.
+      operationId: deleteUserByName
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: name
+        in: path
+        description: Name of the user
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User for instance {name} is not found
+  /v1/users/{id}:
+    get:
+      tags:
+      - Users
+      summary: Get a user
+      description: Get a user by `id`
+      operationId: getUserByID
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: profile,roles,teams,follows,owns,domains,personas,defaultPersona,personaPreferences
+      - name: include
+        in: query
+        description: Include all, deleted, or non-deleted entities.
+        schema:
+          type: string
+          default: non-deleted
+          enum:
+          - all
+          - deleted
+          - non-deleted
+      responses:
+        '200':
+          description: The user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User for instance {id} is not found
+    delete:
+      tags:
+      - Users
+      summary: Delete a user
+      description: Users can't be deleted but are soft-deleted.
+      operationId: deleteUser
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User for instance {id} is not found
+    patch:
+      tags:
+      - Users
+      summary: Update a user
+      description: Update an existing user using JsonPatch.
+      externalDocs:
+        description: JsonPatch RFC
+        url: https://tools.ietf.org/html/rfc6902
+      operationId: patchUser
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: JsonPatch with array of operations
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatch'
+            example: '[{op:remove, path:/a},{op:add, path: /b, value: val}]'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /v1/users/async/{id}:
+    delete:
+      tags:
+      - Users
+      summary: Asynchronously delete a user
+      description: Users can't be deleted but are soft-deleted.
+      operationId: deleteUserAsync
+      parameters:
+      - name: hardDelete
+        in: query
+        description: Hard delete the entity. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User for instance {id} is not found
+  /v1/users/export:
+    get:
+      tags:
+      - Users
+      summary: Export users in a team in CSV format
+      operationId: exportUsers
+      parameters:
+      - name: team
+        in: query
+        description: Name of the team to under which the users are imported to
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Exported csv with user information
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/users/exportAsync:
+    get:
+      tags:
+      - Users
+      summary: Export users in a team in CSV format
+      operationId: exportUsers_1
+      parameters:
+      - name: team
+        in: query
+        description: Name of the team to under which the users are imported to
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Exported csv with user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSVExportResponse'
+  /v1/users/generateRandomPwd:
+    get:
+      tags:
+      - Users
+      summary: Generate a random password
+      description: Generate a random password
+      operationId: generateRandomPwd
+      responses:
+        '200':
+          description: Random pwd
+  /v1/users/generatePasswordResetLink:
+    post:
+      tags:
+      - Users
+      summary: Generate Password Reset Link
+      description: Generate Password Reset Link
+      operationId: generatePasswordResetLink
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailRequest'
+      responses:
+        '200':
+          description: 'The user '
+        '400':
+          description: Bad request
+  /v1/users/generateToken/{id}:
+    put:
+      tags:
+      - Users
+      summary: Generate JWT Token for a Bot User
+      description: Generate JWT Token for a Bot User.
+      operationId: generateJWTTokenForBotUser
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateTokenRequest'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                type: string
+                enum:
+                - OneHour
+                - '1'
+                - '7'
+                - '30'
+                - '60'
+                - '90'
+                - Unlimited
+        '400':
+          description: Bad request
+  /v1/users/generateToken:
+    post:
+      tags:
+      - Users
+      summary: Generate JWT Token for a User
+      description: Generate JWT Token for a user. Users with EDIT permission can generate tokens for bot users, and users can generate their own tokens. Regular users cannot generate tokens for other regular users.
+      operationId: generateJWTTokenForUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateTokenRequest'
+      responses:
+        '200':
+          description: The JWT auth mechanism with the generated token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTAuthMechanism'
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden - User not authorized
+  /v1/users/auth-mechanism/{id}:
+    get:
+      tags:
+      - Users
+      summary: Get Authentication Mechanism for a Bot User
+      description: Get Authentication Mechanism for a Bot User.
+      operationId: getAuthenticationMechanismBotUser
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationMechanism'
+        '400':
+          description: Bad request
+  /v1/users/loggedInUser/groupTeams:
+    get:
+      tags:
+      - Users
+      summary: Get group type of teams for current logged in user
+      description: Get the group type of teams of user who is authenticated and is currently logged in.
+      operationId: getCurrentLoggedInUserGroupTeams
+      responses:
+        '200':
+          description: The teams of type 'Group' that a user belongs to
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EntityReference'
+        '404':
+          description: User not found
+  /v1/users/loggedInUser:
+    get:
+      tags:
+      - Users
+      summary: Get current logged in user
+      description: Get the user who is authenticated and is currently logged in.
+      operationId: getCurrentLoggedInUser
+      parameters:
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: profile,roles,teams,follows,owns,domains,personas,defaultPersona,personaPreferences
+      responses:
+        '200':
+          description: The user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+  /v1/users/token/{id}:
+    get:
+      tags:
+      - Users
+      summary: Get JWT Token for a Bot User
+      description: Get JWT Token for a Bot User.
+      operationId: getJWTTokenForBotUser
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTAuthMechanism'
+        '400':
+          description: Bad request
+  /v1/users/documentation/csv:
+    get:
+      tags:
+      - Users
+      summary: Get CSV documentation for user import/export
+      operationId: getCsvDocumentation_2
+      responses:
+        default:
+          description: default response
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/users/{id}/versions/{version}:
+    get:
+      tags:
+      - Users
+      summary: Get a version of the user
+      description: Get a version of the user by given `id`
+      operationId: getSpecificUserVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: version
+        in: path
+        description: User version number in the form `major`.`minor`
+        required: true
+        schema:
+          type: string
+          example: 0.1 or 1.1
+      responses:
+        '200':
+          description: user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User for instance {id} and version {version} is not found
+  /v1/users/import:
+    put:
+      tags:
+      - Users
+      summary: Import from CSV to create, and update teams.
+      operationId: importTeams_1
+      parameters:
+      - name: team
+        in: query
+        description: Name of the team to under which the users are imported to
+        required: true
+        schema:
+          type: string
+      - name: dryRun
+        in: query
+        description: Dry-run when true is used for validating the CSV without really importing it. (default=true)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Import result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvImportResult'
+  /v1/users/importAsync:
+    put:
+      tags:
+      - Users
+      summary: Import from CSV to create, and update teams asynchronously.
+      operationId: importTeamsAsync_1
+      parameters:
+      - name: team
+        in: query
+        description: Name of the team to under which the users are imported to
+        required: true
+        schema:
+          type: string
+      - name: dryRun
+        in: query
+        description: Dry-run when true is used for validating the CSV without really importing it. (default=true)
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Import result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvImportResult'
+  /v1/users/history:
+    get:
+      tags:
+      - Users
+      summary: List all entity versions within a time range
+      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      operationId: listAllEntityVersionsByTimestamp_60
+      parameters:
+      - name: startTs
+        in: query
+        description: Start timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: endTs
+        in: query
+        description: End timestamp in milliseconds since epoch
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Limit the number of entity returned (1 to 1000000, default = 10)
+        schema:
+          maximum: 500
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of entity versions before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of entity versions after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of all versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultList'
+  /v1/users/online:
+    get:
+      tags:
+      - Users
+      summary: List online users
+      description: Get a list of users who have been active within the specified time window. Admin access only.
+      operationId: listOnlineUsers
+      parameters:
+      - name: timeWindow
+        in: query
+        description: 'Time window in minutes (default: 5). Use 0 for all time. Examples: 0 (all time), 1 (last minute), 5 (last 5 minutes), 60 (last hour), 1440 (last day)'
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+          example: 5
+          default: 5
+      - name: fields
+        in: query
+        description: Fields requested in the returned resource
+        schema:
+          type: string
+          example: profile,roles,teams,follows,owns,domains,personas,defaultPersona,personaPreferences
+      - name: limit
+        in: query
+        description: Limit the number users returned. (1 to 1000000, default = 10)
+        schema:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 10
+      - name: before
+        in: query
+        description: Returns list of users before this cursor
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Returns list of users after this cursor
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of online users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+        '403':
+          description: Forbidden - Admin access required
+  /v1/users/{id}/assets:
+    get:
+      tags:
+      - Users
+      summary: List assets owned by this user or their teams
+      description: Get a paginated list of assets that are owned by this user or any of the teams they belong to. Use limit and offset query params for pagination.
+      operationId: listUserAssets
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: Limit the number of assets returned. (1 to 1000, default = 100)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Offset for pagination (default = 0)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityReference'
+        '404':
+          description: User for instance {id} is not found
+  /v1/users/name/{name}/assets:
+    get:
+      tags:
+      - Users
+      summary: List assets owned by this user or their teams by name
+      description: Get a paginated list of assets that are owned by this user or any of the teams they belong to. Use limit and offset query params for pagination.
+      operationId: listUserAssetsByName
+      parameters:
+      - name: name
+        in: path
+        description: Name of the user
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Limit the number of assets returned. (1 to 1000, default = 100)
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+          format: int32
+          default: 10
+      - name: offset
+        in: query
+        description: Offset for pagination (default = 0)
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityReference'
+        '404':
+          description: User for instance {name} is not found
+  /v1/users/{id}/versions:
+    get:
+      tags:
+      - Users
+      summary: List user versions
+      description: Get a list of all the versions of a user identified by `id`
+      operationId: listAllUserVersion
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: List of user versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistory'
+  /v1/users/login:
+    post:
+      tags:
+      - Users
+      summary: Login User with email (plain-text) and Password (encoded in base 64)
+      description: Login User with email(plain-text) and Password (encoded in base 64)
+      operationId: loginUserWithPwd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: 'Returns the Jwt Token Response '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: Bad request
+  /v1/users/logout:
+    post:
+      tags:
+      - Users
+      summary: Logout a User(Only called for saml and basic Auth)
+      description: Logout a User(Only called for saml and basic Auth)
+      operationId: logoutUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '200':
+          description: 'The user '
+        '400':
+          description: Bad request
+  /v1/users/refresh:
+    post:
+      tags:
+      - Users
+      summary: Provide access token to User with refresh token
+      description: Provide access token to User with refresh token
+      operationId: refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: Bad request
+  /v1/users/signup:
+    post:
+      tags:
+      - Users
+      summary: Register User
+      description: Register a new User
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: 'The user '
+        '400':
+          description: Bad request
+  /v1/users/resendRegistrationToken:
+    put:
+      tags:
+      - Users
+      summary: Resend Registration Token
+      description: Resend Registration Token
+      operationId: resendRegistrationToken
+      parameters:
+      - name: user
+        in: query
+        description: Token sent for Email Confirmation Earlier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'The user '
+        '400':
+          description: Bad request
+  /v1/users/password/reset:
+    post:
+      tags:
+      - Users
+      summary: Reset Password For User
+      description: Reset User Password
+      operationId: resetUserPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+  /v1/users/restore:
+    put:
+      tags:
+      - Users
+      summary: Restore a soft deleted User.
+      description: Restore a soft deleted User.
+      operationId: restore_47
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreEntity'
+      responses:
+        '200':
+          description: 'Successfully restored the User '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /v1/users/security/token/revoke:
+    put:
+      tags:
+      - Users
+      summary: Revoke personal access token to User
+      description: Revoke personal access token
+      operationId: revokePersonalAccessToken
+      parameters:
+      - name: username
+        in: query
+        description: Username in case admin is revoking. (Default = `false`)
+        schema:
+          type: string
+      - name: removeAll
+        in: query
+        description: Remove All tokens of the user. (Default = `false`)
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokePersonalTokenRequest'
+      responses:
+        '200':
+          description: 'The Personal access token '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalAccessTokenList'
+        '400':
+          description: Bad request
+  /v1/users/revokeToken:
+    put:
+      tags:
+      - Users
+      summary: Revoke JWT Token for a Bot User
+      description: Revoke JWT Token for a Bot User.
+      operationId: revokeJWTTokenForBotUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeTokenRequest'
+      responses:
+        '200':
+          description: 'The user '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTAuthMechanism'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    GenerateTokenRequest:
+      required:
+      - JWTTokenExpiry
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        JWTTokenExpiry:
+          type: string
+          enum:
+          - OneHour
+          - '1'
+          - '7'
+          - '30'
+          - '60'
+          - '90'
+          - Unlimited
+    AuthenticationMechanism:
+      type: object
+      properties:
+        config:
+          type: object
+        authType:
+          type: string
+          enum:
+          - JWT
+          - SSO
+          - BASIC
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    PersonalAccessToken:
+      required:
+      - expiryDate
+      - token
+      - userId
+      type: object
+      properties:
+        token:
+          type: string
+          format: uuid
+        tokenName:
+          type: string
+        userId:
+          type: string
+          format: uuid
+        tokenType:
+          type: string
+          enum:
+          - REFRESH_TOKEN
+          - EMAIL_VERIFICATION
+          - PASSWORD_RESET
+          - PERSONAL_ACCESS_TOKEN
+          - SUPPORT_TOKEN
+        expiryDate:
+          type: integer
+          format: int64
+        jwtToken:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    Profile:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/ImageList'
+        subscription:
+          $ref: '#/components/schemas/SubscriptionConfig'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    RevokeTokenRequest:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    Webhook:
+      type: object
+      properties:
+        receivers:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        endpoint:
+          type: string
+          format: uri
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        queryParams:
+          type: object
+          additionalProperties:
+            type: string
+        httpMethod:
+          type: string
+          enum:
+          - POST
+          - PUT
+        sendToAdmins:
+          type: boolean
+        sendToOwners:
+          type: boolean
+        authType:
+          type: object
+        sendToFollowers:
+          type: boolean
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    CreatePersonalToken:
+      required:
+      - JWTTokenExpiry
+      - tokenName
+      type: object
+      properties:
+        tokenName:
+          type: string
+        JWTTokenExpiry:
+          type: string
+          enum:
+          - OneHour
+          - '1'
+          - '7'
+          - '30'
+          - '60'
+          - '90'
+          - Unlimited
+    LandingPageSettings:
+      type: object
+      properties:
+        headerColor:
+          type: string
+        headerImage:
+          type: string
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    RevokePersonalTokenRequest:
+      type: object
+      properties:
+        tokenIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ChangePasswordRequest:
+      required:
+      - confirmPassword
+      - newPassword
+      type: object
+      properties:
+        username:
+          type: string
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+        requestType:
+          type: string
+          enum:
+          - SELF
+          - USER
+    JsonPatch:
+      type: object
+    LoginRequest:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    UserList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    PersonaPreferences:
+      required:
+      - personaId
+      - personaName
+      type: object
+      properties:
+        personaId:
+          type: string
+          format: uuid
+        personaName:
+          type: string
+        landingPageSettings:
+          $ref: '#/components/schemas/LandingPageSettings'
+    PersonalAccessTokenList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonalAccessToken'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ImageList:
+      type: object
+      properties:
+        image:
+          type: string
+          format: uri
+        image24:
+          type: string
+          format: uri
+        image32:
+          type: string
+          format: uri
+        image48:
+          type: string
+          format: uri
+        image72:
+          type: string
+          format: uri
+        image192:
+          type: string
+          format: uri
+        image512:
+          type: string
+          format: uri
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          exclusiveMinimum: false
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    EmailRequest:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    User:
+      required:
+      - email
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        description:
+          type: string
+        externalId:
+          type: string
+        scimUserName:
+          type: string
+        displayName:
+          type: string
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+        href:
+          type: string
+          format: uri
+        timezone:
+          type: string
+        isBot:
+          type: boolean
+        isAdmin:
+          type: boolean
+        allowImpersonation:
+          type: boolean
+        authenticationMechanism:
+          $ref: '#/components/schemas/AuthenticationMechanism'
+        profile:
+          $ref: '#/components/schemas/Profile'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        defaultPersona:
+          $ref: '#/components/schemas/EntityReference'
+        personas:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        owns:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        follows:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        inheritedRoles:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        inheritedPersonas:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        isEmailVerified:
+          type: boolean
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lastLoginTime:
+          type: integer
+          format: int64
+        lastActivityTime:
+          type: integer
+          format: int64
+        personaPreferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonaPreferences'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    LogoutRequest:
+      required:
+      - token
+      type: object
+      properties:
+        username:
+          type: string
+        token:
+          type: string
+        logoutTime:
+          type: string
+          format: date-time
+        refreshToken:
+          type: string
+    JwtResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+        expiryDuration:
+          type: integer
+          format: int64
+    JWTAuthMechanism:
+      required:
+      - JWTTokenExpiry
+      type: object
+      properties:
+        JWTToken:
+          type: string
+        JWTTokenExpiry:
+          type: string
+          enum:
+          - OneHour
+          - '1'
+          - '7'
+          - '30'
+          - '60'
+          - '90'
+          - Unlimited
+        JWTTokenExpiresAt:
+          type: integer
+          format: int64
+    TokenRefreshRequest:
+      required:
+      - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    CreateUser:
+      required:
+      - email
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        externalId:
+          type: string
+        scimUserName:
+          type: string
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+        timezone:
+          type: string
+        isBot:
+          type: boolean
+        botName:
+          type: string
+        isAdmin:
+          type: boolean
+        profile:
+          $ref: '#/components/schemas/Profile'
+        teams:
+          type: array
+          items:
+            type: string
+            format: uuid
+        roles:
+          type: array
+          items:
+            type: string
+            format: uuid
+        personas:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        defaultPersona:
+          $ref: '#/components/schemas/EntityReference'
+        authenticationMechanism:
+          $ref: '#/components/schemas/AuthenticationMechanism'
+        createPasswordType:
+          type: string
+          enum:
+          - ADMIN_CREATE
+          - USER_CREATE
+        password:
+          type: string
+        confirmPassword:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    SubscriptionConfig:
+      type: object
+      properties:
+        slack:
+          $ref: '#/components/schemas/Webhook'
+        msTeams:
+          $ref: '#/components/schemas/Webhook'
+        gChat:
+          $ref: '#/components/schemas/Webhook'
+        generic:
+          $ref: '#/components/schemas/Webhook'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    PasswordResetRequest:
+      required:
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          maxLength: 56
+          minLength: 8
+          type: string
+        confirmPassword:
+          maxLength: 56
+          minLength: 8
+          type: string
+        token:
+          type: string
+    RegistrationRequest:
+      required:
+      - email
+      - firstName
+      - lastName
+      - password
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+        password:
+          maxLength: 56
+          minLength: 8
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
