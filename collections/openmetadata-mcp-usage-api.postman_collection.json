@@ -1,0 +1,618 @@
+{
+  "item": [
+    {
+      "id": "3f19353c-2b5d-4c99-a4b1-12a1d787b0c4",
+      "name": "MCP Usage",
+      "description": {
+        "content": "MCP tool-call usage counters and breakdowns.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0ae5b760-b0ec-423d-8830-f075435c21d7",
+          "name": "Per-tool call counts",
+          "request": {
+            "name": "Per-tool call counts",
+            "description": {
+              "content": "Counts MCP requests per tool name in the supplied window. Admin only.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcp",
+                "usage",
+                "breakdown",
+                "tools"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5345831a-6d92-401f-af18-39080f7e5574",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcp",
+                    "usage",
+                    "breakdown",
+                    "tools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "955530f7-fa46-433c-a51a-ea3965c07825",
+          "name": "Per-user call counts",
+          "request": {
+            "name": "Per-user call counts",
+            "description": {
+              "content": "Counts MCP requests per principal in the supplied window. Bot principals (suffix 'Bot') are excluded. Admin only.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcp",
+                "usage",
+                "breakdown",
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ef18e689-8f40-4002-8116-a4d26785fa21",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcp",
+                    "usage",
+                    "breakdown",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e2d054b3-9a6e-41ff-910e-c2a3c493e883",
+          "name": "Daily MCP usage counts",
+          "request": {
+            "name": "Daily MCP usage counts",
+            "description": {
+              "content": "Returns a map of UTC start-of-day (epoch millis) to call count. Empty days are filled with 0 so the series is continuous. Admin access required.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcp",
+                "usage",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2ab9a80-1cb0-4484-901c-981910379895",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcp",
+                    "usage",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f1be77b5-02ad-421e-82bc-18d42b066a66",
+          "name": "Self-service MCP usage counters",
+          "request": {
+            "name": "Self-service MCP usage counters",
+            "description": {
+              "content": "Returns the calling user's total MCP call count and per-tool breakdown for the supplied window. Any authenticated user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcp",
+                "usage",
+                "me"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8224903f-5b2d-40b3-bef4-853846375fd8",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcp",
+                    "usage",
+                    "me"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "137e7b49-f555-44fc-8ae6-4bc9cfc12b61",
+          "name": "Get aggregate MCP usage counters",
+          "request": {
+            "name": "Get aggregate MCP usage counters",
+            "description": {
+              "content": "Returns total/success/failed counts and unique-user count for the supplied window. Defaults to the last 30 days. Admin access required.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcp",
+                "usage",
+                "summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>",
+                  "description": "Window start (epoch millis). Defaults to 30 days ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>",
+                  "description": "Window end exclusive (epoch millis). Defaults to now."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2d0df6f-cb58-48c4-ac34-0c23051f2fa4",
+              "name": "Aggregate counters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcp",
+                    "usage",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48ec0522-bff5-49b8-a1aa-40b4aeeaf1ab",
+              "name": "Forbidden. Admin only.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcp",
+                    "usage",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3af9f2b9-4a98-429c-a8ae-7db5eaa9b80b",
+    "name": "OpenMetadata APIs Agent Executions MCP Usage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

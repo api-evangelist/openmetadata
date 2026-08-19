@@ -1,0 +1,447 @@
+{
+  "item": [
+    {
+      "id": "311a173e-7d96-4424-983f-738229682d2e",
+      "name": "OpenLineage",
+      "description": {
+        "content": "OpenLineage API for receiving lineage events from external systems like Spark, Airflow, etc.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "af8d2cb5-1a0d-493d-88b4-541d45556700",
+          "name": "Receive a single OpenLineage event",
+          "request": {
+            "name": "Receive a single OpenLineage event",
+            "description": {
+              "content": "Process a single OpenLineage RunEvent and create lineage edges in OpenMetadata. Only COMPLETE events are processed by default.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "openlineage",
+                "lineage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventTime\": \"<dateTime>\",\n  \"job\": {\n    \"name\": \"<string>\",\n    \"namespace\": \"<string>\",\n    \"facets\": {\n      \"sql\": {\n        \"query\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\"\n      }\n    }\n  },\n  \"producer\": \"<uri>\",\n  \"run\": {\n    \"runId\": \"<uuid>\",\n    \"facets\": {\n      \"parent\": {\n        \"job\": {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\"\n        },\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"run\": {\n          \"runId\": \"<uuid>\"\n        }\n      },\n      \"errorMessage\": {\n        \"message\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"programmingLanguage\": \"<string>\",\n        \"stackTrace\": \"<string>\"\n      },\n      \"processing_engine\": {\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"name\": \"<string>\",\n        \"version\": \"<string>\",\n        \"openlineageAdapterVersion\": \"<string>\"\n      }\n    }\n  },\n  \"schemaURL\": \"<uri>\",\n  \"eventType\": \"<string>\",\n  \"inputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5497d1ca-aa32-4210-85cb-67f52ba206e4",
+              "name": "Event processed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "openlineage",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eventTime\": \"<dateTime>\",\n  \"job\": {\n    \"name\": \"<string>\",\n    \"namespace\": \"<string>\",\n    \"facets\": {\n      \"sql\": {\n        \"query\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\"\n      }\n    }\n  },\n  \"producer\": \"<uri>\",\n  \"run\": {\n    \"runId\": \"<uuid>\",\n    \"facets\": {\n      \"parent\": {\n        \"job\": {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\"\n        },\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"run\": {\n          \"runId\": \"<uuid>\"\n        }\n      },\n      \"errorMessage\": {\n        \"message\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"programmingLanguage\": \"<string>\",\n        \"stackTrace\": \"<string>\"\n      },\n      \"processing_engine\": {\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"name\": \"<string>\",\n        \"version\": \"<string>\",\n        \"openlineageAdapterVersion\": \"<string>\"\n      }\n    }\n  },\n  \"schemaURL\": \"<uri>\",\n  \"eventType\": \"<string>\",\n  \"inputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"failure\",\n  \"message\": \"string\",\n  \"summary\": {\n    \"received\": 4437,\n    \"successful\": 2429,\n    \"failed\": 3692,\n    \"skipped\": 4652\n  },\n  \"failedEvents\": [\n    {\n      \"index\": 3635,\n      \"reason\": \"string\",\n      \"retriable\": true\n    },\n    {\n      \"index\": 8451,\n      \"reason\": \"string\",\n      \"retriable\": false\n    }\n  ],\n  \"lineageEdgesCreated\": 3085\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7941190d-f7fd-44c6-8fe9-232a46439bf8",
+              "name": "Invalid event format",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "openlineage",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eventTime\": \"<dateTime>\",\n  \"job\": {\n    \"name\": \"<string>\",\n    \"namespace\": \"<string>\",\n    \"facets\": {\n      \"sql\": {\n        \"query\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\"\n      }\n    }\n  },\n  \"producer\": \"<uri>\",\n  \"run\": {\n    \"runId\": \"<uuid>\",\n    \"facets\": {\n      \"parent\": {\n        \"job\": {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\"\n        },\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"run\": {\n          \"runId\": \"<uuid>\"\n        }\n      },\n      \"errorMessage\": {\n        \"message\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"programmingLanguage\": \"<string>\",\n        \"stackTrace\": \"<string>\"\n      },\n      \"processing_engine\": {\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"name\": \"<string>\",\n        \"version\": \"<string>\",\n        \"openlineageAdapterVersion\": \"<string>\"\n      }\n    }\n  },\n  \"schemaURL\": \"<uri>\",\n  \"eventType\": \"<string>\",\n  \"inputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2d533186-0caf-4929-9170-0287d1ab8882",
+              "name": "Not authorized to create lineage",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "openlineage",
+                    "lineage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eventTime\": \"<dateTime>\",\n  \"job\": {\n    \"name\": \"<string>\",\n    \"namespace\": \"<string>\",\n    \"facets\": {\n      \"sql\": {\n        \"query\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\"\n      }\n    }\n  },\n  \"producer\": \"<uri>\",\n  \"run\": {\n    \"runId\": \"<uuid>\",\n    \"facets\": {\n      \"parent\": {\n        \"job\": {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\"\n        },\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"run\": {\n          \"runId\": \"<uuid>\"\n        }\n      },\n      \"errorMessage\": {\n        \"message\": \"<string>\",\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"programmingLanguage\": \"<string>\",\n        \"stackTrace\": \"<string>\"\n      },\n      \"processing_engine\": {\n        \"_producer\": \"<string>\",\n        \"_schemaURL\": \"<string>\",\n        \"name\": \"<string>\",\n        \"version\": \"<string>\",\n        \"openlineageAdapterVersion\": \"<string>\"\n      }\n    }\n  },\n  \"schemaURL\": \"<uri>\",\n  \"eventType\": \"<string>\",\n  \"inputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"inputFacets\": \"<object>\"\n    }\n  ],\n  \"outputs\": [\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"namespace\": \"<string>\",\n      \"facets\": {\n        \"schema\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"symlinks\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"identifiers\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"datasource\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"name\": \"<string>\",\n          \"uri\": \"<uri>\"\n        },\n        \"documentation\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"ownership\": {\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\",\n          \"owners\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      },\n      \"outputFacets\": {\n        \"columnLineage\": {\n          \"fields\": \"<object>\",\n          \"_producer\": \"<string>\",\n          \"_schemaURL\": \"<string>\"\n        }\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aba0951e-24a0-4ad8-8119-d99aa2a621f8",
+          "name": "Receive multiple OpenLineage events",
+          "request": {
+            "name": "Receive multiple OpenLineage events",
+            "description": {
+              "content": "Process multiple OpenLineage RunEvents in a single request. Returns a summary of processed events including any failures.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "openlineage",
+                "lineage",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    {\n      \"eventTime\": \"<dateTime>\",\n      \"job\": {\n        \"name\": \"<string>\",\n        \"namespace\": \"<string>\",\n        \"facets\": {\n          \"sql\": {\n            \"query\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"producer\": \"<uri>\",\n      \"run\": {\n        \"runId\": \"<uuid>\",\n        \"facets\": {\n          \"parent\": {\n            \"job\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"run\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"errorMessage\": {\n            \"message\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"programmingLanguage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"stackTrace\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"processing_engine\": {\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"version\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"openlineageAdapterVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"schemaURL\": \"<uri>\",\n      \"eventType\": \"<string>\",\n      \"inputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        }\n      ],\n      \"outputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7156d7bb-2d03-47e7-9470-f654af31bbdd",
+              "name": "Batch processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "openlineage",
+                    "lineage",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"eventTime\": \"<dateTime>\",\n      \"job\": {\n        \"name\": \"<string>\",\n        \"namespace\": \"<string>\",\n        \"facets\": {\n          \"sql\": {\n            \"query\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"producer\": \"<uri>\",\n      \"run\": {\n        \"runId\": \"<uuid>\",\n        \"facets\": {\n          \"parent\": {\n            \"job\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"run\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"errorMessage\": {\n            \"message\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"programmingLanguage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"stackTrace\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"processing_engine\": {\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"version\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"openlineageAdapterVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"schemaURL\": \"<uri>\",\n      \"eventType\": \"<string>\",\n      \"inputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        }\n      ],\n      \"outputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"failure\",\n  \"message\": \"string\",\n  \"summary\": {\n    \"received\": 7089,\n    \"successful\": 3155,\n    \"failed\": 4834,\n    \"skipped\": 2936\n  },\n  \"failedEvents\": [\n    {\n      \"index\": 2014,\n      \"reason\": \"string\",\n      \"retriable\": true\n    },\n    {\n      \"index\": 3081,\n      \"reason\": \"string\",\n      \"retriable\": false\n    }\n  ],\n  \"lineageEdgesCreated\": 4210\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b8e84df-1c83-4f67-b8f5-1c8c6cdc7226",
+              "name": "Invalid batch format",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "openlineage",
+                    "lineage",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"eventTime\": \"<dateTime>\",\n      \"job\": {\n        \"name\": \"<string>\",\n        \"namespace\": \"<string>\",\n        \"facets\": {\n          \"sql\": {\n            \"query\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"producer\": \"<uri>\",\n      \"run\": {\n        \"runId\": \"<uuid>\",\n        \"facets\": {\n          \"parent\": {\n            \"job\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"run\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"errorMessage\": {\n            \"message\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"programmingLanguage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"stackTrace\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"processing_engine\": {\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"version\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"openlineageAdapterVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"schemaURL\": \"<uri>\",\n      \"eventType\": \"<string>\",\n      \"inputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        }\n      ],\n      \"outputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ef2982b-7665-433c-82b6-1afbb7397f8b",
+              "name": "Not authorized to create lineage",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "openlineage",
+                    "lineage",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"events\": [\n    {\n      \"eventTime\": \"<dateTime>\",\n      \"job\": {\n        \"name\": \"<string>\",\n        \"namespace\": \"<string>\",\n        \"facets\": {\n          \"sql\": {\n            \"query\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"producer\": \"<uri>\",\n      \"run\": {\n        \"runId\": \"<uuid>\",\n        \"facets\": {\n          \"parent\": {\n            \"job\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"run\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"errorMessage\": {\n            \"message\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"programmingLanguage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"stackTrace\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"processing_engine\": {\n            \"_producer\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"_schemaURL\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"version\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"openlineageAdapterVersion\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"schemaURL\": \"<uri>\",\n      \"eventType\": \"<string>\",\n      \"inputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"inputFacets\": \"<object>\"\n        }\n      ],\n      \"outputs\": [\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"namespace\": \"<string>\",\n          \"facets\": {\n            \"schema\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"symlinks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"datasource\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"documentation\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ownership\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"outputFacets\": {\n            \"columnLineage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "be8fb64b-8736-4c4a-a526-0f5457103232",
+    "name": "OpenMetadata APIs Agent Executions OpenLineage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions System API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "System",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get system diagnostics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/system/diagnostics"
+          },
+          "docs": "Returns a structured performance snapshot including JVM, Jetty thread pool, database connection pool, bulk executor, and per-endpoint latency breakdown."
+        },
+        {
+          "info": {
+            "name": "Get version of metadata service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/system/version"
+          },
+          "docs": "Get the build version of OpenMetadata service and build timestamp."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

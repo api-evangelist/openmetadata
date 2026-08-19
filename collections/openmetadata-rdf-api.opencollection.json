@@ -1,0 +1,428 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions RDF API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RDF",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Debug glossary term relations in RDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/debug/glossary-relations"
+          },
+          "docs": "Diagnostic endpoint to inspect what predicates are stored between glossary terms in the RDF store"
+        },
+        {
+          "info": {
+            "name": "Explore entity graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/graph/explore",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type"
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "Depth of relationships to explore"
+              },
+              {
+                "name": "entityTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated entity types to keep in the graph"
+              },
+              {
+                "name": "relationshipTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated relationship types to keep in the graph"
+              }
+            ]
+          },
+          "docs": "Get graph data for an entity with relationships up to specified depth"
+        },
+        {
+          "info": {
+            "name": "Export explored entity graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/graph/explore/export",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type"
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "Depth of relationships to explore"
+              },
+              {
+                "name": "entityTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated entity types to keep in the graph"
+              },
+              {
+                "name": "relationshipTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated relationship types to keep in the graph"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Export format: turtle or jsonld"
+              }
+            ]
+          },
+          "docs": "Export the currently explored entity graph in Turtle or JSON-LD format"
+        },
+        {
+          "info": {
+            "name": "Export glossary as ontology",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/glossary/:id/export",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Glossary ID"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "RDF format (turtle, rdfxml, ntriples, jsonld)"
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Include term relations"
+              }
+            ]
+          },
+          "docs": "Export a glossary with all its terms and relationships as an ontology in RDF format (Turtle, RDF/XML, N-Triples, or JSON-LD). Includes SKOS vocabulary for semantic interoperability."
+        },
+        {
+          "info": {
+            "name": "Find similar entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/search/similar/:entityType/:id",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Entity ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              }
+            ]
+          },
+          "docs": "Find entities similar to the given entity using semantic analysis"
+        },
+        {
+          "info": {
+            "name": "Get entity as RDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/entity/:entityType/:id",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "RDF format"
+              }
+            ]
+          },
+          "docs": "Retrieve an entity in RDF format (JSON-LD, Turtle, RDF/XML, N-Triples)"
+        },
+        {
+          "info": {
+            "name": "Get full lineage with inference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/inference/lineage/:entityId",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Entity ID"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction (upstream, downstream, both)"
+              }
+            ]
+          },
+          "docs": "Get complete upstream and downstream lineage including transitive relationships"
+        },
+        {
+          "info": {
+            "name": "Get glossary term relationship graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/glossary/graph",
+            "params": [
+              {
+                "name": "glossaryId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by glossary ID (UUID)"
+              },
+              {
+                "name": "relationTypes",
+                "value": "",
+                "type": "query",
+                "description": "Filter by relation types (comma-separated)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of terms to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              },
+              {
+                "name": "includeIsolated",
+                "value": "",
+                "type": "query",
+                "description": "Include isolated terms (terms without relations)"
+              }
+            ]
+          },
+          "docs": "Get all glossary terms and their relationships as a graph. Supports filtering by glossary and pagination for large datasets."
+        },
+        {
+          "info": {
+            "name": "Get RDF service status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/status"
+          },
+          "docs": "Check RDF service status including inference configuration"
+        },
+        {
+          "info": {
+            "name": "Get personalized recommendations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/search/recommendations/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "User ID"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Entity type for recommendations"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              }
+            ]
+          },
+          "docs": "Get entity recommendations based on user's interaction history"
+        },
+        {
+          "info": {
+            "name": "Execute SPARQL query via GET",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/sparql",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "SPARQL query string"
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Response format (json, xml, csv, tsv)"
+              },
+              {
+                "name": "inference",
+                "value": "",
+                "type": "query",
+                "description": "Enable inference/reasoning (none, rdfs, owl, custom)"
+              }
+            ]
+          },
+          "docs": "Execute a SPARQL query against the RDF store using GET method"
+        },
+        {
+          "info": {
+            "name": "Execute SPARQL query via POST",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/rdf/sparql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute a SPARQL query against the RDF store using POST method"
+        },
+        {
+          "info": {
+            "name": "Semantic search across entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/rdf/search/semantic",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query"
+              },
+              {
+                "name": "type",
+                "value": "table",
+                "type": "query",
+                "description": "Entity type to search"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              }
+            ]
+          },
+          "docs": "Search for entities using semantic understanding and graph relationships"
+        },
+        {
+          "info": {
+            "name": "Execute SPARQL UPDATE",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/rdf/sparql/update",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute a SPARQL UPDATE operation (INSERT, DELETE, etc.)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

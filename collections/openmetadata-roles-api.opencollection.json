@@ -1,0 +1,437 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Roles API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles",
+            "params": [
+              {
+                "name": "default",
+                "value": "",
+                "type": "query",
+                "description": "List only default role(s)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number tables returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tables before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tables after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of roles. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/roles",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new role."
+        },
+        {
+          "info": {
+            "name": "Update role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/roles",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or Update a role."
+        },
+        {
+          "info": {
+            "name": "Get a role by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the role"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a role by `name`."
+        },
+        {
+          "info": {
+            "name": "Delete a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/roles/name/:name",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the role"
+              }
+            ]
+          },
+          "docs": "Delete a role by given `name`."
+        },
+        {
+          "info": {
+            "name": "Get a role by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the role"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a role by `id`."
+        },
+        {
+          "info": {
+            "name": "Update a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/roles/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the role"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing role with JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/roles/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the role"
+              }
+            ]
+          },
+          "docs": "Delete a role by given `id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a role",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/roles/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the role"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a role by given `id`."
+        },
+        {
+          "info": {
+            "name": "Get a version of the role",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the role"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Role version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the role by given `id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List role versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the role"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a role identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Update a role using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/roles/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the role"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing role with JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/roles/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted role."
+        },
+        {
+          "info": {
+            "name": "Search roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/roles/search",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query for role names or display names"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of roles returned. (1 to 1000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Search roles by name or display name. Use `q` parameter to provide the search query."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

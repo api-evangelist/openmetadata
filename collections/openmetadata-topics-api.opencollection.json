@@ -1,0 +1,535 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Topics API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Topics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/topics/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as followed of this topic"
+        },
+        {
+          "info": {
+            "name": "Get sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ]
+          },
+          "docs": "Get sample data from the topic."
+        },
+        {
+          "info": {
+            "name": "Add sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/topics/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add sample data to the topic."
+        },
+        {
+          "info": {
+            "name": "Bulk create or update topics",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/topics/bulk",
+            "params": [
+              {
+                "name": "async",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update multiple topics in a single operation. Returns a BulkOperationResult with success/failure details for each topic."
+        },
+        {
+          "info": {
+            "name": "List topics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter topics by service name"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number topics returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of topics before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of topics after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of topics, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/topics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a topic under an existing `service`."
+        },
+        {
+          "info": {
+            "name": "Update topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/topics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a topic, it it does not exist or update an existing topic."
+        },
+        {
+          "info": {
+            "name": "Get a topic by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the topic"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a topic by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Update a topic using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/topics/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the topic"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing topic using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a topic by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/topics/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the topic"
+              }
+            ]
+          },
+          "docs": "Delete a topic by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get a topic by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a topic by `id`."
+        },
+        {
+          "info": {
+            "name": "Update a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/topics/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing topic using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a topic by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/topics/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ]
+          },
+          "docs": "Delete a topic by `id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a topic by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/topics/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a topic by `id`."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/topics/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the topic."
+        },
+        {
+          "info": {
+            "name": "Get a version of the topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Topic version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the topic by given `id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List topic versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/topics/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the topic"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a topic identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/topics/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted topic."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/topics/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

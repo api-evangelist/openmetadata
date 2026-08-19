@@ -1,0 +1,141 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions MCP Usage API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MCP Usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Per-tool call counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcp/usage/breakdown/tools",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Counts MCP requests per tool name in the supplied window. Admin only."
+        },
+        {
+          "info": {
+            "name": "Per-user call counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcp/usage/breakdown/users",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Counts MCP requests per principal in the supplied window. Bot principals (suffix 'Bot') are excluded. Admin only."
+        },
+        {
+          "info": {
+            "name": "Daily MCP usage counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcp/usage/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a map of UTC start-of-day (epoch millis) to call count. Empty days are filled with 0 so the series is continuous. Admin access required."
+        },
+        {
+          "info": {
+            "name": "Self-service MCP usage counters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcp/usage/me",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the calling user's total MCP call count and per-tool breakdown for the supplied window. Any authenticated user."
+        },
+        {
+          "info": {
+            "name": "Get aggregate MCP usage counters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcp/usage/summary",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Window start (epoch millis). Defaults to 30 days ago."
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Window end exclusive (epoch millis). Defaults to now."
+              }
+            ]
+          },
+          "docs": "Returns total/success/failed counts and unique-user count for the supplied window. Defaults to the last 30 days. Admin access required."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

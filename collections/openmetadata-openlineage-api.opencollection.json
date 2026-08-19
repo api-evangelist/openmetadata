@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions OpenLineage API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OpenLineage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Receive a single OpenLineage event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/openlineage/lineage",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Process a single OpenLineage RunEvent and create lineage edges in OpenMetadata. Only COMPLETE events are processed by default."
+        },
+        {
+          "info": {
+            "name": "Receive multiple OpenLineage events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/openlineage/lineage/batch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Process multiple OpenLineage RunEvents in a single request. Returns a summary of processed events including any failures."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

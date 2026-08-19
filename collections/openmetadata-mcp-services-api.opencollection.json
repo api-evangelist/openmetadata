@@ -1,0 +1,476 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions MCP Services API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MCP Services",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/mcpServices/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP Service"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as follower of this MCP service"
+        },
+        {
+          "info": {
+            "name": "Add test connection result",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/mcpServices/:id/testConnectionResult",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the service"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add test connection result to the service."
+        },
+        {
+          "info": {
+            "name": "List MCP services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/mcpServices",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter services by domain"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of MCP services before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of MCP services after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of MCP services."
+        },
+        {
+          "info": {
+            "name": "Create MCP service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/mcpServices",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new MCP service."
+        },
+        {
+          "info": {
+            "name": "Update MCP service",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/mcpServices",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing or create a new MCP service."
+        },
+        {
+          "info": {
+            "name": "Get MCP service by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/mcpServices/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the MCP service"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get an MCP service by the service `name`."
+        },
+        {
+          "info": {
+            "name": "Delete an MCP service by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/mcpServices/name/:name",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the MCP service"
+              }
+            ]
+          },
+          "docs": "Delete an MCP service by `name`. If MCP servers belong to the service, it can't be deleted."
+        },
+        {
+          "info": {
+            "name": "Get an MCP service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/mcpServices/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP service"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get an MCP service by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update an MCP service",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/services/mcpServices/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP service"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing MCP service using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete an MCP service by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/mcpServices/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP service"
+              }
+            ]
+          },
+          "docs": "Delete an MCP service. If MCP servers belong to the service, it can't be deleted."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete an MCP service by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/mcpServices/async/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP service"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete an MCP service. If MCP servers belong to the service, it can't be deleted."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/mcpServices/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the entity."
+        },
+        {
+          "info": {
+            "name": "Get a version of the MCP service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/mcpServices/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP service"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "MCP service version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the MCP service by given `Id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/mcpServices/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List MCP service versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/mcpServices/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP service"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of an MCP service identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Update an MCP service using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/services/mcpServices/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the MCP service"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing MCP service using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted MCP service",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/mcpServices/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted MCP service."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

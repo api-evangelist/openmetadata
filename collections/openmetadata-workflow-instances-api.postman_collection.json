@@ -1,0 +1,195 @@
+{
+  "item": [
+    {
+      "id": "d0d0ea60-a1ce-46e0-8eb8-6f6cb40a4d2c",
+      "name": "Workflow Instances",
+      "description": {
+        "content": "A Workflow Instance is a specific instance of a Workflow Definition.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "715df522-f3fc-4d4a-a4b6-606061ff4369",
+          "name": "List the Workflow Instances",
+          "request": {
+            "name": "List the Workflow Instances",
+            "description": {
+              "content": "Get a list of all the workflow instances, filtered by `startTs` and `endTs` of the creation, and Workflow Definition FQN. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "governance",
+                "workflowInstances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of Workflow Instances returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "Returns list of Workflow Instances at the offset"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<number>",
+                  "description": "Filter Workflow Instances after the given start timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<number>",
+                  "description": "Filter Workflow Instances before the given end timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "latest",
+                  "value": "false",
+                  "description": "Only list the latest Workflow Instance"
+                },
+                {
+                  "disabled": false,
+                  "key": "workflowDefinitionName",
+                  "value": "<string>",
+                  "description": "Workflow Definition Name"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityLink",
+                  "value": "<string>",
+                  "description": "Entity Link"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8aad479e-e291-479a-9b3c-ba26dda8ecba",
+              "name": "List of Workflow Instances",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "governance",
+                    "workflowInstances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "startTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "latest",
+                      "value": "false"
+                    },
+                    {
+                      "key": "workflowDefinitionName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityLink",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"bf8c27f6-d338-e9c6-3e94-1739889e3eba\",\n      \"workflowInstanceId\": \"f19ba1e9-4b23-2b00-d468-d970162a5873\",\n      \"workflowInstanceExecutionId\": \"6832aff4-18da-55be-67c6-5ff49cc47d1d\",\n      \"workflowDefinitionId\": \"d587bb86-1334-ea00-d08f-89be90562896\",\n      \"stage\": {\n        \"name\": \"4EIxY_swz\",\n        \"displayName\": \"string\",\n        \"startedAt\": 9370,\n        \"endedAt\": 7378,\n        \"tasks\": [\n          \"62812de3-a95e-634f-1ed5-3f8a454a0512\",\n          \"4da1c96f-eaaf-b6ea-7391-0a2d4d5d802d\"\n        ],\n        \"variables\": {\n          \"key_0\": {}\n        }\n      },\n      \"timestamp\": 5817,\n      \"status\": \"FAILURE\",\n      \"exception\": \"string\"\n    },\n    {\n      \"id\": \"e41b1bd7-0cf1-0e5a-7ec4-9cf475b274ee\",\n      \"workflowInstanceId\": \"c18fa92d-19f8-0e7b-6b95-ce3cbe1fda7f\",\n      \"workflowInstanceExecutionId\": \"d702cc01-aedf-d00f-1cca-bd563e1d5cca\",\n      \"workflowDefinitionId\": \"50c61a2f-c78d-0320-0147-c8e0357a5a07\",\n      \"stage\": {\n        \"name\": \" \",\n        \"displayName\": \"string\",\n        \"startedAt\": 6902,\n        \"endedAt\": 8138,\n        \"tasks\": [\n          \"f70fe47a-e722-dabb-b00d-859a9ea5d5f0\",\n          \"12d0bb57-b2d6-12f9-3aa2-239f8f50860c\"\n        ],\n        \"variables\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        }\n      },\n      \"timestamp\": 3854,\n      \"status\": \"RUNNING\",\n      \"exception\": \"string\"\n    }\n  ],\n  \"paging\": {\n    \"total\": 5089,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 1045,\n    \"limit\": 3886\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 9715,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2e0102aa-18d6-4d31-b91f-a20f3dcc7478",
+    "name": "OpenMetadata APIs Agent Executions Workflow Instances API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1445 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Glossaries API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Glossaries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List glossaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number glossaries returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of glossaries before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of glossaries after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of glossaries. Use `fields` parameter to get only necessary fields.  Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a glossary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/glossaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new glossary."
+        },
+        {
+          "info": {
+            "name": "Create or update a glossary",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new glossary, if it does not exist or update an existing glossary."
+        },
+        {
+          "info": {
+            "name": "Get a glossary by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a glossary by name."
+        },
+        {
+          "info": {
+            "name": "Delete a glossary by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaries/name/:name",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              }
+            ]
+          },
+          "docs": "Delete a glossary by `name`."
+        },
+        {
+          "info": {
+            "name": "Get a glossary by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a glossary by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a glossary",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/glossaries/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing glossary using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a glossary by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaries/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary"
+              }
+            ]
+          },
+          "docs": "Delete a glossary by `Id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a glossary by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaries/async/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a glossary by `Id`."
+        },
+        {
+          "info": {
+            "name": "Export glossary in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/name/:name/export",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              }
+            ]
+          },
+          "docs": "Export glossary in CSV format"
+        },
+        {
+          "info": {
+            "name": "Export glossary in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/name/:name/exportAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              }
+            ]
+          },
+          "docs": "Export glossary in CSV format"
+        },
+        {
+          "info": {
+            "name": "Get CSV documentation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/documentation/csv"
+          },
+          "docs": "Get CSV documentation"
+        },
+        {
+          "info": {
+            "name": "Get a version of the glossaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "glossary version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the glossary by given `Id`"
+        },
+        {
+          "info": {
+            "name": "Import glossary terms from CSV to create, and update glossary terms",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaries/name/:name/import",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import glossary terms from CSV to create, and update glossary terms"
+        },
+        {
+          "info": {
+            "name": "Import glossary in CSV format asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaries/name/:name/importAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry run the import"
+              }
+            ]
+          },
+          "docs": "Import glossary in CSV format asynchronously"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List glossary versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaries/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a glossary identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Update a glossary using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/glossaries/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing glossary using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted glossary",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaries/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted Glossary."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaries/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        },
+        {
+          "info": {
+            "name": "Add a typed relation to another glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/glossaryTerms/:id/relations",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a typed semantic relation (e.g., broader, narrower, synonym) from this glossary term to another."
+        },
+        {
+          "info": {
+            "name": "Bulk Add Glossary Term to Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/:id/assets/add",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk Add Glossary Term to Assets"
+        },
+        {
+          "info": {
+            "name": "Bulk Remove Glossary Term from Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/:id/assets/remove",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk Remove Glossary Term from Assets"
+        },
+        {
+          "info": {
+            "name": "List glossary terms",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms",
+            "params": [
+              {
+                "name": "glossary",
+                "value": "",
+                "type": "query",
+                "description": "List glossary terms filtered by glossary identified by Id given in `glossary` parameter."
+              },
+              {
+                "name": "parent",
+                "value": "",
+                "type": "query",
+                "description": "List glossary terms filtered by children of glossary term identified by Id given in `parent` parameter."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number glossary terms returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of glossary terms before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of glossary terms after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "directChildrenOf",
+                "value": "",
+                "type": "query",
+                "description": "List glossary terms filtered to retrieve the first level/immediate children of the glossary term `directChildrenOf` parameter."
+              },
+              {
+                "name": "entityStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by entity status (comma-separated: Approved,Draft,In Review,Rejected,Deprecated,Unprocessed)"
+              }
+            ]
+          },
+          "docs": "Get a list of glossary terms. Use `fields` parameter to get only necessary fields.  Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/glossaryTerms",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new glossary term."
+        },
+        {
+          "info": {
+            "name": "Create or update a glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new glossary term, if it does not exist or update an existing glossary term."
+        },
+        {
+          "info": {
+            "name": "Create multiple glossary terms at once",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/glossaryTerms/createMany",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create multiple new glossary terms."
+        },
+        {
+          "info": {
+            "name": "Get a glossary term by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a glossary term by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Update a glossary term by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/glossaryTerms/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the glossary term"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing glossary term using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a glossary term by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaryTerms/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              }
+            ]
+          },
+          "docs": "Delete a glossary term by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get a glossary term by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a glossary term by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/glossaryTerms/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing glossary term using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a glossary term by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaryTerms/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              }
+            ]
+          },
+          "docs": "Delete a glossary term by `Id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a glossary term by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaryTerms/async/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a glossary term by `Id`."
+        },
+        {
+          "info": {
+            "name": "Export glossary term in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/name/:fqn/export",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              }
+            ]
+          },
+          "docs": "Export glossary term and its children in CSV format."
+        },
+        {
+          "info": {
+            "name": "Export glossary term in CSV format asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/name/:fqn/exportAsync",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              }
+            ]
+          },
+          "docs": "Export glossary term and its children in CSV format asynchronously."
+        },
+        {
+          "info": {
+            "name": "Get all glossary terms with their asset counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/assets/counts",
+            "params": [
+              {
+                "name": "parent",
+                "value": "",
+                "type": "query",
+                "description": "Filter by parent glossary or glossary term FQN. When provided, only returns asset counts for children whose FQN starts with this value."
+              }
+            ]
+          },
+          "docs": "Get a map of glossary term fully qualified names to their asset counts using search aggregation."
+        },
+        {
+          "info": {
+            "name": "Get multiple glossary terms by Ids",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/byIds",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of glossary term Ids (UUIDs). Max 100 per call. Omit or pass blank to receive an empty list."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get multiple glossary terms in a single request by passing a comma-separated list of UUIDs. Exists to eliminate the per-Id round-trip pattern when hydrating related-term graphs in the UI. Ids that are missing, deleted, or not visible to the caller are silently omitted from the response, so callers should compare the response size against the input."
+        },
+        {
+          "info": {
+            "name": "Get usage counts for all relation types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/relationTypes/usage"
+          },
+          "docs": "Get a map of relation types to the count of glossary term relations using that type. Useful for determining if a relation type can be safely deleted."
+        },
+        {
+          "info": {
+            "name": "Get the relation graph for a glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/:id/relationsGraph",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              },
+              {
+                "name": "depth",
+                "value": "",
+                "type": "query",
+                "description": "Depth of the graph (1-5, default = 1)"
+              },
+              {
+                "name": "relationTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of relation types to include"
+              }
+            ]
+          },
+          "docs": "Get a graph of related terms up to a specified depth, optionally filtered by relation types."
+        },
+        {
+          "info": {
+            "name": "Get a version of the glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "glossary term version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the glossary term by given `Id`"
+        },
+        {
+          "info": {
+            "name": "Import glossary terms from CSV",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/name/:fqn/import",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import glossary terms from CSV to create, and update glossary terms. This is a synchronous API."
+        },
+        {
+          "info": {
+            "name": "Import glossary term from CSV asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/name/:fqn/importAsync",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import glossary term and its children from CSV format asynchronously to create or update glossary terms."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List assets tagged with this glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/:id/assets",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of assets returned. (1 to 1000, default = 100)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of assets that have this glossary term applied. Use limit and offset query params for pagination."
+        },
+        {
+          "info": {
+            "name": "List assets tagged with this glossary term by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/name/:fqn/assets",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the glossary term"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of assets returned. (1 to 1000, default = 100)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of assets that have this glossary term applied. Use limit and offset query params for pagination."
+        },
+        {
+          "info": {
+            "name": "List glossary term versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a glossary terms identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Move a glossary term to a new parent or glossary",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/:id/moveAsync",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Move a glossary term to a new parent term or glossary. Only parent or glossary can be changed."
+        },
+        {
+          "info": {
+            "name": "Remove a relation to another glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/glossaryTerms/:id/relations/:toTermId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the glossary term"
+              },
+              {
+                "name": "toTermId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the related glossary term to remove"
+              },
+              {
+                "name": "relationType",
+                "value": "",
+                "type": "query",
+                "description": "Type of relation to remove (optional, removes all types if not specified)"
+              }
+            ]
+          },
+          "docs": "Remove a relation from this glossary term to another term."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted glossary term",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted glossary term."
+        },
+        {
+          "info": {
+            "name": "Search glossary terms with pagination",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/glossaryTerms/search",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query for term names, display names, or descriptions"
+              },
+              {
+                "name": "glossary",
+                "value": "",
+                "type": "query",
+                "description": "Filter by glossary ID"
+              },
+              {
+                "name": "glossaryFqn",
+                "value": "",
+                "type": "query",
+                "description": "Filter by glossary FQN"
+              },
+              {
+                "name": "parent",
+                "value": "",
+                "type": "query",
+                "description": "Filter by parent term ID"
+              },
+              {
+                "name": "parentFqn",
+                "value": "",
+                "type": "query",
+                "description": "Filter by parent term FQN"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of terms returned (1 to 1000, default = 50)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned terms"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "entityStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by entity status (comma-separated: Approved,Draft,In Review,Rejected,Deprecated,Unprocessed)"
+              }
+            ]
+          },
+          "docs": "Search glossary terms by name, display name, or description with server-side pagination. This endpoint provides efficient search functionality for glossaries with large numbers of terms."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        },
+        {
+          "info": {
+            "name": "Validate Tags Addition to Glossary Term",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/glossaryTerms/:id/tags/validate",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validate Tags Addition to Glossary Term"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

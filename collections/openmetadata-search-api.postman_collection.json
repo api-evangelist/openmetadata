@@ -1,0 +1,2279 @@
+{
+  "item": [
+    {
+      "id": "caa53fc6-3612-4d8e-8bc6-c70fc95d41a2",
+      "name": "Search",
+      "description": {
+        "content": "APIs related to search and suggest.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "14f3c871-8742-4a97-aac5-9950c88bde75",
+          "name": "Get aggregated fields",
+          "request": {
+            "name": "Get aggregated fields",
+            "description": {
+              "content": "Get aggregated fields from entities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "aggregate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "table"
+                },
+                {
+                  "disabled": false,
+                  "key": "field",
+                  "value": "<string>",
+                  "description": "Field in an entity."
+                },
+                {
+                  "disabled": false,
+                  "key": "value",
+                  "value": "",
+                  "description": "value for searching in aggregation"
+                },
+                {
+                  "disabled": false,
+                  "key": "sourceFields",
+                  "value": "<string>",
+                  "description": "List of fields to fetch from _source per bucket."
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "(Required) Search Query Text, Pass *text* for substring match; Pass without wildcards for exact match. <br/> 1. For listing all tables or topics pass q=* <br/>2. For search tables or topics pass q=*search_term* <br/>3. For searching field names such as search by columnNames pass q=columnNames:address, for searching deleted entities, use q=deleted:true <br/>4. For searching by tag names pass q=tags.tagFQN:user.email <br/>5. When user selects a filter pass q=query_text AND tags.tagFQN:user.email AND platform:MYSQL <br/>6. Search with multiple values of same filter q=tags.tagFQN:user.email AND tags.tagFQN:user.address <br/>NOTE: logic operators such as AND, OR and NOT must be in uppercase "
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "Size field to limit the no.of results returned, defaults to 10"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "false"
+                },
+                {
+                  "disabled": false,
+                  "key": "queryText",
+                  "value": "<string>",
+                  "description": "Free-text search query to scope aggregation results"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "31c8a4de-ae1b-45df-894d-25bfdd184b2b",
+              "name": "Table Aggregate API",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "aggregate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "index",
+                      "value": "table"
+                    },
+                    {
+                      "key": "field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "value",
+                      "value": ""
+                    },
+                    {
+                      "key": "sourceFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "queryText",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"completion\": false,\n  \"phrase\": true,\n  \"term\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b48a5505-6c8d-40ec-b2f9-7a59057438e1",
+          "name": "Get aggregated Search Request",
+          "request": {
+            "name": "Get aggregated Search Request",
+            "description": {
+              "content": "Get aggregated fields from entities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "aggregate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "*/*"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fieldName\": \"<string>\",\n  \"query\": \"<string>\",\n  \"index\": \"<string>\",\n  \"fieldValue\": \"<string>\",\n  \"deleted\": \"<boolean>\",\n  \"size\": \"<integer>\",\n  \"sourceFields\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"queryText\": \"<string>\",\n  \"topHits\": {\n    \"size\": \"<integer>\",\n    \"sortField\": \"<string>\",\n    \"sortOrder\": \"<string>\"\n  }\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "84a8cb88-2901-42eb-9978-77211ceaefde",
+              "name": "Table Aggregate API",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "aggregate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fieldName\": \"<string>\",\n  \"query\": \"<string>\",\n  \"index\": \"<string>\",\n  \"fieldValue\": \"<string>\",\n  \"deleted\": \"<boolean>\",\n  \"size\": \"<integer>\",\n  \"sourceFields\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"queryText\": \"<string>\",\n  \"topHits\": {\n    \"size\": \"<integer>\",\n    \"sortField\": \"<string>\",\n    \"sortOrder\": \"<string>\"\n  }\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "db6bc895-10b4-4ec0-a9c8-bd8445d57c9f",
+          "name": "Clean orphan indexes",
+          "request": {
+            "name": "Clean orphan indexes",
+            "description": {
+              "content": "Delete all orphan indexes (indexes with zero aliases) from the search cluster.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "stats",
+                "orphan"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ac7d692a-ae11-4427-9b74-5f3a30a5ece1",
+              "name": "Cleanup result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "stats",
+                    "orphan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deletedIndexes\": [\n    \"string\",\n    \"string\"\n  ],\n  \"deletedCount\": 8153\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edd1cb7c-37b6-451f-a77b-1d3b7c844c93",
+              "name": "Conflict - Search indexing is currently running",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "stats",
+                    "orphan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b15a93ae-badb-4866-83c3-c75d72d8d1d4",
+          "name": "Export search results as CSV (streaming)",
+          "request": {
+            "name": "Export search results as CSV (streaming)",
+            "description": {
+              "content": "Exports the current search results as a streaming CSV download. The response is streamed directly to the client without buffering the entire result set in memory.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "*",
+                  "description": "Search Query Text"
+                },
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "table",
+                  "description": "ElasticSearch Index name, defaults to table"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "<boolean>",
+                  "description": "Filter documents by deleted param. By default deleted is false"
+                },
+                {
+                  "disabled": false,
+                  "key": "query_filter",
+                  "value": "<string>",
+                  "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+                },
+                {
+                  "disabled": false,
+                  "key": "post_filter",
+                  "value": "<string>",
+                  "description": "Elasticsearch query that will be used as a post_filter"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_field",
+                  "value": "_score",
+                  "description": "Sort the search results by field"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_order",
+                  "value": "desc",
+                  "description": "Sort order asc for ascending or desc for descending, defaults to desc"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "<integer>",
+                  "description": "Maximum number of rows to export. When null, exports all matching results up to the hard cap."
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "0",
+                  "description": "Starting offset for export. Use with size to export a specific page of results (e.g., from=30&size=15 for page 3)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/csv; charset=utf-8"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "affbb04e-7734-48f1-98ae-f532050aed1c",
+              "name": "CSV file stream",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "*"
+                    },
+                    {
+                      "key": "index",
+                      "value": "table"
+                    },
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "query_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "post_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_field",
+                      "value": "_score"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv; charset=utf-8"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv; charset=utf-8"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d1834817-0412-4abc-a1cd-f348ae853041",
+          "name": "Get exact entity type counts",
+          "request": {
+            "name": "Get exact entity type counts",
+            "description": {
+              "content": "Get exact counts of entities by type for a given search query. This endpoint provides accurate counts when searching across all entity types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "entityTypeCounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "(Required) Search query text"
+                },
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "dataAsset",
+                  "description": "Index to search in (all, dataAsset, table, etc.)"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "<boolean>",
+                  "description": "Filter documents by deleted param. By default deleted is false"
+                },
+                {
+                  "disabled": false,
+                  "key": "query_filter",
+                  "value": "<string>",
+                  "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+                },
+                {
+                  "disabled": false,
+                  "key": "post_filter",
+                  "value": "<string>",
+                  "description": "Elasticsearch query that will be used as a post_filter"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "11ea65a6-63ed-4a63-9119-131a96d7a8b1",
+              "name": "Entity type counts response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "entityTypeCounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "index",
+                      "value": "dataAsset"
+                    },
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "query_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "post_filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "874b7b1e-bfd1-4615-8db1-1d3687ef3398",
+          "name": "Get search cluster statistics",
+          "request": {
+            "name": "Get search cluster statistics",
+            "description": {
+              "content": "Get statistics about the search cluster including indexes, shards, and orphan indexes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "stats"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9528a3ad-bf80-4ccb-9a4b-3f8abf132108",
+              "name": "Search statistics",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterHealth\": \"string\",\n  \"totalIndexes\": 4793,\n  \"totalDocuments\": 4896,\n  \"totalSizeInBytes\": 6694,\n  \"totalSizeFormatted\": \"string\",\n  \"totalPrimaryShards\": 3609,\n  \"totalReplicaShards\": 1630,\n  \"indexes\": [\n    {\n      \"name\": \"string\",\n      \"documents\": 1788,\n      \"primaryShards\": 6377,\n      \"replicaShards\": 8632,\n      \"sizeInBytes\": 2119,\n      \"sizeFormatted\": \"string\",\n      \"health\": \"string\",\n      \"aliases\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"documents\": 7519,\n      \"primaryShards\": 8383,\n      \"replicaShards\": 9762,\n      \"sizeInBytes\": 5417,\n      \"sizeFormatted\": \"string\",\n      \"health\": \"string\",\n      \"aliases\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"orphanIndexes\": [\n    {\n      \"name\": \"string\",\n      \"sizeInBytes\": 7909,\n      \"sizeFormatted\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"sizeInBytes\": 8360,\n      \"sizeFormatted\": \"string\"\n    }\n  ],\n  \"isSearchIndexingRunning\": false,\n  \"expectedIndexCount\": 3194,\n  \"missingIndexes\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d44a98a-d5dd-461f-b023-aa45d95cda9c",
+          "name": "Preview Search Results",
+          "request": {
+            "name": "Preview Search Results",
+            "description": {
+              "content": "Preview search results based on provided SearchSettings without saving changes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "preview"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "null",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6b42d7e0-fe95-446c-8471-66767816e572",
+              "name": "Search preview response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "preview"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "null",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9f0c10f-6946-4786-9159-a217e4c1deda",
+          "name": "Only Reindex the selected entities in Elasticsearch.",
+          "request": {
+            "name": "Only Reindex the selected entities in Elasticsearch.",
+            "description": {
+              "content": "Only Reindex the selected entities in Elasticsearch. Maximum 500 entities per request. Job timeout: 30 minutes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "reindexEntities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "timeoutMinutes",
+                  "value": "5",
+                  "description": "Job timeout in minutes (default: 30, max: 60)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "*/*"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  }\n]"
+            }
+          },
+          "response": [
+            {
+              "id": "5d35cb1b-9ba8-4d0e-9c84-490820f8955b",
+              "name": "Reindex process started.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "reindexEntities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeoutMinutes",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  }\n]"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecff0bbb-3c1a-452e-aa9d-f469d1fd3d23",
+              "name": "Bad request - too many entities or invalid input.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "reindexEntities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeoutMinutes",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  }\n]"
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "49590572-1969-4110-8861-cf6f02664a68",
+          "name": "Search entities",
+          "request": {
+            "name": "Search entities",
+            "description": {
+              "content": "Search entities using query text. Use query params `from` and `size` for pagination. Use `sort_field` to sort the results in `sort_order`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "*",
+                  "description": "(Required) Search Query Text, Pass *text* for substring match; Pass without wildcards for exact match. <br/> 1. For listing all tables or topics pass q=* <br/>2. For search tables or topics pass q=*search_term* <br/>3. For searching field names such as search by columnNames pass q=columnNames:address , for searching deleted entities, use q=deleted:true <br/> 4. For searching by tag names pass q=tags.tagFQN:user.email <br/>5. When user selects a filter pass q=query_text AND q=tags.tagFQN:user.email AND platform:MYSQL <br/>6. Search with multiple values of same filter q=tags.tagFQN:user.email AND tags.tagFQN:user.address <br/> 7. Search by service version and type q=service.type:databaseService AND version:0.1 <br/> 8. Search Tables with Specific Constraints q=tableConstraints.constraintType.keyword:PRIMARY_KEY AND NOT tier.tagFQN:Tier.Tier1 <br/> 9. Search with owners q=owner.displayName.keyword:owner_name <br/> NOTE: logic operators such as AND, OR and NOT must be in uppercase "
+                },
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "table",
+                  "description": "ElasticSearch Index name, defaults to table_search_index"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "<boolean>",
+                  "description": "Filter documents by deleted param. By default deleted is false"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "0",
+                  "description": "From field to paginate the results, defaults to 0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "Size field to limit the no.of results returned, defaults to 10"
+                },
+                {
+                  "disabled": false,
+                  "key": "search_after",
+                  "value": "<string>",
+                  "description": "Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2. Each value carried as its own parameter so values containing ',' (e.g. a glossary term FQN) are safe."
+                },
+                {
+                  "disabled": false,
+                  "key": "search_after",
+                  "value": "<string>",
+                  "description": "Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2. Each value carried as its own parameter so values containing ',' (e.g. a glossary term FQN) are safe."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_field",
+                  "value": "_score",
+                  "description": "Sort the search results by field, available fields to sort weekly_stats , daily_stats, monthly_stats, last_updated_timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_order",
+                  "value": "desc",
+                  "description": "Sort order asc for ascending or desc for descending, defaults to desc"
+                },
+                {
+                  "disabled": false,
+                  "key": "track_total_hits",
+                  "value": "false",
+                  "description": "Track Total Hits"
+                },
+                {
+                  "disabled": false,
+                  "key": "query_filter",
+                  "value": "<string>",
+                  "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+                },
+                {
+                  "disabled": false,
+                  "key": "post_filter",
+                  "value": "<string>",
+                  "description": "Elasticsearch query that will be used as a post_filter"
+                },
+                {
+                  "disabled": false,
+                  "key": "fetch_source",
+                  "value": "true",
+                  "description": "Get document body for each hit"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_source_fields",
+                  "value": "<string>",
+                  "description": "Get only selected fields of the document body for each hit. Empty value will return all fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_source_fields",
+                  "value": "<string>",
+                  "description": "Get only selected fields of the document body for each hit. Empty value will return all fields"
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_source_fields",
+                  "value": "<string>",
+                  "description": "Exclude specified fields from the document body for each hit. Use this to exclude heavy fields like 'columns' for better performance"
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_source_fields",
+                  "value": "<string>",
+                  "description": "Exclude specified fields from the document body for each hit. Use this to exclude heavy fields like 'columns' for better performance"
+                },
+                {
+                  "disabled": false,
+                  "key": "getHierarchy",
+                  "value": "false",
+                  "description": "Fetch search results in hierarchical order of children elements. By default hierarchy is not fetched. Currently only supported for glossary_term_search_index."
+                },
+                {
+                  "disabled": false,
+                  "key": "explain",
+                  "value": "false",
+                  "description": "Explain the results of the query. Defaults to false. Only for debugging purposes."
+                },
+                {
+                  "disabled": false,
+                  "key": "include_aggregations",
+                  "value": "true",
+                  "description": "Include aggregations in the search response. Defaults to true. Set to false to skip aggregations for faster response times when only search results are needed."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "614b341c-3945-454e-9a03-1cd1524754c7",
+              "name": "search response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "*"
+                    },
+                    {
+                      "key": "index",
+                      "value": "table"
+                    },
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "from",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_field",
+                      "value": "_score"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "track_total_hits",
+                      "value": "false"
+                    },
+                    {
+                      "key": "query_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "post_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fetch_source",
+                      "value": "true"
+                    },
+                    {
+                      "key": "include_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exclude_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exclude_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "getHierarchy",
+                      "value": "false"
+                    },
+                    {
+                      "key": "explain",
+                      "value": "false"
+                    },
+                    {
+                      "key": "include_aggregations",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "36a143d6-26be-41aa-9127-cb61b2aa56d7",
+          "name": "Search entities",
+          "request": {
+            "name": "Search entities",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "fieldQuery"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fieldName",
+                  "value": "<string>",
+                  "description": "field name"
+                },
+                {
+                  "disabled": false,
+                  "key": "fieldValue",
+                  "value": "<string>",
+                  "description": "field value"
+                },
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "table",
+                  "description": "Search Index name, defaults to table_search_index"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "false",
+                  "description": "Filter documents by deleted param. By default deleted is false"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "0",
+                  "description": "From field to paginate the results, defaults to 0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "Size field to limit the no.of results returned, defaults to 10"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d74bfffd-97d2-490a-881a-d369160d3969",
+              "name": "search response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "fieldQuery"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fieldName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fieldValue",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "index",
+                      "value": "table"
+                    },
+                    {
+                      "key": "deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "from",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d58817f-a294-4897-b6db-279b1961e783",
+          "name": "Search entities",
+          "request": {
+            "name": "Search entities",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "sourceUrl"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sourceUrl",
+                  "value": "<string>",
+                  "description": "source url"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4f0a51aa-208d-4002-a5f7-97d9c50a7712",
+              "name": "search response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "sourceUrl"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sourceUrl",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d5821237-1fdc-4409-b945-f66a68d0e7f4",
+          "name": "Search entities in ES index with Id",
+          "request": {
+            "name": "Search entities in ES index with Id",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "get",
+                ":index",
+                "doc",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) document Id"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "index",
+                  "description": "(Required) Index Name"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "098bf5e7-b1d9-4974-b4a5-8cdaf19a378a",
+              "name": "search response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "get",
+                    ":index",
+                    "doc",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) document Id"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "index",
+                      "description": "(Required) Index Name"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3128aca3-f27e-4b8c-8843-e221dfde9843",
+          "name": "Search entities using Natural Language Query (NLQ)",
+          "request": {
+            "name": "Search entities using Natural Language Query (NLQ)",
+            "description": {
+              "content": "Search entities using Natural Language Queries (NLQ) with full search capabilities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "nlq",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "NLQ query string in natural language"
+                },
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "table",
+                  "description": "ElasticSearch Index name, defaults to table_search_index"
+                },
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "false",
+                  "description": "Filter documents by deleted param. By default deleted is false"
+                },
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "0",
+                  "description": "From field to paginate the results, defaults to 0"
+                },
+                {
+                  "disabled": false,
+                  "key": "size",
+                  "value": "10",
+                  "description": "Size field to limit the no.of results returned, defaults to 10"
+                },
+                {
+                  "disabled": false,
+                  "key": "search_after",
+                  "value": "<string>",
+                  "description": "Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2."
+                },
+                {
+                  "disabled": false,
+                  "key": "search_after",
+                  "value": "<string>",
+                  "description": "Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_field",
+                  "value": "_score",
+                  "description": "Sort the search results by field"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_order",
+                  "value": "desc",
+                  "description": "Sort order asc for ascending or desc for descending, defaults to desc"
+                },
+                {
+                  "disabled": false,
+                  "key": "track_total_hits",
+                  "value": "false",
+                  "description": "Track Total Hits"
+                },
+                {
+                  "disabled": false,
+                  "key": "query_filter",
+                  "value": "<string>",
+                  "description": "Additional filters to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "post_filter",
+                  "value": "<string>",
+                  "description": "Post-filters to apply"
+                },
+                {
+                  "disabled": false,
+                  "key": "fetch_source",
+                  "value": "true",
+                  "description": "Get document body for each hit"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_source_fields",
+                  "value": "<string>",
+                  "description": "Get only selected fields of the document body"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_source_fields",
+                  "value": "<string>",
+                  "description": "Get only selected fields of the document body"
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_source_fields",
+                  "value": "<string>",
+                  "description": "Exclude specified fields from the document body for each hit"
+                },
+                {
+                  "disabled": false,
+                  "key": "exclude_source_fields",
+                  "value": "<string>",
+                  "description": "Exclude specified fields from the document body for each hit"
+                },
+                {
+                  "disabled": false,
+                  "key": "getHierarchy",
+                  "value": "false",
+                  "description": "Fetch results in hierarchical order"
+                },
+                {
+                  "disabled": false,
+                  "key": "explain",
+                  "value": "false",
+                  "description": "Explain the results of the query"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "566a6422-2e9e-44de-8886-d0314ef0d788",
+              "name": "NLQ search response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "nlq",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "index",
+                      "value": "table"
+                    },
+                    {
+                      "key": "deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "from",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search_after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_field",
+                      "value": "_score"
+                    },
+                    {
+                      "key": "sort_order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "track_total_hits",
+                      "value": "false"
+                    },
+                    {
+                      "key": "query_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "post_filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fetch_source",
+                      "value": "true"
+                    },
+                    {
+                      "key": "include_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exclude_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "exclude_source_fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "getHierarchy",
+                      "value": "false"
+                    },
+                    {
+                      "key": "explain",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3974dc4c-fcf0-4372-b095-cf3d1c653e58",
+          "name": "Sync all index templates",
+          "request": {
+            "name": "Sync all index templates",
+            "description": {
+              "content": "Create or update index templates for all entity types from indexMapping.json. Templates ensure proper mappings when ES/OS auto-creates indices.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "templates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "92f2df5f-6bd7-4285-ade7-0559dcc3ede0",
+              "name": "Sync result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "templates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3646f7e8-0417-46fb-a894-2f26442f5fbe",
+              "name": "Admin only",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "templates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7474afaa-4f51-47e8-be52-5921514f0c2b",
+          "name": "Sync index template for a specific entity type",
+          "request": {
+            "name": "Sync index template for a specific entity type",
+            "description": {
+              "content": "Create or update index template for a specific entity type from indexMapping.json.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "templates",
+                ":entityType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) Entity type"
+                }
+              ]
+            },
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9c40710-af97-48d6-ac56-dc62aaeb0893",
+              "name": "Template synced",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "templates",
+                    ":entityType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cfa974af-22eb-4d21-a4ca-44892fbc673e",
+              "name": "Invalid entity type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "templates",
+                    ":entityType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5fafc47b-fec9-49eb-9114-ce2a2c40f66d",
+              "name": "Admin only",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "templates",
+                    ":entityType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7636c70e-005f-4537-830c-1078a1038320",
+    "name": "OpenMetadata APIs Agent Executions Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,357 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Learning Resources API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Learning Resources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List learning resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/learning/resources",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of results returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of learning resources before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of learning resources after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities"
+              },
+              {
+                "name": "pageId",
+                "value": "",
+                "type": "query",
+                "description": "Filter resources to specific page identifiers (supports comma-separated values)"
+              },
+              {
+                "name": "componentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by component identifier within a page"
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "Filter by category (supports comma-separated values, e.g. DataGovernance,DataQuality)"
+              },
+              {
+                "name": "difficulty",
+                "value": "",
+                "type": "query",
+                "description": "Filter by difficulty tier"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by lifecycle status (supports comma-separated values, e.g. Active,Draft)"
+              },
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by resource type (supports comma-separated values, e.g. Video,Storylane,Article)"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search by name or display name (case-insensitive partial match)"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of learning resources with optional contextual filters."
+        },
+        {
+          "info": {
+            "name": "Create a learning resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/learning/resources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new learning resource entry."
+        },
+        {
+          "info": {
+            "name": "Create or update a learning resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/learning/resources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new learning resource, or update an existing one if it already exists."
+        },
+        {
+          "info": {
+            "name": "Get a learning resource by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/learning/resources/:id",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the learning resource"
+              }
+            ]
+          },
+          "docs": "Get a learning resource by `id`."
+        },
+        {
+          "info": {
+            "name": "Update a learning resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/learning/resources/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the learning resource"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Apply a JSONPatch to a learning resource."
+        },
+        {
+          "info": {
+            "name": "Delete a learning resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/learning/resources/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and its children. (Default = false)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = false)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the learning resource"
+              }
+            ]
+          },
+          "docs": "Delete a learning resource by `id`."
+        },
+        {
+          "info": {
+            "name": "Get a learning resource by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/learning/resources/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the learning resource"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include deleted resources"
+              }
+            ]
+          },
+          "docs": "Get a learning resource by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Get a learning resource version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/learning/resources/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the learning resource"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Learning resource version"
+              }
+            ]
+          },
+          "docs": "Get a specific version of the learning resource."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/learning/resources/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List learning resource versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/learning/resources/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the learning resource"
+              }
+            ]
+          },
+          "docs": "Get a list of versions for the specified learning resource."
+        },
+        {
+          "info": {
+            "name": "Restore a soft-deleted learning resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/learning/resources/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a previously soft-deleted learning resource."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

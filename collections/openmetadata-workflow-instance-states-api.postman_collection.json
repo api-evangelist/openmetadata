@@ -1,0 +1,443 @@
+{
+  "item": [
+    {
+      "id": "255b8432-0462-45d4-96a7-7a06176ba726",
+      "name": "Workflow Instance States",
+      "description": {
+        "content": "A Workflow Instance State is a specific state of a Workflow Instance.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7e95a57b-1fbf-4c47-a8d5-c5fe62ab077d",
+          "name": "Get a Workflow Instance State by id",
+          "request": {
+            "name": "Get a Workflow Instance State by id",
+            "description": {
+              "content": "Get a Workflow Instance State by id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "governance",
+                "workflowInstanceStates",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Workflow Instance State ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "281559a4-72d6-4e02-81e8-955e0f93e438",
+              "name": "The Workflow Instance State",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "governance",
+                    "workflowInstanceStates",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Workflow Instance State ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"74f799a0-d635-f6bc-c43e-64f30b8f1764\",\n  \"workflowInstanceId\": \"aea025f8-18a8-1e5e-6864-73545d79f1e1\",\n  \"workflowInstanceExecutionId\": \"c0570e6d-df4c-605c-7f88-9037843b068b\",\n  \"workflowDefinitionId\": \"b701955e-ea86-58c1-95d2-f2d7487bd586\",\n  \"stage\": {\n    \"name\": \"rP7\",\n    \"displayName\": \"string\",\n    \"startedAt\": 8206,\n    \"endedAt\": 2528,\n    \"tasks\": [\n      \"0aee131e-486e-3f6a-0301-fb88708d149a\",\n      \"b87792d3-2eec-e005-9692-ff15ca88cb41\"\n    ],\n    \"variables\": {\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {},\n      \"key_3\": {}\n    }\n  },\n  \"timestamp\": 337,\n  \"status\": \"RUNNING\",\n  \"exception\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "25680ce4-3396-4be1-b557-35bf8d1c63b1",
+          "name": "List the Workflow Instance States",
+          "request": {
+            "name": "List the Workflow Instance States",
+            "description": {
+              "content": "Get a list of all the workflow instances states, filtered by `startTs` and `endTs` of the creation. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "governance",
+                "workflowInstanceStates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of Workflow Instance States returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "Returns list of Workflow Instance States at the offset"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<number>",
+                  "description": "Filter Workflow Instance States after the given start timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<number>",
+                  "description": "Filter Workflow Instance States before the given end timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "latest",
+                  "value": "false",
+                  "description": "Only list the latest Workflow Instance States"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "167099b7-9bf0-4267-ab8f-1c15ed58fc52",
+              "name": "List of Workflow Instances",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "governance",
+                    "workflowInstanceStates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "startTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "latest",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"632edc03-7fa8-e256-5339-558ddc84b171\",\n      \"workflowInstanceId\": \"08bc8538-dd8a-189c-23ec-9a932310ebb6\",\n      \"workflowInstanceExecutionId\": \"0949a3cc-81b0-425c-0e92-68e42dddc85b\",\n      \"workflowDefinitionId\": \"5ccfef32-a40c-79e8-aa91-048164661923\",\n      \"stage\": {\n        \"name\": \"\\\"([r\",\n        \"displayName\": \"string\",\n        \"startedAt\": 357,\n        \"endedAt\": 8945,\n        \"tasks\": [\n          \"dd1f37f6-32be-aa61-6d7d-0673d955d2fa\",\n          \"c144bd62-3cb8-ce97-81ea-cc2d1118b81c\"\n        ],\n        \"variables\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      },\n      \"timestamp\": 6029,\n      \"status\": \"EXCEPTION\",\n      \"exception\": \"string\"\n    },\n    {\n      \"id\": \"0fd5d060-d0f3-f57c-ed11-d39459004e7f\",\n      \"workflowInstanceId\": \"4416a62d-b5ed-8957-9056-371d920010c8\",\n      \"workflowInstanceExecutionId\": \"ec9731a9-b7d6-85b5-aedb-42a3a8d3b7b6\",\n      \"workflowDefinitionId\": \"788bf251-84e0-5be1-3cc0-3c488e0a5897\",\n      \"stage\": {\n        \"name\": \"F<LA\",\n        \"displayName\": \"string\",\n        \"startedAt\": 7239,\n        \"endedAt\": 4193,\n        \"tasks\": [\n          \"2d09179d-580a-aca6-398e-ceece297bd65\",\n          \"79dc1ddb-71b1-1f76-a0f0-54b10f1b63a0\"\n        ],\n        \"variables\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {},\n          \"key_3\": {},\n          \"key_4\": {}\n        }\n      },\n      \"timestamp\": 24,\n      \"status\": \"FINISHED\",\n      \"exception\": \"string\"\n    }\n  ],\n  \"paging\": {\n    \"total\": 6375,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 1500,\n    \"limit\": 6562\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 6836,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "99515cf1-8b35-451e-abb6-e86fa68a8f39",
+          "name": "Get all the Workflow Instance States for a Workflow Instance id",
+          "request": {
+            "name": "Get all the Workflow Instance States for a Workflow Instance id",
+            "description": {
+              "content": "Get all the Workflow Instance States for a Workflow Instancee id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "governance",
+                "workflowInstanceStates",
+                ":workflowDefinitionName",
+                ":workflowInstanceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of Workflow Instance States returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<string>",
+                  "description": "Returns list of Workflow Instance States at the offset"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<number>",
+                  "description": "Filter Workflow Instance States after the given start timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<number>",
+                  "description": "Filter Workflow Instance States before the given end timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "latest",
+                  "value": "false",
+                  "description": "Only list the latest Workflow Instance States"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "workflowDefinitionName",
+                  "description": "(Required) Workflow Definition Name"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workflowInstanceId",
+                  "description": "(Required) Workflow Instance ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b383f544-d029-400f-a61c-b2ee0a65c72a",
+              "name": "The Workflow Instance States",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "governance",
+                    "workflowInstanceStates",
+                    ":workflowDefinitionName",
+                    ":workflowInstanceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "startTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "latest",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workflowDefinitionName",
+                      "description": "(Required) Workflow Definition Name"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workflowInstanceId",
+                      "description": "(Required) Workflow Instance ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"87abe81b-0861-5db0-44c7-4a0657688ea2\",\n      \"workflowInstanceId\": \"85f336fe-d4ea-7f13-2f7c-46513339e70d\",\n      \"workflowInstanceExecutionId\": \"56b0ea87-1f68-d941-8b3c-384b4be0550b\",\n      \"workflowDefinitionId\": \"46de420d-a7aa-8ea9-3808-00e68bfa6e9f\",\n      \"stage\": {\n        \"name\": \" \",\n        \"displayName\": \"string\",\n        \"startedAt\": 160,\n        \"endedAt\": 2107,\n        \"tasks\": [\n          \"25487643-1b52-1568-efe9-2f1e548d538c\",\n          \"f24900b3-3041-c67d-a899-c5f62da1944c\"\n        ],\n        \"variables\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      },\n      \"timestamp\": 5771,\n      \"status\": \"FINISHED\",\n      \"exception\": \"string\"\n    },\n    {\n      \"id\": \"3e9b85db-c19c-e7f5-d3cb-ee543b63cfa2\",\n      \"workflowInstanceId\": \"e3cd013c-ea1f-c2cf-f8a3-4b19cc88421d\",\n      \"workflowInstanceExecutionId\": \"93466015-0394-a820-3bff-a0790a986a2b\",\n      \"workflowDefinitionId\": \"236b6473-ea90-95e5-1d86-13d7ff0d96ec\",\n      \"stage\": {\n        \"name\": \" \",\n        \"displayName\": \"string\",\n        \"startedAt\": 3584,\n        \"endedAt\": 5564,\n        \"tasks\": [\n          \"ebd1fd22-e81d-9964-fbc1-5cf56499966a\",\n          \"5cebd1d0-5a95-8a2b-4096-83b004529921\"\n        ],\n        \"variables\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      },\n      \"timestamp\": 2271,\n      \"status\": \"RUNNING\",\n      \"exception\": \"string\"\n    }\n  ],\n  \"paging\": {\n    \"total\": 5396,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 311,\n    \"limit\": 5123\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 9335,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "166887a3-4bfe-447d-afcd-705bff04a4ea",
+    "name": "OpenMetadata APIs Agent Executions Workflow Instance States API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,698 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Teams API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Teams",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bulk Add Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams/:name/assets/add",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Team"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk Add Assets"
+        },
+        {
+          "info": {
+            "name": "Bulk Remove Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams/:name/assets/remove",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Team"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk Remove Assets"
+        },
+        {
+          "info": {
+            "name": "List teams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of teams returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of teams before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of teams after this cursor"
+              },
+              {
+                "name": "parentTeam",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results by parent team name"
+              },
+              {
+                "name": "isJoinable",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results by whether the team can be joined by any user or not"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of teams. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a team",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/teams",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new team."
+        },
+        {
+          "info": {
+            "name": "Update team",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or Update a team."
+        },
+        {
+          "info": {
+            "name": "Get a team by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the team"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a team by `name`."
+        },
+        {
+          "info": {
+            "name": "Delete a team by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/teams/name/:name",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the team"
+              }
+            ]
+          },
+          "docs": "Delete a team by given `name`."
+        },
+        {
+          "info": {
+            "name": "Get a team by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a team by `id`."
+        },
+        {
+          "info": {
+            "name": "Update a team",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/teams/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing team with JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a team by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/teams/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this team and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              }
+            ]
+          },
+          "docs": "Delete a team by given `id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a team by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/teams/async/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this team and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a team by given `id`."
+        },
+        {
+          "info": {
+            "name": "Remove a user from a team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/teams/:teamId/users/:userId",
+            "params": [
+              {
+                "name": "teamId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed"
+              }
+            ]
+          },
+          "docs": "Remove the user identified by `userId` from the team identified by `teamId`."
+        },
+        {
+          "info": {
+            "name": "Export teams in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/name/:name/export",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Export teams in CSV format"
+        },
+        {
+          "info": {
+            "name": "Export teams in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/name/:name/exportAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Export teams in CSV format"
+        },
+        {
+          "info": {
+            "name": "Get all teams with their asset counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/assets/counts"
+          },
+          "docs": "Get a map of team fully qualified names to their asset counts using search aggregation."
+        },
+        {
+          "info": {
+            "name": "Get CSV documentation for team import/export",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/documentation/csv"
+          },
+          "docs": "Get CSV documentation for team import/export"
+        },
+        {
+          "info": {
+            "name": "Get a version of the team",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Team version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the team by given `id`"
+        },
+        {
+          "info": {
+            "name": "Import from CSV to create, and update teams.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams/name/:name/import",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import from CSV to create, and update teams."
+        },
+        {
+          "info": {
+            "name": "Import from CSV to create, and update teams asynchronously.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams/name/:name/importAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import from CSV to create, and update teams asynchronously."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List teams with hierarchy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/hierarchy",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of teams returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "isJoinable",
+                "value": "",
+                "type": "query",
+                "description": "Filter the results by whether the team can be joined by any user or not"
+              }
+            ]
+          },
+          "docs": "Get a list of teams with hierarchy."
+        },
+        {
+          "info": {
+            "name": "List assets owned by this team",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/:id/assets",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of assets returned. (1 to 1000, default = 100)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of assets that are owned by this team. Use limit and offset query params for pagination."
+        },
+        {
+          "info": {
+            "name": "List assets owned by this team by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/name/:fqn/assets",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the team"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of assets returned. (1 to 1000, default = 100)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of assets that are owned by this team. Use limit and offset query params for pagination."
+        },
+        {
+          "info": {
+            "name": "List team versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/teams/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the team"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a team identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Update a team using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/teams/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the team"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing team with JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted team",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted team."
+        },
+        {
+          "info": {
+            "name": "Update team users",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/teams/:teamId/users",
+            "params": [
+              {
+                "name": "teamId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the list of users for a team. Replaces existing users with the provided list."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

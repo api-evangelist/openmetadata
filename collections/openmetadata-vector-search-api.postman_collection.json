@@ -1,0 +1,146 @@
+{
+  "item": [
+    {
+      "id": "9a8931a2-7636-4cc5-bd94-1663c08fde74",
+      "name": "Vector Search",
+      "description": {
+        "content": "APIs for vector-based semantic search.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c549b776-b649-490f-910e-a1392accc456",
+          "name": "Vector semantic search",
+          "request": {
+            "name": "Vector semantic search",
+            "description": {
+              "content": "Search entities using vector embeddings with full filter support.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "vector",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_2\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"size\": \"<integer>\",\n  \"from\": \"<integer>\",\n  \"k\": \"<integer>\",\n  \"threshold\": \"<double>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4c90a477-6226-40dc-ad28-a986f4d93e64",
+              "name": "Vector search results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "vector",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"size\": \"<integer>\",\n  \"from\": \"<integer>\",\n  \"k\": \"<integer>\",\n  \"threshold\": \"<double>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tookMillis\": 3743,\n  \"hits\": [\n    {\n      \"key_0\": {},\n      \"key_1\": {}\n    },\n    {\n      \"key_0\": {},\n      \"key_1\": {}\n    }\n  ],\n  \"totalHits\": 9312,\n  \"hasMore\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2379f23d-7bfc-4414-b3c0-fcbda836f6bc",
+    "name": "OpenMetadata APIs Agent Executions Vector Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

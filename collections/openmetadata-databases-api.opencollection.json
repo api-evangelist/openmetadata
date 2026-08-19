@@ -1,0 +1,702 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Databases API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Databases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get database profile config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/:id/databaseProfilerConfig",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              }
+            ]
+          },
+          "docs": "Get database profile config to the database."
+        },
+        {
+          "info": {
+            "name": "Add database profile config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/:id/databaseProfilerConfig",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add database profile config to the database."
+        },
+        {
+          "info": {
+            "name": "Delete database profiler config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/databases/:id/databaseProfilerConfig",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "delete database profile config to the database."
+        },
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Database"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as followed of this Database"
+        },
+        {
+          "info": {
+            "name": "Bulk create or update databases",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/bulk",
+            "params": [
+              {
+                "name": "async",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update multiple databases in a single operation. Returns a BulkOperationResult with success/failure details for each database."
+        },
+        {
+          "info": {
+            "name": "List databases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter databases by service name"
+              },
+              {
+                "name": "databaseRegex",
+                "value": "",
+                "type": "query",
+                "description": "Filter databases by regex pattern. By default, the pattern is applied to the database name field (for example, 'financeDB.*'). To filter by fullyQualifiedName instead, set 'regexFilterByFqn=true' and use an FQN-style pattern (for example, 'snowflakeWestCoast.financeDB.*'). For better performance, use in combination with the 'service' query filter."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number tables returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tables before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tables after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "regexFilterByFqn",
+                "value": "",
+                "type": "query",
+                "description": "When true, regex filters match against fullyQualifiedName instead of name. Default is false."
+              },
+              {
+                "name": "regexMode",
+                "value": "",
+                "type": "query",
+                "description": "Controls how regex filters are applied. 'include' returns matching entities, 'exclude' returns non-matching entities. Default is 'include'."
+              }
+            ]
+          },
+          "docs": "Get a list of databases, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/databases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a database under an existing `service`."
+        },
+        {
+          "info": {
+            "name": "Create or update database",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a database, if it does not exist or update an existing database."
+        },
+        {
+          "info": {
+            "name": "Get a database by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the database"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a database by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Update a database by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/databases/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the database"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing database using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a database by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/databases/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the database"
+              }
+            ]
+          },
+          "docs": "Delete a database by `fullyQualifiedName`. Databases can only be deleted if it has no tables."
+        },
+        {
+          "info": {
+            "name": "Get a database by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a database by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/databases/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing database using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a database by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/databases/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              }
+            ]
+          },
+          "docs": "Delete a database by `Id`. Database can only be deleted if it has no tables."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a database by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/databases/async/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a database by `Id`. Database can only be deleted if it has no tables."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/databases/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the entity."
+        },
+        {
+          "info": {
+            "name": "Export database in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/name/:name/export",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Database"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, export will include child entities (schemas, tables, columns)"
+              }
+            ]
+          },
+          "docs": "Export database in CSV format"
+        },
+        {
+          "info": {
+            "name": "Export database in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/name/:name/exportAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Database"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, export will include child entities (schemas, tables, columns)"
+              }
+            ]
+          },
+          "docs": "Export database in CSV format"
+        },
+        {
+          "info": {
+            "name": "Get a version of the database",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Database version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the database by given `Id`"
+        },
+        {
+          "info": {
+            "name": "Import database schemas from CSV to update database schemas (no creation allowed)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/name/:name/import",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Database"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, resursive import"
+              }
+            ]
+          },
+          "docs": "Import database schemas from CSV to update database schemas (no creation allowed)"
+        },
+        {
+          "info": {
+            "name": "Import database schemas from CSV asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/name/:name/importAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Database"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, recursive import"
+              }
+            ]
+          },
+          "docs": "Import database schemas from CSV to update database schemas asynchronously (no creation allowed)."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List database versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/databases/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the database"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a database identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted Database.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted Database."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/databases/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

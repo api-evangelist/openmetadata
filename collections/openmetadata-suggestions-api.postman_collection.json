@@ -1,0 +1,1642 @@
+{
+  "item": [
+    {
+      "id": "7b9c7fb4-26b7-4469-aa73-73e423952f24",
+      "name": "Suggestions",
+      "description": {
+        "content": "Suggestions API supports ability to add suggestion for descriptions or tag labels for Entities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "634d925d-fead-46bc-aa42-e1b83ed909ff",
+          "name": "Accept all Suggestions from a user and an Entity",
+          "request": {
+            "name": "Accept all Suggestions from a user and an Entity",
+            "description": {
+              "content": "Accept a Suggestion and apply the changes to the entity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                "accept-all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<string>",
+                  "description": "user id"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityFQN",
+                  "value": "<string>",
+                  "description": "fullyQualifiedName of entity"
+                },
+                {
+                  "disabled": false,
+                  "key": "suggestionType",
+                  "value": "SuggestDescription",
+                  "description": "Suggestion type being accepted"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fc110679-4212-470f-9df3-565aa0163b63",
+              "name": "The suggestion.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    "accept-all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "suggestionType",
+                      "value": "SuggestDescription"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ee36623-741b-41c2-bab3-ab4937d8f736",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    "accept-all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "suggestionType",
+                      "value": "SuggestDescription"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b5eeca8b-afc6-4cd9-bf43-33875cad943b",
+          "name": "Accept a Suggestion",
+          "request": {
+            "name": "Accept a Suggestion",
+            "description": {
+              "content": "Accept a Suggestion and apply the changes to the entity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                ":id",
+                "accept"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the suggestion"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48f78195-3a5d-4420-a72f-b047b7df2ac6",
+              "name": "The suggestion.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id",
+                    "accept"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the suggestion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc893254-88ed-4bd0-9d1d-193d99d520bc",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id",
+                    "accept"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the suggestion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "65ee93bd-a6d4-4a83-9184-967d69a6a930",
+          "name": "List Suggestions",
+          "request": {
+            "name": "List Suggestions",
+            "description": {
+              "content": "Get a list of suggestions, optionally filtered by `entityLink` or `entityFQN`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of suggestions returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<string>",
+                  "description": "Returns list of threads before this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Returns list of threads after this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityFQN",
+                  "value": "<string>",
+                  "description": "Filter suggestions by entityFQN"
+                },
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<string>",
+                  "description": "Filter threads by user id or bot id. This filter requires a 'filterType' query param."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "Open",
+                  "description": "Filter threads by whether they are accepted or rejected. By default status is OPEN."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c35492c0-4f05-4de7-a772-014134d30e5d",
+              "name": "List of Suggestions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "Open"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e8fa6995-6b4f-406a-93d6-cc3f7f50064a",
+          "name": "Create a Suggestion",
+          "request": {
+            "name": "Create a Suggestion",
+            "description": {
+              "content": "Create a new Suggestion. A Suggestion is created about a data asset when a user suggests an update.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"type\": \"<string>\",\n  \"entityLink\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7d0ed5c8-ca26-4b63-97d0-ba52e0bc1b3f",
+              "name": "The thread",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"type\": \"<string>\",\n  \"entityLink\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "450ea5fa-9eed-4cad-aef9-f93cf57cf083",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"type\": \"<string>\",\n  \"entityLink\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ee954b0e-0102-4b36-a51b-6fb17de51944",
+          "name": "Delete a Suggestion by Id",
+          "request": {
+            "name": "Delete a Suggestion by Id",
+            "description": {
+              "content": "Delete an existing Suggestion and all its relationships.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                ":suggestionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "suggestionId",
+                  "description": "(Required) ThreadId of the thread to be deleted"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8d51f546-b648-41dd-b0b1-be1a5b805a57",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":suggestionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "suggestionId",
+                      "description": "(Required) ThreadId of the thread to be deleted"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "21c84869-6dca-44fa-bbf6-70ce86f60b0f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":suggestionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "suggestionId",
+                      "description": "(Required) ThreadId of the thread to be deleted"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ec2ed26-713a-4fcc-bd90-e2d05922e72c",
+              "name": "thread with {threadId} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":suggestionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "suggestionId",
+                      "description": "(Required) ThreadId of the thread to be deleted"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "89a2ef8e-f34b-4679-b015-f9b5b67cff99",
+          "name": "Delete a Suggestions by entityFQN",
+          "request": {
+            "name": "Delete a Suggestions by entityFQN",
+            "description": {
+              "content": "Delete an existing Suggestions and all its relationships.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                ":entityType",
+                "name",
+                ":entityFQN"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) entity type"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityFQN",
+                  "description": "(Required) fullyQualifiedName of entity"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4040e3b8-170f-47f2-a617-b17cd1c1d683",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":entityType",
+                    "name",
+                    ":entityFQN"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) entity type"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityFQN",
+                      "description": "(Required) fullyQualifiedName of entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1fb90a65-d1f4-481c-8a1d-742730b5fa7a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":entityType",
+                    "name",
+                    ":entityFQN"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) entity type"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityFQN",
+                      "description": "(Required) fullyQualifiedName of entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "da937d6c-d569-455f-8126-f6cd2db48d4b",
+              "name": "thread with {threadId} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":entityType",
+                    "name",
+                    ":entityFQN"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) entity type"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityFQN",
+                      "description": "(Required) fullyQualifiedName of entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4bbe2b8-8cae-4343-9111-71795b4f064d",
+          "name": "Get a suggestion by Id",
+          "request": {
+            "name": "Get a suggestion by Id",
+            "description": {
+              "content": "Get a suggestion by `Id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Thread"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "32a85162-5a54-4b3b-9fe9-215a22d9f311",
+              "name": "The Suggestion",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Thread"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b96cf757-19a6-4692-93f7-c6033f7418fa",
+              "name": "Suggestion for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Thread"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5546be64-3662-44a3-87fd-79be701dfd21",
+          "name": "Update a suggestion by `Id`.",
+          "request": {
+            "name": "Update a suggestion by `Id`.",
+            "description": {
+              "content": "Update an existing suggestion using JsonPatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the Suggestion"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<uuid>\",\n  \"type\": \"<string>\",\n  \"href\": \"<uri>\",\n  \"entityLink\": \"<string>\",\n  \"createdAt\": \"<long>\",\n  \"createdBy\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"updatedAt\": \"<long>\",\n  \"updatedBy\": \"<string>\",\n  \"impersonatedBy\": \"<string>\",\n  \"status\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9e0dcc82-49b4-4b88-a57a-e1ca8d4bf0ba",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the Suggestion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"type\": \"<string>\",\n  \"href\": \"<uri>\",\n  \"entityLink\": \"<string>\",\n  \"createdAt\": \"<long>\",\n  \"createdBy\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"updatedAt\": \"<long>\",\n  \"updatedBy\": \"<string>\",\n  \"impersonatedBy\": \"<string>\",\n  \"status\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "08fd6dc0-657e-4f5a-922a-2005a9c673f2",
+          "name": "Reject all Suggestions from a user and an Entity",
+          "request": {
+            "name": "Reject all Suggestions from a user and an Entity",
+            "description": {
+              "content": "Reject all Suggestions from a user and an Entity",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                "reject-all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<string>",
+                  "description": "user id"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityFQN",
+                  "value": "<string>",
+                  "description": "fullyQualifiedName of entity"
+                },
+                {
+                  "disabled": false,
+                  "key": "suggestionType",
+                  "value": "SuggestDescription",
+                  "description": "Suggestion type being rejected"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9bdabfa-b3b3-40c5-b1c2-7f87793bf5cd",
+              "name": "The suggestion.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    "reject-all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "suggestionType",
+                      "value": "SuggestDescription"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"type\": \"<string>\",\n  \"href\": \"<uri>\",\n  \"entityLink\": \"<string>\",\n  \"createdAt\": \"<long>\",\n  \"createdBy\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"updatedAt\": \"<long>\",\n  \"updatedBy\": \"<string>\",\n  \"impersonatedBy\": \"<string>\",\n  \"status\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf426066-caae-4621-b538-8097e953fbd1",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    "reject-all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "suggestionType",
+                      "value": "SuggestDescription"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4fa5acb0-79eb-4909-873d-b8d89e0d8c45",
+          "name": "Reject a Suggestion",
+          "request": {
+            "name": "Reject a Suggestion",
+            "description": {
+              "content": "Close a Suggestion without making any changes to the entity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "suggestions",
+                ":id",
+                "reject"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the suggestion"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "93bcb85d-0236-46df-a208-3c067ab7bc48",
+              "name": "The Suggestion.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the suggestion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"type\": \"<string>\",\n  \"href\": \"<uri>\",\n  \"entityLink\": \"<string>\",\n  \"createdAt\": \"<long>\",\n  \"createdBy\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"updatedAt\": \"<long>\",\n  \"updatedBy\": \"<string>\",\n  \"impersonatedBy\": \"<string>\",\n  \"status\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tagLabels\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6f757b9-4181-41f3-9728-93dcb6d63669",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "suggestions",
+                    ":id",
+                    "reject"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the suggestion"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e651beda-7846-4820-8325-ed4749931ad9",
+    "name": "OpenMetadata APIs Agent Executions Suggestions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

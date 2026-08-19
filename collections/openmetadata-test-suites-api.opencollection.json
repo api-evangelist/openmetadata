@@ -1,0 +1,705 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Test Suites API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Test Suites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List test suites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number test definitions returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "testSuiteType",
+                "value": "",
+                "type": "query",
+                "description": "Returns executable or logical test suites. If omitted, returns all test suites."
+              },
+              {
+                "name": "includeEmptyTestSuites",
+                "value": "",
+                "type": "query",
+                "description": "Include empty test suite in the response."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of test definitions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of test definitions after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of test suites. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a logical test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataQuality/testSuites",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a logical test suite."
+        },
+        {
+          "info": {
+            "name": "Update logical test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testSuites",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a logical TestSuite, if it does not exist or update an existing test suite."
+        },
+        {
+          "info": {
+            "name": "Create a basic test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataQuality/testSuites/basic",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a basic test suite."
+        },
+        {
+          "info": {
+            "name": "Create or Update Basic test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testSuites/basic",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Basic TestSuite if it does not exist or update an existing one."
+        },
+        {
+          "info": {
+            "name": "Create or Update Executable test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testSuites/executable",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an Executable TestSuite if it does not exist or update an existing one."
+        },
+        {
+          "info": {
+            "name": "Get a test suite by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/name/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the test suite"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a test suite by  name."
+        },
+        {
+          "info": {
+            "name": "Delete a logical test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/name/:name",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the logical entity. (Default = `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "FQN of the logical test suite"
+              }
+            ]
+          },
+          "docs": "Delete a logical test suite by `name`."
+        },
+        {
+          "info": {
+            "name": "Get a test suite by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test suite"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a Test Suite by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/dataQuality/testSuites/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test suite"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing testSuite using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a logical test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the logical entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the logical test suite"
+              }
+            ]
+          },
+          "docs": "Delete a logical test suite by `id`."
+        },
+        {
+          "info": {
+            "name": "Delete a logical test suite asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the logical entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the logical test suite"
+              }
+            ]
+          },
+          "docs": "Delete a logical test suite by `id` asynchronously."
+        },
+        {
+          "info": {
+            "name": "Delete a test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/basic/name/:name",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the test suite"
+              }
+            ]
+          },
+          "docs": "Delete a test suite by `name`."
+        },
+        {
+          "info": {
+            "name": "Delete a test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/basic/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test suite"
+              }
+            ]
+          },
+          "docs": "Delete a test suite by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete a test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/executable/name/:name",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the test suite"
+              }
+            ]
+          },
+          "docs": "Delete a test suite by `name`."
+        },
+        {
+          "info": {
+            "name": "Delete a test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testSuites/executable/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test suite"
+              }
+            ]
+          },
+          "docs": "Delete a test suite by `Id`."
+        },
+        {
+          "info": {
+            "name": "Get Data Quality Report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/dataQualityReport",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query to filter the aggregation results"
+              },
+              {
+                "name": "aggregationQuery",
+                "value": "",
+                "type": "query",
+                "description": "Aggregation query to perform aggregation on the search results"
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "query",
+                "description": "Index to perform the aggregation against"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain fully qualified name"
+              }
+            ]
+          },
+          "docs": "Use the search service to perform data quality aggregation. You can use the `q` parameter to filter the results.\nthe `aggregationQuery` is of the form `bucketName=<bucketName>:aggType=<aggType>:field=<field>`. You can sperate aggregation\nquery with a comma `,` to perform nested aggregations.\nFor example, `bucketName=table:aggType=terms:field=databaseName,bucketName=<bucketName>:aggType=<aggType>:field=<field>`\n"
+        },
+        {
+          "info": {
+            "name": "Get the execution summary of test suites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/executionSummary",
+            "params": [
+              {
+                "name": "testSuiteId",
+                "value": "",
+                "type": "query",
+                "description": "get summary for a specific test suite"
+              }
+            ]
+          },
+          "docs": "Get the execution summary of test suites."
+        },
+        {
+          "info": {
+            "name": "Get a version of the test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test suite"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Test Suite version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the test suite by given `id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List test suite using search service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/search/list",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number test suite returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of test suite after this offset (default = 0)"
+              },
+              {
+                "name": "testSuiteType",
+                "value": "",
+                "type": "query",
+                "description": "Returns executable or logical test suites. If omitted, returns all test suites."
+              },
+              {
+                "name": "includeEmptyTestSuites",
+                "value": "",
+                "type": "query",
+                "description": "Include empty test suite in the response."
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter a test suite by domain."
+              },
+              {
+                "name": "fullyQualifiedName",
+                "value": "",
+                "type": "query",
+                "description": "Filter a test suite by fully qualified name."
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Filter test suites by owner."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field used to sort the test cases listing"
+              },
+              {
+                "name": "sortNestedPath",
+                "value": "",
+                "type": "query",
+                "description": "Set this field if your mapping is nested and you want to sort on a nested field"
+              },
+              {
+                "name": "sortNestedMode",
+                "value": "",
+                "type": "query",
+                "description": "Set this field if your mapping is nested and you want to sort on a nested field"
+              },
+              {
+                "name": "sortType",
+                "value": "",
+                "type": "query",
+                "description": "Sort type"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "search query term to use in list"
+              },
+              {
+                "name": "queryString",
+                "value": "",
+                "type": "query",
+                "description": "raw elasticsearch query to use in list"
+              }
+            ]
+          },
+          "docs": "Get a list of test suite using the search service. Use `fields` parameter to get only necessary fields. Use offset/limit pagination to limit the number entries in the list using `limit` and `offset` query params.Use the `tests` field to get the test cases linked to the test suite and/or use the `summary` field to get a summary of test case executions."
+        },
+        {
+          "info": {
+            "name": "List test suite versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testSuites/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test suite"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a test suite identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testSuites/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted test suite."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

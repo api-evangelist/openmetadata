@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions ChangeSummary API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ChangeSummary",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get change summary for an entity by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/changeSummary/:entityType/name/:fqn",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type (e.g., table, topic, dashboard)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the entity"
+              },
+              {
+                "name": "fieldPrefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter entries by field name prefix (e.g., 'columns.' to get only column-level changes)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entries returned (1-1000)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              }
+            ]
+          },
+          "docs": "Returns the change summary map for the specified entity identified by its fully qualified name (FQN). Use fieldPrefix to filter entries (e.g., 'columns.' for column-level changes only)."
+        },
+        {
+          "info": {
+            "name": "Get change summary for an entity by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/changeSummary/:entityType/:id",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type (e.g., table, topic, dashboard)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Entity ID"
+              },
+              {
+                "name": "fieldPrefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter entries by field name prefix (e.g., 'columns.' to get only column-level changes)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entries returned (1-1000)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              }
+            ]
+          },
+          "docs": "Returns the change summary map for the specified entity, showing who changed each field, the source of the change (Manual, Suggested, Automated, etc.), and when it was changed. Use fieldPrefix to filter entries (e.g., 'columns.' for column-level changes only)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

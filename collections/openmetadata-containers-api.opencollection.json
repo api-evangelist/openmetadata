@@ -1,0 +1,632 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Containers API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Containers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/containers/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the container"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as follower of this container"
+        },
+        {
+          "info": {
+            "name": "Get sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the container"
+              }
+            ]
+          },
+          "docs": "Get sample data from the container."
+        },
+        {
+          "info": {
+            "name": "Add sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/containers/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the container"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add sample data to the container."
+        },
+        {
+          "info": {
+            "name": "Delete sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/containers/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the container"
+              }
+            ]
+          },
+          "docs": "Delete sample data from the container."
+        },
+        {
+          "info": {
+            "name": "Bulk create or update containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/containers/bulk",
+            "params": [
+              {
+                "name": "async",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update multiple containers in a single operation. Returns a BulkOperationResult with success/failure details for each container."
+        },
+        {
+          "info": {
+            "name": "List Containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter Containers by Object Store Service name"
+              },
+              {
+                "name": "root",
+                "value": "",
+                "type": "query",
+                "description": "Filter by Containers at the root level. E.g., without parent"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number containers returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of containers before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of containers after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of containers, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/containers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Container."
+        },
+        {
+          "info": {
+            "name": "Create or update a Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/containers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Container, if it does not exist or update an existing container."
+        },
+        {
+          "info": {
+            "name": "Get an Container by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get an Container by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Update a Container using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/containers/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Container"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Container using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a Container by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/containers/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Container"
+              }
+            ]
+          },
+          "docs": "Delete a Container by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get an Object Store Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get an Object Store container by `id`."
+        },
+        {
+          "info": {
+            "name": "Update a Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/containers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Container"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Container using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/containers/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Container Id"
+              }
+            ]
+          },
+          "docs": "Delete a Container by `id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/containers/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Container Id"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a Container by `id`."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/containers/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the container"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the container."
+        },
+        {
+          "info": {
+            "name": "Get a version of the Container",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Container Id"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Container version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the Container by given `id`"
+        },
+        {
+          "info": {
+            "name": "List ancestor containers (parent chain)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/name/:fqn/ancestors",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the container"
+              }
+            ]
+          },
+          "docs": "Return the ordered chain of ancestor containers from root (immediate child of the storage service) down to the immediate parent of the given container. Resolved via a single batched fetch — useful for rendering breadcrumbs without N sequential parent lookups."
+        },
+        {
+          "info": {
+            "name": "List children containers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/name/:fqn/children",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the container"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of children returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of children after the given offset"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted children."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Optional case-insensitive substring filter on the child container name."
+              }
+            ]
+          },
+          "docs": "Get a list of children containers with pagination."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List Container versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/containers/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Container Id"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a container identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted Container.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/containers/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted Container."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/containers/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

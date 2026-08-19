@@ -1,0 +1,214 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Usage API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get usage by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/usage/:entity/:id",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which usage is requested"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              },
+              {
+                "name": "days",
+                "value": "",
+                "type": "query",
+                "description": "Usage for number of days going back from the given date (default=1, min=1, max=30)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Usage for number of days going back from this date in ISO 8601 format. (default = currentDate)"
+              }
+            ]
+          },
+          "docs": "Get usage details for an entity identified by `id`."
+        },
+        {
+          "info": {
+            "name": "Report usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/usage/:entity/:id",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which usage is reported"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Report usage information for an entity on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted."
+        },
+        {
+          "info": {
+            "name": "Report usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/usage/:entity/:id",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which usage is reported"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Report usage information for an entity on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted."
+        },
+        {
+          "info": {
+            "name": "Get usage by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/usage/:entity/name/:fqn",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which usage is requested"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the entity that uniquely identifies an entity"
+              },
+              {
+                "name": "days",
+                "value": "",
+                "type": "query",
+                "description": "Usage for number of days going back from the given date (default=1, min=1, max=30)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Usage for number of days going back from this date in ISO 8601 format (default = currentDate)"
+              }
+            ]
+          },
+          "docs": "Get usage details for an entity identified by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Report usage by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/usage/:entity/name/:fqn",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which usage is reported"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the entity that uniquely identifies an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Report usage information for an entity by name on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted."
+        },
+        {
+          "info": {
+            "name": "Report usage by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/usage/:entity/name/:fqn",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which usage is reported"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the entity that uniquely identifies an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Report usage information for an entity by name on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

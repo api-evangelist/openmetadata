@@ -1,0 +1,994 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Ingestion Pipelines API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ingestion Pipelines",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/ingestionPipelines/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Ingestion Pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as followed of this ingestion pipeline"
+        },
+        {
+          "info": {
+            "name": "List of pipeline status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/:fqn/pipelineStatus",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline status after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline status before the given end timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of pipeline statuses to return"
+              }
+            ]
+          },
+          "docs": "Get a list of pipeline statuses for the given ingestion pipeline id. Optionally filter by `startTs` and `endTs`. When no time range is provided, the latest 5 runs are returned by default. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Add pipeline status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/ingestionPipelines/:fqn/pipelineStatus",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add pipeline status of ingestion pipeline."
+        },
+        {
+          "info": {
+            "name": "Bulk deploy a list of Ingestion Pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/bulk/deploy",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Bulk deploy a list of Ingestion Pipelines given a list of IDs"
+        },
+        {
+          "info": {
+            "name": "Close log stream for a pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/logs/:fqn/:runId/close",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              }
+            ]
+          },
+          "docs": "Close and finalize the log stream for a specific pipeline run identified by FQN and runId. This ensures any buffered data is written and the stream is properly closed."
+        },
+        {
+          "info": {
+            "name": "List ingestion pipelines for metadata operations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter Ingestion Pipelines by service fully qualified name"
+              },
+              {
+                "name": "testSuite",
+                "value": "",
+                "type": "query",
+                "description": "Filter Ingestion Pipelines by test suite fully qualified name"
+              },
+              {
+                "name": "pipelineType",
+                "value": "",
+                "type": "query",
+                "description": "Filter Ingestion Pipelines by pipeline Type"
+              },
+              {
+                "name": "serviceType",
+                "value": "",
+                "type": "query",
+                "description": "Filter Ingestion Pipelines by service Type"
+              },
+              {
+                "name": "applicationType",
+                "value": "",
+                "type": "query",
+                "description": "Filter Ingestion Pipelines by the type of the application"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number ingestion returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of ingestion before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of ingestion after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "provider",
+                "value": "",
+                "type": "query",
+                "description": "List Ingestion Pipelines by provider.."
+              }
+            ]
+          },
+          "docs": "Get a list of airflow pipelines for metadata operations. Use `fields` parameter to get only necessary fields.  Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create an ingestion pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new ingestion pipeline."
+        },
+        {
+          "info": {
+            "name": "Create or update an ingestion pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/ingestionPipelines",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new ingestion pipeline, if it does not exist or update an existing ingestion pipeline."
+        },
+        {
+          "info": {
+            "name": "Get an ingestion pipeline by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get an ingestion by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Update an ingestion pipeline using name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/services/ingestionPipelines/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the ingestion pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing ingestion pipeline using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete an ingestion pipeline by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/ingestionPipelines/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Delete an ingestion pipeline by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get an ingestion pipeline by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get an ingestion pipeline by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update an ingestion pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/services/ingestionPipelines/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing ingestion pipeline using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete an ingestion pipeline by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/ingestionPipelines/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Delete an ingestion pipeline by `Id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete an ingestion pipeline by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/ingestionPipelines/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete an ingestion pipeline by `Id`."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/ingestionPipelines/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the entity."
+        },
+        {
+          "info": {
+            "name": "Delete Pipeline Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/ingestionPipelines/:id/pipelineStatus",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Ingestion Pipeline"
+              }
+            ]
+          },
+          "docs": "Delete the Pipeline Status for this Ingestion Pipeline."
+        },
+        {
+          "info": {
+            "name": "Delete pipeline status by run ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/services/ingestionPipelines/:id/pipelineStatus/:runId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Ingestion Pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID of the pipeline status"
+              }
+            ]
+          },
+          "docs": "Delete a specific pipeline status by its run ID for the given ingestion pipeline."
+        },
+        {
+          "info": {
+            "name": "Deploy an ingestion pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/deploy/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Deploy a ingestion pipeline run by Id."
+        },
+        {
+          "info": {
+            "name": "Download all logs from last ingestion pipeline run as a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/logs/:id/last/download",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Stream all logs from last ingestion pipeline run by `Id` for download."
+        },
+        {
+          "info": {
+            "name": "Check the airflow REST host IP",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/ip"
+          },
+          "docs": "Check the Airflow REST host IP"
+        },
+        {
+          "info": {
+            "name": "Retrieve all logs from last ingestion pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/logs/:id/last",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns log chunk after this cursor"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of lines to return"
+              }
+            ]
+          },
+          "docs": "Get all logs from last ingestion pipeline run by `Id`."
+        },
+        {
+          "info": {
+            "name": "Get logs for a pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/logs/:fqn/:runId",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns log chunk after this cursor"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of lines to return"
+              }
+            ]
+          },
+          "docs": "Get logs for a specific pipeline run identified by FQN and runId with pagination support"
+        },
+        {
+          "info": {
+            "name": "Write logs for a pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/logs/:fqn/:runId",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Write or append logs for a specific pipeline run identified by FQN and runId. Supports both simple text logs and structured log batches with compression."
+        },
+        {
+          "info": {
+            "name": "Get pipeline status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/:fqn/pipelineStatus/:id",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of pipeline status run"
+              }
+            ]
+          },
+          "docs": "Get pipeline status of ingestion pipeline"
+        },
+        {
+          "info": {
+            "name": "Check the airflow REST status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/status"
+          },
+          "docs": "Check that the Airflow REST endpoint is reachable and up and running"
+        },
+        {
+          "info": {
+            "name": "Get a version of the ingestion pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Ingestion version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the ingestion pipeline by given `Id`"
+        },
+        {
+          "info": {
+            "name": "Mark as failed and kill any not-finished workflow or task for the ingestion pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/kill/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Kill an ingestion pipeline by Id."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List available runs for a pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/logs/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of runs to return"
+              }
+            ]
+          },
+          "docs": "Get a list of available run IDs for a pipeline"
+        },
+        {
+          "info": {
+            "name": "List ingestion workflow versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a ingestion pipeline identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted ingestion pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/ingestionPipelines/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted ingestion pipeline."
+        },
+        {
+          "info": {
+            "name": "Stream logs for a pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/logs/:fqn/stream/:runId",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              }
+            ]
+          },
+          "docs": "Stream logs in real-time for a specific pipeline run using Server-Sent Events"
+        },
+        {
+          "info": {
+            "name": "Stream progress updates for a pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/services/ingestionPipelines/progress/:fqn/stream/:runId",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              }
+            ]
+          },
+          "docs": "Stream real-time progress updates for a specific pipeline run using Server-Sent Events"
+        },
+        {
+          "info": {
+            "name": "Submit operation metrics batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/metrics/:fqn/:runId",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a batch of operation metrics for a pipeline run"
+        },
+        {
+          "info": {
+            "name": "Set an ingestion pipeline either as enabled or disabled",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/toggleIngestion/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Toggle an ingestion pipeline state by Id."
+        },
+        {
+          "info": {
+            "name": "Trigger an ingestion pipeline run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/services/ingestionPipelines/trigger/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the ingestion pipeline"
+              }
+            ]
+          },
+          "docs": "Trigger a ingestion pipeline run by id."
+        },
+        {
+          "info": {
+            "name": "Update pipeline progress",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/services/ingestionPipelines/progress/:fqn/:runId",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the ingestion pipeline"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "Run ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update real-time progress for a pipeline run"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

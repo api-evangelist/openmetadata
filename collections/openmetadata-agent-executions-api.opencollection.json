@@ -1,0 +1,145 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agent Executions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agent executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/agentExecutions",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by agent ID"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions before the given end timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of executions returned"
+              }
+            ]
+          },
+          "docs": "Get a list of agent executions, optionally filtered by agentId, startTs and endTs."
+        },
+        {
+          "info": {
+            "name": "Create an agent execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/agentExecutions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new agent execution record."
+        },
+        {
+          "info": {
+            "name": "Get an agent execution by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/agentExecutions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Agent Execution"
+              }
+            ]
+          },
+          "docs": "Get an agent execution by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete an agent execution by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/agentExecutions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Agent Execution"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              }
+            ]
+          },
+          "docs": "Delete an agent execution by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete agent execution data at a timestamp",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/agentExecutions/:agentId/:timestamp",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the AI Agent"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "path",
+                "description": "Timestamp of the execution to delete"
+              }
+            ]
+          },
+          "docs": "Delete agent execution data for an agent at a specific timestamp."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

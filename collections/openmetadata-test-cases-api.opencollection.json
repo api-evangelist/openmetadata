@@ -1,0 +1,875 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Test Cases API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Test Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get failed rows sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/:id/failedRowsSample",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Get a sample of failed rows for this test case."
+        },
+        {
+          "info": {
+            "name": "Add failed rows sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/:id/failedRowsSample",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              },
+              {
+                "name": "validate",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a sample of failed rows for this test case."
+        },
+        {
+          "info": {
+            "name": "Delete failed rows sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testCases/:id/failedRowsSample",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Delete a sample of failed rows for this test case."
+        },
+        {
+          "info": {
+            "name": "Add inspection query data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/:id/inspectionQuery",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add an inspection query for this test case."
+        },
+        {
+          "info": {
+            "name": "Add test cases to a logical test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/logicalTestCases/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add test cases to a logical test suite."
+        },
+        {
+          "info": {
+            "name": "Add test cases to a logical test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/logicalTestCases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add test cases to a logical test suite."
+        },
+        {
+          "info": {
+            "name": "List test cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number tests returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tests before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tests after this cursor"
+              },
+              {
+                "name": "entityLink",
+                "value": "",
+                "type": "query",
+                "description": "Return list of tests by entity link"
+              },
+              {
+                "name": "columnName",
+                "value": "",
+                "type": "query",
+                "description": "Return list of tests by column names"
+              },
+              {
+                "name": "entityFQN",
+                "value": "",
+                "type": "query",
+                "description": "Return list of tests by entity FQN"
+              },
+              {
+                "name": "testSuiteId",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tests filtered by the testSuite id"
+              },
+              {
+                "name": "includeAllTests",
+                "value": "",
+                "type": "query",
+                "description": "Include all the tests at the entity level"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "testCaseStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case by status"
+              },
+              {
+                "name": "testCaseType",
+                "value": "",
+                "type": "query",
+                "description": "Filter for test case type (e.g. column, table, all"
+              },
+              {
+                "name": "createdBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter test cases by the user who created them"
+              }
+            ]
+          },
+          "docs": "Get a list of test. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.Use the `testSuite` field to get the Basic Test Suite linked to this test case or use the `testSuites` field to list test suites (Basic and Logical) linked."
+        },
+        {
+          "info": {
+            "name": "Create a test case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataQuality/testCases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a test case"
+        },
+        {
+          "info": {
+            "name": "Update test case",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a TestCase, it it does not exist or update an existing TestCase."
+        },
+        {
+          "info": {
+            "name": "Create multiple test cases at once",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataQuality/testCases/createMany",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create multiple test cases at once up to a limit of 100 per request."
+        },
+        {
+          "info": {
+            "name": "Get a test case by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the test case"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a test case by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Delete a test case by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testCases/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the test case"
+              }
+            ]
+          },
+          "docs": "Delete a testCase by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get a test case by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a TestCase by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a test case",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/dataQuality/testCases/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing test using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a test case by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testCases/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              }
+            ]
+          },
+          "docs": "Delete a test case by `Id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a test case by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testCases/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a test case by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete a logical test case by Id from a test suite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataQuality/testCases/logicalTestCases/:testSuiteId/:id",
+            "params": [
+              {
+                "name": "testSuiteId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a logical test case by `Id` a test suite."
+        },
+        {
+          "info": {
+            "name": "Export test cases in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/name/:name/export",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name can be table FQN, test suite FQN, or '*' for platform-wide export"
+              }
+            ]
+          },
+          "docs": "Export test cases in CSV format. You can export test cases at different levels:\n- Table level: Provide table FQN to export test cases for that table\n- Test suite level: Provide test suite FQN to export test cases in that test suite\n- Platform-wide: Use '*' to export all test cases across the platform"
+        },
+        {
+          "info": {
+            "name": "Export test cases in CSV format asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/name/:name/exportAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name can be table FQN, test suite FQN, or '*' for platform-wide export"
+              }
+            ]
+          },
+          "docs": "Export test cases in CSV format asynchronously. You can export test cases at different levels:\n- Table level: Provide table FQN to export test cases for that table\n- Test suite level: Provide test suite FQN to export test cases in that test suite\n- Platform-wide: Use '*' to export all test cases across the platform"
+        },
+        {
+          "info": {
+            "name": "Get a version of the test case",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Test version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the test case by given `Id`"
+        },
+        {
+          "info": {
+            "name": "Import test cases from CSV",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/name/:name/import",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name parameter (currently not used, reserved for future use)"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              },
+              {
+                "name": "targetEntityType",
+                "value": "",
+                "type": "query",
+                "description": "The entity type for which the TestCase are being added (e.g., 'testSuite' or 'table')"
+              }
+            ]
+          },
+          "docs": "Import test cases from CSV to create or update test cases. The CSV should follow the test case CSV format."
+        },
+        {
+          "info": {
+            "name": "Import test cases from CSV asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/name/:name/importAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name parameter (currently not used, reserved for future use)"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              },
+              {
+                "name": "targetEntityType",
+                "value": "",
+                "type": "query",
+                "description": "The entity type for which the TestCase are being added (e.g., 'testSuite' or 'table')"
+              }
+            ]
+          },
+          "docs": "Import test cases from CSV asynchronously to create or update test cases. The CSV should follow the test case CSV format."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List test cases using search service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/search/list",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number tests returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tests after this offset"
+              },
+              {
+                "name": "entityLink",
+                "value": "",
+                "type": "query",
+                "description": "Return list of tests by entity link"
+              },
+              {
+                "name": "testSuiteId",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tests filtered by a testSuite id"
+              },
+              {
+                "name": "includeAllTests",
+                "value": "",
+                "type": "query",
+                "description": "Include all the tests at the entity level"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "testCaseStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case by status"
+              },
+              {
+                "name": "testCaseType",
+                "value": "",
+                "type": "query",
+                "description": "Filter for test case type (e.g. column, table, all)"
+              },
+              {
+                "name": "testPlatforms",
+                "value": "",
+                "type": "query",
+                "description": "Filter for test case by source (e.g. OpenMetadata, dbt, etc.)"
+              },
+              {
+                "name": "dataQualityDimension",
+                "value": "",
+                "type": "query",
+                "description": "Filter for test case by data quality dimension (e.g. OpenMetadata, dbt, etc.)"
+              },
+              {
+                "name": "startTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Parameter used to filter (inclusive) the test cases by the last execution timestamp (in milliseconds). Must be used in conjunction with `endTimestamp`"
+              },
+              {
+                "name": "endTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Parameter used to filter (inclusive) the test cases by the last execution timestamp (in milliseconds). Must be used in conjunction with `startTimestamp`"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field used to sort the test cases listing"
+              },
+              {
+                "name": "sortNestedPath",
+                "value": "",
+                "type": "query",
+                "description": "Set this field if your mapping is nested and you want to sort on a nested field"
+              },
+              {
+                "name": "sortNestedMode",
+                "value": "",
+                "type": "query",
+                "description": "Set this field if your mapping is nested and you want to sort on a nested field"
+              },
+              {
+                "name": "sortType",
+                "value": "",
+                "type": "query",
+                "description": "Sort type"
+              },
+              {
+                "name": "includeFields",
+                "value": "",
+                "type": "query",
+                "description": "Return only required fields in the response"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "domain filter to use in list"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "owner filter to use in list"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "tags filter to use in list"
+              },
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query",
+                "description": "tier filter to use in list"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "query",
+                "description": "service filter to use in list"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "search query term to use in list"
+              },
+              {
+                "name": "queryString",
+                "value": "",
+                "type": "query",
+                "description": "raw elasticsearch query to use in list"
+              },
+              {
+                "name": "createdBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter test cases by the user who created them"
+              },
+              {
+                "name": "followedBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter test cases by entities followed by a user"
+              },
+              {
+                "name": "columnName",
+                "value": "",
+                "type": "query",
+                "description": "Return list of tests by column names"
+              }
+            ]
+          },
+          "docs": "Get a list of test cases using the search service. Use `fields` parameter to get only necessary fields. Use offset/limit pagination to limit the number entries in the list using `limit` and `offset` query params.Use the `testSuite` field to get the Basic Test Suite linked to this test case or use the `testSuites` field to list test suites (Basic and Logical) linked."
+        },
+        {
+          "info": {
+            "name": "List test case versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a testCases identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted test case",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataQuality/testCases/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted test case."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

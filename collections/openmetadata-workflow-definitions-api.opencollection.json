@@ -1,0 +1,503 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Workflow Definitions API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workflow Definitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Workflow Definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowDefinitions",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of Workflow Definitions returned. Default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns the list of Workflow Definitions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns the list of Workflow Definitions after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of Workflow Definitions. Use `fields` parameter to get only necessary fields. Use cursor-based pagination tom limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/governance/workflowDefinitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Workflow Definition."
+        },
+        {
+          "info": {
+            "name": "Create or update Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/governance/workflowDefinitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Workflow Definition, if it does not exist or update an existing Workflow Definition."
+        },
+        {
+          "info": {
+            "name": "Get a Workflow Definition by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowDefinitions/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the Workflow Definition"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a Workflow Definition by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Update a Workflow Definition by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/governance/workflowDefinitions/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Workflow Definition"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Workflow Definition using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a Workflow Definition by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/governance/workflowDefinitions/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Delete a Workflow Definition by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get a Workflow Definition by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowDefinitions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a Workflow Definition by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a Workflow Definition by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/governance/workflowDefinitions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Workflow Definition using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a Workflow Definition by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/governance/workflowDefinitions/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Delete a Workflow Definition by `Id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a Workflow Definition by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/governance/workflowDefinitions/async/:id",
+            "params": [
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (default `false`)"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (default = `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a Workflow Definition by `Id`."
+        },
+        {
+          "info": {
+            "name": "Get a version of the Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowDefinitions/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "WorkflowDefinition version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the Workflow Definition by given `Id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowDefinitions/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List Workflow Definition versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowDefinitions/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a Workflow Definition identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Get a Workflow Definition by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/governance/workflowDefinitions/:id/redeploy",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Get a Workflow Definition by `Id`."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted Workflow Definition.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/governance/workflowDefinitions/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted Workflow Definition."
+        },
+        {
+          "info": {
+            "name": "Resume a suspended Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/governance/workflowDefinitions/name/:fqn/resume",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Resume a suspended Workflow Definition to continue its execution."
+        },
+        {
+          "info": {
+            "name": "Suspend a Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/governance/workflowDefinitions/name/:fqn/suspend",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Suspend a Workflow Definition to temporarily stop its execution."
+        },
+        {
+          "info": {
+            "name": "Start a new instance of a Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/governance/workflowDefinitions/name/:fqn/trigger",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the Workflow Definition"
+              }
+            ]
+          },
+          "docs": "Start a new instance of a Workflow Definition."
+        },
+        {
+          "info": {
+            "name": "Validate a Workflow Definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/governance/workflowDefinitions/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates a Workflow Definition for cycles, node ID conflicts, user task requirements, and updatedBy namespace configuration. This is useful for workflow builders to test their configuration before saving."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,3474 @@
+{
+  "item": [
+    {
+      "id": "60760492-0bc1-4151-aff5-75c18dcb7d7e",
+      "name": "Test Suites",
+      "description": {
+        "content": "`TestSuite` is a set of test cases grouped together to capture data quality.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "95ca413f-7fc8-42b1-832a-1061003b0e39",
+          "name": "List test suites",
+          "request": {
+            "name": "List test suites",
+            "description": {
+              "content": "Get a list of test suites. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number test definitions returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "testSuiteType",
+                  "value": "<string>",
+                  "description": "Returns executable or logical test suites. If omitted, returns all test suites."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeEmptyTestSuites",
+                  "value": "true",
+                  "description": "Include empty test suite in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<string>",
+                  "description": "Returns list of test definitions before this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Returns list of test definitions after this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9be3a74b-53c6-4fd2-b885-001b07075ce9",
+              "name": "List of test definitions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "owners,reviewers,tests,summary"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "testSuiteType",
+                      "value": "basic"
+                    },
+                    {
+                      "key": "includeEmptyTestSuites",
+                      "value": "true"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "36fe863d-6801-4870-aa3e-bd4b4c3e69e6",
+          "name": "Update logical test suite",
+          "request": {
+            "name": "Update logical test suite",
+            "description": {
+              "content": "Create a logical TestSuite, if it does not exist or update an existing test suite.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "46b218a1-70e1-4269-8bf8-384ba6047d96",
+              "name": "The updated test definition ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fa4c84b-adcf-47e1-ba64-236ecd4f4885",
+          "name": "Create a logical test suite",
+          "request": {
+            "name": "Create a logical test suite",
+            "description": {
+              "content": "Create a logical test suite.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c5276191-bcb0-43f8-9e07-29635ce2d6f0",
+              "name": "The test suite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c67a0986-b44e-45b6-a4be-1a9bf852abfa",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0b615b6-47cf-4cb3-958b-5afed10ed370",
+          "name": "Create or Update Basic test suite",
+          "request": {
+            "name": "Create or Update Basic test suite",
+            "description": {
+              "content": "Create a Basic TestSuite if it does not exist or update an existing one.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "basic"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0c7242ae-5f91-443b-9fa2-6291afcdf68c",
+              "name": "The updated test definition ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7a35fd43-8875-4858-8b6e-ad25f60e2bfa",
+          "name": "Create a basic test suite",
+          "request": {
+            "name": "Create a basic test suite",
+            "description": {
+              "content": "Create a basic test suite.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "basic"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2aa8bb79-710f-4ab7-a2c4-a3d64a0f53f8",
+              "name": "Basic test suite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad64469e-6e59-444b-9803-2fa7e968db5f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f683294-2d88-409f-925b-1d4cbf29f797",
+          "name": "Create or Update Executable test suite",
+          "request": {
+            "name": "Create or Update Executable test suite",
+            "description": {
+              "content": "Create an Executable TestSuite if it does not exist or update an existing one.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "executable"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a07f45b0-32a5-4da1-80e5-aed50bcbba00",
+              "name": "The updated test definition ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "executable"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"basicEntityReference\": \"<string>\",\n  \"executableEntityReference\": \"<string>\",\n  \"dataContract\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd0d8206-a488-49f8-b603-7e5b86ede73f",
+          "name": "Get a test suite by name",
+          "request": {
+            "name": "Get a test suite by name",
+            "description": {
+              "content": "Get a test suite by  name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "name",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Name of the test suite"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "60b4895d-4685-4f62-9211-8ff544e87957",
+              "name": "The test suite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "owners,reviewers,tests,summary"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dbdccf3d-939b-409e-b87a-fc01a85d1ceb",
+              "name": "Test Suite for instance {name} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "owners,reviewers,tests,summary"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f5751613-b975-4df3-a07b-e1bbf39b9db6",
+          "name": "Delete a logical test suite",
+          "request": {
+            "name": "Delete a logical test suite",
+            "description": {
+              "content": "Delete a logical test suite by `name`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "name",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the logical entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) FQN of the logical test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "18723962-bf04-47ab-83b0-2d5b62eac6bf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) FQN of the logical test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f1885095-a9a8-42f7-9bbc-794a6ab93419",
+              "name": "Logical Test suite for instance {name} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) FQN of the logical test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "461add9d-45f2-40ce-8250-9a729431e4d9",
+          "name": "Get a test suite by Id",
+          "request": {
+            "name": "Get a test suite by Id",
+            "description": {
+              "content": "Get a Test Suite by `Id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeRelations",
+                  "value": "<string>",
+                  "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the test suite"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4d8b1bd0-41b2-48ab-8777-addf88792691",
+              "name": "The Test suite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "owners,reviewers,tests,summary"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    },
+                    {
+                      "key": "includeRelations",
+                      "value": "owners:non-deleted,followers:all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79f8e787-4111-4dab-93f7-84a94ba52702",
+              "name": "Test Suite for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "owners,reviewers,tests,summary"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    },
+                    {
+                      "key": "includeRelations",
+                      "value": "owners:non-deleted,followers:all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f29fb1a1-2d79-4ab6-b77d-674613f22245",
+          "name": "Delete a logical test suite",
+          "request": {
+            "name": "Delete a logical test suite",
+            "description": {
+              "content": "Delete a logical test suite by `id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the logical entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the logical test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2968a6f9-e77b-49ae-8845-2870a91545b0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the logical test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3d0e3c92-7878-465c-9f1c-6c3407f1bd3b",
+              "name": "Logical test suite for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the logical test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d1992ac9-bc3f-4706-9ed2-d94cbeaa609a",
+          "name": "Update a test suite",
+          "request": {
+            "name": "Update a test suite",
+            "description": {
+              "content": "Update an existing testSuite using JsonPatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the test suite"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "843fdca8-6e0d-4b50-a0c7-626d5c1cd619",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[{op:remove, path:/a},{op:add, path: /b, value: val}]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5733f785-5fae-4478-b951-1306e96a59fa",
+          "name": "Delete a logical test suite asynchronously",
+          "request": {
+            "name": "Delete a logical test suite asynchronously",
+            "description": {
+              "content": "Delete a logical test suite by `id` asynchronously.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "async",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the logical entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the logical test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6d9f63a2-5924-4522-a2b0-05243ac95ee7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "async",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the logical test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a407f806-72dd-4c92-99f2-f6593ca8d776",
+              "name": "Logical test suite for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "async",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the logical test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d079ca21-5420-4435-b736-201069b2b16c",
+          "name": "Delete a test suite",
+          "request": {
+            "name": "Delete a test suite",
+            "description": {
+              "content": "Delete a test suite by `name`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "basic",
+                "name",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "false",
+                  "description": "Recursively delete this entity and it's children. (Default `false`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Name of the test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f285c7c5-ba7b-4aa1-883d-b3be08b88a8a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8c1b4baa-0711-4073-ae58-42477678d1a7",
+              "name": "Test suite for instance {name} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "61770a89-651f-48d0-8415-087b5a17d953",
+          "name": "Delete a test suite",
+          "request": {
+            "name": "Delete a test suite",
+            "description": {
+              "content": "Delete a test suite by `Id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "basic",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "false",
+                  "description": "Recursively delete this entity and it's children. (Default `false`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "53e102ea-90cd-4087-bfad-ff5ee6d2b4e3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e3c2bb5c-5510-4b70-aab0-6ee7a5c473a0",
+              "name": "Test suite for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "basic",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ca11342-679a-49ae-a17c-cd2331a55e93",
+          "name": "Delete a test suite",
+          "request": {
+            "name": "Delete a test suite",
+            "description": {
+              "content": "Delete a test suite by `name`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "executable",
+                "name",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "false",
+                  "description": "Recursively delete this entity and it's children. (Default `false`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Name of the test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "73f25351-173e-4134-90bc-3873a618f3f1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "executable",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "10509fdf-15e3-45b3-b306-dbdac4cf03c5",
+              "name": "Test suite for instance {name} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "executable",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0590b2d-7848-4203-ae56-a4a765ef6923",
+          "name": "Delete a test suite",
+          "request": {
+            "name": "Delete a test suite",
+            "description": {
+              "content": "Delete a test suite by `Id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "executable",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "false",
+                  "description": "Recursively delete this entity and it's children. (Default `false`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "false",
+                  "description": "Hard delete the entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the test suite"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cbbc4ed3-9d03-470f-a8d1-062ad00adbe1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "executable",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "61258f4e-1ced-42a5-8894-d4b80e5ef468",
+              "name": "Test suite for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "executable",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "recursive",
+                      "value": "false"
+                    },
+                    {
+                      "key": "hardDelete",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fd24923-41ed-4876-a884-35a08e9fac51",
+          "name": "Get Data Quality Report",
+          "request": {
+            "name": "Get Data Quality Report",
+            "description": {
+              "content": "Use the search service to perform data quality aggregation. You can use the `q` parameter to filter the results.\nthe `aggregationQuery` is of the form `bucketName=<bucketName>:aggType=<aggType>:field=<field>`. You can sperate aggregation\nquery with a comma `,` to perform nested aggregations.\nFor example, `bucketName=table:aggType=terms:field=databaseName,bucketName=<bucketName>:aggType=<aggType>:field=<field>`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "dataQualityReport"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Search query to filter the aggregation results"
+                },
+                {
+                  "disabled": false,
+                  "key": "aggregationQuery",
+                  "value": "<string>",
+                  "description": "Aggregation query to perform aggregation on the search results"
+                },
+                {
+                  "disabled": false,
+                  "key": "index",
+                  "value": "<string>",
+                  "description": "Index to perform the aggregation against"
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "Filter by domain fully qualified name"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "13f1b2a2-9488-496a-903a-3c660ddf224a",
+              "name": "Data Quality Report Results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "dataQualityReport"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "aggregationQuery",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "index",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [],\n  \"metadata\": {\n    \"keys\": [\n      \"string\",\n      \"string\"\n    ],\n    \"dimensions\": [\n      \"string\",\n      \"string\"\n    ],\n    \"metrics\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c13a82b-c031-4344-9a58-ba46c7109e19",
+          "name": "Get the execution summary of test suites",
+          "request": {
+            "name": "Get the execution summary of test suites",
+            "description": {
+              "content": "Get the execution summary of test suites.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "executionSummary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "testSuiteId",
+                  "value": "<uuid>",
+                  "description": "get summary for a specific test suite"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7192d3dd-9699-41b9-9ec4-44edaa276c97",
+              "name": "Tests Execution Summary",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "executionSummary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "testSuiteId",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7dc1e6c-acd2-40e5-967d-eae325597549",
+          "name": "Get a version of the test suite",
+          "request": {
+            "name": "Get a version of the test suite",
+            "description": {
+              "content": "Get a version of the test suite by given `id`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                ":id",
+                "versions",
+                ":version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the test suite"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "version",
+                  "description": "(Required) Test Suite version number in the form `major`.`minor`"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6bf62ba4-14fd-4144-90d3-a38ee5e4c7c3",
+              "name": "TestSuite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id",
+                    "versions",
+                    ":version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version",
+                      "description": "(Required) Test Suite version number in the form `major`.`minor`"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e90b40ff-1e81-4f9e-bbb5-3b42d62cac65",
+              "name": "Test Suite for instance {id} and version {version} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id",
+                    "versions",
+                    ":version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version",
+                      "description": "(Required) Test Suite version number in the form `major`.`minor`"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "690ee797-46fc-4f8e-a7b6-9bcfb4cc778f",
+          "name": "List all entity versions within a time range",
+          "request": {
+            "name": "List all entity versions within a time range",
+            "description": {
+              "content": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>",
+                  "description": "(Required) Start timestamp in milliseconds since epoch"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>",
+                  "description": "(Required) End timestamp in milliseconds since epoch"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<string>",
+                  "description": "Returns list of entity versions before this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Returns list of entity versions after this cursor"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "32178313-616e-454a-b76e-dd4953722bb0",
+              "name": "List of all versions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [],\n  \"paging\": {\n    \"total\": 411,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 3676,\n    \"limit\": 5615\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 2004,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3bd9bc37-176a-4da0-900a-c729bfc0462d",
+          "name": "List test suite using search service",
+          "request": {
+            "name": "List test suite using search service",
+            "description": {
+              "content": "Get a list of test suite using the search service. Use `fields` parameter to get only necessary fields. Use offset/limit pagination to limit the number entries in the list using `limit` and `offset` query params.Use the `tests` field to get the test cases linked to the test suite and/or use the `summary` field to get a summary of test case executions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "search",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number test suite returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Returns list of test suite after this offset (default = 0)"
+                },
+                {
+                  "disabled": false,
+                  "key": "testSuiteType",
+                  "value": "<string>",
+                  "description": "Returns executable or logical test suites. If omitted, returns all test suites."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeEmptyTestSuites",
+                  "value": "true",
+                  "description": "Include empty test suite in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "Filter a test suite by domain."
+                },
+                {
+                  "disabled": false,
+                  "key": "fullyQualifiedName",
+                  "value": "<string>",
+                  "description": "Filter a test suite by fully qualified name."
+                },
+                {
+                  "disabled": false,
+                  "key": "owner",
+                  "value": "<string>",
+                  "description": "Filter test suites by owner."
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortField",
+                  "value": "<string>",
+                  "description": "Field used to sort the test cases listing"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortNestedPath",
+                  "value": "<string>",
+                  "description": "Set this field if your mapping is nested and you want to sort on a nested field"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortNestedMode",
+                  "value": "<string>",
+                  "description": "Set this field if your mapping is nested and you want to sort on a nested field"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortType",
+                  "value": "desc",
+                  "description": "Sort type"
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "search query term to use in list"
+                },
+                {
+                  "disabled": false,
+                  "key": "queryString",
+                  "value": "<string>",
+                  "description": "raw elasticsearch query to use in list"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a1732f5c-4bae-4eff-96d8-e9dfae961132",
+              "name": "List of test suites",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "search",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "owners,reviewers,tests,summary"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "testSuiteType",
+                      "value": "executable"
+                    },
+                    {
+                      "key": "includeEmptyTestSuites",
+                      "value": "true"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fullyQualifiedName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "owner",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    },
+                    {
+                      "key": "sortField",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortNestedPath",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortNestedMode",
+                      "value": "min,max,avg,sum,median"
+                    },
+                    {
+                      "key": "sortType",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "queryString",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c858a99a-5f61-4b0a-ab80-ef2f41ee0795",
+          "name": "List test suite versions",
+          "request": {
+            "name": "List test suite versions",
+            "description": {
+              "content": "Get a list of all the versions of a test suite identified by `id`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                ":id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the test suite"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12971bd6-a926-4f2c-a391-67dba0cf65bd",
+              "name": "List of test suite versions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the test suite"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityType\": \"string\",\n  \"versions\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "03525924-4076-4c03-84eb-c8369f502432",
+          "name": "Restore a soft deleted test suite",
+          "request": {
+            "name": "Restore a soft deleted test suite",
+            "description": {
+              "content": "Restore a soft deleted test suite.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testSuites",
+                "restore"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cd6a0026-78e2-48bb-8e8d-7d72279d04e1",
+              "name": "Successfully restored the TestSuite.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testSuites",
+                    "restore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3a59a97d-6495-4b3a-ad72-6f251b941784",
+    "name": "OpenMetadata APIs Agent Executions Test Suites API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

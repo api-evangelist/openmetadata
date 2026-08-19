@@ -1,0 +1,1254 @@
+{
+  "item": [
+    {
+      "id": "a6a0f8a2-a82d-4cef-ae3b-54e775e2d67f",
+      "name": "Usage",
+      "description": {
+        "content": "APIs related usage of data assets.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "26869a7e-d28f-4327-9d85-f13f115cde8f",
+          "name": "Get usage by id",
+          "request": {
+            "name": "Get usage by id",
+            "description": {
+              "content": "Get usage details for an entity identified by `id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "usage",
+                ":entity",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "days",
+                  "value": "<integer>",
+                  "description": "Usage for number of days going back from the given date (default=1, min=1, max=30)"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<string>",
+                  "description": "Usage for number of days going back from this date in ISO 8601 format. (default = currentDate)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity",
+                  "description": "(Required) Entity type for which usage is requested"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Entity id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6a1ec8bf-4fd7-4d39-9552-8766371a0d5d",
+              "name": "Entity usage",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is requested"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Entity id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity\": {\n    \"id\": \"de366e7b-8503-6265-6957-72145461941c\",\n    \"type\": \"string\",\n    \"name\": \"string\",\n    \"fullyQualifiedName\": \"string\",\n    \"description\": \"string\",\n    \"displayName\": \"string\",\n    \"deleted\": false,\n    \"inherited\": false,\n    \"href\": \"https://RdFCjMLVdpTTqWY.sihC+ZrVR.AZoSCC\"\n  },\n  \"usage\": [\n    {\n      \"dailyStats\": {\n        \"count\": 5075,\n        \"percentileRank\": 7670.283749909582\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 1176,\n        \"percentileRank\": 3201.0266327377067\n      },\n      \"monthlyStats\": {\n        \"count\": 8820,\n        \"percentileRank\": 3076.332395936291\n      }\n    },\n    {\n      \"dailyStats\": {\n        \"count\": 2821,\n        \"percentileRank\": 443.32144653128734\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 1596,\n        \"percentileRank\": 2521.304487313415\n      },\n      \"monthlyStats\": {\n        \"count\": 4174,\n        \"percentileRank\": 7553.527908278891\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4eb6547-28e3-4ca6-963c-2530b7cf8b0f",
+              "name": "Entity for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is requested"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Entity id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "972ddbd0-ae3a-469e-a6cd-210b4c10a695",
+          "name": "Report usage",
+          "request": {
+            "name": "Report usage",
+            "description": {
+              "content": "Report usage information for an entity on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "usage",
+                ":entity",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity",
+                  "description": "(Required) Entity type for which usage is reported"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Entity id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "41ec744a-14b0-4a68-a034-74b09826cd83",
+              "name": "Usage information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Entity id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity\": {\n    \"id\": \"dba1052e-f3c7-b876-d687-fdd08376cc49\",\n    \"type\": \"string\",\n    \"name\": \"string\",\n    \"fullyQualifiedName\": \"string\",\n    \"description\": \"string\",\n    \"displayName\": \"string\",\n    \"deleted\": false,\n    \"inherited\": false,\n    \"href\": \"https://tGMhLsfCMT.cnE+ZOmpJxoXNlZCC.Ns0MSMQT4NnnqMWyvbn6DZNs2JA9R.ZkAQX,,Wu2s11NuYW3vQnVd\"\n  },\n  \"usage\": [\n    {\n      \"dailyStats\": {\n        \"count\": 9987,\n        \"percentileRank\": 8064.953147880156\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 9139,\n        \"percentileRank\": 9684.858912245163\n      },\n      \"monthlyStats\": {\n        \"count\": 9344,\n        \"percentileRank\": 4973.170421499614\n      }\n    },\n    {\n      \"dailyStats\": {\n        \"count\": 3700,\n        \"percentileRank\": 6971.585504135271\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 8378,\n        \"percentileRank\": 4345.701756468585\n      },\n      \"monthlyStats\": {\n        \"count\": 16,\n        \"percentileRank\": 8082.025716406622\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f56e420e-31d5-4496-adbf-2abeeefb6c7c",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Entity id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fc4acc45-b76e-4d23-9b29-ee475c03462e",
+          "name": "Report usage",
+          "request": {
+            "name": "Report usage",
+            "description": {
+              "content": "Report usage information for an entity on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "usage",
+                ":entity",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity",
+                  "description": "(Required) Entity type for which usage is reported"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Entity id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0867db4b-7185-4516-b150-23d5df572e95",
+              "name": "Usage information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Entity id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity\": {\n    \"id\": \"dba1052e-f3c7-b876-d687-fdd08376cc49\",\n    \"type\": \"string\",\n    \"name\": \"string\",\n    \"fullyQualifiedName\": \"string\",\n    \"description\": \"string\",\n    \"displayName\": \"string\",\n    \"deleted\": false,\n    \"inherited\": false,\n    \"href\": \"https://tGMhLsfCMT.cnE+ZOmpJxoXNlZCC.Ns0MSMQT4NnnqMWyvbn6DZNs2JA9R.ZkAQX,,Wu2s11NuYW3vQnVd\"\n  },\n  \"usage\": [\n    {\n      \"dailyStats\": {\n        \"count\": 9987,\n        \"percentileRank\": 8064.953147880156\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 9139,\n        \"percentileRank\": 9684.858912245163\n      },\n      \"monthlyStats\": {\n        \"count\": 9344,\n        \"percentileRank\": 4973.170421499614\n      }\n    },\n    {\n      \"dailyStats\": {\n        \"count\": 3700,\n        \"percentileRank\": 6971.585504135271\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 8378,\n        \"percentileRank\": 4345.701756468585\n      },\n      \"monthlyStats\": {\n        \"count\": 16,\n        \"percentileRank\": 8082.025716406622\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b376a75-b6a4-47a1-b0b0-f9ab7948e71d",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Entity id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bc1f67f4-0758-47c3-be91-45c7681b6d9e",
+          "name": "Get usage by fully qualified name",
+          "request": {
+            "name": "Get usage by fully qualified name",
+            "description": {
+              "content": "Get usage details for an entity identified by fully qualified name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "usage",
+                ":entity",
+                "name",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "days",
+                  "value": "<integer>",
+                  "description": "Usage for number of days going back from the given date (default=1, min=1, max=30)"
+                },
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<string>",
+                  "description": "Usage for number of days going back from this date in ISO 8601 format (default = currentDate)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity",
+                  "description": "(Required) Entity type for which usage is requested"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2d9a6405-1ec2-486f-bd9d-f330dad8340e",
+              "name": "Entity usage",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is requested"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity\": {\n    \"id\": \"dba1052e-f3c7-b876-d687-fdd08376cc49\",\n    \"type\": \"string\",\n    \"name\": \"string\",\n    \"fullyQualifiedName\": \"string\",\n    \"description\": \"string\",\n    \"displayName\": \"string\",\n    \"deleted\": false,\n    \"inherited\": false,\n    \"href\": \"https://tGMhLsfCMT.cnE+ZOmpJxoXNlZCC.Ns0MSMQT4NnnqMWyvbn6DZNs2JA9R.ZkAQX,,Wu2s11NuYW3vQnVd\"\n  },\n  \"usage\": [\n    {\n      \"dailyStats\": {\n        \"count\": 9987,\n        \"percentileRank\": 8064.953147880156\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 9139,\n        \"percentileRank\": 9684.858912245163\n      },\n      \"monthlyStats\": {\n        \"count\": 9344,\n        \"percentileRank\": 4973.170421499614\n      }\n    },\n    {\n      \"dailyStats\": {\n        \"count\": 3700,\n        \"percentileRank\": 6971.585504135271\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 8378,\n        \"percentileRank\": 4345.701756468585\n      },\n      \"monthlyStats\": {\n        \"count\": 16,\n        \"percentileRank\": 8082.025716406622\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c8fadbd-97b2-4340-91d2-edb07ee25402",
+              "name": "Entity for instance {fqn} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is requested"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f6c313d-d586-4926-8868-2a89ad022a8c",
+          "name": "Report usage by fully qualified name",
+          "request": {
+            "name": "Report usage by fully qualified name",
+            "description": {
+              "content": "Report usage information for an entity by name on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "usage",
+                ":entity",
+                "name",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity",
+                  "description": "(Required) Entity type for which usage is reported"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0dd8a1d3-0504-45c4-b220-22df77a60527",
+              "name": "Usage information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity\": {\n    \"id\": \"dba1052e-f3c7-b876-d687-fdd08376cc49\",\n    \"type\": \"string\",\n    \"name\": \"string\",\n    \"fullyQualifiedName\": \"string\",\n    \"description\": \"string\",\n    \"displayName\": \"string\",\n    \"deleted\": false,\n    \"inherited\": false,\n    \"href\": \"https://tGMhLsfCMT.cnE+ZOmpJxoXNlZCC.Ns0MSMQT4NnnqMWyvbn6DZNs2JA9R.ZkAQX,,Wu2s11NuYW3vQnVd\"\n  },\n  \"usage\": [\n    {\n      \"dailyStats\": {\n        \"count\": 9987,\n        \"percentileRank\": 8064.953147880156\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 9139,\n        \"percentileRank\": 9684.858912245163\n      },\n      \"monthlyStats\": {\n        \"count\": 9344,\n        \"percentileRank\": 4973.170421499614\n      }\n    },\n    {\n      \"dailyStats\": {\n        \"count\": 3700,\n        \"percentileRank\": 6971.585504135271\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 8378,\n        \"percentileRank\": 4345.701756468585\n      },\n      \"monthlyStats\": {\n        \"count\": 16,\n        \"percentileRank\": 8082.025716406622\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eeb14c38-fb5e-45d0-92f2-5caff96ca86d",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6457d714-482a-45c6-a4e0-0cf142a00581",
+          "name": "Report usage by fully qualified name",
+          "request": {
+            "name": "Report usage by fully qualified name",
+            "description": {
+              "content": "Report usage information for an entity by name on a given date. System stores last 30 days of usage information. Usage information older than 30 days is deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "usage",
+                ":entity",
+                "name",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity",
+                  "description": "(Required) Entity type for which usage is reported"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "314b5f53-7697-4b44-9210-4d74bc12d375",
+              "name": "Usage information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity\": {\n    \"id\": \"dba1052e-f3c7-b876-d687-fdd08376cc49\",\n    \"type\": \"string\",\n    \"name\": \"string\",\n    \"fullyQualifiedName\": \"string\",\n    \"description\": \"string\",\n    \"displayName\": \"string\",\n    \"deleted\": false,\n    \"inherited\": false,\n    \"href\": \"https://tGMhLsfCMT.cnE+ZOmpJxoXNlZCC.Ns0MSMQT4NnnqMWyvbn6DZNs2JA9R.ZkAQX,,Wu2s11NuYW3vQnVd\"\n  },\n  \"usage\": [\n    {\n      \"dailyStats\": {\n        \"count\": 9987,\n        \"percentileRank\": 8064.953147880156\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 9139,\n        \"percentileRank\": 9684.858912245163\n      },\n      \"monthlyStats\": {\n        \"count\": 9344,\n        \"percentileRank\": 4973.170421499614\n      }\n    },\n    {\n      \"dailyStats\": {\n        \"count\": 3700,\n        \"percentileRank\": 6971.585504135271\n      },\n      \"date\": \"string\",\n      \"weeklyStats\": {\n        \"count\": 8378,\n        \"percentileRank\": 4345.701756468585\n      },\n      \"monthlyStats\": {\n        \"count\": 16,\n        \"percentileRank\": 8082.025716406622\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3314170b-c6ba-4431-9783-0df69c76b787",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "usage",
+                    ":entity",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity",
+                      "description": "(Required) Entity type for which usage is reported"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity that uniquely identifies an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"count\": \"<integer>\",\n  \"date\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1cd20bf0-1f19-4533-8bb0-2ba849d3f34a",
+    "name": "OpenMetadata APIs Agent Executions Usage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "item": [
+    {
+      "id": "008549b8-3a5c-4b74-8989-2fee481b7be9",
+      "name": "System",
+      "description": {
+        "content": "System diagnostics providing a performance snapshot for load test correlation",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ad243353-9fdb-4919-8072-e6fca96d9c2a",
+          "name": "Get system diagnostics",
+          "request": {
+            "name": "Get system diagnostics",
+            "description": {
+              "content": "Returns a structured performance snapshot including JVM, Jetty thread pool, database connection pool, bulk executor, and per-endpoint latency breakdown.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "system",
+                "diagnostics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1171ce6f-5008-4dc9-a495-5294ec2e9b05",
+              "name": "Diagnostics snapshot",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "system",
+                    "diagnostics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0385a77-13d4-498e-886f-b28b4196b0e2",
+          "name": "Get version of metadata service",
+          "request": {
+            "name": "Get version of metadata service",
+            "description": {
+              "content": "Get the build version of OpenMetadata service and build timestamp.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "system",
+                "version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cf9d2df5-61a5-49b3-9f60-9c800c2b99f9",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "system",
+                    "version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"version\": \"string\",\n  \"revision\": \"string\",\n  \"timestamp\": 789\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f158d21f-cfb1-4985-94af-eb960f686174",
+    "name": "OpenMetadata APIs Agent Executions System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

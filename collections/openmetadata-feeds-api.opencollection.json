@@ -1,0 +1,359 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Feeds API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Feeds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all the posts of a thread",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/feed/:id/posts",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the thread"
+              }
+            ]
+          },
+          "docs": "Get all the posts of an existing thread."
+        },
+        {
+          "info": {
+            "name": "Add post to a thread",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/feed/:id/posts",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the thread"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a post to an existing thread."
+        },
+        {
+          "info": {
+            "name": "Close a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/feed/tasks/:id/close",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the task thread"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Close a task without making any changes to the entity."
+        },
+        {
+          "info": {
+            "name": "List threads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/feed",
+            "params": [
+              {
+                "name": "limitPosts",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of posts sorted by chronological order (1 to 1000000, default = 3)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of threads returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of threads before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of threads after this cursor"
+              },
+              {
+                "name": "entityLink",
+                "value": "",
+                "type": "query",
+                "description": "Filter threads by entity link of entity about which this thread is created"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Filter threads by user id. This filter requires a 'filterType' query param. The default filter type is 'OWNER'. This filter cannot be combined with the entityLink filter."
+              },
+              {
+                "name": "filterType",
+                "value": "",
+                "type": "query",
+                "description": "Filter type definition for the user filter. It can take one of 'OWNER', 'FOLLOWS', 'MENTIONS'. This must be used with the 'user' query param"
+              },
+              {
+                "name": "resolved",
+                "value": "",
+                "type": "query",
+                "description": "Filter threads by whether they are resolved or not. By default resolved is false"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of thread to filter the results. It can take one of 'Conversation', 'Task', 'Announcement'"
+              },
+              {
+                "name": "taskStatus",
+                "value": "",
+                "type": "query",
+                "description": "The status of tasks to filter the results. It can take one of 'Open', 'Closed'. This filter will take effect only when type is set to Task"
+              },
+              {
+                "name": "activeAnnouncement",
+                "value": "",
+                "type": "query",
+                "description": "Whether to filter results by announcements that are currently active. This filter will take effect only when type is set to Announcement"
+              }
+            ]
+          },
+          "docs": "Get a list of threads, optionally filtered by `entityLink`."
+        },
+        {
+          "info": {
+            "name": "Create a thread",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/feed",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new thread. A thread is created about a data asset when a user posts the first post."
+        },
+        {
+          "info": {
+            "name": "Update post of a thread by `Id`.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/feed/:threadId/posts/:postId",
+            "params": [
+              {
+                "name": "threadId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the thread"
+              },
+              {
+                "name": "postId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the post"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a post of an existing thread using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a post from its thread",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/feed/:threadId/posts/:postId",
+            "params": [
+              {
+                "name": "threadId",
+                "value": "",
+                "type": "path",
+                "description": "ThreadId of the post to be deleted"
+              },
+              {
+                "name": "postId",
+                "value": "",
+                "type": "path",
+                "description": "PostId of the post to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a post from an existing thread."
+        },
+        {
+          "info": {
+            "name": "Delete a thread by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/feed/:threadId",
+            "params": [
+              {
+                "name": "threadId",
+                "value": "",
+                "type": "path",
+                "description": "ThreadId of the thread to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete an existing thread and all its relationships."
+        },
+        {
+          "info": {
+            "name": "Get a thread by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/feed/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Thread"
+              }
+            ]
+          },
+          "docs": "Get a thread by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a thread by `Id`.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/feed/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the thread"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing thread using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Get a task thread by task Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/feed/tasks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the task thread"
+              }
+            ]
+          },
+          "docs": "Get a task thread by `task Id`."
+        },
+        {
+          "info": {
+            "name": "Count of threads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/feed/count",
+            "params": [
+              {
+                "name": "entityLink",
+                "value": "",
+                "type": "query",
+                "description": "Filter threads by entity link"
+              }
+            ]
+          },
+          "docs": "Get a count of threads, optionally filtered by `entityLink` for each of the entities."
+        },
+        {
+          "info": {
+            "name": "Resolve a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/feed/tasks/:id/resolve",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the task thread"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resolve a task."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

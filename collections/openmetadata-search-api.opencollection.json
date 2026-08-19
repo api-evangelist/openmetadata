@@ -1,0 +1,607 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Search API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get aggregated fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/aggregate",
+            "params": [
+              {
+                "name": "index",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "field",
+                "value": "",
+                "type": "query",
+                "description": "Field in an entity."
+              },
+              {
+                "name": "value",
+                "value": "",
+                "type": "query",
+                "description": "value for searching in aggregation"
+              },
+              {
+                "name": "sourceFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields to fetch from _source per bucket."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search Query Text, Pass *text* for substring match; Pass without wildcards for exact match. <br/> 1. For listing all tables or topics pass q=* <br/>2. For search tables or topics pass q=*search_term* <br/>3. For searching field names such as search by columnNames pass q=columnNames:address, for searching deleted entities, use q=deleted:true <br/>4. For searching by tag names pass q=tags.tagFQN:user.email <br/>5. When user selects a filter pass q=query_text AND tags.tagFQN:user.email AND platform:MYSQL <br/>6. Search with multiple values of same filter q=tags.tagFQN:user.email AND tags.tagFQN:user.address <br/>NOTE: logic operators such as AND, OR and NOT must be in uppercase "
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 10"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "queryText",
+                "value": "",
+                "type": "query",
+                "description": "Free-text search query to scope aggregation results"
+              }
+            ]
+          },
+          "docs": "Get aggregated fields from entities."
+        },
+        {
+          "info": {
+            "name": "Get aggregated Search Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/search/aggregate"
+          },
+          "docs": "Get aggregated fields from entities."
+        },
+        {
+          "info": {
+            "name": "Clean orphan indexes",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/search/stats/orphan"
+          },
+          "docs": "Delete all orphan indexes (indexes with zero aliases) from the search cluster."
+        },
+        {
+          "info": {
+            "name": "Export search results as CSV (streaming)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/export",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search Query Text"
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "query",
+                "description": "ElasticSearch Index name, defaults to table"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "post_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be used as a post_filter"
+              },
+              {
+                "name": "sort_field",
+                "value": "",
+                "type": "query",
+                "description": "Sort the search results by field"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order asc for ascending or desc for descending, defaults to desc"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to export. When null, exports all matching results up to the hard cap."
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Starting offset for export. Use with size to export a specific page of results (e.g., from=30&size=15 for page 3)."
+              }
+            ]
+          },
+          "docs": "Exports the current search results as a streaming CSV download. The response is streamed directly to the client without buffering the entire result set in memory."
+        },
+        {
+          "info": {
+            "name": "Get exact entity type counts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/entityTypeCounts",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query text"
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "query",
+                "description": "Index to search in (all, dataAsset, table, etc.)"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "post_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be used as a post_filter"
+              }
+            ]
+          },
+          "docs": "Get exact counts of entities by type for a given search query. This endpoint provides accurate counts when searching across all entity types."
+        },
+        {
+          "info": {
+            "name": "Get search cluster statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/stats"
+          },
+          "docs": "Get statistics about the search cluster including indexes, shards, and orphan indexes."
+        },
+        {
+          "info": {
+            "name": "Preview Search Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/search/preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Preview search results based on provided SearchSettings without saving changes."
+        },
+        {
+          "info": {
+            "name": "Only Reindex the selected entities in Elasticsearch.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/search/reindexEntities",
+            "params": [
+              {
+                "name": "timeoutMinutes",
+                "value": "",
+                "type": "query",
+                "description": "Job timeout in minutes (default: 30, max: 60)"
+              }
+            ]
+          },
+          "docs": "Only Reindex the selected entities in Elasticsearch. Maximum 500 entities per request. Job timeout: 30 minutes."
+        },
+        {
+          "info": {
+            "name": "Search entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/query",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search Query Text, Pass *text* for substring match; Pass without wildcards for exact match. <br/> 1. For listing all tables or topics pass q=* <br/>2. For search tables or topics pass q=*search_term* <br/>3. For searching field names such as search by columnNames pass q=columnNames:address , for searching deleted entities, use q=deleted:true <br/> 4. For searching by tag names pass q=tags.tagFQN:user.email <br/>5. When user selects a filter pass q=query_text AND q=tags.tagFQN:user.email AND platform:MYSQL <br/>6. Search with multiple values of same filter q=tags.tagFQN:user.email AND tags.tagFQN:user.address <br/> 7. Search by service version and type q=service.type:databaseService AND version:0.1 <br/> 8. Search Tables with Specific Constraints q=tableConstraints.constraintType.keyword:PRIMARY_KEY AND NOT tier.tagFQN:Tier.Tier1 <br/> 9. Search with owners q=owner.displayName.keyword:owner_name <br/> NOTE: logic operators such as AND, OR and NOT must be in uppercase "
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "query",
+                "description": "ElasticSearch Index name, defaults to table_search_index"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 10"
+              },
+              {
+                "name": "search_after",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2. Each value carried as its own parameter so values containing ',' (e.g. a glossary term FQN) are safe."
+              },
+              {
+                "name": "sort_field",
+                "value": "",
+                "type": "query",
+                "description": "Sort the search results by field, available fields to sort weekly_stats , daily_stats, monthly_stats, last_updated_timestamp"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order asc for ascending or desc for descending, defaults to desc"
+              },
+              {
+                "name": "track_total_hits",
+                "value": "",
+                "type": "query",
+                "description": "Track Total Hits"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "post_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be used as a post_filter"
+              },
+              {
+                "name": "fetch_source",
+                "value": "",
+                "type": "query",
+                "description": "Get document body for each hit"
+              },
+              {
+                "name": "include_source_fields",
+                "value": "",
+                "type": "query",
+                "description": "Get only selected fields of the document body for each hit. Empty value will return all fields"
+              },
+              {
+                "name": "exclude_source_fields",
+                "value": "",
+                "type": "query",
+                "description": "Exclude specified fields from the document body for each hit. Use this to exclude heavy fields like 'columns' for better performance"
+              },
+              {
+                "name": "getHierarchy",
+                "value": "",
+                "type": "query",
+                "description": "Fetch search results in hierarchical order of children elements. By default hierarchy is not fetched. Currently only supported for glossary_term_search_index."
+              },
+              {
+                "name": "explain",
+                "value": "",
+                "type": "query",
+                "description": "Explain the results of the query. Defaults to false. Only for debugging purposes."
+              },
+              {
+                "name": "include_aggregations",
+                "value": "",
+                "type": "query",
+                "description": "Include aggregations in the search response. Defaults to true. Set to false to skip aggregations for faster response times when only search results are needed."
+              }
+            ]
+          },
+          "docs": "Search entities using query text. Use query params `from` and `size` for pagination. Use `sort_field` to sort the results in `sort_order`."
+        },
+        {
+          "info": {
+            "name": "Search entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/fieldQuery",
+            "params": [
+              {
+                "name": "fieldName",
+                "value": "",
+                "type": "query",
+                "description": "field name"
+              },
+              {
+                "name": "fieldValue",
+                "value": "",
+                "type": "query",
+                "description": "field value"
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "query",
+                "description": "Search Index name, defaults to table_search_index"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 10"
+              }
+            ]
+          },
+          "docs": "Search entities"
+        },
+        {
+          "info": {
+            "name": "Search entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/sourceUrl",
+            "params": [
+              {
+                "name": "sourceUrl",
+                "value": "",
+                "type": "query",
+                "description": "source url"
+              }
+            ]
+          },
+          "docs": "Search entities"
+        },
+        {
+          "info": {
+            "name": "Search entities in ES index with Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/get/:index/doc/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "document Id"
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "path",
+                "description": "Index Name"
+              }
+            ]
+          },
+          "docs": "Search entities in ES index with Id"
+        },
+        {
+          "info": {
+            "name": "Search entities using Natural Language Query (NLQ)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/nlq/query",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "NLQ query string in natural language"
+              },
+              {
+                "name": "index",
+                "value": "",
+                "type": "query",
+                "description": "ElasticSearch Index name, defaults to table_search_index"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 10"
+              },
+              {
+                "name": "search_after",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor. Repeat once per sort value: ?search_after=v1&search_after=v2."
+              },
+              {
+                "name": "sort_field",
+                "value": "",
+                "type": "query",
+                "description": "Sort the search results by field"
+              },
+              {
+                "name": "sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order asc for ascending or desc for descending, defaults to desc"
+              },
+              {
+                "name": "track_total_hits",
+                "value": "",
+                "type": "query",
+                "description": "Track Total Hits"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Additional filters to apply"
+              },
+              {
+                "name": "post_filter",
+                "value": "",
+                "type": "query",
+                "description": "Post-filters to apply"
+              },
+              {
+                "name": "fetch_source",
+                "value": "",
+                "type": "query",
+                "description": "Get document body for each hit"
+              },
+              {
+                "name": "include_source_fields",
+                "value": "",
+                "type": "query",
+                "description": "Get only selected fields of the document body"
+              },
+              {
+                "name": "exclude_source_fields",
+                "value": "",
+                "type": "query",
+                "description": "Exclude specified fields from the document body for each hit"
+              },
+              {
+                "name": "getHierarchy",
+                "value": "",
+                "type": "query",
+                "description": "Fetch results in hierarchical order"
+              },
+              {
+                "name": "explain",
+                "value": "",
+                "type": "query",
+                "description": "Explain the results of the query"
+              }
+            ]
+          },
+          "docs": "Search entities using Natural Language Queries (NLQ) with full search capabilities."
+        },
+        {
+          "info": {
+            "name": "Sync all index templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/search/templates"
+          },
+          "docs": "Create or update index templates for all entity types from indexMapping.json. Templates ensure proper mappings when ES/OS auto-creates indices."
+        },
+        {
+          "info": {
+            "name": "Sync index template for a specific entity type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/search/templates/:entityType",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type"
+              }
+            ]
+          },
+          "docs": "Create or update index template for a specific entity type from indexMapping.json."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,282 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Test Case Incident Manager API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Test Case Incident Manager",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the test case failure statuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/testCaseIncidentStatus",
+            "params": [
+              {
+                "name": "testCaseId",
+                "value": "",
+                "type": "query",
+                "description": "Test Case ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number tests returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tests at the offset"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses before the given end timestamp"
+              },
+              {
+                "name": "testCaseResolutionStatusType",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses by status"
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "Only list the latest statuses"
+              },
+              {
+                "name": "assignee",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses by assignee"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "testCaseFQN",
+                "value": "",
+                "type": "query",
+                "description": "Test case fully qualified name"
+              },
+              {
+                "name": "originEntityFQN",
+                "value": "",
+                "type": "query",
+                "description": "Origin entity for which the incident was opened for"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter incidents by domain"
+              }
+            ]
+          },
+          "docs": "Get a list of all the test case failure statuses, optionally filtered by `startTs` and `endTs` of the status creation, status, assignee, and test case id. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a new test case failure status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataQuality/testCases/testCaseIncidentStatus",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new test case failure status"
+        },
+        {
+          "info": {
+            "name": "Get test case failure status by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/testCaseIncidentStatus/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Test Case Failure Status ID"
+              }
+            ]
+          },
+          "docs": "Get a test case failure status by id"
+        },
+        {
+          "info": {
+            "name": "Update an existing test case failure status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/dataQuality/testCases/testCaseIncidentStatus/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the test case result status"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing test case failure status"
+        },
+        {
+          "info": {
+            "name": "Get test case failure statuses for a sequence id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/testCaseIncidentStatus/stateId/:stateId",
+            "params": [
+              {
+                "name": "stateId",
+                "value": "",
+                "type": "path",
+                "description": "Sequence ID"
+              }
+            ]
+          },
+          "docs": "Get a test case failure statuses for a sequence id"
+        },
+        {
+          "info": {
+            "name": "List test case resolution status using search service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataQuality/testCases/testCaseIncidentStatus/search/list",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of incidents returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of incidents after this offset"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses before the given end timestamp"
+              },
+              {
+                "name": "testCaseResolutionStatusType",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses by status"
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "Only list the latest statuses"
+              },
+              {
+                "name": "assignee",
+                "value": "",
+                "type": "query",
+                "description": "Filter test case statuses by assignee"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "testCaseFQN",
+                "value": "",
+                "type": "query",
+                "description": "Test case fully qualified name"
+              },
+              {
+                "name": "originEntityFQN",
+                "value": "",
+                "type": "query",
+                "description": "Origin entity for which the incident was opened for"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "domain filter to use in list"
+              },
+              {
+                "name": "sortField",
+                "value": "",
+                "type": "query",
+                "description": "Field used to sort the incidents listing"
+              },
+              {
+                "name": "sortType",
+                "value": "",
+                "type": "query",
+                "description": "Sort type"
+              },
+              {
+                "name": "dateField",
+                "value": "",
+                "type": "query",
+                "description": "Field to filter incidents by date range. Use 'timestamp' for created at or 'updatedAt' for last updated at."
+              }
+            ]
+          },
+          "docs": "Get a list of test case resolution status using the search service. Use cursor-based pagination to limit the number of entries in the list using `limit` and `offset` query params."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

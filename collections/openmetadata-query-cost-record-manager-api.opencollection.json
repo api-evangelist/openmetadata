@@ -1,0 +1,76 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Query Cost Record Manager API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query Cost Record Manager",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create query cost record",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/queryCostRecord",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create query cost record"
+        },
+        {
+          "info": {
+            "name": "Get query cost record by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/queryCostRecord/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Get query cost record by id"
+              }
+            ]
+          },
+          "docs": "Get query cost record by id"
+        },
+        {
+          "info": {
+            "name": "Get Query Cost By Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/queryCostRecord/service/:serviceName",
+            "params": [
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get Query Cost By Service"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

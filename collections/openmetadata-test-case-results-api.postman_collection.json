@@ -1,0 +1,915 @@
+{
+  "item": [
+    {
+      "id": "6455431a-501f-4028-8fc8-cf10aeefc856",
+      "name": "Test Case Results",
+      "description": {
+        "content": "Test case results are the results of running a test case on a dataset. This resource provides APIs to manage test case results.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6fda5908-a1aa-407c-afb4-125d19b5d49c",
+          "name": "List of test case results for a given test case",
+          "request": {
+            "name": "List of test case results for a given test case",
+            "description": {
+              "content": "Get a list of all the test case results for the given testCase FQN, optionally filtered by  `startTimestamp` and `endTimestamp`. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testCases",
+                "testCaseResults",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<number>",
+                  "description": "Filter testCase results after the given start timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<number>",
+                  "description": "Filter testCase results before the given end timestamp"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the test case"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12a16675-c956-496d-a044-f5d8f0cd691b",
+              "name": "List of testCase results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testCases",
+                    "testCaseResults",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the test case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"timestamp\": 9491,\n      \"id\": \"90119ace-17e0-ddb9-5252-3a6b5d561254\",\n      \"testCaseFQN\": \"string\",\n      \"testCaseStatus\": \"Queued\",\n      \"result\": \"string\",\n      \"sampleData\": \"string\",\n      \"testResultValue\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\",\n          \"predictedValue\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\",\n          \"predictedValue\": \"string\"\n        }\n      ],\n      \"passedRows\": 4261,\n      \"failedRows\": 7100,\n      \"passedRowsPercentage\": 2989.380186867412,\n      \"failedRowsPercentage\": 4157.930417146299,\n      \"incidentId\": \"64438c60-27e0-9e81-94c1-76fc97790c72\",\n      \"maxBound\": 4645.581359361759,\n      \"minBound\": 4139.745104122974,\n      \"testCase\": {\n        \"id\": \"561eb176-e631-5dfd-4d93-2fe4069780b9\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": true,\n        \"inherited\": false,\n        \"href\": \"https://TDAJYFpx.veXiG1--YiiSaADEcuwHK26CVKX2R\"\n      },\n      \"testDefinition\": {\n        \"id\": \"d3320cf3-fd04-f756-0d9b-4ef48680380c\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": false,\n        \"inherited\": true,\n        \"href\": \"https://SuFyUUGpqZujDKdymzgSKnEP.ixhpobbGRRDyrUxQjLObBe05UtnAMlgbsACQgT2LBI2GoqwpPuy2Q3AcGXQ41vX2.WoAeNy6\"\n      },\n      \"dimensionResults\": [\n        {\n          \"dimensionKey\": \"string\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"3aa0c43b-5efd-7e03-e7fb-38558f58a387\",\n          \"testCaseResultId\": \"ed821e82-59e5-9572-afbb-e6e41f6609f5\",\n          \"testCaseStatus\": \"Queued\",\n          \"timestamp\": 1226,\n          \"testCase\": {\n            \"id\": \"b402bf39-41e2-afbd-5efd-fde0252ddd9a\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": false,\n            \"inherited\": true,\n            \"href\": \"http://xSOwUZyLeFhGgIQWEOuNyXfCvEX.uxfOd47Ve,XNX4LMKBz\"\n          },\n          \"result\": \"string\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": 1797,\n          \"failedRows\": 320,\n          \"passedRowsPercentage\": 5837.58134238428,\n          \"failedRowsPercentage\": 2074.752807676935,\n          \"impactScore\": 4396.7021809309945\n        },\n        {\n          \"dimensionKey\": \"string\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"7b7f27e9-94fc-c92d-bae3-d422a7cd0852\",\n          \"testCaseResultId\": \"a821efcd-6140-bdd3-cbde-a5844d5439e3\",\n          \"testCaseStatus\": \"Success\",\n          \"timestamp\": 294,\n          \"testCase\": {\n            \"id\": \"5c6a2963-a777-6bfa-fb4d-eed61d829dec\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": false,\n            \"inherited\": true,\n            \"href\": \"http://ZBJE.jkwPw9PMD,+jTwr,5+y8Bw,Bl,vVRrP2365plPfbCLNYnm8\"\n          },\n          \"result\": \"string\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": 6165,\n          \"failedRows\": 3682,\n          \"passedRowsPercentage\": 8859.828316427676,\n          \"failedRowsPercentage\": 9895.088321305413,\n          \"impactScore\": 889.6441735911264\n        }\n      ]\n    },\n    {\n      \"timestamp\": 5664,\n      \"id\": \"9f8a1119-ef0e-d4a9-61e5-5f2e79d9b753\",\n      \"testCaseFQN\": \"string\",\n      \"testCaseStatus\": \"Queued\",\n      \"result\": \"string\",\n      \"sampleData\": \"string\",\n      \"testResultValue\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\",\n          \"predictedValue\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\",\n          \"predictedValue\": \"string\"\n        }\n      ],\n      \"passedRows\": 4466,\n      \"failedRows\": 1990,\n      \"passedRowsPercentage\": 2353.277422466523,\n      \"failedRowsPercentage\": 1834.064422414783,\n      \"incidentId\": \"b517f443-172c-5e48-3202-55654b7d6b82\",\n      \"maxBound\": 832.0037624231713,\n      \"minBound\": 7266.977574383842,\n      \"testCase\": {\n        \"id\": \"6a2b85be-163f-5bd6-c2c3-ab55987315b7\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": false,\n        \"inherited\": true,\n        \"href\": \"https://ZidevGBoqKnvnvvXwOmwdXEIUuk.nslXS2hcK8nXtv+W6BJsKOJo2xZLHWVZ\"\n      },\n      \"testDefinition\": {\n        \"id\": \"a983de6b-6b31-a4e6-8fc6-5686c80f9eaa\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": false,\n        \"inherited\": true,\n        \"href\": \"http://OGdcJCHJAvTfdmCUFqnAKucjAakzNDp.twam9kjidL3AFrGA8BUMpdeqnHftTFIEy0-a.dwRvdFxfZR\"\n      },\n      \"dimensionResults\": [\n        {\n          \"dimensionKey\": \"string\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"770892fa-499c-d109-4efe-9d1ed5907fda\",\n          \"testCaseResultId\": \"342739ba-7702-9e0a-3d1f-8eb10c227f9d\",\n          \"testCaseStatus\": \"Aborted\",\n          \"timestamp\": 9952,\n          \"testCase\": {\n            \"id\": \"11b0fa46-38d9-d811-76fb-745e342e7bcc\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": true,\n            \"inherited\": true,\n            \"href\": \"http://RSvixIwauqCYclEdNvd.hdf,yMciQBY8gcb3c3Q7.Xfq+3qIwYG3kNNbvpRoTKZlEnWWHgu\"\n          },\n          \"result\": \"string\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": 1488,\n          \"failedRows\": 9865,\n          \"passedRowsPercentage\": 4066.556955216035,\n          \"failedRowsPercentage\": 3993.3633456377406,\n          \"impactScore\": 4439.8933501935535\n        },\n        {\n          \"dimensionKey\": \"string\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"33263eee-7c17-d646-2734-d3f4480c5f60\",\n          \"testCaseResultId\": \"9ba4e204-5c7f-7754-9ccd-32e37ec8ef43\",\n          \"testCaseStatus\": \"Failed\",\n          \"timestamp\": 4185,\n          \"testCase\": {\n            \"id\": \"9b20159b-b120-161e-52ac-f05e12879c64\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": false,\n            \"inherited\": true,\n            \"href\": \"http://SevtGGsxwptNTNbhPpTRBgYlfBl.hnhejWrVw6MwitPzD4SZoHo7-lY\"\n          },\n          \"result\": \"string\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": 2382,\n          \"failedRows\": 5017,\n          \"passedRowsPercentage\": 9940.138849294462,\n          \"failedRowsPercentage\": 1808.234817869342,\n          \"impactScore\": 9351.20771210729\n        }\n      ]\n    }\n  ],\n  \"paging\": {\n    \"total\": 8959,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 4515,\n    \"limit\": 6981\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 296,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1a00718-8cdb-414d-a14c-ba6aaa7bbdfb",
+          "name": "Add test case result data to a testCase",
+          "request": {
+            "name": "Add test case result data to a testCase",
+            "description": {
+              "content": "Add test case result data to the testCase.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testCases",
+                "testCaseResults",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the test case"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"testCaseStatus\": \"<string>\",\n  \"testResultValue\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"predictedValue\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"predictedValue\": \"<string>\"\n    }\n  ],\n  \"timestamp\": \"<long>\",\n  \"fqn\": \"<string>\",\n  \"result\": \"<string>\",\n  \"sampleData\": \"<string>\",\n  \"passedRows\": \"<long>\",\n  \"failedRows\": \"<long>\",\n  \"passedRowsPercentage\": \"<double>\",\n  \"failedRowsPercentage\": \"<double>\",\n  \"incidentId\": \"<uuid>\",\n  \"maxBound\": \"<double>\",\n  \"minBound\": \"<double>\",\n  \"dimensionResults\": [\n    {\n      \"dimensionKey\": \"<string>\",\n      \"dimensionValues\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"id\": \"<uuid>\",\n      \"testCaseResultId\": \"<uuid>\",\n      \"testCaseStatus\": \"<string>\",\n      \"timestamp\": \"<long>\",\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"result\": \"<string>\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": \"<integer>\",\n      \"failedRows\": \"<integer>\",\n      \"passedRowsPercentage\": \"<double>\",\n      \"failedRowsPercentage\": \"<double>\",\n      \"impactScore\": \"<double>\"\n    },\n    {\n      \"dimensionKey\": \"<string>\",\n      \"dimensionValues\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"id\": \"<uuid>\",\n      \"testCaseResultId\": \"<uuid>\",\n      \"testCaseStatus\": \"<string>\",\n      \"timestamp\": \"<long>\",\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"result\": \"<string>\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": \"<integer>\",\n      \"failedRows\": \"<integer>\",\n      \"passedRowsPercentage\": \"<double>\",\n      \"failedRowsPercentage\": \"<double>\",\n      \"impactScore\": \"<double>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37e29af1-1701-46b2-85be-27dd98d17cf1",
+              "name": "Successfully created the TestCase. ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testCases",
+                    "testCaseResults",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the test case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"testCaseStatus\": \"<string>\",\n  \"testResultValue\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"predictedValue\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"predictedValue\": \"<string>\"\n    }\n  ],\n  \"timestamp\": \"<long>\",\n  \"fqn\": \"<string>\",\n  \"result\": \"<string>\",\n  \"sampleData\": \"<string>\",\n  \"passedRows\": \"<long>\",\n  \"failedRows\": \"<long>\",\n  \"passedRowsPercentage\": \"<double>\",\n  \"failedRowsPercentage\": \"<double>\",\n  \"incidentId\": \"<uuid>\",\n  \"maxBound\": \"<double>\",\n  \"minBound\": \"<double>\",\n  \"dimensionResults\": [\n    {\n      \"dimensionKey\": \"<string>\",\n      \"dimensionValues\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"id\": \"<uuid>\",\n      \"testCaseResultId\": \"<uuid>\",\n      \"testCaseStatus\": \"<string>\",\n      \"timestamp\": \"<long>\",\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"result\": \"<string>\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": \"<integer>\",\n      \"failedRows\": \"<integer>\",\n      \"passedRowsPercentage\": \"<double>\",\n      \"failedRowsPercentage\": \"<double>\",\n      \"impactScore\": \"<double>\"\n    },\n    {\n      \"dimensionKey\": \"<string>\",\n      \"dimensionValues\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"id\": \"<uuid>\",\n      \"testCaseResultId\": \"<uuid>\",\n      \"testCaseStatus\": \"<string>\",\n      \"timestamp\": \"<long>\",\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"result\": \"<string>\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": \"<integer>\",\n      \"failedRows\": \"<integer>\",\n      \"passedRowsPercentage\": \"<double>\",\n      \"failedRowsPercentage\": \"<double>\",\n      \"impactScore\": \"<double>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"timestamp\": 4501,\n  \"id\": \"b02a4b9e-57de-c5c0-b3d9-a1169c30b4f9\",\n  \"testCaseFQN\": \"string\",\n  \"testCaseStatus\": \"Failed\",\n  \"result\": \"string\",\n  \"sampleData\": \"string\",\n  \"testResultValue\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"predictedValue\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": \"<string>\",\n      \"predictedValue\": \"<string>\"\n    }\n  ],\n  \"passedRows\": 9607,\n  \"failedRows\": 1237,\n  \"passedRowsPercentage\": 6278.8474227351335,\n  \"failedRowsPercentage\": 8841.974776301664,\n  \"incidentId\": \"d0fbe1c4-42ad-558b-8267-668357defcf2\",\n  \"maxBound\": 8263.21013071807,\n  \"minBound\": 1954.490398557608,\n  \"testCase\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"testDefinition\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"dimensionResults\": [\n    {\n      \"dimensionKey\": \"<string>\",\n      \"dimensionValues\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"id\": \"<uuid>\",\n      \"testCaseResultId\": \"<uuid>\",\n      \"testCaseStatus\": \"<string>\",\n      \"timestamp\": \"<long>\",\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"result\": \"<string>\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": \"<integer>\",\n      \"failedRows\": \"<integer>\",\n      \"passedRowsPercentage\": \"<double>\",\n      \"failedRowsPercentage\": \"<double>\",\n      \"impactScore\": \"<double>\"\n    },\n    {\n      \"dimensionKey\": \"<string>\",\n      \"dimensionValues\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"id\": \"<uuid>\",\n      \"testCaseResultId\": \"<uuid>\",\n      \"testCaseStatus\": \"<string>\",\n      \"timestamp\": \"<long>\",\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"result\": \"<string>\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": \"<integer>\",\n      \"failedRows\": \"<integer>\",\n      \"passedRowsPercentage\": \"<double>\",\n      \"failedRowsPercentage\": \"<double>\",\n      \"impactScore\": \"<double>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7b9f3d73-8d0c-42bd-932b-5992340c59a4",
+          "name": "Delete test case result",
+          "request": {
+            "name": "Delete test case result",
+            "description": {
+              "content": "Delete testCase result for a testCase.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testCases",
+                "testCaseResults",
+                ":fqn",
+                ":timestamp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the test case"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "timestamp",
+                  "description": "(Required) Timestamp of the testCase result"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3e899f3f-21f1-4728-841f-d3cf44394f72",
+              "name": "Successfully deleted the TestCaseResult",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testCases",
+                    "testCaseResults",
+                    ":fqn",
+                    ":timestamp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the test case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "timestamp",
+                      "description": "(Required) Timestamp of the testCase result"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "29cee0bc-07d8-43b8-b4e6-d14b0fb89f43",
+          "name": "Update a test case result",
+          "request": {
+            "name": "Update a test case result",
+            "description": {
+              "content": "Update an existing test case using JsonPatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testCases",
+                "testCaseResults",
+                ":fqn",
+                ":timestamp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) fqn of the test case"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "timestamp",
+                  "description": "(Required) Timestamp of the testCase result"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aad6ebc7-1748-4e07-868c-ec1c7cea67c3",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testCases",
+                    "testCaseResults",
+                    ":fqn",
+                    ":timestamp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) fqn of the test case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "timestamp",
+                      "description": "(Required) Timestamp of the testCase result"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[{op:remove, path:/a},{op:add, path: /b, value: val}]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d2cc4ef-0186-4d85-96e3-ad1c9ff3d6d2",
+          "name": "Latest test case results using search service",
+          "request": {
+            "name": "Latest test case results using search service",
+            "description": {
+              "content": "Get latest test case results from the search service. Use `testCaseFQN` to filter the results by test case fully qualified name. Use `testCaseStatus` to filter the results by test case status. Use `fields` to get only necessary fields. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testCases",
+                "testCaseResults",
+                "search",
+                "latest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "testCaseStatus",
+                  "value": "<string>",
+                  "description": "Status of the test case -- one of Success, Failed, Aborted, Queued"
+                },
+                {
+                  "disabled": false,
+                  "key": "testCaseFQN",
+                  "value": "<string>",
+                  "description": "FullyQualifiedName of the test case"
+                },
+                {
+                  "disabled": false,
+                  "key": "testSuiteId",
+                  "value": "<string>",
+                  "description": "FullyQualifiedName of the test case"
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "search query term to use in list"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7a1d67eb-d3a5-450f-88a2-7832206d06b0",
+              "name": "List of test case results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testCases",
+                    "testCaseResults",
+                    "search",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "testCase,testDefinition"
+                    },
+                    {
+                      "key": "testCaseStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "testCaseFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "testSuiteId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"timestamp\": 1082,\n      \"id\": \"63d33c97-24fb-e8a8-e7d3-d766f14742de\",\n      \"testCaseFQN\": \"string\",\n      \"testCaseStatus\": \"Aborted\",\n      \"result\": \"string\",\n      \"sampleData\": \"string\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": 905,\n      \"failedRows\": 845,\n      \"passedRowsPercentage\": 1228.7905292126234,\n      \"failedRowsPercentage\": 6391.80804008383,\n      \"incidentId\": \"2c85bb5b-f21a-ecb9-6ed2-21a72e1187ec\",\n      \"maxBound\": 5939.075533810709,\n      \"minBound\": 9644.139249265672,\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"testDefinition\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"dimensionResults\": [\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        },\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        }\n      ]\n    },\n    {\n      \"timestamp\": 777,\n      \"id\": \"646e2f6f-6dc9-ed18-7eac-fea363449553\",\n      \"testCaseFQN\": \"string\",\n      \"testCaseStatus\": \"Success\",\n      \"result\": \"string\",\n      \"sampleData\": \"string\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": 9943,\n      \"failedRows\": 2231,\n      \"passedRowsPercentage\": 1115.2307253303727,\n      \"failedRowsPercentage\": 4247.242861191961,\n      \"incidentId\": \"d66ed263-8f74-516e-5a49-6ea82bd505e8\",\n      \"maxBound\": 352.40965341013174,\n      \"minBound\": 6997.511799010252,\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"testDefinition\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"dimensionResults\": [\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        },\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        }\n      ]\n    }\n  ],\n  \"paging\": {\n    \"total\": 9785,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 3604,\n    \"limit\": 192\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 6187,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e4811bb7-954c-40d6-8ba5-c068c3afc01c",
+          "name": "List test case results using search service",
+          "request": {
+            "name": "List test case results using search service",
+            "description": {
+              "content": "List test case results from the search service. Use `startTimestamp` and `endTimestamp` to filter the results by timestamp. Use `testCaseFQN` to filter the results by test case fully qualified name. Use `testCaseStatus` to filter the results by test case status. Use `fields` to get only necessary fields. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "dataQuality",
+                "testCases",
+                "testCaseResults",
+                "search",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number tests case results returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Returns list of tests after this offset"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTimestamp",
+                  "value": "<number>",
+                  "description": "Start timestamp to list test case from"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTimestamp",
+                  "value": "<number>",
+                  "description": "End timestamp to list test case from"
+                },
+                {
+                  "disabled": false,
+                  "key": "testCaseStatus",
+                  "value": "<string>",
+                  "description": "Status of the test case -- one of Success, Failed, Aborted, Queued"
+                },
+                {
+                  "disabled": false,
+                  "key": "testCaseFQN",
+                  "value": "<string>",
+                  "description": "FullyQualifiedName of the test case"
+                },
+                {
+                  "disabled": false,
+                  "key": "testSuiteId",
+                  "value": "<string>",
+                  "description": "Test Suite Id the test case belongs to"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityFQN",
+                  "value": "<string>",
+                  "description": "Entity FQN the test case belongs to"
+                },
+                {
+                  "disabled": false,
+                  "key": "latest",
+                  "value": "false",
+                  "description": "Get the latest test case result for each test case -- requires `testSuiteId`"
+                },
+                {
+                  "disabled": false,
+                  "key": "testCaseType",
+                  "value": "all",
+                  "description": "Filter for test case result by type (e.g. column, table, all)"
+                },
+                {
+                  "disabled": false,
+                  "key": "dataQualityDimension",
+                  "value": "<string>",
+                  "description": "Filter for test case by data quality dimension (e.g. OpenMetadata, dbt, etc.)"
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "search query term to use in list"
+                },
+                {
+                  "disabled": false,
+                  "key": "queryString",
+                  "value": "<string>",
+                  "description": "raw elasticsearch query to use in list"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6073f226-bcf6-469c-b1d8-5c2c42ca7424",
+              "name": "List of test case results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "dataQuality",
+                    "testCases",
+                    "testCaseResults",
+                    "search",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "testCase,testDefinition"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "startTimestamp",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "endTimestamp",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "testCaseStatus",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "testCaseFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "testSuiteId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "latest",
+                      "value": "false"
+                    },
+                    {
+                      "key": "testCaseType",
+                      "value": "all"
+                    },
+                    {
+                      "key": "dataQualityDimension",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "queryString",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"timestamp\": 1082,\n      \"id\": \"63d33c97-24fb-e8a8-e7d3-d766f14742de\",\n      \"testCaseFQN\": \"string\",\n      \"testCaseStatus\": \"Aborted\",\n      \"result\": \"string\",\n      \"sampleData\": \"string\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": 905,\n      \"failedRows\": 845,\n      \"passedRowsPercentage\": 1228.7905292126234,\n      \"failedRowsPercentage\": 6391.80804008383,\n      \"incidentId\": \"2c85bb5b-f21a-ecb9-6ed2-21a72e1187ec\",\n      \"maxBound\": 5939.075533810709,\n      \"minBound\": 9644.139249265672,\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"testDefinition\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"dimensionResults\": [\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        },\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        }\n      ]\n    },\n    {\n      \"timestamp\": 777,\n      \"id\": \"646e2f6f-6dc9-ed18-7eac-fea363449553\",\n      \"testCaseFQN\": \"string\",\n      \"testCaseStatus\": \"Success\",\n      \"result\": \"string\",\n      \"sampleData\": \"string\",\n      \"testResultValue\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\",\n          \"predictedValue\": \"<string>\"\n        }\n      ],\n      \"passedRows\": 9943,\n      \"failedRows\": 2231,\n      \"passedRowsPercentage\": 1115.2307253303727,\n      \"failedRowsPercentage\": 4247.242861191961,\n      \"incidentId\": \"d66ed263-8f74-516e-5a49-6ea82bd505e8\",\n      \"maxBound\": 352.40965341013174,\n      \"minBound\": 6997.511799010252,\n      \"testCase\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"testDefinition\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"dimensionResults\": [\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        },\n        {\n          \"dimensionKey\": \"<string>\",\n          \"dimensionValues\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"id\": \"<uuid>\",\n          \"testCaseResultId\": \"<uuid>\",\n          \"testCaseStatus\": \"<string>\",\n          \"timestamp\": \"<long>\",\n          \"testCase\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"result\": \"<string>\",\n          \"testResultValue\": [\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"value\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"predictedValue\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"passedRows\": \"<integer>\",\n          \"failedRows\": \"<integer>\",\n          \"passedRowsPercentage\": \"<double>\",\n          \"failedRowsPercentage\": \"<double>\",\n          \"impactScore\": \"<double>\"\n        }\n      ]\n    }\n  ],\n  \"paging\": {\n    \"total\": 9785,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 3604,\n    \"limit\": 192\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 6187,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cb619913-b5e2-4e56-889c-02887b41fae9",
+    "name": "OpenMetadata APIs Agent Executions Test Case Results API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,456 @@
+{
+  "item": [
+    {
+      "id": "cbe1f240-6b5d-4fe5-ba1f-333f6e9d6e55",
+      "name": "ChangeSummary",
+      "description": {
+        "content": "APIs to retrieve change summary metadata for entities. Change summary tracks who changed each field, the source of the change (e.g., Suggested for AI-generated, Manual for user edits), and when the change occurred.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c6046e98-68f7-416f-985c-2179288b3984",
+          "name": "Get change summary for an entity by fully qualified name",
+          "request": {
+            "name": "Get change summary for an entity by fully qualified name",
+            "description": {
+              "content": "Returns the change summary map for the specified entity identified by its fully qualified name (FQN). Use fieldPrefix to filter entries (e.g., 'columns.' for column-level changes only).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "changeSummary",
+                ":entityType",
+                "name",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fieldPrefix",
+                  "value": "<string>",
+                  "description": "Filter entries by field name prefix (e.g., 'columns.' to get only column-level changes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of entries returned (1-1000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset for pagination"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) Entity type (e.g., table, topic, dashboard)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Fully qualified name of the entity"
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9ef41088-0e19-45bb-864f-feb11a195ef2",
+              "name": "Change summary map",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "changeSummary",
+                    ":entityType",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fieldPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type (e.g., table, topic, dashboard)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a8083c39-83b0-4536-8e5e-6f06ce2c79a1",
+              "name": "Entity not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "changeSummary",
+                    ":entityType",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fieldPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type (e.g., table, topic, dashboard)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Fully qualified name of the entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "83a18d69-7f0f-4342-af98-2cfd970cf3e8",
+          "name": "Get change summary for an entity by ID",
+          "request": {
+            "name": "Get change summary for an entity by ID",
+            "description": {
+              "content": "Returns the change summary map for the specified entity, showing who changed each field, the source of the change (Manual, Suggested, Automated, etc.), and when it was changed. Use fieldPrefix to filter entries (e.g., 'columns.' for column-level changes only).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "changeSummary",
+                ":entityType",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fieldPrefix",
+                  "value": "<string>",
+                  "description": "Filter entries by field name prefix (e.g., 'columns.' to get only column-level changes)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of entries returned (1-1000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset for pagination"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) Entity type (e.g., table, topic, dashboard)"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Entity ID"
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2109c8aa-e7e4-42b4-887b-66b6a48d80e0",
+              "name": "Change summary map",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "changeSummary",
+                    ":entityType",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fieldPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type (e.g., table, topic, dashboard)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Entity ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "97e5d377-a15b-4393-a5d7-15591d7a8f2f",
+              "name": "Entity not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "changeSummary",
+                    ":entityType",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fieldPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type (e.g., table, topic, dashboard)"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Entity ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "da12034e-dc7e-4301-9931-94649c9cd2e7",
+    "name": "OpenMetadata APIs Agent Executions ChangeSummary API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

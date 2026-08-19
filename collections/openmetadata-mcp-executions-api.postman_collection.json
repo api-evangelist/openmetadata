@@ -1,0 +1,717 @@
+{
+  "item": [
+    {
+      "id": "ce12635c-a3cc-441e-8b74-48f4a0b72fa4",
+      "name": "MCP Executions",
+      "description": {
+        "content": "`MCP Executions` are time-series records of MCP server execution sessions, capturing tool calls, resource accesses, data lineage, compliance checks, and audit trails for AI governance.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5e9ac252-0047-49c4-b394-80012e694b5f",
+          "name": "List MCP executions",
+          "request": {
+            "name": "List MCP executions",
+            "description": {
+              "content": "Get a list of MCP executions, optionally filtered by serverId, startTs and endTs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcpExecutions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "serverId",
+                  "value": "<uuid>",
+                  "description": "Filter by MCP server ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<number>",
+                  "description": "Filter executions after the given start timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<number>",
+                  "description": "Filter executions before the given end timestamp"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of executions returned"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "86feaec4-2e4a-4434-9bab-1962639e8683",
+              "name": "List of MCP executions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "serverId",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"server\": {\n        \"id\": \"d883a301-6b56-dc04-c5c6-08dcc66a583e\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": true,\n        \"inherited\": true,\n        \"href\": \"https://nkdXRZkvkRnFnz.kaTxVR1utaP,f0b6ixu4ZRBQz.\"\n      },\n      \"serverId\": \"0e0e69f0-b94d-9c7f-1a39-6ba858a67973\",\n      \"status\": \"Cancelled\",\n      \"timestamp\": 3052,\n      \"id\": \"094d82ce-7d16-cac4-63bb-9d81bbc02fc7\",\n      \"endTimestamp\": 4843,\n      \"durationMs\": 7031.883383327532,\n      \"executedBy\": \"string\",\n      \"applicationContext\": {\n        \"id\": \"d9317725-8240-8ccf-c2e9-f5e33bece688\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": true,\n        \"inherited\": false,\n        \"href\": \"http://lpaLsXskrnJqk.xwsErvuGMa+5LUlMUtB1BKT5tEOotc\"\n      },\n      \"sessionId\": \"string\",\n      \"toolCalls\": [\n        {\n          \"toolName\": \"string\",\n          \"parameters\": {},\n          \"result\": \"string\",\n          \"success\": false,\n          \"latencyMs\": 4719.712848983676,\n          \"timestamp\": 8140,\n          \"errorMessage\": \"string\",\n          \"dataAccessed\": [\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"toolName\": \"string\",\n          \"parameters\": {},\n          \"result\": \"string\",\n          \"success\": true,\n          \"latencyMs\": 2695.654974161834,\n          \"timestamp\": 2144,\n          \"errorMessage\": \"string\",\n          \"dataAccessed\": [\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ],\n      \"resourceAccesses\": [\n        {\n          \"resourceName\": \"string\",\n          \"resourceUri\": \"string\",\n          \"accessType\": \"Delete\",\n          \"success\": true,\n          \"timestamp\": 302,\n          \"bytesTransferred\": 2629\n        },\n        {\n          \"resourceName\": \"string\",\n          \"resourceUri\": \"string\",\n          \"accessType\": \"Write\",\n          \"success\": true,\n          \"timestamp\": 4378,\n          \"bytesTransferred\": 971\n        }\n      ],\n      \"promptUses\": [\n        {\n          \"promptName\": \"string\",\n          \"arguments\": {},\n          \"timestamp\": 1797,\n          \"tokensGenerated\": 1638\n        },\n        {\n          \"promptName\": \"string\",\n          \"arguments\": {},\n          \"timestamp\": 7590,\n          \"tokensGenerated\": 6528\n        }\n      ],\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"0e372964-8c7b-6d68-6e2b-c45899b35760\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": false,\n            \"inherited\": true,\n            \"href\": \"https://VXRrT.avtdZhnpvEkMIxOxh\"\n          },\n          \"accessType\": \"Write\",\n          \"recordCount\": 3740,\n          \"columns\": [\n            \"string\",\n            \"string\"\n          ],\n          \"piiAccessed\": true,\n          \"sensitivityLevel\": \"Restricted\",\n          \"timestamp\": 3967\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"9f2ebc13-445d-3c97-d17a-b0e34b99d401\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": true,\n            \"inherited\": false,\n            \"href\": \"http://FSrzQwM.rdbrNfGRgyooZPhQDOcGuZz57lahEybEaoMBiSCd1iXSdvqmv4Hn\"\n          },\n          \"accessType\": \"Read\",\n          \"recordCount\": 9368,\n          \"columns\": [\n            \"string\",\n            \"string\"\n          ],\n          \"piiAccessed\": false,\n          \"sensitivityLevel\": \"Confidential\",\n          \"timestamp\": 1551\n        }\n      ],\n      \"complianceChecks\": [\n        {\n          \"checkName\": \"string\",\n          \"passed\": true,\n          \"details\": \"string\",\n          \"severity\": \"Info\",\n          \"timestamp\": 4491\n        },\n        {\n          \"checkName\": \"string\",\n          \"passed\": false,\n          \"details\": \"string\",\n          \"severity\": \"Error\",\n          \"timestamp\": 1034\n        }\n      ],\n      \"metrics\": {\n        \"totalToolCalls\": 737,\n        \"successfulToolCalls\": 4893,\n        \"totalResourceAccesses\": 7769,\n        \"totalPromptUses\": 2353,\n        \"piiDataAccessed\": false,\n        \"highSensitivityDataAccessed\": true,\n        \"highRiskOperations\": 6821,\n        \"complianceViolations\": 7439\n      },\n      \"errorMessage\": \"string\",\n      \"errorStack\": \"string\",\n      \"environment\": \"Staging\",\n      \"serverVersion\": \"string\",\n      \"protocolVersion\": \"string\",\n      \"metadata\": {},\n      \"deleted\": true\n    },\n    {\n      \"server\": {\n        \"id\": \"cf102542-64cf-6a91-38f8-520965ef833e\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": true,\n        \"inherited\": true,\n        \"href\": \"https://IowtzMBFJlihxScFtbMZjyNK.qmcgEZecSmO.Vs1.UJI3S-O1Cl\"\n      },\n      \"serverId\": \"3e5f8fac-94f8-ae3a-1516-cc048b7b7aaa\",\n      \"status\": \"Running\",\n      \"timestamp\": 4802,\n      \"id\": \"35d1d9dc-9fe3-bc52-9540-da277e85348e\",\n      \"endTimestamp\": 4906,\n      \"durationMs\": 4585.958259461619,\n      \"executedBy\": \"string\",\n      \"applicationContext\": {\n        \"id\": \"a31cdda4-28a2-4da7-6b0b-ae67540b6e1d\",\n        \"type\": \"string\",\n        \"name\": \"string\",\n        \"fullyQualifiedName\": \"string\",\n        \"description\": \"string\",\n        \"displayName\": \"string\",\n        \"deleted\": false,\n        \"inherited\": false,\n        \"href\": \"https://znZVH.xyd7aXB0ChhCipt5dcwGmGYRdtHPW28qaVB4GcuM7rQwk\"\n      },\n      \"sessionId\": \"string\",\n      \"toolCalls\": [\n        {\n          \"toolName\": \"string\",\n          \"parameters\": {},\n          \"result\": \"string\",\n          \"success\": false,\n          \"latencyMs\": 1246.2001880827033,\n          \"timestamp\": 8834,\n          \"errorMessage\": \"string\",\n          \"dataAccessed\": [\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"toolName\": \"string\",\n          \"parameters\": {},\n          \"result\": \"string\",\n          \"success\": true,\n          \"latencyMs\": 9878.919158402658,\n          \"timestamp\": 5718,\n          \"errorMessage\": \"string\",\n          \"dataAccessed\": [\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"dataSource\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"accessType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"recordCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"columns\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"piiAccessed\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"sensitivityLevel\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"timestamp\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ],\n      \"resourceAccesses\": [\n        {\n          \"resourceName\": \"string\",\n          \"resourceUri\": \"string\",\n          \"accessType\": \"Read\",\n          \"success\": false,\n          \"timestamp\": 4365,\n          \"bytesTransferred\": 5410\n        },\n        {\n          \"resourceName\": \"string\",\n          \"resourceUri\": \"string\",\n          \"accessType\": \"Read\",\n          \"success\": true,\n          \"timestamp\": 1068,\n          \"bytesTransferred\": 416\n        }\n      ],\n      \"promptUses\": [\n        {\n          \"promptName\": \"string\",\n          \"arguments\": {},\n          \"timestamp\": 8800,\n          \"tokensGenerated\": 7903\n        },\n        {\n          \"promptName\": \"string\",\n          \"arguments\": {},\n          \"timestamp\": 5488,\n          \"tokensGenerated\": 2446\n        }\n      ],\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"8412b59d-9377-4718-07c9-21355343f4c1\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": true,\n            \"inherited\": false,\n            \"href\": \"http://uzDnWUB.fkpEXHj6HXYswamwTkRcP8TmBo1L3OUoRfhxr1Wdx,cScI\"\n          },\n          \"accessType\": \"Read\",\n          \"recordCount\": 977,\n          \"columns\": [\n            \"string\",\n            \"string\"\n          ],\n          \"piiAccessed\": true,\n          \"sensitivityLevel\": \"Restricted\",\n          \"timestamp\": 6587\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"c1fde152-6f7c-75de-76a9-63a38cfb57b3\",\n            \"type\": \"string\",\n            \"name\": \"string\",\n            \"fullyQualifiedName\": \"string\",\n            \"description\": \"string\",\n            \"displayName\": \"string\",\n            \"deleted\": true,\n            \"inherited\": true,\n            \"href\": \"https://APomAMcn.jpdfvECP7IF3x22IpeSM6CDADf7qaAW6x,kNshcuDQM4WS.e+U.h1D.9s87ZY.z+ag7Gm,Inh6sE+fUmuNa\"\n          },\n          \"accessType\": \"Read\",\n          \"recordCount\": 793,\n          \"columns\": [\n            \"string\",\n            \"string\"\n          ],\n          \"piiAccessed\": true,\n          \"sensitivityLevel\": \"Restricted\",\n          \"timestamp\": 6755\n        }\n      ],\n      \"complianceChecks\": [\n        {\n          \"checkName\": \"string\",\n          \"passed\": false,\n          \"details\": \"string\",\n          \"severity\": \"Info\",\n          \"timestamp\": 3419\n        },\n        {\n          \"checkName\": \"string\",\n          \"passed\": false,\n          \"details\": \"string\",\n          \"severity\": \"Info\",\n          \"timestamp\": 8491\n        }\n      ],\n      \"metrics\": {\n        \"totalToolCalls\": 2549,\n        \"successfulToolCalls\": 8945,\n        \"totalResourceAccesses\": 6781,\n        \"totalPromptUses\": 8333,\n        \"piiDataAccessed\": true,\n        \"highSensitivityDataAccessed\": true,\n        \"highRiskOperations\": 8746,\n        \"complianceViolations\": 9705\n      },\n      \"errorMessage\": \"string\",\n      \"errorStack\": \"string\",\n      \"environment\": \"Staging\",\n      \"serverVersion\": \"string\",\n      \"protocolVersion\": \"string\",\n      \"metadata\": {},\n      \"deleted\": false\n    }\n  ],\n  \"paging\": {\n    \"total\": 1890,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 2741,\n    \"limit\": 6917\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 1278,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d46ccbf-9e1d-4141-b084-8e6b7fcba819",
+          "name": "Create an MCP execution",
+          "request": {
+            "name": "Create an MCP execution",
+            "description": {
+              "content": "Create a new MCP execution record.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcpExecutions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"server\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"serverId\": \"<uuid>\",\n  \"status\": \"<string>\",\n  \"timestamp\": \"<long>\",\n  \"id\": \"<uuid>\",\n  \"endTimestamp\": \"<long>\",\n  \"durationMs\": \"<double>\",\n  \"executedBy\": \"<string>\",\n  \"applicationContext\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"sessionId\": \"<string>\",\n  \"toolCalls\": [\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    },\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    }\n  ],\n  \"resourceAccesses\": [\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    },\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    }\n  ],\n  \"promptUses\": [\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    },\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    }\n  ],\n  \"dataAccessed\": [\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"complianceChecks\": [\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"metrics\": {\n    \"totalToolCalls\": \"<integer>\",\n    \"successfulToolCalls\": \"<integer>\",\n    \"totalResourceAccesses\": \"<integer>\",\n    \"totalPromptUses\": \"<integer>\",\n    \"piiDataAccessed\": \"<boolean>\",\n    \"highSensitivityDataAccessed\": \"<boolean>\",\n    \"highRiskOperations\": \"<integer>\",\n    \"complianceViolations\": \"<integer>\"\n  },\n  \"errorMessage\": \"<string>\",\n  \"errorStack\": \"<string>\",\n  \"environment\": \"<string>\",\n  \"serverVersion\": \"<string>\",\n  \"protocolVersion\": \"<string>\",\n  \"metadata\": \"<object>\",\n  \"deleted\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e5040051-1279-4eb5-8f93-fe3459082e72",
+              "name": "MCP Execution",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"server\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"serverId\": \"<uuid>\",\n  \"status\": \"<string>\",\n  \"timestamp\": \"<long>\",\n  \"id\": \"<uuid>\",\n  \"endTimestamp\": \"<long>\",\n  \"durationMs\": \"<double>\",\n  \"executedBy\": \"<string>\",\n  \"applicationContext\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"sessionId\": \"<string>\",\n  \"toolCalls\": [\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    },\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    }\n  ],\n  \"resourceAccesses\": [\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    },\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    }\n  ],\n  \"promptUses\": [\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    },\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    }\n  ],\n  \"dataAccessed\": [\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"complianceChecks\": [\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"metrics\": {\n    \"totalToolCalls\": \"<integer>\",\n    \"successfulToolCalls\": \"<integer>\",\n    \"totalResourceAccesses\": \"<integer>\",\n    \"totalPromptUses\": \"<integer>\",\n    \"piiDataAccessed\": \"<boolean>\",\n    \"highSensitivityDataAccessed\": \"<boolean>\",\n    \"highRiskOperations\": \"<integer>\",\n    \"complianceViolations\": \"<integer>\"\n  },\n  \"errorMessage\": \"<string>\",\n  \"errorStack\": \"<string>\",\n  \"environment\": \"<string>\",\n  \"serverVersion\": \"<string>\",\n  \"protocolVersion\": \"<string>\",\n  \"metadata\": \"<object>\",\n  \"deleted\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"server\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"serverId\": \"<uuid>\",\n  \"status\": \"<string>\",\n  \"timestamp\": \"<long>\",\n  \"id\": \"<uuid>\",\n  \"endTimestamp\": \"<long>\",\n  \"durationMs\": \"<double>\",\n  \"executedBy\": \"<string>\",\n  \"applicationContext\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"sessionId\": \"<string>\",\n  \"toolCalls\": [\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    },\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    }\n  ],\n  \"resourceAccesses\": [\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    },\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    }\n  ],\n  \"promptUses\": [\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    },\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    }\n  ],\n  \"dataAccessed\": [\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"complianceChecks\": [\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"metrics\": {\n    \"totalToolCalls\": \"<integer>\",\n    \"successfulToolCalls\": \"<integer>\",\n    \"totalResourceAccesses\": \"<integer>\",\n    \"totalPromptUses\": \"<integer>\",\n    \"piiDataAccessed\": \"<boolean>\",\n    \"highSensitivityDataAccessed\": \"<boolean>\",\n    \"highRiskOperations\": \"<integer>\",\n    \"complianceViolations\": \"<integer>\"\n  },\n  \"errorMessage\": \"<string>\",\n  \"errorStack\": \"<string>\",\n  \"environment\": \"<string>\",\n  \"serverVersion\": \"<string>\",\n  \"protocolVersion\": \"<string>\",\n  \"metadata\": \"<object>\",\n  \"deleted\": \"<boolean>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7332bb87-ac21-4770-aee2-3922c54c4004",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"server\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"serverId\": \"<uuid>\",\n  \"status\": \"<string>\",\n  \"timestamp\": \"<long>\",\n  \"id\": \"<uuid>\",\n  \"endTimestamp\": \"<long>\",\n  \"durationMs\": \"<double>\",\n  \"executedBy\": \"<string>\",\n  \"applicationContext\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"sessionId\": \"<string>\",\n  \"toolCalls\": [\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    },\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    }\n  ],\n  \"resourceAccesses\": [\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    },\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    }\n  ],\n  \"promptUses\": [\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    },\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    }\n  ],\n  \"dataAccessed\": [\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"complianceChecks\": [\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"metrics\": {\n    \"totalToolCalls\": \"<integer>\",\n    \"successfulToolCalls\": \"<integer>\",\n    \"totalResourceAccesses\": \"<integer>\",\n    \"totalPromptUses\": \"<integer>\",\n    \"piiDataAccessed\": \"<boolean>\",\n    \"highSensitivityDataAccessed\": \"<boolean>\",\n    \"highRiskOperations\": \"<integer>\",\n    \"complianceViolations\": \"<integer>\"\n  },\n  \"errorMessage\": \"<string>\",\n  \"errorStack\": \"<string>\",\n  \"environment\": \"<string>\",\n  \"serverVersion\": \"<string>\",\n  \"protocolVersion\": \"<string>\",\n  \"metadata\": \"<object>\",\n  \"deleted\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1e311e0-dc21-4ef2-aef6-34ece7d9e97a",
+          "name": "Get an MCP execution by Id",
+          "request": {
+            "name": "Get an MCP execution by Id",
+            "description": {
+              "content": "Get an MCP execution by `Id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcpExecutions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the MCP Execution"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5afce100-f17a-4a94-9aae-93ba1b2064a3",
+              "name": "The execution",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the MCP Execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"server\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"serverId\": \"<uuid>\",\n  \"status\": \"<string>\",\n  \"timestamp\": \"<long>\",\n  \"id\": \"<uuid>\",\n  \"endTimestamp\": \"<long>\",\n  \"durationMs\": \"<double>\",\n  \"executedBy\": \"<string>\",\n  \"applicationContext\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"sessionId\": \"<string>\",\n  \"toolCalls\": [\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    },\n    {\n      \"toolName\": \"<string>\",\n      \"parameters\": \"<object>\",\n      \"result\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"latencyMs\": \"<double>\",\n      \"timestamp\": \"<long>\",\n      \"errorMessage\": \"<string>\",\n      \"dataAccessed\": [\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        },\n        {\n          \"dataSource\": {\n            \"id\": \"<uuid>\",\n            \"type\": \"<string>\",\n            \"name\": \"<string>\",\n            \"fullyQualifiedName\": \"<string>\",\n            \"description\": \"<string>\",\n            \"displayName\": \"<string>\",\n            \"deleted\": \"<boolean>\",\n            \"inherited\": \"<boolean>\",\n            \"href\": \"<uri>\"\n          },\n          \"accessType\": \"<string>\",\n          \"recordCount\": \"<integer>\",\n          \"columns\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"piiAccessed\": \"<boolean>\",\n          \"sensitivityLevel\": \"<string>\",\n          \"timestamp\": \"<long>\"\n        }\n      ]\n    }\n  ],\n  \"resourceAccesses\": [\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    },\n    {\n      \"resourceName\": \"<string>\",\n      \"resourceUri\": \"<string>\",\n      \"accessType\": \"<string>\",\n      \"success\": \"<boolean>\",\n      \"timestamp\": \"<long>\",\n      \"bytesTransferred\": \"<integer>\"\n    }\n  ],\n  \"promptUses\": [\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    },\n    {\n      \"promptName\": \"<string>\",\n      \"arguments\": \"<object>\",\n      \"timestamp\": \"<long>\",\n      \"tokensGenerated\": \"<integer>\"\n    }\n  ],\n  \"dataAccessed\": [\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"dataSource\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessType\": \"<string>\",\n      \"recordCount\": \"<integer>\",\n      \"columns\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"piiAccessed\": \"<boolean>\",\n      \"sensitivityLevel\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"complianceChecks\": [\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    },\n    {\n      \"checkName\": \"<string>\",\n      \"passed\": \"<boolean>\",\n      \"details\": \"<string>\",\n      \"severity\": \"<string>\",\n      \"timestamp\": \"<long>\"\n    }\n  ],\n  \"metrics\": {\n    \"totalToolCalls\": \"<integer>\",\n    \"successfulToolCalls\": \"<integer>\",\n    \"totalResourceAccesses\": \"<integer>\",\n    \"totalPromptUses\": \"<integer>\",\n    \"piiDataAccessed\": \"<boolean>\",\n    \"highSensitivityDataAccessed\": \"<boolean>\",\n    \"highRiskOperations\": \"<integer>\",\n    \"complianceViolations\": \"<integer>\"\n  },\n  \"errorMessage\": \"<string>\",\n  \"errorStack\": \"<string>\",\n  \"environment\": \"<string>\",\n  \"serverVersion\": \"<string>\",\n  \"protocolVersion\": \"<string>\",\n  \"metadata\": \"<object>\",\n  \"deleted\": \"<boolean>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3aa638ed-2c95-4331-aab1-550a0ebda25e",
+              "name": "Execution for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the MCP Execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aff57743-743b-4eb7-9c37-2bfa6f2b18b5",
+          "name": "Delete an MCP execution by Id",
+          "request": {
+            "name": "Delete an MCP execution by Id",
+            "description": {
+              "content": "Delete an MCP execution by `Id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcpExecutions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "hardDelete",
+                  "value": "<boolean>",
+                  "description": "Hard delete the entity. (Default = `false`)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the MCP Execution"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "65872ec9-fe92-4b61-b0b3-4cf5b7016ab3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the MCP Execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "82919102-7044-4328-8b46-8d692068c3b4",
+              "name": "Execution for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "hardDelete",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the MCP Execution"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f8addcd7-1f93-4fdb-8462-0d04ec3b9364",
+          "name": "Delete MCP execution data at a timestamp",
+          "request": {
+            "name": "Delete MCP execution data at a timestamp",
+            "description": {
+              "content": "Delete MCP execution data for a server at a specific timestamp.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "mcpExecutions",
+                ":serverId",
+                ":timestamp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "serverId",
+                  "description": "(Required) ID of the MCP Server"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "timestamp",
+                  "description": "(Required) Timestamp of the execution to delete"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dacb07d9-a270-4dac-919f-6c19f69f1bc7",
+              "name": "Successfully deleted MCP Execution Data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "mcpExecutions",
+                    ":serverId",
+                    ":timestamp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "serverId",
+                      "description": "(Required) ID of the MCP Server"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "timestamp",
+                      "description": "(Required) Timestamp of the execution to delete"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7fa0c62b-1a9d-45b5-a3be-5ca9f232f1fe",
+    "name": "OpenMetadata APIs Agent Executions MCP Executions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

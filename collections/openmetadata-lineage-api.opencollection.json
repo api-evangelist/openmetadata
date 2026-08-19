@@ -1,0 +1,851 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Lineage API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Lineage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a lineage edge",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/lineage",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a lineage edge with from entity as upstream node and to entity as downstream node."
+        },
+        {
+          "info": {
+            "name": "Patch a lineage edge",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/lineage/:fromEntity/:fromId/:toEntity/:toId",
+            "params": [
+              {
+                "name": "fromEntity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type of upstream entity of the edge"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              },
+              {
+                "name": "toEntity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for downstream entity of the edge"
+              },
+              {
+                "name": "toId",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch a lineage edge with from entity as upstream node and to entity as downstream node."
+        },
+        {
+          "info": {
+            "name": "Delete a lineage edge",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/lineage/:fromEntity/:fromId/:toEntity/:toId",
+            "params": [
+              {
+                "name": "fromEntity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type of upstream entity of the edge"
+              },
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              },
+              {
+                "name": "toEntity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for downstream entity of the edge"
+              },
+              {
+                "name": "toId",
+                "value": "",
+                "type": "path",
+                "description": "Entity id"
+              }
+            ]
+          },
+          "docs": "Delete a lineage edge with from entity as upstream node and to entity as downstream node."
+        },
+        {
+          "info": {
+            "name": "Delete a lineage edge by FQNs",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/lineage/:fromEntity/name/:fromFQN/:toEntity/name/:toFQN",
+            "params": [
+              {
+                "name": "fromEntity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type of upstream entity of the edge"
+              },
+              {
+                "name": "fromFQN",
+                "value": "",
+                "type": "path",
+                "description": "Entity FQN"
+              },
+              {
+                "name": "toEntity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for downstream entity of the edge"
+              },
+              {
+                "name": "toFQN",
+                "value": "",
+                "type": "path",
+                "description": "Entity FQN"
+              }
+            ]
+          },
+          "docs": "Delete a lineage edge with from entity as upstream node and to entity as downstream node."
+        },
+        {
+          "info": {
+            "name": "Delete a lineage edge by Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/lineage/:entityType/:entityId/type/:lineageSource",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type of upstream entity of the edge"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Entity ID"
+              },
+              {
+                "name": "lineageSource",
+                "value": "",
+                "type": "path",
+                "description": "Lineage Type"
+              }
+            ]
+          },
+          "docs": "Delete a lineage edge with from entity as upstream node and to entity as downstream node by source of lineage"
+        },
+        {
+          "info": {
+            "name": "Export lineage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/export",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              }
+            ]
+          },
+          "docs": "Export lineage"
+        },
+        {
+          "info": {
+            "name": "Export lineage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/exportAsync",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              }
+            ]
+          },
+          "docs": "Export lineage"
+        },
+        {
+          "info": {
+            "name": "Export lineage by entity count",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/exportByEntityCountAsync",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction of lineage traversal"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Starting offset for pagination (0-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of entities to return in this page"
+              },
+              {
+                "name": "nodeDepth",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities by specific node depth level (optional)"
+              },
+              {
+                "name": "maxDepth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum depth to traverse in the specified direction"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum upstream depth to compute pagination info for"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum downstream depth to compute pagination info for"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Source Fields to Include"
+              }
+            ]
+          },
+          "docs": "Export lineage by entity count"
+        },
+        {
+          "info": {
+            "name": "Get lineage by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/:entity/:id",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which lineage is requested"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the entity"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Upstream depth of lineage (default=1, min=0, max=3)"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Upstream depth of lineage (default=1, min=0, max=3)"
+              }
+            ]
+          },
+          "docs": "Get lineage details for an entity identified by `Id`."
+        },
+        {
+          "info": {
+            "name": "Get lineage by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/:entity/name/:fqn",
+            "params": [
+              {
+                "name": "entity",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for which lineage is requested"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the entity that uniquely identifies an entity"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Upstream depth of lineage (default=1, min=0, max=3)"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Upstream depth of lineage (default=1, min=0, max=3)"
+              }
+            ]
+          },
+          "docs": "Get lineage details for an entity identified by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Get lineage with entity count based pagination",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getLineageByEntityCount",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction of lineage traversal"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Starting offset for pagination (0-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of entities to return in this page"
+              },
+              {
+                "name": "nodeDepth",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities by specific node depth level (optional)"
+              },
+              {
+                "name": "maxDepth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum depth to traverse in the specified direction"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum upstream depth to use when calculating pagination info"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum downstream depth to use when calculating pagination info"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Source Fields to Include"
+              },
+              {
+                "name": "column_filter",
+                "value": "",
+                "type": "query",
+                "description": "Column-level lineage filter. Supports filtering by column names, tags, or glossary terms (e.g., 'columnName:customer_id', 'tag:PII', 'glossary:BusinessTerm')"
+              },
+              {
+                "name": "preserve_paths",
+                "value": "",
+                "type": "query",
+                "description": "When true, preserves all nodes in the path to filtered results. When false, only returns nodes matching the filter. Default is false."
+              },
+              {
+                "name": "include_pagination_info",
+                "value": "",
+                "type": "query",
+                "description": "When true, includes pagination totals and depth counts in the entity-count response."
+              }
+            ]
+          },
+          "docs": "Get lineage entities with pagination support, optionally filtered by node depth"
+        },
+        {
+          "info": {
+            "name": "Get  a lineage edge",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getLineageEdge/:fromId/:toId",
+            "params": [
+              {
+                "name": "fromId",
+                "value": "",
+                "type": "path",
+                "description": "Entity FQN"
+              },
+              {
+                "name": "toId",
+                "value": "",
+                "type": "path",
+                "description": "Entity FQN"
+              }
+            ]
+          },
+          "docs": "Get a lineage edge with from entity as upstream node and to entity as downstream node."
+        },
+        {
+          "info": {
+            "name": "Get lineage pagination information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getPaginationInfo",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              }
+            ]
+          },
+          "docs": "Get pagination information showing total entities per layer and across depth"
+        },
+        {
+          "info": {
+            "name": "Search Data Quality lineage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getDataQualityLineage",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              }
+            ]
+          },
+          "docs": "Search Data Quality lineage"
+        },
+        {
+          "info": {
+            "name": "Get Platform Lineage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getPlatformLineage",
+            "params": [
+              {
+                "name": "view",
+                "value": "",
+                "type": "query",
+                "description": "view (service or domain)"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              }
+            ]
+          },
+          "docs": "Get Platform Lineage"
+        },
+        {
+          "info": {
+            "name": "Search lineage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getLineage",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Source Fields to Include"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 10"
+              },
+              {
+                "name": "column_filter",
+                "value": "",
+                "type": "query",
+                "description": "Column-level lineage filter. Supports filtering by column names, tags, or glossary terms (e.g., 'columnName:customer_id', 'tag:PII', 'glossary:BusinessTerm')"
+              },
+              {
+                "name": "preserve_paths",
+                "value": "",
+                "type": "query",
+                "description": "When true, preserves all nodes in the path to filtered results. When false, only returns nodes matching the filter. Default is true."
+              }
+            ]
+          },
+          "docs": "Search lineage"
+        },
+        {
+          "info": {
+            "name": "Search lineage with Direction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/lineage/getLineage/:direction",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "path",
+                "description": "Direction"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Source Fields to Include"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "entity type"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 10"
+              },
+              {
+                "name": "column_filter",
+                "value": "",
+                "type": "query",
+                "description": "Column-level lineage filter. Supports filtering by column names, tags, or glossary terms (e.g., 'columnName:customer_id', 'tag:PII', 'glossary:BusinessTerm')"
+              },
+              {
+                "name": "preserve_paths",
+                "value": "",
+                "type": "query",
+                "description": "When true, preserves all nodes in the path to filtered results. When false, only returns nodes matching the filter. Default is true."
+              }
+            ]
+          },
+          "docs": "Search lineage with Direction"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

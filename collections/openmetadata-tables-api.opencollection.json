@@ -1,0 +1,1560 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Tables API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add custom metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/customMetric",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add custom metrics. For columns, add columnName."
+        },
+        {
+          "info": {
+            "name": "Add data modeling information to a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/dataModel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add data modeling (such as DBT model) information on how the table was created to the table."
+        },
+        {
+          "info": {
+            "name": "Add table profile data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/tableProfile",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add table profile data to the table."
+        },
+        {
+          "info": {
+            "name": "Get table profile config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/tableProfilerConfig",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Get table profile config to the table."
+        },
+        {
+          "info": {
+            "name": "Add table profile config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/tableProfilerConfig",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add table profile config to the table."
+        },
+        {
+          "info": {
+            "name": "Delete table profiler config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/tableProfilerConfig",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "delete table profile config to the table."
+        },
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as followed of this table"
+        },
+        {
+          "info": {
+            "name": "Add table join information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/joins",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add information about other tables that this table is joined with. Join information can only be added for the last 30 days starting today."
+        },
+        {
+          "info": {
+            "name": "Get pipeline observability data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/pipelineObservability",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Get pipeline observability data for the table."
+        },
+        {
+          "info": {
+            "name": "Add pipeline observability data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/pipelineObservability",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add pipeline observability data to the table."
+        },
+        {
+          "info": {
+            "name": "Delete pipeline observability data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/pipelineObservability",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Delete pipeline observability data from the table."
+        },
+        {
+          "info": {
+            "name": "Get sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Get sample data from the table."
+        },
+        {
+          "info": {
+            "name": "Add sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add sample data to the table."
+        },
+        {
+          "info": {
+            "name": "Delete sample data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/sampleData",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Delete sample data from the table."
+        },
+        {
+          "info": {
+            "name": "Add or update single pipeline observability data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/pipelineObservability/:pipelineFqn",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "pipelineFqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add or update pipeline observability data for a specific pipeline on the table."
+        },
+        {
+          "info": {
+            "name": "Delete single pipeline observability data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/pipelineObservability/:pipelineFqn",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "pipelineFqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              }
+            ]
+          },
+          "docs": "Delete pipeline observability data for a specific pipeline from the table."
+        },
+        {
+          "info": {
+            "name": "Bulk create or update tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/bulk",
+            "params": [
+              {
+                "name": "async",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update multiple tables in a single operation. Returns a BulkOperationResult with success/failure details for each table."
+        },
+        {
+          "info": {
+            "name": "List tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "database",
+                "value": "",
+                "type": "query",
+                "description": "Filter tables by database fully qualified name"
+              },
+              {
+                "name": "databaseSchema",
+                "value": "",
+                "type": "query",
+                "description": "Filter tables by databaseSchema fully qualified name"
+              },
+              {
+                "name": "databaseSchemaRegex",
+                "value": "",
+                "type": "query",
+                "description": "Filter tables by database schema regex pattern applied to databaseSchema.name by default. To apply the regex to the fully qualified name, set regexFilterByFqn=true. For better performance, use this in combination with the database query filter."
+              },
+              {
+                "name": "tableRegex",
+                "value": "",
+                "type": "query",
+                "description": "Filter tables by table regex pattern applied to the table name by default. To apply the regex to the table fully qualified name, set regexFilterByFqn=true. For better performance, use this in combination with the database and/or databaseSchema query filters."
+              },
+              {
+                "name": "includeEmptyTestSuite",
+                "value": "",
+                "type": "query",
+                "description": "Include tables with an empty test suite (i.e. no test cases have been created for this table). Default to true"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number tables returned. (1 to 1000000, default = 10) "
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tables before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of tables after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "regexFilterByFqn",
+                "value": "",
+                "type": "query",
+                "description": "When true, regex filters match against fullyQualifiedName instead of name. Default is false."
+              },
+              {
+                "name": "regexMode",
+                "value": "",
+                "type": "query",
+                "description": "Controls how regex filters are applied. 'include' returns matching entities, 'exclude' returns non-matching entities. Default is 'include'."
+              }
+            ]
+          },
+          "docs": "Get a list of tables, optionally filtered by `database` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/tables",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new table under an existing `database`."
+        },
+        {
+          "info": {
+            "name": "Create or update a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a table, if it does not exist. If a table already exists, update the table."
+        },
+        {
+          "info": {
+            "name": "Get a table by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "table Id"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a table by `Id`"
+        },
+        {
+          "info": {
+            "name": "Update a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/tables/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "changeSource",
+                "value": "",
+                "type": "query",
+                "description": "Optional source of the change. If the change is made by a user use 'Manual'."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing table using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a table by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Delete a table by `Id`."
+        },
+        {
+          "info": {
+            "name": "Get a table by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the table"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a table by fully qualified table name."
+        },
+        {
+          "info": {
+            "name": "Update a table by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/tables/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              },
+              {
+                "name": "changeSource",
+                "value": "",
+                "type": "query",
+                "description": "Context of the change"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing table using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a table by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              }
+            ]
+          },
+          "docs": "Delete a table by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a table by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a table by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete custom metric from a column",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/customMetric/:columnName/:customMetricName",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "columnName",
+                "value": "",
+                "type": "path",
+                "description": "column of the table"
+              },
+              {
+                "name": "customMetricName",
+                "value": "",
+                "type": "path",
+                "description": "column Test Type"
+              }
+            ]
+          },
+          "docs": "Delete a custom metric from a column."
+        },
+        {
+          "info": {
+            "name": "Delete table profile data",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:fqn/:entityType/:timestamp/profile",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "FQN of the table or column"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "type of the entity table or column"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "path",
+                "description": "Timestamp of the table profile"
+              }
+            ]
+          },
+          "docs": "Delete table profile data to the table."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the entity."
+        },
+        {
+          "info": {
+            "name": "Delete custom metric from a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/tables/:id/customMetric/:customMetricName",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "customMetricName",
+                "value": "",
+                "type": "path",
+                "description": "column Test Type"
+              }
+            ]
+          },
+          "docs": "Delete a custom metric from a table."
+        },
+        {
+          "info": {
+            "name": "Export table in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/name/:name/export",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              }
+            ]
+          },
+          "docs": "Export table in CSV format"
+        },
+        {
+          "info": {
+            "name": "Export table in CSV format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/name/:name/exportAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              }
+            ]
+          },
+          "docs": "Export table in CSV format"
+        },
+        {
+          "info": {
+            "name": "Get the latest table profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:fqn/tableProfile/latest",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "FQN of the table or column"
+              },
+              {
+                "name": "includeColumnProfile",
+                "value": "",
+                "type": "query",
+                "description": "Include column profile"
+              }
+            ]
+          },
+          "docs": "Get the latest table and column profile "
+        },
+        {
+          "info": {
+            "name": "Get pipeline observability data by table FQN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/name/:fqn/pipelineObservability",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the table"
+              }
+            ]
+          },
+          "docs": "Get pipeline observability data for the table using fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Get table columns with pagination",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/columns",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of columns returned (1 to 1000, default = 50)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned columns"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort columns by field. Supported values: 'name' (default), 'ordinalPosition'"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order. Supported values: 'asc' (default), 'desc'"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of table columns. This endpoint provides server-side pagination to handle tables with large numbers of columns efficiently."
+        },
+        {
+          "info": {
+            "name": "Get table columns with pagination by FQN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/name/:fqn/columns",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the table"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of columns returned (1 to 1000, default = 50)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned columns"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort columns by field. Supported values: 'name' (default), 'ordinalPosition'"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order. Supported values: 'asc' (default), 'desc'"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of table columns by fully qualified name. This endpoint provides server-side pagination to handle tables with large numbers of columns efficiently."
+        },
+        {
+          "info": {
+            "name": "Get a version of the table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Table Id"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Table version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the table by given `Id`"
+        },
+        {
+          "info": {
+            "name": "Import columns from CSV to update table (no creation allowed)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/name/:name/import",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import columns from CSV to update table (no creation allowed)"
+        },
+        {
+          "info": {
+            "name": "Import columns from CSV to update table asynchronously (no creation allowed)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/name/:name/importAsync",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "Name of the table"
+              },
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run when true is used for validating the CSV without really importing it. (default=true)"
+              }
+            ]
+          },
+          "docs": "Import columns from CSV to update table asynchronously (no creation allowed)"
+        },
+        {
+          "info": {
+            "name": "List of column profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:fqn/columnProfile",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "FQN of the column"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter table/column profiles after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter table/column profiles before the given end timestamp"
+              }
+            ]
+          },
+          "docs": "Get a list of all the column profiles for the given table fqn, optionally filtered by `extension`, `startTs` and `endTs` of the profile. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List of system profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:fqn/systemProfile",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "FQN of the table"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter system profiles after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter system profiles before the given end timestamp"
+              }
+            ]
+          },
+          "docs": "Get a list of all the system profiles for the given table fqn, filtered by `extension`, `startTs` and `endTs` of the profile. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "List of table profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:fqn/tableProfile",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "FQN of the table or column"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter table/column profiles after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter table/column profiles before the given end timestamp"
+              }
+            ]
+          },
+          "docs": "Get a list of all the table profiles for the given table fqn, optionally filtered by `extension`, `startTs` and `endTs` of the profile. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "List table versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Table Id"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a table identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted table."
+        },
+        {
+          "info": {
+            "name": "Search Entity Relationship",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/entityRelationship",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Source Fields to Include"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 1000"
+              }
+            ]
+          },
+          "docs": "Search Entity Relationship"
+        },
+        {
+          "info": {
+            "name": "Search entity relationship with Direction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/entityRelationship/:direction",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "query",
+                "description": "fqn"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "path",
+                "description": "Direction"
+              },
+              {
+                "name": "upstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "upstreamDepth"
+              },
+              {
+                "name": "downstreamDepth",
+                "value": "",
+                "type": "query",
+                "description": "downstreamDepth"
+              },
+              {
+                "name": "query_filter",
+                "value": "",
+                "type": "query",
+                "description": "Elasticsearch query that will be combined with the query_string query generator from the `query` argument"
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter documents by deleted param. By default deleted is false"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Source Fields to Include"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "From field to paginate the results, defaults to 0"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Size field to limit the no.of results returned, defaults to 1000"
+              }
+            ]
+          },
+          "docs": "Search entity relationship with Direction"
+        },
+        {
+          "info": {
+            "name": "Search table columns with pagination by FQN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/name/:fqn/columns/search",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the table"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query for column names, descriptions, or data types"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of columns returned (1 to 1000, default = 50)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned columns"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort columns by field. Supported values: 'name' (default), 'ordinalPosition'"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order. Supported values: 'asc' (default), 'desc'"
+              }
+            ]
+          },
+          "docs": "Search table columns by name, description, or data type with server-side pagination. This endpoint provides efficient search functionality for tables with large numbers of columns."
+        },
+        {
+          "info": {
+            "name": "Search table columns with pagination by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/tables/:id/columns/search",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the table"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query for column names, descriptions, or data types"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of columns returned (1 to 1000, default = 50)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned columns"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort columns by field. Supported values: 'name' (default), 'ordinalPosition'"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order. Supported values: 'asc' (default), 'desc'"
+              }
+            ]
+          },
+          "docs": "Search table columns by name, description, or data type with server-side pagination. This endpoint provides efficient search functionality for tables with large numbers of columns."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/tables/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

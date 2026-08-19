@@ -1,0 +1,1038 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Pipelines API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pipelines",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add bulk status data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines/:fqn/status/bulk",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add multiple status records to the pipeline in a single request."
+        },
+        {
+          "info": {
+            "name": "Add a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines/:id/followers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user identified by `userId` as follower of this pipeline"
+        },
+        {
+          "info": {
+            "name": "List pipeline status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/:fqn/status",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline statues after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline statues before the given end timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of pipeline statuses returned. If not provided, returns all results."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of pipeline statuses before this cursor (timestamp)"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of pipeline statuses after this cursor (timestamp)"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status. Supports multiple comma-separated values (e.g., 'Failed,Successful')"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search pipeline statuses by task name"
+              },
+              {
+                "name": "minDuration",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline statuses by minimum duration in milliseconds"
+              },
+              {
+                "name": "maxDuration",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline statuses by maximum duration in milliseconds"
+              }
+            ]
+          },
+          "docs": "Get a list of pipeline status. Use `limit` and `before` or `after` query params for cursor-based pagination. Filter by execution status using comma-separated values (e.g., 'Failed,Successful'). Search by task name using the `search` parameter."
+        },
+        {
+          "info": {
+            "name": "Add status data",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines/:fqn/status",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add status data to the pipeline."
+        },
+        {
+          "info": {
+            "name": "Bulk create or update pipelines",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines/bulk",
+            "params": [
+              {
+                "name": "async",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update multiple pipelines in a single operation. Returns a BulkOperationResult with success/failure details for each pipeline."
+        },
+        {
+          "info": {
+            "name": "List pipelines",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipelines by service name"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number pipelines returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of pipelines before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of pipelines after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Get a list of pipelines, optionally filtered by `service` it belongs to. Use `fields` parameter to get only necessary fields. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Create a pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/pipelines",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new pipeline."
+        },
+        {
+          "info": {
+            "name": "Create or update a pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new pipeline, if it does not exist or update an existing pipeline."
+        },
+        {
+          "info": {
+            "name": "Get a pipeline by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a pipeline by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Update a pipeline by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/pipelines/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Name of the pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing pipeline using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a pipeline by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/pipelines/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              }
+            ]
+          },
+          "docs": "Delete a pipeline by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Get a pipeline by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a pipeline by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/pipelines/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing pipeline using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a pipeline by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/pipelines/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              }
+            ]
+          },
+          "docs": "Delete a pipeline by `Id`."
+        },
+        {
+          "info": {
+            "name": "Asynchronously delete a pipeline by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/pipelines/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              }
+            ]
+          },
+          "docs": "Asynchronously delete a pipeline by `Id`."
+        },
+        {
+          "info": {
+            "name": "Remove a follower",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/pipelines/:id/followers/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the user being removed as follower"
+              }
+            ]
+          },
+          "docs": "Remove the user identified `userId` as a follower of the pipeline."
+        },
+        {
+          "info": {
+            "name": "Delete pipeline status",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/pipelines/:fqn/status/:timestamp",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "path",
+                "description": "Timestamp of the pipeline status"
+              }
+            ]
+          },
+          "docs": "Delete pipeline status for a pipeline."
+        },
+        {
+          "info": {
+            "name": "Get pipeline execution trend",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/executionTrend",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp for trend analysis"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp for trend analysis"
+              },
+              {
+                "name": "pipelineFqn",
+                "value": "",
+                "type": "query",
+                "description": "Filter by specific pipeline FQN"
+              },
+              {
+                "name": "serviceType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service type"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status (Successful, Failed, Pending, Skipped)"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID or fully qualified name"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Filter by owner ID or name"
+              },
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tier (e.g., Tier.Tier1)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of trend data points to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              }
+            ]
+          },
+          "docs": "Get day-wise pipeline execution trend showing succeeded and failed counts from the database."
+        },
+        {
+          "info": {
+            "name": "Get aggregated pipeline metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/metrics",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query to filter the aggregation results"
+              },
+              {
+                "name": "serviceType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service type"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status (Successful, Failed, Pending, Skipped)"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID or fully qualified name"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Filter by owner ID or name"
+              },
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tier (e.g., Tier.Tier1)"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter results after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter results before the given end timestamp"
+              }
+            ]
+          },
+          "docs": "Get aggregated metrics about pipelines from the database. Optionally filter results using the q parameter."
+        },
+        {
+          "info": {
+            "name": "Get pipeline observability data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/name/:fqn/observability",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the pipeline"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status (Successful, Failed, Running, Pending, Skipped)"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline observability data after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter pipeline observability data before the given end timestamp"
+              },
+              {
+                "name": "serviceType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service type"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search tables by name or FQN"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of tables returned"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list after this cursor"
+              }
+            ]
+          },
+          "docs": "Get observability data for all tables associated with this pipeline."
+        },
+        {
+          "info": {
+            "name": "Get pipeline runtime trend",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/runtimeTrend",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp for trend analysis"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp for trend analysis"
+              },
+              {
+                "name": "pipelineFqn",
+                "value": "",
+                "type": "query",
+                "description": "Filter by specific pipeline FQN"
+              },
+              {
+                "name": "serviceType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service type"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status (Successful, Failed, Pending, Skipped)"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID or fully qualified name"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Filter by owner ID or name"
+              },
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tier (e.g., Tier.Tier1)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of trend data points to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination (default = 0)"
+              }
+            ]
+          },
+          "docs": "Get day-wise pipeline runtime trend showing max, min, and average runtime from the database."
+        },
+        {
+          "info": {
+            "name": "Get a version of the pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Pipeline version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of the pipeline by given `Id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List pipeline summaries with impacted assets count",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/summary",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "service",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search pipelines by name or FQN"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by execution status (Successful, Failed, Pending, Skipped)"
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID or fully qualified name"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Filter by owner ID or name"
+              },
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tier (e.g., Tier.Tier1)"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter results after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter results before the given end timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of results (1 to 1000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of pipeline summaries including impacted assets count"
+        },
+        {
+          "info": {
+            "name": "List pipeline versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/pipelines/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the pipeline"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a pipeline identified by `Id`"
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted pipeline."
+        },
+        {
+          "info": {
+            "name": "Update Vote for a Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/pipelines/:id/vote",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update vote for a Entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

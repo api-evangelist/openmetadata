@@ -1,0 +1,497 @@
+{
+  "item": [
+    {
+      "id": "43c0d26e-ea14-433a-b3b1-0735ff97311e",
+      "name": "Audit Logs",
+      "description": {
+        "content": "APIs for listing user initiated change events persisted for auditing",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7184f089-3611-43c5-a19c-59dae2284bf3",
+          "name": "Export audit log events as JSON (async)",
+          "request": {
+            "name": "Export audit log events as JSON (async)",
+            "description": {
+              "content": "Initiates an asynchronous export of audit log events. Returns a job ID immediately. When the export is complete, the data will be sent via WebSocket on the csvExportChannel.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "audit",
+                "logs",
+                "export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>",
+                  "description": "(Required) Start timestamp in milliseconds (required)"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>",
+                  "description": "(Required) End timestamp in milliseconds (required)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10000",
+                  "description": "Maximum number of records to export (default 10000, max 100000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "userName",
+                  "value": "<string>",
+                  "description": "Filter by username"
+                },
+                {
+                  "disabled": false,
+                  "key": "actorType",
+                  "value": "<string>",
+                  "description": "Filter by actor type (USER, BOT, AGENT)"
+                },
+                {
+                  "disabled": false,
+                  "key": "serviceName",
+                  "value": "<string>",
+                  "description": "Filter by service name"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityType",
+                  "value": "<string>",
+                  "description": "Filter by entity type"
+                },
+                {
+                  "disabled": false,
+                  "key": "eventType",
+                  "value": "<string>",
+                  "description": "Filter by event type"
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Search term to filter audit logs (searches across user_name, entity_fqn, service_name, entity_type)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a4b5d9db-5956-42d4-9c22-3de288788845",
+              "name": "Export job initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "audit",
+                    "logs",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "userName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actorType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "serviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "eventType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"jobId\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "503ef4c8-0ead-4f32-8c89-f88f62335f0d",
+              "name": "Invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "audit",
+                    "logs",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10000"
+                    },
+                    {
+                      "key": "userName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actorType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "serviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "eventType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "093d69e0-d701-4873-bea0-560b6dccb42e",
+          "name": "List audit log events",
+          "request": {
+            "name": "List audit log events",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "audit",
+                "logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Limit the number of results returned. (1 to 200)"
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Returns results after this cursor (for forward pagination)"
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<string>",
+                  "description": "Returns results before this cursor (for backward pagination)"
+                },
+                {
+                  "disabled": false,
+                  "key": "userName",
+                  "value": "<string>",
+                  "description": "Filter by username"
+                },
+                {
+                  "disabled": false,
+                  "key": "actorType",
+                  "value": "<string>",
+                  "description": "Filter by actor type (USER, BOT, AGENT)"
+                },
+                {
+                  "disabled": false,
+                  "key": "serviceName",
+                  "value": "<string>",
+                  "description": "Filter by service name"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityType",
+                  "value": "<string>",
+                  "description": "Filter by entity type"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityFQN",
+                  "value": "<string>",
+                  "description": "Filter by entity fully qualified name"
+                },
+                {
+                  "disabled": false,
+                  "key": "eventType",
+                  "value": "<string>",
+                  "description": "Filter by event type"
+                },
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>",
+                  "description": "Filter events after this timestamp (ms)"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>",
+                  "description": "Filter events before this timestamp (ms)"
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "Search term to filter audit logs (searches across user_name, entity_fqn, service_name, entity_type)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9e15a1fe-b4c6-426d-83dd-9f7349c9db09",
+              "name": "List of audit log events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "audit",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "actorType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "serviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "entityFQN",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "eventType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [],\n  \"paging\": {\n    \"total\": 1228,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 3310,\n    \"limit\": 9380\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 4828,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d1e68f55-0010-4e86-8c62-f40e1987ad48",
+    "name": "OpenMetadata APIs Agent Executions Audit Logs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

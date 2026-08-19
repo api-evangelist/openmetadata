@@ -1,0 +1,157 @@
+{
+  "item": [
+    {
+      "id": "831dec06-2f4f-49da-9336-9efeb84adbfc",
+      "name": "Search Reindex",
+      "description": {
+        "content": "APIs related to search reindexing failures and status.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f04eb32e-2188-4f14-87f0-2e71c9fbba42",
+          "name": "Get reindex failures",
+          "request": {
+            "name": "Get reindex failures",
+            "description": {
+              "content": "Get paginated list of failures from the last reindexing run. Use `offset` and `limit` for pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "search",
+                "reindex",
+                "failures"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Limit the number of results returned"
+                },
+                {
+                  "disabled": false,
+                  "key": "entityType",
+                  "value": "<string>",
+                  "description": "Filter by entity type"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5073622f-4b90-49ec-a1b9-813348bbdba6",
+              "name": "List of reindex failures",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "search",
+                    "reindex",
+                    "failures"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "entityType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"jobId\": \"string\",\n      \"serverId\": \"string\",\n      \"entityType\": \"string\",\n      \"entityId\": \"string\",\n      \"entityFqn\": \"string\",\n      \"failureStage\": \"string\",\n      \"errorMessage\": \"string\",\n      \"stackTrace\": \"string\",\n      \"timestamp\": 3450\n    },\n    {\n      \"id\": \"string\",\n      \"jobId\": \"string\",\n      \"serverId\": \"string\",\n      \"entityType\": \"string\",\n      \"entityId\": \"string\",\n      \"entityFqn\": \"string\",\n      \"failureStage\": \"string\",\n      \"errorMessage\": \"string\",\n      \"stackTrace\": \"string\",\n      \"timestamp\": 823\n    }\n  ],\n  \"total\": 2145,\n  \"offset\": 8447,\n  \"limit\": 7631\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a6bf0e3a-05d1-41bd-86b8-b77e08df2e2d",
+    "name": "OpenMetadata APIs Agent Executions Search Reindex API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

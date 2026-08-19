@@ -1,0 +1,274 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Suggestions API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Suggestions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Accept all Suggestions from a user and an Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/suggestions/accept-all",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "user id"
+              },
+              {
+                "name": "entityFQN",
+                "value": "",
+                "type": "query",
+                "description": "fullyQualifiedName of entity"
+              },
+              {
+                "name": "suggestionType",
+                "value": "",
+                "type": "query",
+                "description": "Suggestion type being accepted"
+              }
+            ]
+          },
+          "docs": "Accept a Suggestion and apply the changes to the entity."
+        },
+        {
+          "info": {
+            "name": "Accept a Suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/suggestions/:id/accept",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the suggestion"
+              }
+            ]
+          },
+          "docs": "Accept a Suggestion and apply the changes to the entity."
+        },
+        {
+          "info": {
+            "name": "List Suggestions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/suggestions",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of suggestions returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of threads before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of threads after this cursor"
+              },
+              {
+                "name": "entityFQN",
+                "value": "",
+                "type": "query",
+                "description": "Filter suggestions by entityFQN"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Filter threads by user id or bot id. This filter requires a 'filterType' query param."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter threads by whether they are accepted or rejected. By default status is OPEN."
+              }
+            ]
+          },
+          "docs": "Get a list of suggestions, optionally filtered by `entityLink` or `entityFQN`."
+        },
+        {
+          "info": {
+            "name": "Create a Suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/suggestions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Suggestion. A Suggestion is created about a data asset when a user suggests an update."
+        },
+        {
+          "info": {
+            "name": "Delete a Suggestion by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/suggestions/:suggestionId",
+            "params": [
+              {
+                "name": "suggestionId",
+                "value": "",
+                "type": "path",
+                "description": "ThreadId of the thread to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete an existing Suggestion and all its relationships."
+        },
+        {
+          "info": {
+            "name": "Delete a Suggestions by entityFQN",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/suggestions/:entityType/name/:entityFQN",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "entity type"
+              },
+              {
+                "name": "entityFQN",
+                "value": "",
+                "type": "path",
+                "description": "fullyQualifiedName of entity"
+              }
+            ]
+          },
+          "docs": "Delete an existing Suggestions and all its relationships."
+        },
+        {
+          "info": {
+            "name": "Get a suggestion by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/suggestions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Thread"
+              }
+            ]
+          },
+          "docs": "Get a suggestion by `Id`."
+        },
+        {
+          "info": {
+            "name": "Update a suggestion by `Id`.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/suggestions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Suggestion"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing suggestion using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Reject all Suggestions from a user and an Entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/suggestions/reject-all",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "user id"
+              },
+              {
+                "name": "entityFQN",
+                "value": "",
+                "type": "query",
+                "description": "fullyQualifiedName of entity"
+              },
+              {
+                "name": "suggestionType",
+                "value": "",
+                "type": "query",
+                "description": "Suggestion type being rejected"
+              }
+            ]
+          },
+          "docs": "Reject all Suggestions from a user and an Entity"
+        },
+        {
+          "info": {
+            "name": "Reject a Suggestion",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/suggestions/:id/reject",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the suggestion"
+              }
+            ]
+          },
+          "docs": "Close a Suggestion without making any changes to the entity."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

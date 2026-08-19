@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Search Reindex API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search Reindex",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get reindex failures",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/search/reindex/failures",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of results returned"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by entity type"
+              }
+            ]
+          },
+          "docs": "Get paginated list of failures from the last reindexing run. Use `offset` and `limit` for pagination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

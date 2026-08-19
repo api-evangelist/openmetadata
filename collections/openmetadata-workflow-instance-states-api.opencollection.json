@@ -1,0 +1,141 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Workflow Instance States API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workflow Instance States",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a Workflow Instance State by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowInstanceStates/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Workflow Instance State ID"
+              }
+            ]
+          },
+          "docs": "Get a Workflow Instance State by id"
+        },
+        {
+          "info": {
+            "name": "List the Workflow Instance States",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowInstanceStates",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of Workflow Instance States returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of Workflow Instance States at the offset"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter Workflow Instance States after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter Workflow Instance States before the given end timestamp"
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "Only list the latest Workflow Instance States"
+              }
+            ]
+          },
+          "docs": "Get a list of all the workflow instances states, filtered by `startTs` and `endTs` of the creation. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        },
+        {
+          "info": {
+            "name": "Get all the Workflow Instance States for a Workflow Instance id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowInstanceStates/:workflowDefinitionName/:workflowInstanceId",
+            "params": [
+              {
+                "name": "workflowDefinitionName",
+                "value": "",
+                "type": "path",
+                "description": "Workflow Definition Name"
+              },
+              {
+                "name": "workflowInstanceId",
+                "value": "",
+                "type": "path",
+                "description": "Workflow Instance ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of Workflow Instance States returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of Workflow Instance States at the offset"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter Workflow Instance States after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter Workflow Instance States before the given end timestamp"
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "Only list the latest Workflow Instance States"
+              }
+            ]
+          },
+          "docs": "Get all the Workflow Instance States for a Workflow Instancee id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

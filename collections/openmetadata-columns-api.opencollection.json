@@ -1,0 +1,407 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Columns API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Columns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bulk update columns asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/columns/bulk-update-async",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update multiple columns across different entities asynchronously. This endpoint accepts a list of column updates and processes them in the background. Returns a job ID that can be used to track progress via WebSocket notifications. Updates are applied to column metadata including description, display name, tags, and glossary terms."
+        },
+        {
+          "info": {
+            "name": "Preview bulk column updates (dry-run)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/columns/bulk-update-preview",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Preview what columns will be updated without making actual changes. Returns a detailed diff showing current vs new values for each matching column. Use this to review changes before executing the actual bulk update. Supports both search-based (columnName + filters) and explicit (columnUpdates list) modes."
+        },
+        {
+          "info": {
+            "name": "Export unique column names to CSV",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/columns/export",
+            "params": [
+              {
+                "name": "columnName",
+                "value": "order_id",
+                "type": "query",
+                "description": "Column name to filter by"
+              },
+              {
+                "name": "entityTypes",
+                "value": "table,dashboardDataModel",
+                "type": "query",
+                "description": "Filter by entity types (comma-separated)"
+              },
+              {
+                "name": "serviceName",
+                "value": "sample_data",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "databaseName",
+                "value": "ecommerce_db",
+                "type": "query",
+                "description": "Filter by database name"
+              },
+              {
+                "name": "schemaName",
+                "value": "shopify",
+                "type": "query",
+                "description": "Filter by schema name"
+              },
+              {
+                "name": "domainId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID"
+              }
+            ]
+          },
+          "docs": "Export all unique column names across entity types to CSV format. The CSV includes column metadata (name, displayName, description, tags, glossaryTerms) for bulk editing. Supports filtering by entity types, service, database, schema, and domain."
+        },
+        {
+          "info": {
+            "name": "Get a column by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/columns/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "sample_data.ecommerce_db.shopify.dim_address.address_id",
+                "type": "path",
+                "description": "Fully qualified name of the column"
+              },
+              {
+                "name": "entityType",
+                "value": "table",
+                "type": "query",
+                "description": "Entity type of the parent entity (table or dashboardDataModel)"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields to include in the response (comma-separated). Supported: tags, customMetrics, extension, profile"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities."
+              }
+            ]
+          },
+          "docs": "Retrieve a single column by its fully qualified name. The parent entity type must be specified. Supports field projection via the 'fields' parameter (e.g. tags, customMetrics, extension, profile)."
+        },
+        {
+          "info": {
+            "name": "Update a column by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/columns/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "sample_data.ecommerce_db.shopify.dim_address.address_id",
+                "type": "path",
+                "description": "Fully qualified name of the column"
+              },
+              {
+                "name": "entityType",
+                "value": "table",
+                "type": "query",
+                "description": "Entity type of the parent entity (table or dashboardDataModel)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update column metadata such as display name, description, tags, glossary terms, and other properties. This API works for columns in both tables and dashboard data models. The column is identified by its fully qualified name and the parent entity type is specified. \n\nTag Management Examples:\n• Add tags: {\"tags\": [{\"tagFQN\": \"PersonalData.PII\", \"source\": \"Classification\"}]}\n• Remove specific tag: {\"tags\": []} (specify only tags you want to keep)\n• Remove all tags: {\"tags\": []}\n• Mix classification"
+        },
+        {
+          "info": {
+            "name": "Get column grid with metadata grouping",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/columns/grid",
+            "params": [
+              {
+                "name": "size",
+                "value": "1000",
+                "type": "query",
+                "description": "Number of columns per batch (max 10000)"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor for pagination"
+              },
+              {
+                "name": "columnNamePattern",
+                "value": "order",
+                "type": "query",
+                "description": "Column name pattern (wildcard search)"
+              },
+              {
+                "name": "entityTypes",
+                "value": "table,dashboardDataModel",
+                "type": "query",
+                "description": "Filter by entity types (comma-separated)"
+              },
+              {
+                "name": "serviceName",
+                "value": "sample_data",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "serviceTypes",
+                "value": "BigQuery,Mysql,Postgres",
+                "type": "query",
+                "description": "Filter by service types (comma-separated)"
+              },
+              {
+                "name": "databaseName",
+                "value": "ecommerce_db",
+                "type": "query",
+                "description": "Filter by database name"
+              },
+              {
+                "name": "schemaName",
+                "value": "shopify",
+                "type": "query",
+                "description": "Filter by schema name"
+              },
+              {
+                "name": "domainId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID"
+              },
+              {
+                "name": "hasConflicts",
+                "value": "",
+                "type": "query",
+                "description": "Show only columns with conflicting metadata"
+              },
+              {
+                "name": "hasMissingMetadata",
+                "value": "",
+                "type": "query",
+                "description": "Show only columns with missing metadata"
+              },
+              {
+                "name": "metadataStatus",
+                "value": "",
+                "type": "query",
+                "description": "Filter by metadata status: MISSING (no description AND no tags), INCOMPLETE (has description OR tags, but not both), COMPLETE (has both description AND tags)"
+              },
+              {
+                "name": "tags",
+                "value": "PII.Sensitive,PersonalData.Email",
+                "type": "query",
+                "description": "Filter by classification tags at column level (comma-separated tag FQNs)"
+              },
+              {
+                "name": "glossaryTerms",
+                "value": "Business.CustomerData,Business.Revenue",
+                "type": "query",
+                "description": "Filter by glossary terms at column level (comma-separated glossary term FQNs)"
+              }
+            ]
+          },
+          "docs": "Returns unique columns with metadata variations grouped for grid-based editing. Uses scalable Elasticsearch/OpenSearch aggregations with cursor-based pagination. Columns with the same name but different metadata (description, tags, etc.) are grouped by metadata hash, allowing efficient bulk editing of similar columns."
+        },
+        {
+          "info": {
+            "name": "Import column metadata from CSV (with dry-run)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/columns/import",
+            "params": [
+              {
+                "name": "dryRun",
+                "value": "",
+                "type": "query",
+                "description": "Dry-run mode for validation without applying changes"
+              },
+              {
+                "name": "entityTypes",
+                "value": "table,dashboardDataModel",
+                "type": "query",
+                "description": "Filter by entity types (comma-separated)"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "databaseName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by database name"
+              },
+              {
+                "name": "schemaName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by schema name"
+              },
+              {
+                "name": "domainId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID"
+              }
+            ]
+          },
+          "docs": "Import column metadata updates from CSV. Each row should contain column name and metadata fields. The system will search for all occurrences of each column name and apply the updates. Supports dry-run mode to preview changes before applying."
+        },
+        {
+          "info": {
+            "name": "Import column metadata from CSV asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/columns/import-async",
+            "params": [
+              {
+                "name": "entityTypes",
+                "value": "table,dashboardDataModel",
+                "type": "query",
+                "description": "Filter by entity types (comma-separated)"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "databaseName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by database name"
+              },
+              {
+                "name": "schemaName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by schema name"
+              },
+              {
+                "name": "domainId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID"
+              }
+            ]
+          },
+          "docs": "Import column metadata updates from CSV asynchronously. Returns a job ID for tracking progress via WebSocket notifications."
+        },
+        {
+          "info": {
+            "name": "Search and group columns by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/columns/search",
+            "params": [
+              {
+                "name": "columnName",
+                "value": "order_id",
+                "type": "query",
+                "description": "Column name to search for"
+              },
+              {
+                "name": "entityTypes",
+                "value": "table,dashboardDataModel",
+                "type": "query",
+                "description": "Filter by entity types (comma-separated)"
+              },
+              {
+                "name": "serviceName",
+                "value": "sample_data",
+                "type": "query",
+                "description": "Filter by service name"
+              },
+              {
+                "name": "databaseName",
+                "value": "ecommerce_db",
+                "type": "query",
+                "description": "Filter by database name"
+              },
+              {
+                "name": "schemaName",
+                "value": "shopify",
+                "type": "query",
+                "description": "Filter by schema name"
+              },
+              {
+                "name": "domainId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by domain ID"
+              }
+            ]
+          },
+          "docs": "Search for columns across different entity types and group them by exact column name match. This endpoint helps identify unique column names and their occurrences across tables, dashboard data models, containers, and search indexes. Supports filtering by entity type, service, database, schema, and domain."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

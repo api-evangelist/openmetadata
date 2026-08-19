@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions RDF SQL API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RDF SQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute SQL query over RDF data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/rdf/sql/query",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Result format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Translates SQL to SPARQL and executes against RDF store"
+        },
+        {
+          "info": {
+            "name": "Translate SQL to SPARQL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/rdf/sql/translate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Translates SQL query to SPARQL without executing"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

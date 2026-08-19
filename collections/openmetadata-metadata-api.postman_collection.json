@@ -1,0 +1,2468 @@
+{
+  "item": [
+    {
+      "id": "43b7dc47-de57-4f44-a799-67394b1cfae7",
+      "name": "Metadata",
+      "description": {
+        "content": "These APIs are for managing custom property definitions in OpenMetadata. Use these APIs to create custom properties with predefined data types (String, Integer, Date, etc.) that extend entity metadata. Note: This does not support creating new custom data types - only custom properties using existing OpenMetadata data types.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8e6a321f-0947-40cf-96ad-892b38dc9405",
+          "name": "Get a type",
+          "request": {
+            "name": "Get a type",
+            "description": {
+              "content": "Get a type by `id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeRelations",
+                  "value": "<string>",
+                  "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0037a1d2-0a43-4564-bbd9-7919a34df9b6",
+              "name": "The type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "customProperties"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    },
+                    {
+                      "key": "includeRelations",
+                      "value": "owners:non-deleted,followers:all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af1aa579-421d-4822-ad3a-3b80066396e0",
+              "name": "Type for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "customProperties"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    },
+                    {
+                      "key": "includeRelations",
+                      "value": "owners:non-deleted,followers:all"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "039c26a5-b848-49b4-825e-bd7394f84a89",
+          "name": "Add or update a Property to an entity",
+          "request": {
+            "name": "Add or update a Property to an entity",
+            "description": {
+              "content": "Add or update a property to an entity type. Properties can only be added to entity type and not property type.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"propertyType\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"displayName\": \"<string>\",\n  \"customPropertyConfig\": {\n    \"config\": \"<object>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0a641ec9-fd5b-48a5-9e00-0ba804a844b0",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"propertyType\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"displayName\": \"<string>\",\n  \"customPropertyConfig\": {\n    \"config\": \"<object>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bdb68747-ae70-4127-844c-38bcea9be578",
+              "name": "type for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"propertyType\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"displayName\": \"<string>\",\n  \"customPropertyConfig\": {\n    \"config\": \"<object>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bdae773e-771e-4128-8e38-7327dab3d400",
+          "name": "Delete a type by id",
+          "request": {
+            "name": "Delete a type by id",
+            "description": {
+              "content": "Delete a type by `id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e84be0ff-eb6a-4723-b0cd-c24910d77e69",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f2050200-bfc3-4c61-81a0-7bcf96ef5d03",
+              "name": "type for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "51a03c57-668b-465a-b7b8-216f10272921",
+          "name": "Update a type",
+          "request": {
+            "name": "Update a type",
+            "description": {
+              "content": "Update an existing type using JsonPatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dae68288-3b61-4dc9-a108-6fcd714c67dd",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[{op:remove, path:/a},{op:add, path: /b, value: val}]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27d83553-a11b-4021-8fc2-5baeb3d5be53",
+          "name": "List types",
+          "request": {
+            "name": "List types",
+            "description": {
+              "content": "Get a list of types. Use cursor-based pagination to limit the number entries in the list using `limit` and `before` or `after` query params.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "category",
+                  "value": "<string>",
+                  "description": "Filter types by metadata type category."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number types returned. (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<string>",
+                  "description": "Returns list of types before this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Returns list of types after this cursor"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9b53201d-bcf6-4291-98f7-aee73bd32e0a",
+              "name": "List of types",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "Property, Entity"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "adf43382-96cb-4191-b87f-2298b2eb8e75",
+          "name": "Create or update a type",
+          "request": {
+            "name": "Create or update a type",
+            "description": {
+              "content": "Create a new type, if it does not exist or update an existing type.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nameSpace\": \"<string>\",\n  \"schema\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"category\": \"<string>\",\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "774a9004-4840-4665-a80a-2db34235417b",
+              "name": "The type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nameSpace\": \"<string>\",\n  \"schema\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"category\": \"<string>\",\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14aa37d2-3e9a-4de7-bdc3-ba8ad411183f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nameSpace\": \"<string>\",\n  \"schema\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"category\": \"<string>\",\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c475b45f-001e-46e9-976c-70c90ab08f16",
+          "name": "Create a custom property definition",
+          "request": {
+            "name": "Create a custom property definition",
+            "description": {
+              "content": "Create a new custom property definition that can be applied to entities. This creates a property template using existing OpenMetadata data types (String, Integer, Date, Enum, etc.). The created property can then be used to extend metadata for data assets like tables, dashboards, and pipelines. Note: This does not create new data types - only custom property definitions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nameSpace\": \"<string>\",\n  \"schema\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"category\": \"<string>\",\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ec2f46c6-0d33-42dc-a970-05c121a5402f",
+              "name": "The custom property definition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nameSpace\": \"<string>\",\n  \"schema\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"category\": \"<string>\",\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d44bf4ba-e42d-43c8-ba1c-62442e9793b2",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nameSpace\": \"<string>\",\n  \"schema\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"category\": \"<string>\",\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"owners\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"extension\": \"<object>\",\n  \"tags\": [\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    },\n    {\n      \"labelType\": \"<string>\",\n      \"source\": \"<string>\",\n      \"state\": \"<string>\",\n      \"tagFQN\": \"<string>\",\n      \"name\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"style\": {\n        \"color\": \"<string>\",\n        \"iconURL\": \"<string>\",\n        \"coverImage\": {\n          \"url\": \"<string>\",\n          \"position\": \"<string>\"\n        }\n      },\n      \"href\": \"<uri>\",\n      \"reason\": \"<string>\",\n      \"appliedAt\": \"<dateTime>\",\n      \"appliedBy\": \"<string>\",\n      \"metadata\": {\n        \"recognizer\": {\n          \"recognizerId\": \"<uuid>\",\n          \"recognizerName\": \"<string>\",\n          \"score\": \"<double>\",\n          \"target\": \"<string>\",\n          \"patterns\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"expiryDate\": \"<long>\"\n      }\n    }\n  ],\n  \"reviewers\": [\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"fullyQualifiedName\": \"<string>\",\n      \"description\": \"<string>\",\n      \"displayName\": \"<string>\",\n      \"deleted\": \"<boolean>\",\n      \"inherited\": \"<boolean>\",\n      \"href\": \"<uri>\"\n    }\n  ],\n  \"dataProducts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"lifeCycle\": {\n    \"created\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"updated\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    },\n    \"accessed\": {\n      \"timestamp\": \"<long>\",\n      \"accessedBy\": {\n        \"id\": \"<uuid>\",\n        \"type\": \"<string>\",\n        \"name\": \"<string>\",\n        \"fullyQualifiedName\": \"<string>\",\n        \"description\": \"<string>\",\n        \"displayName\": \"<string>\",\n        \"deleted\": \"<boolean>\",\n        \"inherited\": \"<boolean>\",\n        \"href\": \"<uri>\"\n      },\n      \"accessedByAProcess\": \"<string>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "71f372ba-0aac-466f-ad66-f758a0b3fb50",
+          "name": "Get a type by name",
+          "request": {
+            "name": "Get a type by name",
+            "description": {
+              "content": "Get a type by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "name",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Fields requested in the returned resource"
+                },
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Name of the type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c23d2c96-bbb6-423a-9c64-b7739dbcb5bb",
+              "name": "The type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "customProperties"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be5b2e4e-bf6d-44de-892b-c90fe7646744",
+              "name": "Type for instance {name} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "customProperties"
+                    },
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "afe55ece-a856-402a-9638-c6bcbdccab95",
+          "name": "Delete a type by name",
+          "request": {
+            "name": "Delete a type by name",
+            "description": {
+              "content": "Delete a type by `name`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "name",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) Name of the type"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7d9578bf-316a-460f-9a85-3352515866fb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "37862bd0-eb61-41ac-9f4c-e8d1a372cb36",
+              "name": "type for instance {name} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) Name of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a82dac0e-cad6-4685-b23b-701bf3dda841",
+          "name": "Asynchronously delete a type by id",
+          "request": {
+            "name": "Asynchronously delete a type by id",
+            "description": {
+              "content": "Asynchronously delete a type by `id`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "async",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cb2d5e73-bc5b-411d-a287-d1b564a13eb2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "async",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bad3bbce-7874-4c40-8f3e-adcedc68db26",
+              "name": "type for instance {id} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "async",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f3493f13-2fbf-498f-9bc7-d3b4e80654ee",
+          "name": "get All Custom Properties By Entity Type",
+          "request": {
+            "name": "get All Custom Properties By Entity Type",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "customProperties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f372f1c8-d349-49cd-a7ac-a5c6d3594843",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "customProperties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b126c3e2-bdfc-43d9-b07e-4ab8394e979a",
+          "name": "Get custom properties for an entity type",
+          "request": {
+            "name": "Get custom properties for an entity type",
+            "description": {
+              "content": "Get custom properties defined for a specific entity type by name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "name",
+                ":entityType",
+                "customProperties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted",
+                  "description": "Include all, deleted, or non-deleted entities."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) Name of the entity type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fb7e7634-80ae-44d0-9693-e7727d4ab5f1",
+              "name": "List of custom properties for the entity type",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":entityType",
+                    "customProperties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Name of the entity type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"propertyType\": {\n    \"id\": \"<uuid>\",\n    \"type\": \"<string>\",\n    \"name\": \"<string>\",\n    \"fullyQualifiedName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"deleted\": \"<boolean>\",\n    \"inherited\": \"<boolean>\",\n    \"href\": \"<uri>\"\n  },\n  \"displayName\": \"<string>\",\n  \"customPropertyConfig\": {\n    \"config\": \"<object>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30035fd9-d9e4-4e32-9341-221db4e73943",
+              "name": "Entity type {entityType} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":entityType",
+                    "customProperties"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Name of the entity type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "766c4476-04f5-422e-ae5a-00563ecbb630",
+          "name": "get Entity Type Fields",
+          "request": {
+            "name": "get Entity Type Fields",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "fields",
+                ":entityType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include",
+                  "value": "non-deleted"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "34e06aa8-2bfe-4710-9cfb-dba04c5a7754",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "fields",
+                    ":entityType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include",
+                      "value": "non-deleted"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "adc96c39-2e9d-40bd-9265-77ef5968ffc8",
+          "name": "Get a version of the types",
+          "request": {
+            "name": "Get a version of the types",
+            "description": {
+              "content": "Get a version of the type by given `id`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                ":id",
+                "versions",
+                ":version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "version",
+                  "description": "(Required) type version number in the form `major`.`minor`"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3e3a53c9-2588-4513-b331-0e7682c3827b",
+              "name": "types",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id",
+                    "versions",
+                    ":version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version",
+                      "description": "(Required) type version number in the form `major`.`minor`"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "null",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ccdb7f3-5af0-4197-8209-531b2b2e03d9",
+              "name": "Type for instance {id} and version {version} is not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id",
+                    "versions",
+                    ":version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "version",
+                      "description": "(Required) type version number in the form `major`.`minor`"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d740525-de38-4c43-8e7f-bba24a6638c8",
+          "name": "List all entity versions within a time range",
+          "request": {
+            "name": "List all entity versions within a time range",
+            "description": {
+              "content": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startTs",
+                  "value": "<long>",
+                  "description": "(Required) Start timestamp in milliseconds since epoch"
+                },
+                {
+                  "disabled": false,
+                  "key": "endTs",
+                  "value": "<long>",
+                  "description": "(Required) End timestamp in milliseconds since epoch"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<string>",
+                  "description": "Returns list of entity versions before this cursor"
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Returns list of entity versions after this cursor"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3a979e9c-4e0e-499b-9812-617e7715b858",
+              "name": "List of all versions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "endTs",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [],\n  \"paging\": {\n    \"total\": 230,\n    \"before\": \"string\",\n    \"after\": \"string\",\n    \"offset\": 2486,\n    \"limit\": 7848\n  },\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ],\n  \"warningsCount\": 2223,\n  \"warnings\": [\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    },\n    {\n      \"message\": \"string\",\n      \"entity\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4edaa5c0-df02-44ba-927a-0a67d97c9094",
+          "name": "List type versions",
+          "request": {
+            "name": "List type versions",
+            "description": {
+              "content": "Get a list of all the versions of a type identified by `id`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                ":id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23833620-d44c-475f-9039-30aaad50dcc6",
+              "name": "List of type versions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    ":id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityType\": \"string\",\n  \"versions\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7f2892d5-b3c4-47c5-806c-46a04509de54",
+          "name": "Update a type using name.",
+          "request": {
+            "name": "Update a type using name.",
+            "description": {
+              "content": "Update an existing type using JsonPatch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "metadata",
+                "types",
+                "name",
+                ":fqn"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fqn",
+                  "description": "(Required) Name of the type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3872d7f0-da6b-43c2-b8da-ce9697be2bff",
+              "name": "default response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "metadata",
+                    "types",
+                    "name",
+                    ":fqn"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fqn",
+                      "description": "(Required) Name of the type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[{op:remove, path:/a},{op:add, path: /b, value: val}]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f91aeca5-6aef-4854-946e-3a79b4c03ea5",
+    "name": "OpenMetadata APIs Agent Executions Metadata API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Common types and API definition for OpenMetadata\n\nContact Support:\n Name: OpenMetadata\n Email: openmetadata-dev@googlegroups.com",
+      "type": "text/plain"
+    }
+  }
+}

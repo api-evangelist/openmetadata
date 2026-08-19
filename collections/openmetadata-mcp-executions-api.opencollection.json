@@ -1,0 +1,145 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions MCP Executions API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MCP Executions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List MCP executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcpExecutions",
+            "params": [
+              {
+                "name": "serverId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by MCP server ID"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter executions before the given end timestamp"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of executions returned"
+              }
+            ]
+          },
+          "docs": "Get a list of MCP executions, optionally filtered by serverId, startTs and endTs."
+        },
+        {
+          "info": {
+            "name": "Create an MCP execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/mcpExecutions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new MCP execution record."
+        },
+        {
+          "info": {
+            "name": "Get an MCP execution by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/mcpExecutions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP Execution"
+              }
+            ]
+          },
+          "docs": "Get an MCP execution by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete an MCP execution by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/mcpExecutions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the MCP Execution"
+              },
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity. (Default = `false`)"
+              }
+            ]
+          },
+          "docs": "Delete an MCP execution by `Id`."
+        },
+        {
+          "info": {
+            "name": "Delete MCP execution data at a timestamp",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/mcpExecutions/:serverId/:timestamp",
+            "params": [
+              {
+                "name": "serverId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the MCP Server"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "path",
+                "description": "Timestamp of the execution to delete"
+              }
+            ]
+          },
+          "docs": "Delete MCP execution data for a server at a specific timestamp."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

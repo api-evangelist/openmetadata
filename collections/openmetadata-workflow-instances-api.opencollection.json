@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Workflow Instances API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workflow Instances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the Workflow Instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/governance/workflowInstances",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of Workflow Instances returned. (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of Workflow Instances at the offset"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter Workflow Instances after the given start timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Filter Workflow Instances before the given end timestamp"
+              },
+              {
+                "name": "latest",
+                "value": "",
+                "type": "query",
+                "description": "Only list the latest Workflow Instance"
+              },
+              {
+                "name": "workflowDefinitionName",
+                "value": "",
+                "type": "query",
+                "description": "Workflow Definition Name"
+              },
+              {
+                "name": "entityLink",
+                "value": "",
+                "type": "query",
+                "description": "Entity Link"
+              }
+            ]
+          },
+          "docs": "Get a list of all the workflow instances, filtered by `startTs` and `endTs` of the creation, and Workflow Definition FQN. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

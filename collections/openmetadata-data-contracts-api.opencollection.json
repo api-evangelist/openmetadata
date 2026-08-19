@@ -1,0 +1,934 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "OpenMetadata APIs Agent Executions Data Contracts API",
+    "version": "1.13"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Contracts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List data contracts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts",
+            "params": [
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of records returned in the response"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of contracts before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of contracts after this cursor"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter contracts by status"
+              },
+              {
+                "name": "entity",
+                "value": "",
+                "type": "query",
+                "description": "Filter contracts by entity id"
+              }
+            ]
+          },
+          "docs": "Get a list of data contracts, optionally filtered by query parameters."
+        },
+        {
+          "info": {
+            "name": "Create a data contract from YAML",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts"
+          },
+          "docs": "Create a new data contract from YAML content."
+        },
+        {
+          "info": {
+            "name": "Create or update a data contract from YAML",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataContracts"
+          },
+          "docs": "Create a new data contract from YAML, if it does not exist or update an existing data contract."
+        },
+        {
+          "info": {
+            "name": "Import data contract from ODCS format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/odcs",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID to associate with the contract"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity Type (table, topic, etc.)"
+              },
+              {
+                "name": "objectName",
+                "value": "",
+                "type": "query",
+                "description": "Schema object name to import (for multi-object ODCS contracts). If not specified, auto-selects based on entity name or uses first object."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Import a data contract from Open Data Contract Standard (ODCS) v3.1.0 JSON format."
+        },
+        {
+          "info": {
+            "name": "Create or update data contract from ODCS format",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataContracts/odcs",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID to associate with the contract"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity Type (table, topic, etc.)"
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "Import mode: 'merge' preserves existing fields, 'replace' overwrites all fields"
+              },
+              {
+                "name": "objectName",
+                "value": "",
+                "type": "query",
+                "description": "Schema object name to import (for multi-object ODCS contracts). If not specified, auto-selects based on entity name or uses first object."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update a data contract from Open Data Contract Standard (ODCS) v3.1.0 JSON format. Use mode=merge (default) to preserve existing fields not in the import. Use mode=replace to fully overwrite the contract while preserving ID and execution history."
+        },
+        {
+          "info": {
+            "name": "Import data contract from ODCS YAML format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/odcs/yaml",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID to associate with the contract"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity Type (table, topic, etc.)"
+              },
+              {
+                "name": "objectName",
+                "value": "",
+                "type": "query",
+                "description": "Schema object name to import (for multi-object ODCS contracts). If not specified, auto-selects based on entity name or uses first object."
+              }
+            ]
+          },
+          "docs": "Import a data contract from Open Data Contract Standard (ODCS) v3.1.0 YAML format."
+        },
+        {
+          "info": {
+            "name": "Create or update data contract from ODCS YAML format",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataContracts/odcs/yaml",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID to associate with the contract"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity Type (table, topic, etc.)"
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "Import mode: 'merge' preserves existing fields, 'replace' overwrites all fields"
+              },
+              {
+                "name": "objectName",
+                "value": "",
+                "type": "query",
+                "description": "Schema object name to import (for multi-object ODCS contracts). If not specified, auto-selects based on entity name or uses first object."
+              }
+            ]
+          },
+          "docs": "Create or update a data contract from Open Data Contract Standard (ODCS) v3.1.0 YAML format. Use mode=merge (default) to preserve existing fields not in the import. Use mode=replace to fully overwrite the contract while preserving ID and execution history."
+        },
+        {
+          "info": {
+            "name": "List data contract results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/results",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of results (1 to 10000, default = 10)"
+              },
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Returns results after this timestamp"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "Returns results before this timestamp"
+              }
+            ]
+          },
+          "docs": "Get a list of all data contract execution results for a given contract."
+        },
+        {
+          "info": {
+            "name": "Create or update data contract result",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataContracts/:id/results",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new data contract execution result."
+        },
+        {
+          "info": {
+            "name": "Get a data contract by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Data contract Id"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities"
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a data contract by `id`."
+        },
+        {
+          "info": {
+            "name": "Update a data contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "/api/v1/dataContracts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Data contract Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing data contract using JsonPatch."
+        },
+        {
+          "info": {
+            "name": "Delete a data contract by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataContracts/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Data contract Id"
+              }
+            ]
+          },
+          "docs": "Delete a data contract by `id`."
+        },
+        {
+          "info": {
+            "name": "Delete a data contract by id asynchronously",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataContracts/async/:id",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Data contract Id"
+              }
+            ]
+          },
+          "docs": "Delete a data contract by `id` asynchronously."
+        },
+        {
+          "info": {
+            "name": "Get a data contract by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/name/:fqn",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the data contract"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Include all, deleted, or non-deleted entities"
+              },
+              {
+                "name": "includeRelations",
+                "value": "",
+                "type": "query",
+                "description": "Per-relation include control. Format: field:value,field2:value2. Example: owners:non-deleted,followers:all. Valid values: all, deleted, non-deleted. If not specified for a field, uses the entity's include value."
+              }
+            ]
+          },
+          "docs": "Get a data contract by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Delete a data contract by fully qualified name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataContracts/name/:fqn",
+            "params": [
+              {
+                "name": "hardDelete",
+                "value": "",
+                "type": "query",
+                "description": "Hard delete the entity"
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Recursively delete this entity and it's children. (Default `false`)"
+              },
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the data contract"
+              }
+            ]
+          },
+          "docs": "Delete a data contract by `fullyQualifiedName`."
+        },
+        {
+          "info": {
+            "name": "Delete data contract result",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataContracts/:id/results/:timestamp",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "path",
+                "description": "Timestamp of the result to delete"
+              }
+            ]
+          },
+          "docs": "Delete a data contract result at a specific timestamp."
+        },
+        {
+          "info": {
+            "name": "Delete data contract results before timestamp",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/api/v1/dataContracts/:id/results/before/:timestamp",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "path",
+                "description": "Delete results before this timestamp"
+              }
+            ]
+          },
+          "docs": "Delete all data contract results before a specific timestamp."
+        },
+        {
+          "info": {
+            "name": "Export data contract to ODCS format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/odcs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              }
+            ]
+          },
+          "docs": "Export a data contract to Open Data Contract Standard (ODCS) v3.1.0 format."
+        },
+        {
+          "info": {
+            "name": "Export data contract to ODCS format by FQN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/name/:fqn/odcs",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the data contract"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              }
+            ]
+          },
+          "docs": "Export a data contract to Open Data Contract Standard (ODCS) v3.1.0 format by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Export data contract to ODCS YAML format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/odcs/yaml",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              }
+            ]
+          },
+          "docs": "Export a data contract to Open Data Contract Standard (ODCS) v3.1.0 YAML format."
+        },
+        {
+          "info": {
+            "name": "Export data contract to ODCS YAML format by FQN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/name/:fqn/odcs/yaml",
+            "params": [
+              {
+                "name": "fqn",
+                "value": "",
+                "type": "path",
+                "description": "Fully qualified name of the data contract"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              }
+            ]
+          },
+          "docs": "Export a data contract to Open Data Contract Standard (ODCS) v3.1.0 YAML format by fully qualified name."
+        },
+        {
+          "info": {
+            "name": "Get the effective data contract for an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/entity",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the related Entity"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity Type to get the data contract for"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Fields requested in the returned resource"
+              }
+            ]
+          },
+          "docs": "Get the effective data contract for an entity, including inherited contract properties from its data product if applicable."
+        },
+        {
+          "info": {
+            "name": "Get latest data contract result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/results/latest",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              }
+            ]
+          },
+          "docs": "Get the latest execution result for a data contract."
+        },
+        {
+          "info": {
+            "name": "Get a data contract result by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/results/:resultId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              },
+              {
+                "name": "resultId",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract result"
+              }
+            ]
+          },
+          "docs": "Get a specific data contract execution result by its ID."
+        },
+        {
+          "info": {
+            "name": "Get a version of a data contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/versions/:version",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Data contract Id"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "Data contract version number in the form `major`.`minor`"
+              }
+            ]
+          },
+          "docs": "Get a version of a data contract by given `id`"
+        },
+        {
+          "info": {
+            "name": "List all entity versions within a time range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/history",
+            "params": [
+              {
+                "name": "startTs",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "endTs",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp in milliseconds since epoch"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the number of entity returned (1 to 1000000, default = 10)"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions before this cursor"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns list of entity versions after this cursor"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. "
+        },
+        {
+          "info": {
+            "name": "List all versions of a data contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/api/v1/dataContracts/:id/versions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Data contract Id"
+              }
+            ]
+          },
+          "docs": "Get a list of all the versions of a data contract identified by `id`"
+        },
+        {
+          "info": {
+            "name": "Parse ODCS YAML and return metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/odcs/parse/yaml"
+          },
+          "docs": "Parse an ODCS YAML contract and return metadata including the list of schema objects. Use this to determine available objects for multi-object contracts before importing."
+        },
+        {
+          "info": {
+            "name": "Restore a soft deleted data contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "/api/v1/dataContracts/restore",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Restore a soft deleted data contract."
+        },
+        {
+          "info": {
+            "name": "Validate a data contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/:id/validate",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the data contract"
+              }
+            ]
+          },
+          "docs": "Execute on-demand validation of a data contract including semantic rules, quality tests, and inherited contract properties from data products."
+        },
+        {
+          "info": {
+            "name": "Validate a data contract for an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/entity/validate",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the entity"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Type of the entity"
+              }
+            ]
+          },
+          "docs": "Execute on-demand validation of a data contract for an entity. If the entity only has an inherited contract from a Data Product, an empty contract will be materialized for the entity to store validation results."
+        },
+        {
+          "info": {
+            "name": "Validate data contract request without creating",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validate a CreateDataContract request against the target entity without creating the contract. Returns comprehensive validation results including constraint errors and schema field mismatches."
+        },
+        {
+          "info": {
+            "name": "Validate data contract request from YAML without creating",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/validate/yaml"
+          },
+          "docs": "Validate a CreateDataContract YAML request against the target entity without creating the contract. Returns comprehensive validation results including entity errors, constraint errors, and schema field mismatches."
+        },
+        {
+          "info": {
+            "name": "Validate ODCS YAML without importing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/api/v1/dataContracts/odcs/validate/yaml",
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID to validate against"
+              },
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity Type (table, topic, etc.)"
+              },
+              {
+                "name": "objectName",
+                "value": "",
+                "type": "query",
+                "description": "Schema object name to validate (for multi-object ODCS contracts). If not specified, auto-selects based on entity name or uses first object."
+              }
+            ]
+          },
+          "docs": "Validate an ODCS YAML contract against the target entity without creating the contract. Returns comprehensive validation results including entity errors, constraint errors, and schema field mismatches."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
