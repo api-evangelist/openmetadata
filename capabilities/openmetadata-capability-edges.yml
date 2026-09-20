@@ -1,0 +1,236 @@
+slug: openmetadata
+provider: OpenMetadata
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 22
+edges:
+- tag: Data Quality
+  spec_file: openmetadata-data-quality-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.9
+  evidence: GET /v1/dataQuality/testCases/dimensionResults/{fqn} listTestCaseDimensionResults 'List test
+    case dimensional results'
+  reason: Operations expose data quality test case results and quality dimensions, which is squarely data
+    quality monitoring/remediation support.
+- tag: Test Cases
+  spec_file: openmetadata-test-cases-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.88
+  evidence: GET /v1/dataQuality/testCases listTestCases 'List test cases'; 'Get failed rows sample data'
+  reason: Operations create and run data-quality test cases under /v1/dataQuality, with failed-row samples
+    and TestCaseResult schemas — this is data quality monitoring and remediation, not software test management.
+- tag: SCIM
+  spec_file: openmetadata-scim-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: listScimUsers "List SCIM users"; createScimGroup "Create SCIM group"; schemas ScimUser, ScimGroup,
+    ScimPatchOp
+  reason: SCIM user and group provisioning endpoints are directory-driven identity lifecycle (joiners-movers-leavers)
+    for platform accounts, squarely Identity & Access Management.
+- tag: Test Case Incident Manager
+  spec_file: openmetadata-test-case-incident-manager-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.85
+  evidence: GET /v1/dataQuality/testCases/testCaseIncidentStatus List the test case failure statuses;
+    CreateTestCaseResolutionStatus
+  reason: Tracks and resolves data-quality test failures under the /dataQuality path — data quality monitoring
+    and remediation, not IT incident management.
+- tag: Test Case Results
+  spec_file: openmetadata-test-case-results-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.85
+  evidence: Add test case result data to a testCase under /v1/dataQuality/testCases/testCaseResults; schemas
+    TestCaseResult, TestSummary
+  reason: Records and lists data-quality test case results, i.e. data quality monitoring and reporting
+    on catalogued data assets.
+- tag: Test Definitions
+  spec_file: openmetadata-test-definitions-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.85
+  evidence: GET /v1/dataQuality/testDefinitions 'List test definitions'; schema TestCaseParameterValidationRule
+  reason: Defines reusable data-quality validation rules under the dataQuality namespace; realises data
+    quality management within the catalog platform.
+- tag: Test Suites
+  spec_file: openmetadata-test-suites-api-openapi.yml
+  capability_id: BC-610.30
+  capability_id_l1: BC-610
+  capability_name: Data Quality Management
+  confidence: 0.85
+  evidence: POST /v1/dataQuality/testSuites createBasicTestSuite 'Create a basic test suite'; schema DataQualityReportMetadata
+  reason: Groups and executes data-quality tests over data assets, with data-quality report metadata —
+    data quality monitoring capability.
+- tag: LLM Models
+  spec_file: openmetadata-llm-models-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.82
+  evidence: POST /v1/llmModels createLLMModel 'Create an LLM model'; schemas ModelEvaluation, TrainingMetrics,
+    FairnessMetrics, RobustnessMetrics, ModelSpecifications
+  reason: Registering LLM model entities with evaluation, training and fairness metrics is AI/ML model
+    lifecycle and responsible-AI metadata management.
+- tag: Classifications
+  spec_file: openmetadata-classifications-api-openapi.yml
+  capability_id: BC-610.10
+  capability_id_l1: BC-610
+  capability_name: Data Governance Management
+  confidence: 0.8
+  evidence: POST /v1/classifications createClassification 'Create a classification'; schemas AutoClassificationConfig,
+    TagList, RecognizerFeedback
+  reason: Classification and tag taxonomies with auto-classification recognizers are the core mechanism
+    for data ownership, stewardship policies and sensitivity labelling in a catalog — squarely Data Governance
+    Management. Some chance a reviewer would file taxonomy work under knowledge curation, hence 0.8.
+- tag: ML Models
+  spec_file: openmetadata-ml-models-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.8
+  evidence: POST /v1/mlmodels createMlModel 'Create an ML model'; schemas MlModel, MlHyperParameter, MlFeatureSource,
+    MlStore
+  reason: Managing ML model entities with hyperparameters, feature sources and model store references
+    is AI/ML model lifecycle (MLOps) metadata management.
+- tag: Users
+  spec_file: openmetadata-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: PUT /v1/users/changePassword changeUserPassword; PUT /v1/users/security/token createPersonalAccessToken;
+    schema AuthenticationMechanism
+  reason: User account lifecycle, password change, email verification and personal access token issuance
+    is identity and access management for the platform.
+- tag: AI Governance Policies
+  spec_file: openmetadata-ai-governance-policies-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.78
+  evidence: POST /v1/aiGovernancePolicies  createAIGovernancePolicy; schemas ComplianceRequirement, DataAccessControl,
+    CostControl
+  reason: Lifecycle management of AI governance policies with compliance requirements and access controls
+    — responsible AI governance.
+- tag: Lineage
+  spec_file: openmetadata-lineage-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.78
+  evidence: PUT /v1/lineage addLineageEdge 'Add a lineage edge'; schemas ColumnLineage, EntityLineage,
+    LineageDetails
+  reason: Data lineage graph management is squarely information & data management; whether it belongs
+    to data governance or data architecture sub-capability is unclear, so only L1 is asserted.
+- tag: Roles
+  spec_file: openmetadata-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: createRole "Create a role"; schemas Role, CreateRole; used with policies for entity access
+  reason: Role lifecycle management underpinning who may act on catalog entities — access management.
+    Not the buyer's HR roles; strictly authorisation objects.
+- tag: Tables
+  spec_file: openmetadata-tables-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.75
+  evidence: Add data modeling information to a table; Add table profile data; Get table profile config;
+    Add table join information
+  reason: Core data-catalog surface for table metadata, data models, profiling and lineage/join information
+    — clearly Information & Data Management; evidence spans cataloguing/governance, data quality profiling
+    and data architecture, so no single L2 is asserted.
+- tag: AI Applications
+  spec_file: openmetadata-ai-applications-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.72
+  evidence: POST /v1/aiApplications  createAIApplication; schemas AICompliance, HighRiskSystems, ConformityAssessment,
+    SafetyMetrics
+  reason: Catalogues AI applications as governed assets with compliance/risk metadata — AI/ML lifecycle
+    and responsible AI management within a metadata platform.
+- tag: Permissions
+  spec_file: openmetadata-permissions-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: GET /v1/permissions/{resource}/{id} Get permissions for a given entity for a logged in user;
+    schemas RolePermission, PolicyEvaluationStep, InheritedPermission
+  reason: Read/evaluate authorisation decisions for users against resources, roles and policies — access
+    management. Confidence tempered because these are debug/evaluation reads rather than full IAM administration.
+- tag: Columns
+  spec_file: openmetadata-columns-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: POST /v1/columns/import 'Import column metadata from CSV (with dry-run)'; GET /v1/columns/grid
+    'Get column grid with metadata grouping'
+  reason: Bulk curation, search and import/export of column-level technical metadata across the catalog.
+    Clearly Information & Data Management; ambiguous between data governance and data architecture sub-capabilities,
+    so L2 left null.
+- tag: Database Schemas
+  spec_file: openmetadata-database-schemas-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: GET /v1/databaseSchemas listDBSchemas 'List database schemas'; DatabaseSchemaProfilerConfig,
+    AssetCertification
+  reason: Cataloguing and curating database schema metadata (with profiler config, certification, ownership)
+    is information & data management; evidence does not clearly single out one L2 between data architecture
+    and governance.
+- tag: Domains
+  spec_file: openmetadata-domains-api-openapi.yml
+  capability_id: BC-610.10
+  capability_id_l1: BC-610
+  capability_name: Data Governance Management
+  confidence: 0.7
+  evidence: GET /v1/dataProducts listDataProducts; PUT /v1/dataProducts/{name}/assets/add bulkAddAssets;
+    schemas CreateDomain, DomainList, SlaDefinition
+  reason: Domains and data products assign ownership and stewardship boundaries over data assets (data
+    mesh governance), which fits data governance management.
+- tag: MCP Servers
+  spec_file: openmetadata-mcp-servers-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: POST /v1/mcpServers createMcpServer; schemas AICompliance, HighRiskSystems, ConformityAssessment,
+    TransparencyObligations, McpGovernanceMetadata
+  reason: Cataloguing AI/MCP servers with AI-compliance, conformity-assessment and governance metadata
+    is responsible-AI / AI lifecycle management.
+- tag: OpenLineage
+  spec_file: openmetadata-openlineage-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: POST /v1/openlineage/lineage postOpenLineageEvent Receive a single OpenLineage event; schemas
+    DatasetFacets, OpenLineageRun, SchemaFacet
+  reason: Ingests OpenLineage run/dataset events to build data lineage in the catalog — a core information
+    & data management capability. Whether it belongs under data governance or data architecture is unclear,
+    so only the L1 is asserted.
