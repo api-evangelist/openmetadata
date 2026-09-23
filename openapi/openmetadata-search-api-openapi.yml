@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Search API
+  title: OpenMetadata Search API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -260,7 +260,7 @@ paths:
     post:
       tags:
       - Search
-      summary: Only Reindex the selected entities in Elasticsearch.
+      summary: Only Reindex the selected entities in Elasticsearch
       description: 'Only Reindex the selected entities in Elasticsearch. Maximum 500 entities per request. Job timeout: 30 minutes.'
       operationId: reindexOnlySelectedEntities.
       parameters:
@@ -651,56 +651,77 @@ paths:
           description: Admin only
 components:
   schemas:
-    TagLabelRecognizerMetadata:
+    FieldInterpretation:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - explanation
+      - pattern
       type: object
       properties:
-        recognizerId:
+        pattern:
           type: string
-          format: uuid
-        recognizerName:
+        explanation:
           type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
+    MappingConfiguration:
+      type: object
+      properties:
+        includeMappings:
+          type: boolean
+        mappingSection:
+          $ref: '#/components/schemas/TitleSection'
+        fieldInterpretations:
           type: array
           items:
-            $ref: '#/components/schemas/PatternMatch'
-    Range:
+            $ref: '#/components/schemas/FieldInterpretation'
+    TopHits:
       type: object
       properties:
-        gt:
-          type: number
-          format: double
-        gte:
-          type: number
-          format: double
-        lt:
-          type: number
-          format: double
-        lte:
-          type: number
-          format: double
-    TitleSection:
+        size:
+          type: integer
+          format: int32
+        sortField:
+          type: string
+        sortOrder:
+          type: string
+          enum:
+          - asc
+          - desc
+    Field__1:
+      required:
+      - description
+      - name
       type: object
       properties:
-        title:
+        name:
           type: string
         description:
+          type: string
+    PromptSection:
+      required:
+      - content
+      - section
+      type: object
+      properties:
+        section:
+          type: string
+        content:
           type: string
         order:
           type: integer
           format: int32
-    AllowedFieldValueBoostFields:
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    AllowedSearchFields:
       required:
       - entityType
       - fields
@@ -711,47 +732,37 @@ components:
         fields:
           type: array
           items:
-            $ref: '#/components/schemas/Field__1'
-    ExtensionFieldGuidelines:
+            $ref: '#/components/schemas/Field'
+    AdditionalSettings:
+      type: object
+    QueryExample:
       required:
-      - header
-      - sections
+      - esQuery
+      - query
       type: object
       properties:
-        header:
+        description:
           type: string
-        sections:
+        query:
+          type: string
+        esQuery:
+          type: string
+        entityTypes:
           type: array
           items:
-            $ref: '#/components/schemas/GuidelineSection'
-        examples:
+            type: string
+    GuidelineSection:
+      required:
+      - guidelines
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        guidelines:
           type: array
           items:
-            $ref: '#/components/schemas/QueryExample'
-    FieldBoost:
-      required:
-      - field
-      type: object
-      properties:
-        field:
-          type: string
-        boost:
-          type: number
-          format: double
-        matchType:
-          type: string
-          enum:
-          - exact
-          - phrase
-          - fuzzy
-          - standard
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
+            type: string
     GlobalSettings:
       type: object
       properties:
@@ -788,219 +799,23 @@ components:
         semanticWeight:
           type: number
           format: double
-    AdditionalSettings:
-      type: object
-    PreviewSearchRequest:
+    ExtensionFieldGuidelines:
       required:
-      - index
-      - query
-      - searchSettings
+      - header
+      - sections
       type: object
       properties:
-        query:
+        header:
           type: string
-        index:
-          type: string
-        searchSettings:
-          $ref: '#/components/schemas/SearchSettings'
-        from:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        sortField:
-          type: string
-        sortOrder:
-          type: string
-          enum:
-          - asc
-          - desc
-        trackTotalHits:
-          type: boolean
-        queryFilter:
-          type: string
-        postFilter:
-          type: string
-        fetchSource:
-          type: boolean
-        includeSourceFields:
+        sections:
           type: array
           items:
-            type: string
-        explain:
-          type: boolean
-    Aggregation:
-      required:
-      - name
-      - type
-      type: object
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - terms
-          - range
-          - histogram
-          - date_histogram
-          - filters
-          - missing
-          - nested
-          - reverse_nested
-          - top_hits
-          - max
-          - min
-          - avg
-          - sum
-          - stats
-        field:
-          type: string
-        script:
-          type: string
-    AggregationRequest:
-      required:
-      - fieldName
-      type: object
-      properties:
-        query:
-          type: string
-        index:
-          type: string
-        fieldName:
-          type: string
-        fieldValue:
-          type: string
-        deleted:
-          type: boolean
-        size:
-          type: integer
-          format: int32
-        sourceFields:
+            $ref: '#/components/schemas/GuidelineSection'
+        examples:
           type: array
           items:
-            type: string
-        queryText:
-          type: string
-        topHits:
-          $ref: '#/components/schemas/TopHits'
-    SearchResponse:
-      type: object
-    SearchStatsResponse$OrphanIndex:
-      type: object
-      properties:
-        name:
-          type: string
-        sizeInBytes:
-          type: integer
-          format: int32
-        sizeFormatted:
-          type: string
-    SearchStatsResponse$IndexStats:
-      type: object
-      properties:
-        name:
-          type: string
-        documents:
-          type: integer
-          format: int32
-        primaryShards:
-          type: integer
-          format: int32
-        replicaShards:
-          type: integer
-          format: int32
-        sizeInBytes:
-          type: integer
-          format: int32
-        sizeFormatted:
-          type: string
-        health:
-          type: string
-        aliases:
-          type: array
-          items:
-            type: string
-    FieldValueBoost:
-      required:
-      - factor
-      - field
-      type: object
-      properties:
-        field:
-          type: string
-        factor:
-          type: number
-          format: double
-        modifier:
-          type: string
-          enum:
-          - none
-          - log
-          - log1p
-          - log2p
-          - ln
-          - ln1p
-          - ln2p
-          - square
-          - sqrt
-          - reciprocal
-        missing:
-          type: number
-          format: double
-        condition:
-          $ref: '#/components/schemas/Condition'
-    SearchSettings:
-      type: object
-      properties:
-        globalSettings:
-          $ref: '#/components/schemas/GlobalSettings'
-        assetTypeConfigurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetTypeConfiguration'
-        defaultConfiguration:
-          $ref: '#/components/schemas/AssetTypeConfiguration'
-        allowedFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllowedSearchFields'
-        allowedFieldValueBoosts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllowedFieldValueBoostFields'
-        nlqConfiguration:
-          $ref: '#/components/schemas/NLQConfiguration'
-    QueryExample:
-      required:
-      - esQuery
-      - query
-      type: object
-      properties:
-        description:
-          type: string
-        query:
-          type: string
-        esQuery:
-          type: string
-        entityTypes:
-          type: array
-          items:
-            type: string
-    MatchTypeBoostMultipliers:
-      type: object
-      properties:
-        exactMatchMultiplier:
-          type: number
-          format: double
-        phraseMatchMultiplier:
-          type: number
-          format: double
-        fuzzyMatchMultiplier:
-          type: number
-          format: double
-    AllowedSearchFields:
+            $ref: '#/components/schemas/QueryExample'
+    AllowedFieldValueBoostFields:
       required:
       - entityType
       - fields
@@ -1011,276 +826,19 @@ components:
         fields:
           type: array
           items:
-            $ref: '#/components/schemas/Field'
-    GuidelineSection:
+            $ref: '#/components/schemas/Field__1'
+    EntitySpecificInstruction:
       required:
-      - guidelines
-      - title
+      - entityType
+      - sections
       type: object
       properties:
-        title:
+        entityType:
           type: string
-        guidelines:
-          type: array
-          items:
-            type: string
-    Suggest:
-      type: object
-      properties:
-        completion:
-          type: boolean
-        phrase:
-          type: boolean
-        term:
-          type: boolean
-    TermBoost:
-      required:
-      - boost
-      - field
-      - value
-      type: object
-      properties:
-        field:
-          type: string
-        value:
-          type: string
-        boost:
-          type: number
-          format: double
-    AssetTypeConfiguration:
-      required:
-      - assetType
-      type: object
-      properties:
-        assetType:
-          type: string
-        searchFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldBoost'
-        highlightFields:
-          type: array
-          items:
-            type: string
-        aggregations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Aggregation'
-        termBoosts:
-          type: array
-          items:
-            $ref: '#/components/schemas/TermBoost'
-        fieldValueBoosts:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValueBoost'
-        scoreMode:
-          type: string
-          enum:
-          - multiply
-          - sum
-          - avg
-          - first
-          - max
-          - min
-        boostMode:
-          type: string
-          enum:
-          - multiply
-          - replace
-          - sum
-          - avg
-          - max
-          - min
-        additionalSettings:
-          $ref: '#/components/schemas/AdditionalSettings'
-        matchTypeBoostMultipliers:
-          $ref: '#/components/schemas/MatchTypeBoostMultipliers'
-    OrphanCleanupResponse:
-      type: object
-      properties:
-        deletedIndexes:
-          type: array
-          items:
-            type: string
-        deletedCount:
-          type: integer
-          format: int32
-    SearchStatsResponse:
-      type: object
-      properties:
-        clusterHealth:
-          type: string
-        totalIndexes:
-          type: integer
-          format: int32
-        totalDocuments:
-          type: integer
-          format: int32
-        totalSizeInBytes:
-          type: integer
-          format: int32
-        totalSizeFormatted:
-          type: string
-        totalPrimaryShards:
-          type: integer
-          format: int32
-        totalReplicaShards:
-          type: integer
-          format: int32
-        indexes:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchStatsResponse$IndexStats'
-        orphanIndexes:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchStatsResponse$OrphanIndex'
-        isSearchIndexingRunning:
-          type: boolean
-        expectedIndexCount:
-          type: integer
-          format: int32
-        missingIndexes:
-          type: array
-          items:
-            type: string
-    MappingConfiguration:
-      type: object
-      properties:
-        includeMappings:
-          type: boolean
-        mappingSection:
-          $ref: '#/components/schemas/TitleSection'
-        fieldInterpretations:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldInterpretation'
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    TopHits:
-      type: object
-      properties:
-        size:
-          type: integer
-          format: int32
-        sortField:
-          type: string
-        sortOrder:
-          type: string
-          enum:
-          - asc
-          - desc
-    PromptSection:
-      required:
-      - content
-      - section
-      type: object
-      properties:
-        section:
-          type: string
-        content:
-          type: string
-        order:
-          type: integer
-          format: int32
-    NLQConfiguration:
-      type: object
-      properties:
-        promptTemplate:
-          type: string
-        globalInstructions:
+        sections:
           type: array
           items:
             $ref: '#/components/schemas/PromptSection'
-        entitySpecificInstructions:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitySpecificInstruction'
-        examples:
-          type: array
-          items:
-            $ref: '#/components/schemas/QueryExample'
-        mappingConfiguration:
-          $ref: '#/components/schemas/MappingConfiguration'
-        extensionFieldGuidelines:
-          $ref: '#/components/schemas/ExtensionFieldGuidelines'
     Field:
       required:
       - dataType
@@ -1332,21 +890,446 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Field'
-    Condition:
-      type: object
-      properties:
-        range:
-          $ref: '#/components/schemas/Range'
-    FieldInterpretation:
+    TermBoost:
       required:
-      - explanation
-      - pattern
+      - boost
+      - field
+      - value
       type: object
       properties:
-        pattern:
+        field:
           type: string
-        explanation:
+        value:
           type: string
+        boost:
+          type: number
+          format: double
+    SearchStatsResponse_OrphanIndex:
+      type: object
+      properties:
+        name:
+          type: string
+        sizeInBytes:
+          type: integer
+          format: int32
+        sizeFormatted:
+          type: string
+    SearchStatsResponse:
+      type: object
+      properties:
+        clusterHealth:
+          type: string
+        totalIndexes:
+          type: integer
+          format: int32
+        totalDocuments:
+          type: integer
+          format: int32
+        totalSizeInBytes:
+          type: integer
+          format: int32
+        totalSizeFormatted:
+          type: string
+        totalPrimaryShards:
+          type: integer
+          format: int32
+        totalReplicaShards:
+          type: integer
+          format: int32
+        indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchStatsResponse_IndexStats'
+        orphanIndexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchStatsResponse_OrphanIndex'
+        isSearchIndexingRunning:
+          type: boolean
+        expectedIndexCount:
+          type: integer
+          format: int32
+        missingIndexes:
+          type: array
+          items:
+            type: string
+    Aggregation:
+      required:
+      - name
+      - type
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - terms
+          - range
+          - histogram
+          - date_histogram
+          - filters
+          - missing
+          - nested
+          - reverse_nested
+          - top_hits
+          - max
+          - min
+          - avg
+          - sum
+          - stats
+        field:
+          type: string
+        script:
+          type: string
+    SearchStatsResponse_IndexStats:
+      type: object
+      properties:
+        name:
+          type: string
+        documents:
+          type: integer
+          format: int32
+        primaryShards:
+          type: integer
+          format: int32
+        replicaShards:
+          type: integer
+          format: int32
+        sizeInBytes:
+          type: integer
+          format: int32
+        sizeFormatted:
+          type: string
+        health:
+          type: string
+        aliases:
+          type: array
+          items:
+            type: string
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    TitleSection:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+          format: int32
+    NLQConfiguration:
+      type: object
+      properties:
+        promptTemplate:
+          type: string
+        globalInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptSection'
+        entitySpecificInstructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitySpecificInstruction'
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryExample'
+        mappingConfiguration:
+          $ref: '#/components/schemas/MappingConfiguration'
+        extensionFieldGuidelines:
+          $ref: '#/components/schemas/ExtensionFieldGuidelines'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    Range:
+      type: object
+      properties:
+        gt:
+          type: number
+          format: double
+        gte:
+          type: number
+          format: double
+        lt:
+          type: number
+          format: double
+        lte:
+          type: number
+          format: double
+    OrphanCleanupResponse:
+      type: object
+      properties:
+        deletedIndexes:
+          type: array
+          items:
+            type: string
+        deletedCount:
+          type: integer
+          format: int32
+    MatchTypeBoostMultipliers:
+      type: object
+      properties:
+        exactMatchMultiplier:
+          type: number
+          format: double
+        phraseMatchMultiplier:
+          type: number
+          format: double
+        fuzzyMatchMultiplier:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    Suggest:
+      type: object
+      properties:
+        completion:
+          type: boolean
+        phrase:
+          type: boolean
+        term:
+          type: boolean
+    FieldValueBoost:
+      required:
+      - factor
+      - field
+      type: object
+      properties:
+        field:
+          type: string
+        factor:
+          type: number
+          format: double
+        modifier:
+          type: string
+          enum:
+          - none
+          - log
+          - log1p
+          - log2p
+          - ln
+          - ln1p
+          - ln2p
+          - square
+          - sqrt
+          - reciprocal
+        missing:
+          type: number
+          format: double
+        condition:
+          $ref: '#/components/schemas/Condition'
+    SearchSettings:
+      type: object
+      properties:
+        globalSettings:
+          $ref: '#/components/schemas/GlobalSettings'
+        assetTypeConfigurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetTypeConfiguration'
+        defaultConfiguration:
+          $ref: '#/components/schemas/AssetTypeConfiguration'
+        allowedFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedSearchFields'
+        allowedFieldValueBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedFieldValueBoostFields'
+        nlqConfiguration:
+          $ref: '#/components/schemas/NLQConfiguration'
+    AssetTypeConfiguration:
+      required:
+      - assetType
+      type: object
+      properties:
+        assetType:
+          type: string
+        searchFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldBoost'
+        highlightFields:
+          type: array
+          items:
+            type: string
+        aggregations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Aggregation'
+        termBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TermBoost'
+        fieldValueBoosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValueBoost'
+        scoreMode:
+          type: string
+          enum:
+          - multiply
+          - sum
+          - avg
+          - first
+          - max
+          - min
+        boostMode:
+          type: string
+          enum:
+          - multiply
+          - replace
+          - sum
+          - avg
+          - max
+          - min
+        additionalSettings:
+          $ref: '#/components/schemas/AdditionalSettings'
+        matchTypeBoostMultipliers:
+          $ref: '#/components/schemas/MatchTypeBoostMultipliers'
+    FieldBoost:
+      required:
+      - field
+      type: object
+      properties:
+        field:
+          type: string
+        boost:
+          type: number
+          format: double
+        matchType:
+          type: string
+          enum:
+          - exact
+          - phrase
+          - fuzzy
+          - standard
+    SearchResponse:
+      type: object
+    PreviewSearchRequest:
+      required:
+      - index
+      - query
+      - searchSettings
+      type: object
+      properties:
+        query:
+          type: string
+        index:
+          type: string
+        searchSettings:
+          $ref: '#/components/schemas/SearchSettings'
+        from:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        sortField:
+          type: string
+        sortOrder:
+          type: string
+          enum:
+          - asc
+          - desc
+        trackTotalHits:
+          type: boolean
+        queryFilter:
+          type: string
+        postFilter:
+          type: string
+        fetchSource:
+          type: boolean
+        includeSourceFields:
+          type: array
+          items:
+            type: string
+        explain:
+          type: boolean
     EntityReference:
       required:
       - id
@@ -1373,28 +1356,45 @@ components:
         href:
           type: string
           format: uri
-    EntitySpecificInstruction:
-      required:
-      - entityType
-      - sections
+    Condition:
       type: object
       properties:
-        entityType:
+        range:
+          $ref: '#/components/schemas/Range'
+    AggregationRequest:
+      required:
+      - fieldName
+      type: object
+      properties:
+        query:
           type: string
-        sections:
+        index:
+          type: string
+        fieldName:
+          type: string
+        fieldValue:
+          type: string
+        deleted:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        sourceFields:
           type: array
           items:
-            $ref: '#/components/schemas/PromptSection'
-    Field__1:
-      required:
-      - description
-      - name
+            type: string
+        queryText:
+          type: string
+        topHits:
+          $ref: '#/components/schemas/TopHits'
+    TagLabelMetadata:
       type: object
       properties:
-        name:
-          type: string
-        description:
-          type: string
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

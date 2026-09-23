@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Data Quality API
+  title: OpenMetadata Data Quality API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -102,28 +102,15 @@ paths:
                 $ref: '#/components/schemas/TestCaseDimensionResultList'
 components:
   schemas:
-    TestCaseDimensionResultList:
-      required:
-      - data
+    TestResultValue:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCaseDimensionResult'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
+        name:
+          type: string
+        value:
+          type: string
+        predictedValue:
+          type: string
     TestCaseDimensionResult:
       required:
       - dimensionKey
@@ -186,34 +173,6 @@ components:
           type: string
         entity:
           type: object
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    DimensionValue:
-      required:
-      - name
-      - value
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
     EntityReference:
       required:
       - id
@@ -240,15 +199,56 @@ components:
         href:
           type: string
           format: uri
-    TestResultValue:
+    DimensionValue:
+      required:
+      - name
+      - value
       type: object
       properties:
         name:
           type: string
         value:
           type: string
-        predictedValue:
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
           type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TestCaseDimensionResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseDimensionResult'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
   securitySchemes:
     BearerAuth:
       type: http

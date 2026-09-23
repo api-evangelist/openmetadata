@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Data Contracts API
+  title: OpenMetadata Data Contracts API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -881,7 +881,7 @@ paths:
       tags:
       - Data Contracts
       summary: List all entity versions within a time range
-      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      description: Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch.
       operationId: listAllEntityVersionsByTimestamp_12
       parameters:
       - name: startTs
@@ -1142,276 +1142,154 @@ paths:
           description: Invalid YAML content
 components:
   schemas:
-    TagLabelRecognizerMetadata:
+    Policy:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - id
+      - name
+      - rules
       type: object
       properties:
-        recognizerId:
+        id:
           type: string
           format: uuid
-        recognizerName:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
           type: string
-        score:
-          type: number
-          format: double
-        target:
+        fullyQualifiedName:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
           type: string
-          enum:
-          - content
-          - column_name
-        patterns:
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
           type: array
           items:
-            $ref: '#/components/schemas/PatternMatch'
-    ColumnProfile:
-      required:
-      - name
-      - timestamp
-      type: object
-      properties:
-        name:
+            $ref: '#/components/schemas/EntityReference'
+        href:
           type: string
-        timestamp:
+          format: uri
+        enabled:
+          type: boolean
+        version:
+          type: number
+          format: double
+        updatedAt:
           type: integer
           format: int64
-        valuesCount:
-          type: number
-          format: double
-        valuesPercentage:
-          type: number
-          format: double
-        validCount:
-          type: number
-          format: double
-        duplicateCount:
-          type: number
-          format: double
-        nullCount:
-          type: number
-          format: double
-        nullProportion:
-          type: number
-          format: double
-        missingPercentage:
-          type: number
-          format: double
-        missingCount:
-          type: number
-          format: double
-        uniqueCount:
-          type: number
-          format: double
-        uniqueProportion:
-          type: number
-          format: double
-        distinctCount:
-          type: number
-          format: double
-        distinctProportion:
-          type: number
-          format: double
-        min:
-          type: object
-        max:
-          type: object
-        minLength:
-          type: number
-          format: double
-        maxLength:
-          type: number
-          format: double
-        mean:
-          type: number
-          format: double
-        sum:
-          type: number
-          format: double
-        stddev:
-          type: number
-          format: double
-        variance:
-          type: number
-          format: double
-        median:
-          type: number
-          format: double
-        firstQuartile:
-          type: number
-          format: double
-        thirdQuartile:
-          type: number
-          format: double
-        interQuartileRange:
-          type: number
-          format: double
-        nonParametricSkew:
-          type: number
-          format: double
-        histogram:
-          $ref: '#/components/schemas/Histogram'
-        customMetrics:
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        rules:
           type: array
           items:
-            $ref: '#/components/schemas/CustomMetricProfile'
-        cardinalityDistribution:
-          $ref: '#/components/schemas/CardinalityDistribution'
-    ODCSParseResult:
+            $ref: '#/components/schemas/Rule'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        location:
+          $ref: '#/components/schemas/EntityReference'
+        allowDelete:
+          type: boolean
+        allowEdit:
+          type: boolean
+        deleted:
+          type: boolean
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        disabled:
+          type: boolean
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    CardinalityDistribution:
       type: object
       properties:
-        name:
-          type: string
-        version:
-          type: string
-        status:
-          type: string
-        schemaObjects:
+        categories:
           type: array
           items:
             type: string
-        hasMultipleObjects:
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
           type: boolean
-    ODCSSupportChannel:
-      required:
-      - channel
-      - url
-      type: object
-      properties:
-        channel:
-          type: string
-        url:
-          type: string
-          format: uri
-        description:
-          type: string
-        tool:
-          type: string
-          enum:
-          - email
-          - slack
-          - teams
-          - discord
-          - ticket
-          - other
-        scope:
-          type: string
-          enum:
-          - interactive
-          - announcements
-          - issues
-        invitationUrl:
-          type: string
-          format: uri
-    ODCSAuthoritativeDefinition:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-        name:
-          type: string
-        type:
-          type: string
-    TermsOfUse:
-      type: object
-      properties:
-        content:
-          type: string
-        inherited:
-          type: boolean
-    ContractSLA:
-      type: object
-      properties:
-        inherited:
-          type: boolean
-        refreshFrequency:
-          $ref: '#/components/schemas/RefreshFrequency'
-        maxLatency:
-          $ref: '#/components/schemas/MaxLatency'
-        availabilityTime:
-          type: string
-        timezone:
-          type: string
-          enum:
-          - GMT-11:00 (Pacific/Niue)
-          - GMT-10:00 (Pacific/Honolulu)
-          - GMT-09:30 (Pacific/Marquesas)
-          - GMT-09:00 (America/Anchorage)
-          - GMT-08:00 (America/Los Angeles)
-          - GMT-07:00 (America/Denver)
-          - GMT-06:00 (America/Chicago)
-          - GMT-05:00 (America/New York)
-          - GMT-04:00 (America/Santiago)
-          - GMT-03:00 (America/Sao Paulo)
-          - GMT-02:30 (Atlantic/Newfoundland)
-          - GMT-02:00 (Atlantic/South_Georgia)
-          - GMT-01:00 (Atlantic/Azores)
-          - GMT+00:00 (Europe/London)
-          - GMT+01:00 (Europe/Paris)
-          - GMT+02:00 (Europe/Athens)
-          - GMT+03:00 (Europe/Moscow)
-          - GMT+03:00 (Asia/Iran)
-          - GMT+04:00 (Asia/Dubai)
-          - GMT+04:30 (Asia/Afghanistan)
-          - GMT+05:00 (Asia/Karachi)
-          - GMT+05:30 (Asia/Kolkata)
-          - GMT+05:45 (Asia/Nepal)
-          - GMT+06:00 (Asia/Dhaka)
-          - GMT+06:00 (Asia/Myanmar)
-          - GMT+07:00 (Asia/Bangkok)
-          - GMT+08:00 (Asia/Shanghai)
-          - GMT+08:45 (Australia/Australian Central Western Standard Time)
-          - GMT+09:00 (Asia/Tokyo)
-          - GMT+09:00 (Australia/Adelaide)
-          - GMT+10:00 (Australia/Sydney)
-          - GMT+10:30 (Australia/Lord Howe)
-          - GMT+11:00 (Pacific/Norfolk)
-          - GMT+12:00 (Pacific/Auckland)
-          - GMT+13:00 (Pacific/Tongatapu)
-          - GMT+14:00 (Pacific/Kiritimati)
-        retention:
-          $ref: '#/components/schemas/Retention'
-        columnName:
-          type: string
-    FailedRule:
-      type: object
-      properties:
-        ruleName:
-          type: string
-        reason:
-          type: string
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
     RestoreEntity:
       required:
       - id
@@ -1420,7 +1298,49 @@ components:
         id:
           type: string
           format: uuid
-    SemanticsValidation:
+    DataContractResult:
+      required:
+      - contractExecutionStatus
+      - dataContractFQN
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dataContractFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        contractExecutionStatus:
+          type: string
+          enum:
+          - Running
+          - Success
+          - Failed
+          - PartialSuccess
+          - Aborted
+          - Queued
+        result:
+          type: string
+        schemaValidation:
+          $ref: '#/components/schemas/SchemaValidation'
+        semanticsValidation:
+          $ref: '#/components/schemas/SemanticsValidation'
+        qualityValidation:
+          $ref: '#/components/schemas/QualityValidation'
+        slaValidation:
+          $ref: '#/components/schemas/SlaValidation'
+        incidentId:
+          type: string
+          format: uuid
+        executionTime:
+          type: integer
+          format: int64
+    QualityValidation:
       type: object
       properties:
         passed:
@@ -1432,70 +1352,196 @@ components:
         total:
           type: integer
           format: int32
-        failedRules:
+        qualityScore:
+          type: number
+          format: double
+    ODCSSchemaElement:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        physicalName:
+          type: string
+        physicalType:
+          type: string
+        description:
+          type: string
+        businessName:
+          type: string
+        tags:
           type: array
           items:
-            $ref: '#/components/schemas/FailedRule'
-    Retention:
+            type: string
+        authoritativeDefinitions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ODCSAuthoritativeDefinition'
+        customProperties:
+          $ref: '#/components/schemas/CustomProperties__1'
+        dataGranularityDescription:
+          type: string
+        primaryKey:
+          type: boolean
+        primaryKeyPosition:
+          type: integer
+          format: int32
+        logicalType:
+          type: string
+          enum:
+          - string
+          - text
+          - date
+          - timestamp
+          - time
+          - number
+          - integer
+          - decimal
+          - float
+          - double
+          - long
+          - object
+          - array
+          - boolean
+          - bytes
+          - 'null'
+        logicalTypeOptions:
+          $ref: '#/components/schemas/ODCSLogicalTypeOptions'
+        required:
+          type: boolean
+        unique:
+          type: boolean
+        partitioned:
+          type: boolean
+        partitionKeyPosition:
+          type: integer
+          format: int32
+        classification:
+          type: string
+        encryptedName:
+          type: string
+        transformSourceObjects:
+          type: array
+          items:
+            type: string
+        transformLogic:
+          type: string
+        transformDescription:
+          type: string
+        examples:
+          type: array
+          items:
+            type: string
+        criticalDataElement:
+          type: boolean
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ODCSSchemaElement'
+        items:
+          $ref: '#/components/schemas/ODCSSchemaElement'
+        quality:
+          type: array
+          items:
+            $ref: '#/components/schemas/ODCSQualityRule'
+    ODCSSlaProperty:
       required:
-      - period
+      - property
+      - value
+      type: object
+      properties:
+        property:
+          type: string
+        value:
+          type: string
+        valueExt:
+          type: string
+        unit:
+          type: string
+        element:
+          type: string
+        driver:
+          type: string
+          enum:
+          - regulatory
+          - analytics
+          - operational
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    RefreshFrequency:
+      required:
+      - interval
       - unit
       type: object
       properties:
-        period:
+        interval:
           type: integer
           format: int32
         unit:
           type: string
           enum:
+          - hour
           - day
           - week
           - month
           - year
-    LifeCycle:
+    FailedRule:
       type: object
       properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
+        ruleName:
           type: string
-        versions:
+        reason:
+          type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
           type: array
           items:
-            type: object
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    CustomMetricProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
           type: number
           format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    ContractUpdate:
+      required:
+      - timestamp
+      - updatedBy
+      - version
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        changeDescription:
+          type: string
+        version:
+          type: string
     ODCSDataContract:
       required:
       - apiVersion
@@ -1588,25 +1634,110 @@ components:
         contractCreatedTs:
           type: string
           format: date-time
-    CardinalityDistribution:
+    AccessDetails:
+      required:
+      - timestamp
       type: object
       properties:
-        categories:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
           type: array
           items:
-            type: string
-        counts:
-          type: array
-          items:
-            type: integer
-            format: int32
-        percentages:
-          type: array
-          items:
-            type: number
-            format: double
-        allValuesUnique:
-          type: boolean
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
     ResultList:
       required:
       - data
@@ -1629,235 +1760,194 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    ODCSSchemaElement:
+    CreateDataContract:
       required:
+      - entity
       - name
       type: object
       properties:
-        name:
-          type: string
-        physicalName:
-          type: string
-        physicalType:
-          type: string
-        description:
-          type: string
-        businessName:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        authoritativeDefinitions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ODCSAuthoritativeDefinition'
-        customProperties:
-          $ref: '#/components/schemas/CustomProperties__1'
-        dataGranularityDescription:
-          type: string
-        primaryKey:
-          type: boolean
-        primaryKeyPosition:
-          type: integer
-          format: int32
-        logicalType:
-          type: string
-          enum:
-          - string
-          - text
-          - date
-          - timestamp
-          - time
-          - number
-          - integer
-          - decimal
-          - float
-          - double
-          - long
-          - object
-          - array
-          - boolean
-          - bytes
-          - 'null'
-        logicalTypeOptions:
-          $ref: '#/components/schemas/ODCSLogicalTypeOptions'
-        required:
-          type: boolean
-        unique:
-          type: boolean
-        partitioned:
-          type: boolean
-        partitionKeyPosition:
-          type: integer
-          format: int32
-        classification:
-          type: string
-        encryptedName:
-          type: string
-        transformSourceObjects:
-          type: array
-          items:
-            type: string
-        transformLogic:
-          type: string
-        transformDescription:
-          type: string
-        examples:
-          type: array
-          items:
-            type: string
-        criticalDataElement:
-          type: boolean
-        properties:
-          type: array
-          items:
-            $ref: '#/components/schemas/ODCSSchemaElement'
-        items:
-          $ref: '#/components/schemas/ODCSSchemaElement'
-        quality:
-          type: array
-          items:
-            $ref: '#/components/schemas/ODCSQualityRule'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    JsonPatch:
-      type: object
-    QualityValidation:
-      type: object
-      properties:
-        passed:
-          type: integer
-          format: int32
-        failed:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-        qualityScore:
-          type: number
-          format: double
-    ODCSDescription:
-      type: object
-      properties:
-        purpose:
-          type: string
-        limitations:
-          type: string
-        usage:
-          type: string
-    CustomMetric:
-      required:
-      - expression
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
         name:
           maxLength: 256
           minLength: 1
           pattern: ^((?!::).)*$
           type: string
+        displayName:
+          type: string
         description:
           type: string
-        columnName:
+        entityStatus:
           type: string
-        expression:
-          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        entity:
+          $ref: '#/components/schemas/EntityReference'
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        semantics:
+          type: array
+          items:
+            $ref: '#/components/schemas/SemanticsRule'
+        qualityExpectations:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        odcsQualityRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ODCSQualityRule'
         owners:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        effectiveFrom:
           type: string
-    ODCSLogicalTypeOptions:
+          format: date-time
+        effectiveUntil:
+          type: string
+          format: date-time
+        sourceUrl:
+          type: string
+        termsOfUse:
+          type: string
+        security:
+          $ref: '#/components/schemas/ContractSecurity'
+        sla:
+          $ref: '#/components/schemas/ContractSLA'
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    CustomProperties__1:
+      type: object
+    MaxLatency:
+      required:
+      - unit
+      - value
       type: object
       properties:
+        value:
+          type: integer
+          format: int32
+        unit:
+          type: string
+          enum:
+          - minute
+          - hour
+          - day
+    ODCSCustomProperty:
+      type: object
+      properties:
+        property:
+          type: string
+        value:
+          type: string
+    ODCSRole:
+      required:
+      - role
+      type: object
+      properties:
+        role:
+          type: string
+        description:
+          type: string
+        access:
+          type: string
+          enum:
+          - read
+          - write
+          - readWrite
+        firstLevelApprovers:
+          type: array
+          items:
+            type: string
+        secondLevelApprovers:
+          type: array
+          items:
+            type: string
+        customProperties:
+          $ref: '#/components/schemas/CustomProperties__2'
+    CustomProperties__2:
+      type: object
+    ODCSServer:
+      required:
+      - server
+      - type
+      type: object
+      properties:
+        server:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        environment:
+          type: string
+          enum:
+          - prod
+          - preprod
+          - dev
+          - uat
+        roles:
+          type: array
+          items:
+            type: string
+        host:
+          type: string
+        port:
+          type: integer
+          format: int32
+        database:
+          type: string
+        schema:
+          type: string
+        catalog:
+          type: string
+        project:
+          type: string
+        dataset:
+          type: string
+        account:
+          type: string
+        region:
+          type: string
+        warehouse:
+          type: string
+        topic:
+          type: string
+        stream:
+          type: string
+        location:
+          type: string
         format:
           type: string
-        minimum:
-          type: number
-          format: double
-        maximum:
-          type: number
-          format: double
-        exclusiveMinimum:
-          type: number
-          format: double
-        exclusiveMaximum:
-          type: number
-          format: double
-        minLength:
-          type: integer
-          format: int32
-        maxLength:
-          type: integer
-          format: int32
-        pattern:
+        delimiter:
           type: string
-        minItems:
-          type: integer
-          format: int32
-        maxItems:
-          type: integer
-          format: int32
-        uniqueItems:
-          type: boolean
-        multipleOf:
-          type: number
-          format: double
-        minProperties:
-          type: integer
-          format: int32
-        maxProperties:
-          type: integer
-          format: int32
-        timezone:
-          type: boolean
-        defaultTimezone:
-          type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
+        customProperties:
+          $ref: '#/components/schemas/CustomProperties__3'
     ODCSQualityRule:
       type: object
       properties:
@@ -1967,225 +2057,15 @@ components:
           type: array
           items:
             type: string
-    CustomProperties__3:
-      type: object
-    ODCSServer:
-      required:
-      - server
-      - type
+    FieldChange:
       type: object
       properties:
-        server:
+        name:
           type: string
-        type:
-          type: string
-        description:
-          type: string
-        environment:
-          type: string
-          enum:
-          - prod
-          - preprod
-          - dev
-          - uat
-        roles:
-          type: array
-          items:
-            type: string
-        host:
-          type: string
-        port:
-          type: integer
-          format: int32
-        database:
-          type: string
-        schema:
-          type: string
-        catalog:
-          type: string
-        project:
-          type: string
-        dataset:
-          type: string
-        account:
-          type: string
-        region:
-          type: string
-        warehouse:
-          type: string
-        topic:
-          type: string
-        stream:
-          type: string
-        location:
-          type: string
-        format:
-          type: string
-        delimiter:
-          type: string
-        customProperties:
-          $ref: '#/components/schemas/CustomProperties__3'
-    SlaValidation:
-      type: object
-      properties:
-        refreshFrequencyMet:
-          type: boolean
-        latencyMet:
-          type: boolean
-        availabilityMet:
-          type: boolean
-        actualLatency:
-          type: integer
-          format: int32
-    DataContractResult:
-      required:
-      - contractExecutionStatus
-      - dataContractFQN
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        dataContractFQN:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        contractExecutionStatus:
-          type: string
-          enum:
-          - Running
-          - Success
-          - Failed
-          - PartialSuccess
-          - Aborted
-          - Queued
-        result:
-          type: string
-        schemaValidation:
-          $ref: '#/components/schemas/SchemaValidation'
-        semanticsValidation:
-          $ref: '#/components/schemas/SemanticsValidation'
-        qualityValidation:
-          $ref: '#/components/schemas/QualityValidation'
-        slaValidation:
-          $ref: '#/components/schemas/SlaValidation'
-        incidentId:
-          type: string
-          format: uuid
-        executionTime:
-          type: integer
-          format: int64
-    SchemaValidation:
-      type: object
-      properties:
-        passed:
-          type: integer
-          format: int32
-        failed:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-        failedFields:
-          type: array
-          items:
-            type: string
-        duplicateFields:
-          type: array
-          items:
-            type: string
-        typeMismatchFields:
-          type: array
-          items:
-            type: string
-    LatestResult:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum:
-          - Running
-          - Success
-          - Failed
-          - PartialSuccess
-          - Aborted
-          - Queued
-        message:
-          type: string
-        resultId:
-          type: string
-          format: uuid
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    CustomProperties__2:
-      type: object
-    RefreshFrequency:
-      required:
-      - interval
-      - unit
-      type: object
-      properties:
-        interval:
-          type: integer
-          format: int32
-        unit:
-          type: string
-          enum:
-          - hour
-          - day
-          - week
-          - month
-          - year
-    DataContractList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataContract'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
+        oldValue:
+          type: object
+        newValue:
+          type: object
     Column:
       required:
       - dataType
@@ -2422,441 +2302,6 @@ components:
             $ref: '#/components/schemas/CustomMetric'
         extension:
           type: object
-    CustomProperties__1:
-      type: object
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    ContractValidation:
-      type: object
-      properties:
-        valid:
-          type: boolean
-        schemaValidation:
-          $ref: '#/components/schemas/SchemaValidation'
-        entityErrors:
-          type: array
-          items:
-            type: string
-        constraintErrors:
-          type: array
-          items:
-            type: string
-    Histogram:
-      type: object
-      properties:
-        boundaries:
-          type: array
-          items:
-            type: object
-        frequencies:
-          type: array
-          items:
-            type: object
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    ODCSRole:
-      required:
-      - role
-      type: object
-      properties:
-        role:
-          type: string
-        description:
-          type: string
-        access:
-          type: string
-          enum:
-          - read
-          - write
-          - readWrite
-        firstLevelApprovers:
-          type: array
-          items:
-            type: string
-        secondLevelApprovers:
-          type: array
-          items:
-            type: string
-        customProperties:
-          $ref: '#/components/schemas/CustomProperties__2'
-    CreateDataContract:
-      required:
-      - entity
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        entityStatus:
-          type: string
-          enum:
-          - Draft
-          - In Review
-          - Approved
-          - Archived
-          - Deprecated
-          - Rejected
-          - Unprocessed
-        entity:
-          $ref: '#/components/schemas/EntityReference'
-        schema:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        semantics:
-          type: array
-          items:
-            $ref: '#/components/schemas/SemanticsRule'
-        qualityExpectations:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        odcsQualityRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ODCSQualityRule'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        effectiveFrom:
-          type: string
-          format: date-time
-        effectiveUntil:
-          type: string
-          format: date-time
-        sourceUrl:
-          type: string
-        termsOfUse:
-          type: string
-        security:
-          $ref: '#/components/schemas/ContractSecurity'
-        sla:
-          $ref: '#/components/schemas/ContractSLA'
-        extension:
-          type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ODCSTeamMember:
-      type: object
-      properties:
-        username:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        role:
-          type: string
-        dateIn:
-          type: string
-        dateOut:
-          type: string
-        replacedByUsername:
-          type: string
-    ContractUpdate:
-      required:
-      - timestamp
-      - updatedBy
-      - version
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-        impersonatedBy:
-          type: string
-        changeDescription:
-          type: string
-        version:
-          type: string
-    ODCSCustomProperty:
-      type: object
-      properties:
-        property:
-          type: string
-        value:
-          type: string
-    Policy:
-      required:
-      - id
-      - name
-      - rules
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        fullyQualifiedName:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        href:
-          type: string
-          format: uri
-        enabled:
-          type: boolean
-        version:
-          type: number
-          format: double
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-        impersonatedBy:
-          type: string
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rule'
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        location:
-          $ref: '#/components/schemas/EntityReference'
-        allowDelete:
-          type: boolean
-        allowEdit:
-          type: boolean
-        deleted:
-          type: boolean
-        provider:
-          type: string
-          enum:
-          - system
-          - user
-          - automation
-        disabled:
-          type: boolean
-        domains:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        service:
-          $ref: '#/components/schemas/EntityReference'
-        style:
-          $ref: '#/components/schemas/Style'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        followers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        experts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataContract:
-          $ref: '#/components/schemas/EntityReference'
-        usageSummary:
-          $ref: '#/components/schemas/UsageDetails'
-        entityStatus:
-          type: string
-          enum:
-          - Draft
-          - In Review
-          - Approved
-          - Archived
-          - Deprecated
-          - Rejected
-          - Unprocessed
-        votes:
-          $ref: '#/components/schemas/Votes'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-        certification:
-          $ref: '#/components/schemas/AssetCertification'
-    ODCSSlaProperty:
-      required:
-      - property
-      - value
-      type: object
-      properties:
-        property:
-          type: string
-        value:
-          type: string
-        valueExt:
-          type: string
-        unit:
-          type: string
-        element:
-          type: string
-        driver:
-          type: string
-          enum:
-          - regulatory
-          - analytics
-          - operational
-    MaxLatency:
-      required:
-      - unit
-      - value
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-        unit:
-          type: string
-          enum:
-          - minute
-          - hour
-          - day
     SemanticsRule:
       required:
       - description
@@ -3042,7 +2487,327 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    CustomProperties:
+    LatestResult:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Running
+          - Success
+          - Failed
+          - PartialSuccess
+          - Aborted
+          - Queued
+        message:
+          type: string
+        resultId:
+          type: string
+          format: uuid
+    DataContractList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataContract'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    Histogram:
+      type: object
+      properties:
+        boundaries:
+          type: array
+          items:
+            type: object
+        frequencies:
+          type: array
+          items:
+            type: object
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    ODCSLogicalTypeOptions:
+      type: object
+      properties:
+        format:
+          type: string
+        minimum:
+          type: number
+          format: double
+        maximum:
+          type: number
+          format: double
+        exclusiveMinimum:
+          type: number
+          format: double
+        exclusiveMaximum:
+          type: number
+          format: double
+        minLength:
+          type: integer
+          format: int32
+        maxLength:
+          type: integer
+          format: int32
+        pattern:
+          type: string
+        minItems:
+          type: integer
+          format: int32
+        maxItems:
+          type: integer
+          format: int32
+        uniqueItems:
+          type: boolean
+        multipleOf:
+          type: number
+          format: double
+        minProperties:
+          type: integer
+          format: int32
+        maxProperties:
+          type: integer
+          format: int32
+        timezone:
+          type: boolean
+        defaultTimezone:
+          type: string
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ODCSSupportChannel:
+      required:
+      - channel
+      - url
+      type: object
+      properties:
+        channel:
+          type: string
+        url:
+          type: string
+          format: uri
+        description:
+          type: string
+        tool:
+          type: string
+          enum:
+          - email
+          - slack
+          - teams
+          - discord
+          - ticket
+          - other
+        scope:
+          type: string
+          enum:
+          - interactive
+          - announcements
+          - issues
+        invitationUrl:
+          type: string
+          format: uri
+    ChangeSummaryMap:
+      type: object
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    CustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    ODCSPricing:
+      type: object
+      properties:
+        priceAmount:
+          type: number
+          format: double
+        priceCurrency:
+          type: string
+        priceUnit:
+          type: string
+    ODCSParseResult:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        status:
+          type: string
+        schemaObjects:
+          type: array
+          items:
+            type: string
+        hasMultipleObjects:
+          type: boolean
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    JsonPatch:
       type: object
     ContractSecurity:
       type: object
@@ -3055,42 +2820,94 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Policy'
-    EntityReference:
+    CustomProperties__3:
+      type: object
+    Retention:
       required:
-      - id
-      - type
+      - period
+      - unit
       type: object
       properties:
-        id:
+        period:
+          type: integer
+          format: int32
+        unit:
           type: string
-          format: uuid
+          enum:
+          - day
+          - week
+          - month
+          - year
+    ContractValidation:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        schemaValidation:
+          $ref: '#/components/schemas/SchemaValidation'
+        entityErrors:
+          type: array
+          items:
+            type: string
+        constraintErrors:
+          type: array
+          items:
+            type: string
+    ODCSAuthoritativeDefinition:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        name:
+          type: string
         type:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    ODCSTeamMember:
+      type: object
+      properties:
+        username:
           type: string
         name:
           type: string
-        fullyQualifiedName:
-          type: string
         description:
           type: string
-        displayName:
+        role:
           type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
+        dateIn:
           type: string
-          format: uri
-    ODCSPricing:
+        dateOut:
+          type: string
+        replacedByUsername:
+          type: string
+    Votes:
       type: object
       properties:
-        priceAmount:
-          type: number
-          format: double
-        priceCurrency:
-          type: string
-        priceUnit:
-          type: string
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    CustomProperties:
+      type: object
     UsageDetails:
       required:
       - dailyStats
@@ -3104,6 +2921,84 @@ components:
         monthlyStats:
           $ref: '#/components/schemas/UsageStats'
         date:
+          type: string
+    SchemaValidation:
+      type: object
+      properties:
+        passed:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        failedFields:
+          type: array
+          items:
+            type: string
+        duplicateFields:
+          type: array
+          items:
+            type: string
+        typeMismatchFields:
+          type: array
+          items:
+            type: string
+    ContractSLA:
+      type: object
+      properties:
+        inherited:
+          type: boolean
+        refreshFrequency:
+          $ref: '#/components/schemas/RefreshFrequency'
+        maxLatency:
+          $ref: '#/components/schemas/MaxLatency'
+        availabilityTime:
+          type: string
+        timezone:
+          type: string
+          enum:
+          - GMT-11:00 (Pacific/Niue)
+          - GMT-10:00 (Pacific/Honolulu)
+          - GMT-09:30 (Pacific/Marquesas)
+          - GMT-09:00 (America/Anchorage)
+          - GMT-08:00 (America/Los Angeles)
+          - GMT-07:00 (America/Denver)
+          - GMT-06:00 (America/Chicago)
+          - GMT-05:00 (America/New York)
+          - GMT-04:00 (America/Santiago)
+          - GMT-03:00 (America/Sao Paulo)
+          - GMT-02:30 (Atlantic/Newfoundland)
+          - GMT-02:00 (Atlantic/South_Georgia)
+          - GMT-01:00 (Atlantic/Azores)
+          - GMT+00:00 (Europe/London)
+          - GMT+01:00 (Europe/Paris)
+          - GMT+02:00 (Europe/Athens)
+          - GMT+03:00 (Europe/Moscow)
+          - GMT+03:00 (Asia/Iran)
+          - GMT+04:00 (Asia/Dubai)
+          - GMT+04:30 (Asia/Afghanistan)
+          - GMT+05:00 (Asia/Karachi)
+          - GMT+05:30 (Asia/Kolkata)
+          - GMT+05:45 (Asia/Nepal)
+          - GMT+06:00 (Asia/Dhaka)
+          - GMT+06:00 (Asia/Myanmar)
+          - GMT+07:00 (Asia/Bangkok)
+          - GMT+08:00 (Asia/Shanghai)
+          - GMT+08:45 (Australia/Australian Central Western Standard Time)
+          - GMT+09:00 (Asia/Tokyo)
+          - GMT+09:00 (Australia/Adelaide)
+          - GMT+10:00 (Australia/Sydney)
+          - GMT+10:30 (Australia/Lord Howe)
+          - GMT+11:00 (Pacific/Norfolk)
+          - GMT+12:00 (Pacific/Auckland)
+          - GMT+13:00 (Pacific/Tongatapu)
+          - GMT+14:00 (Pacific/Kiritimati)
+        retention:
+          $ref: '#/components/schemas/Retention'
+        columnName:
           type: string
     Rule:
       required:
@@ -3194,6 +3089,110 @@ components:
             type: string
         condition:
           type: string
+    CustomMetricProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+          format: double
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    SlaValidation:
+      type: object
+      properties:
+        refreshFrequencyMet:
+          type: boolean
+        latencyMet:
+          type: boolean
+        availabilityMet:
+          type: boolean
+        actualLatency:
+          type: integer
+          format: int32
+    SemanticsValidation:
+      type: object
+      properties:
+        passed:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        failedRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedRule'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    ODCSDescription:
+      type: object
+      properties:
+        purpose:
+          type: string
+        limitations:
+          type: string
+        usage:
+          type: string
+    TermsOfUse:
+      type: object
+      properties:
+        content:
+          type: string
+        inherited:
+          type: boolean
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

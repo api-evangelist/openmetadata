@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Stored Procedures API
+  title: OpenMetadata Stored Procedures API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -259,7 +259,7 @@ paths:
     patch:
       tags:
       - Stored Procedures
-      summary: Update a Stored Procedure by name.
+      summary: Update a Stored Procedure by name
       description: Update an existing StoredProcedure using JsonPatch.
       externalDocs:
         description: JsonPatch RFC
@@ -486,7 +486,7 @@ paths:
       tags:
       - Stored Procedures
       summary: List all entity versions within a time range
-      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      description: Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch.
       operationId: listAllEntityVersionsByTimestamp_15
       parameters:
       - name: startTs
@@ -555,7 +555,7 @@ paths:
     put:
       tags:
       - Stored Procedures
-      summary: Restore a soft deleted stored procedure.
+      summary: Restore a soft deleted stored procedure
       description: Restore a soft deleted stored procedure.
       operationId: restore_14
       requestBody:
@@ -601,70 +601,69 @@ paths:
           description: model for instance {id} is not found
 components:
   schemas:
-    TagLabelRecognizerMetadata:
+    RestoreEntity:
       required:
-      - recognizerId
-      - recognizerName
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    StoredProcedureList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoredProcedure'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    PatternMatch:
+      required:
+      - name
       - score
       type: object
       properties:
-        recognizerId:
+        name:
           type: string
-          format: uuid
-        recognizerName:
+        regex:
           type: string
         score:
           type: number
           format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    BulkOperationResult:
+    ChangeDescription:
       type: object
       properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        successRequest:
+        fieldsAdded:
           type: array
           items:
-            $ref: '#/components/schemas/BulkResponse'
-        failedRequest:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
           type: array
           items:
-            $ref: '#/components/schemas/BulkResponse'
-    ChangeSummaryMap:
-      type: object
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
     AccessDetails:
       required:
       - timestamp
@@ -676,88 +675,6 @@ components:
         accessedBy:
           $ref: '#/components/schemas/EntityReference'
         accessedByAProcess:
-          type: string
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    VoteRequest:
-      type: object
-      properties:
-        updatedVoteType:
-          type: string
-          enum:
-          - votedUp
-          - votedDown
-          - unVoted
-    StoredProcedureCode:
-      type: object
-      properties:
-        language:
-          type: string
-          enum:
-          - SQL
-          - Java
-          - JavaScript
-          - Python
-          - External
-        code:
           type: string
     ResultList:
       required:
@@ -781,56 +698,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    BulkResponse:
-      type: object
-      properties:
-        request:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    JsonPatch:
-      type: object
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
     ChangeEvent:
       required:
       - entityId
@@ -898,19 +765,102 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    UsageStats:
-      required:
-      - count
+    StoredProcedureCode:
       type: object
       properties:
-        count:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
+        language:
+          type: string
+          enum:
+          - SQL
+          - Java
+          - JavaScript
+          - Python
+          - External
+        code:
+          type: string
+    CreateStoredProcedure:
+      required:
+      - name
+      - storedProcedureCode
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        storedProcedureCode:
+          $ref: '#/components/schemas/StoredProcedureCode'
+        storedProcedureType:
+          type: string
+          enum:
+          - StoredProcedure
+          - UDF
+          - StoredPackage
+          - Function
+        databaseSchema:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        extension:
+          type: object
+        dataProducts:
+          type: array
+          items:
+            type: string
+        sourceUrl:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
     StoredProcedure:
       required:
       - id
@@ -1101,32 +1051,55 @@ components:
             $ref: '#/components/schemas/EntityReference'
         usageSummary:
           $ref: '#/components/schemas/UsageDetails'
-    Style:
+    BulkResponse:
       type: object
       properties:
-        color:
+        request:
+          type: object
+        message:
           type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    Votes:
+        status:
+          type: integer
+          format: int32
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
       type: object
       properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
+            $ref: '#/components/schemas/PatternMatch'
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
     TagLabel:
       required:
       - labelType
@@ -1175,27 +1148,8 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    PatternMatch:
-      required:
-      - name
-      - score
+    ChangeSummaryMap:
       type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
     EntityError:
       type: object
       properties:
@@ -1203,64 +1157,81 @@ components:
           type: string
         entity:
           type: object
-    CreateStoredProcedure:
-      required:
-      - name
-      - storedProcedureCode
+    Style:
       type: object
       properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
+        color:
           type: string
-        displayName:
+        iconURL:
           type: string
-        description:
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
           type: string
-        owners:
+        versions:
+          type: array
+          items:
+            type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    JsonPatch:
+      type: object
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        storedProcedureCode:
-          $ref: '#/components/schemas/StoredProcedureCode'
-        storedProcedureType:
-          type: string
-          enum:
-          - StoredProcedure
-          - UDF
-          - StoredPackage
-          - Function
-        databaseSchema:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        extension:
-          type: object
-        dataProducts:
-          type: array
-          items:
-            type: string
-        sourceUrl:
-          type: string
-        domains:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-        sourceHash:
-          maxLength: 32
-          minLength: 1
-          type: string
-        reviewers:
+        downVoters:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
     EntityReference:
       required:
       - id
@@ -1287,42 +1258,67 @@ components:
         href:
           type: string
           format: uri
-    StoredProcedureList:
+    Paging:
       required:
-      - data
+      - total
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StoredProcedure'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
           type: integer
           format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    BulkOperationResult:
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        dryRun:
+          type: boolean
+        status:
           type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

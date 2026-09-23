@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Search Reindex API
+  title: OpenMetadata Search Reindex API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -57,27 +57,6 @@ paths:
                 $ref: '#/components/schemas/ReindexFailuresResponse'
 components:
   schemas:
-    ReindexFailuresResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          description: List of failure records
-          items:
-            $ref: '#/components/schemas/SearchIndexFailureRecord'
-        total:
-          type: integer
-          description: Total number of failures
-          format: int32
-        offset:
-          type: integer
-          description: Current offset
-          format: int32
-        limit:
-          type: integer
-          description: Page size limit
-          format: int32
-      description: Response containing paginated reindex failures
     SearchIndexFailureRecord:
       type: object
       properties:
@@ -103,6 +82,27 @@ components:
           type: integer
           format: int64
       description: List of failure records
+    ReindexFailuresResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of failure records
+          items:
+            $ref: '#/components/schemas/SearchIndexFailureRecord'
+        total:
+          type: integer
+          description: Total number of failures
+          format: int32
+        offset:
+          type: integer
+          description: Current offset
+          format: int32
+        limit:
+          type: integer
+          description: Page size limit
+          format: int32
+      description: Response containing paginated reindex failures
   securitySchemes:
     BearerAuth:
       type: http

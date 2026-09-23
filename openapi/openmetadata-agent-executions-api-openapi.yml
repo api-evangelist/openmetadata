@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions API
+  title: OpenMetadata Agent Executions API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -153,22 +153,10 @@ paths:
           description: Successfully deleted Agent Execution Data
 components:
   schemas:
-    ComplianceCheck:
+    Parameters__1:
       type: object
-      properties:
-        checkName:
-          type: string
-        passed:
-          type: boolean
-        details:
-          type: string
-        severity:
-          type: string
-          enum:
-          - Low
-          - Medium
-          - High
-          - Critical
+    Metadata:
+      type: object
     ExecutionMetrics:
       type: object
       properties:
@@ -187,6 +175,176 @@ components:
         cost:
           type: number
           format: double
+    ModelCall:
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/EntityReference'
+        prompt:
+          type: string
+        response:
+          type: string
+        inputTokens:
+          type: integer
+          format: int32
+        outputTokens:
+          type: integer
+          format: int32
+        latencyMs:
+          type: number
+          format: double
+        cost:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+        purpose:
+          type: string
+    ComplianceCheck:
+      type: object
+      properties:
+        checkName:
+          type: string
+        passed:
+          type: boolean
+        details:
+          type: string
+        severity:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    DataAccess:
+      required:
+      - accessType
+      - dataSource
+      type: object
+      properties:
+        dataSource:
+          $ref: '#/components/schemas/EntityReference'
+        accessType:
+          type: string
+          enum:
+          - Read
+          - Write
+          - Update
+          - Delete
+        columns:
+          type: array
+          items:
+            type: string
+        recordCount:
+          type: integer
+          format: int32
+        query:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        piiAccessed:
+          type: boolean
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+    AgentExecutionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentExecution'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    ToolCall:
+      type: object
+      properties:
+        tool:
+          $ref: '#/components/schemas/EntityReference'
+        parameters:
+          $ref: '#/components/schemas/Parameters__1'
+        result:
+          type: string
+        success:
+          type: boolean
+        latencyMs:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
     AgentExecution:
       required:
       - agent
@@ -260,164 +418,6 @@ components:
           $ref: '#/components/schemas/Metadata'
         deleted:
           type: boolean
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    ModelCall:
-      type: object
-      properties:
-        model:
-          $ref: '#/components/schemas/EntityReference'
-        prompt:
-          type: string
-        response:
-          type: string
-        inputTokens:
-          type: integer
-          format: int32
-        outputTokens:
-          type: integer
-          format: int32
-        latencyMs:
-          type: number
-          format: double
-        cost:
-          type: number
-          format: double
-        timestamp:
-          type: integer
-          format: int64
-        purpose:
-          type: string
-    DataAccess:
-      required:
-      - accessType
-      - dataSource
-      type: object
-      properties:
-        dataSource:
-          $ref: '#/components/schemas/EntityReference'
-        accessType:
-          type: string
-          enum:
-          - Read
-          - Write
-          - Update
-          - Delete
-        columns:
-          type: array
-          items:
-            type: string
-        recordCount:
-          type: integer
-          format: int32
-        query:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        piiAccessed:
-          type: boolean
-        sensitivityLevel:
-          type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
-    Metadata:
-      type: object
-    ToolCall:
-      type: object
-      properties:
-        tool:
-          $ref: '#/components/schemas/EntityReference'
-        parameters:
-          $ref: '#/components/schemas/Parameters__1'
-        result:
-          type: string
-        success:
-          type: boolean
-        latencyMs:
-          type: number
-          format: double
-        timestamp:
-          type: integer
-          format: int64
-        errorMessage:
-          type: string
-    AgentExecutionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentExecution'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Parameters__1:
-      type: object
   securitySchemes:
     BearerAuth:
       type: http

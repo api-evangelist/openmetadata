@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Files API
+  title: OpenMetadata Files API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -332,7 +332,7 @@ paths:
     patch:
       tags:
       - Files
-      summary: Update a file by name.
+      summary: Update a file by name
       description: Update an existing file using JsonPatch.
       externalDocs:
         description: JsonPatch RFC
@@ -554,7 +554,7 @@ paths:
       tags:
       - Files
       summary: List all entity versions within a time range
-      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      description: Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch.
       operationId: listAllEntityVersionsByTimestamp_25
       parameters:
       - name: startTs
@@ -691,30 +691,14 @@ paths:
           description: File for instance {id} is not found
 components:
   schemas:
-    TagLabelRecognizerMetadata:
+    RestoreEntity:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - id
       type: object
       properties:
-        recognizerId:
+        id:
           type: string
           format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
     FileList:
       required:
       - data
@@ -737,180 +721,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    ColumnProfile:
+    PatternMatch:
       required:
       - name
-      - timestamp
+      - score
       type: object
       properties:
         name:
           type: string
-        timestamp:
-          type: integer
-          format: int64
-        valuesCount:
-          type: number
-          format: double
-        valuesPercentage:
-          type: number
-          format: double
-        validCount:
-          type: number
-          format: double
-        duplicateCount:
-          type: number
-          format: double
-        nullCount:
-          type: number
-          format: double
-        nullProportion:
-          type: number
-          format: double
-        missingPercentage:
-          type: number
-          format: double
-        missingCount:
-          type: number
-          format: double
-        uniqueCount:
-          type: number
-          format: double
-        uniqueProportion:
-          type: number
-          format: double
-        distinctCount:
-          type: number
-          format: double
-        distinctProportion:
-          type: number
-          format: double
-        min:
-          type: object
-        max:
-          type: object
-        minLength:
-          type: number
-          format: double
-        maxLength:
-          type: number
-          format: double
-        mean:
-          type: number
-          format: double
-        sum:
-          type: number
-          format: double
-        stddev:
-          type: number
-          format: double
-        variance:
-          type: number
-          format: double
-        median:
-          type: number
-          format: double
-        firstQuartile:
-          type: number
-          format: double
-        thirdQuartile:
-          type: number
-          format: double
-        interQuartileRange:
-          type: number
-          format: double
-        nonParametricSkew:
-          type: number
-          format: double
-        histogram:
-          $ref: '#/components/schemas/Histogram'
-        customMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetricProfile'
-        cardinalityDistribution:
-          $ref: '#/components/schemas/CardinalityDistribution'
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
+        regex:
           type: string
-    RestoreEntity:
-      required:
-      - id
+        score:
+          type: number
+          format: double
+    TagLabelMetadata:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
         expiryDate:
           type: integer
           format: int64
-    CustomMetricProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: number
-          format: double
     CreateFile:
       required:
       - name
@@ -1005,25 +836,130 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-    CardinalityDistribution:
+    ChangeDescription:
       type: object
       properties:
-        categories:
+        fieldsAdded:
           type: array
           items:
-            type: string
-        counts:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
           type: array
           items:
-            type: integer
-            format: int32
-        percentages:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
           type: array
           items:
-            type: number
-            format: double
-        allValuesUnique:
-          type: boolean
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
     ResultList:
       required:
       - data
@@ -1046,97 +982,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    VoteRequest:
-      type: object
-      properties:
-        updatedVoteType:
-          type: string
-          enum:
-          - votedUp
-          - votedDown
-          - unVoted
-    TableData:
-      type: object
-      properties:
-        columns:
-          type: array
-          items:
-            type: string
-        rows:
-          type: array
-          items:
-            type: array
-            items:
-              type: object
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    JsonPatch:
-      type: object
-    CustomMetric:
-      required:
-      - expression
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        description:
-          type: string
-        columnName:
-          type: string
-        expression:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
     ChangeEvent:
       required:
       - entityId
@@ -1204,191 +1049,6 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    File:
-      required:
-      - id
-      - name
-      - service
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        service:
-          $ref: '#/components/schemas/EntityReference'
-        serviceType:
-          type: string
-          enum:
-          - GoogleDrive
-          - SharePoint
-          - Sftp
-          - CustomDrive
-        directory:
-          $ref: '#/components/schemas/EntityReference'
-        fileType:
-          type: string
-          enum:
-          - Document
-          - Spreadsheet
-          - Presentation
-          - Image
-          - Video
-          - Audio
-          - PDF
-          - Archive
-          - Code
-          - Data
-          - CSV
-          - Text
-          - Other
-        mimeType:
-          type: string
-        fileExtension:
-          type: string
-        path:
-          type: string
-        size:
-          type: integer
-          format: int32
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        sampleData:
-          $ref: '#/components/schemas/TableData'
-        checksum:
-          type: string
-        webViewLink:
-          type: string
-          format: uri
-        downloadLink:
-          type: string
-          format: uri
-        isShared:
-          type: boolean
-        fileVersion:
-          type: string
-        createdTime:
-          type: integer
-          format: int64
-        modifiedTime:
-          type: integer
-          format: int64
-        lastModifiedBy:
-          $ref: '#/components/schemas/EntityReference'
-        sourceUrl:
-          type: string
-        href:
-          type: string
-          format: uri
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        followers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        version:
-          type: number
-          format: double
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-        impersonatedBy:
-          type: string
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        deleted:
-          type: boolean
-        domains:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataContract:
-          $ref: '#/components/schemas/EntityReference'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-        sourceHash:
-          maxLength: 32
-          minLength: 1
-          type: string
-        extension:
-          type: object
-        votes:
-          $ref: '#/components/schemas/Votes'
-        certification:
-          $ref: '#/components/schemas/AssetCertification'
-        usageSummary:
-          $ref: '#/components/schemas/UsageDetails'
-        entityStatus:
-          type: string
-          enum:
-          - Draft
-          - In Review
-          - Approved
-          - Archived
-          - Deprecated
-          - Rejected
-          - Unprocessed
-        provider:
-          type: string
-          enum:
-          - system
-          - user
-          - automation
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        style:
-          $ref: '#/components/schemas/Style'
-        experts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
     Column:
       required:
       - dataType
@@ -1625,32 +1285,31 @@ components:
             $ref: '#/components/schemas/CustomMetric'
         extension:
           type: object
-    Style:
+    FieldChange:
       type: object
       properties:
-        color:
+        name:
           type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    Votes:
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    VoteRequest:
       type: object
       properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
     Histogram:
       type: object
       properties:
@@ -1662,6 +1321,74 @@ components:
           type: array
           items:
             type: object
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    CustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
     TagLabel:
       required:
       - labelType
@@ -1710,27 +1437,8 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    PatternMatch:
-      required:
-      - name
-      - score
+    ChangeSummaryMap:
       type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
     EntityError:
       type: object
       properties:
@@ -1738,6 +1446,274 @@ components:
           type: string
         entity:
           type: object
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    JsonPatch:
+      type: object
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    TableData:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              type: object
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    File:
+      required:
+      - id
+      - name
+      - service
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        serviceType:
+          type: string
+          enum:
+          - GoogleDrive
+          - SharePoint
+          - Sftp
+          - CustomDrive
+        directory:
+          $ref: '#/components/schemas/EntityReference'
+        fileType:
+          type: string
+          enum:
+          - Document
+          - Spreadsheet
+          - Presentation
+          - Image
+          - Video
+          - Audio
+          - PDF
+          - Archive
+          - Code
+          - Data
+          - CSV
+          - Text
+          - Other
+        mimeType:
+          type: string
+        fileExtension:
+          type: string
+        path:
+          type: string
+        size:
+          type: integer
+          format: int32
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        sampleData:
+          $ref: '#/components/schemas/TableData'
+        checksum:
+          type: string
+        webViewLink:
+          type: string
+          format: uri
+        downloadLink:
+          type: string
+          format: uri
+        isShared:
+          type: boolean
+        fileVersion:
+          type: string
+        createdTime:
+          type: integer
+          format: int64
+        modifiedTime:
+          type: integer
+          format: int64
+        lastModifiedBy:
+          $ref: '#/components/schemas/EntityReference'
+        sourceUrl:
+          type: string
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        extension:
+          type: object
+        votes:
+          $ref: '#/components/schemas/Votes'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    CustomMetricProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+          format: double
     EntityReference:
       required:
       - id
@@ -1764,20 +1740,43 @@ components:
         href:
           type: string
           format: uri
-    UsageDetails:
+    Paging:
       required:
-      - dailyStats
-      - date
+      - total
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        before:
           type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    CardinalityDistribution:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
+          type: boolean
   securitySchemes:
     BearerAuth:
       type: http

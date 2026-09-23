@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Permissions API
+  title: OpenMetadata Permissions API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -162,7 +162,7 @@ paths:
     get:
       tags:
       - Permissions
-      summary: Get permissions for a given entity type at field level.
+      summary: Get permissions for a given entity type at field level
       operationId: getEntityTypeFieldPermissions
       parameters:
       - name: entityType
@@ -313,6 +313,138 @@ paths:
                 $ref: '#/components/schemas/ResourcePermissionList'
 components:
   schemas:
+    EvaluationSummary:
+      type: object
+      properties:
+        totalPoliciesEvaluated:
+          type: integer
+          format: int32
+        totalRulesEvaluated:
+          type: integer
+          format: int32
+        matchingRules:
+          type: integer
+          format: int32
+        denyRules:
+          type: integer
+          format: int32
+        allowRules:
+          type: integer
+          format: int32
+        appliedPolicies:
+          type: array
+          items:
+            type: string
+        reasonsForDecision:
+          type: array
+          items:
+            type: string
+        evaluationTimeMs:
+          type: integer
+          format: int64
+    InheritedPermission:
+      type: object
+      properties:
+        permissionType:
+          type: string
+        source:
+          $ref: '#/components/schemas/EntityReference'
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyInfo'
+        description:
+          type: string
+    PolicyEvaluationStep:
+      type: object
+      properties:
+        stepNumber:
+          type: integer
+          format: int32
+        source:
+          type: string
+        sourceEntity:
+          $ref: '#/components/schemas/EntityReference'
+        policy:
+          $ref: '#/components/schemas/EntityReference'
+        rule:
+          type: string
+        effect:
+          type: string
+        matched:
+          type: boolean
+        matchReason:
+          type: string
+        conditionEvaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionEvaluation'
+    ResourcePermissionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourcePermission'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ResourcePermission:
+      required:
+      - permissions
+      - resource
+      type: object
+      properties:
+        resource:
+          type: string
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+    PermissionSummary:
+      type: object
+      properties:
+        totalRoles:
+          type: integer
+          format: int32
+        totalPolicies:
+          type: integer
+          format: int32
+        totalRules:
+          type: integer
+          format: int32
+        directRoles:
+          type: integer
+          format: int32
+        inheritedRoles:
+          type: integer
+          format: int32
+        teamCount:
+          type: integer
+          format: int32
+        maxHierarchyDepth:
+          type: integer
+          format: int32
+        effectiveOperations:
+          type: array
+          items:
+            type: string
+        deniedOperations:
+          type: array
+          items:
+            type: string
     PermissionEvaluationDebugInfo:
       type: object
       properties:
@@ -392,70 +524,6 @@ components:
             $ref: '#/components/schemas/PolicyEvaluationStep'
         summary:
           $ref: '#/components/schemas/EvaluationSummary'
-    EvaluationSummary:
-      type: object
-      properties:
-        totalPoliciesEvaluated:
-          type: integer
-          format: int32
-        totalRulesEvaluated:
-          type: integer
-          format: int32
-        matchingRules:
-          type: integer
-          format: int32
-        denyRules:
-          type: integer
-          format: int32
-        allowRules:
-          type: integer
-          format: int32
-        appliedPolicies:
-          type: array
-          items:
-            type: string
-        reasonsForDecision:
-          type: array
-          items:
-            type: string
-        evaluationTimeMs:
-          type: integer
-          format: int64
-    ResourcePermissionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourcePermission'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    RolePermission:
-      type: object
-      properties:
-        role:
-          $ref: '#/components/schemas/EntityReference'
-        policies:
-          type: array
-          items:
-            $ref: '#/components/schemas/PolicyInfo'
-        inheritedFrom:
-          type: string
-        defaultRole:
-          type: boolean
     ConditionEvaluation:
       type: object
       properties:
@@ -465,155 +533,35 @@ components:
           type: boolean
         evaluationDetails:
           type: string
-    ResourcePermission:
-      required:
-      - permissions
-      - resource
+    PermissionDebugInfo:
       type: object
       properties:
-        resource:
-          type: string
-        permissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Permission'
-    DirectRolePermission:
-      type: object
-      properties:
-        role:
+        user:
           $ref: '#/components/schemas/EntityReference'
-        policies:
-          type: array
-          items:
-            $ref: '#/components/schemas/PolicyInfo'
-        source:
-          type: string
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    PermissionSummary:
-      type: object
-      properties:
-        totalRoles:
-          type: integer
-          format: int32
-        totalPolicies:
-          type: integer
-          format: int32
-        totalRules:
-          type: integer
-          format: int32
         directRoles:
-          type: integer
-          format: int32
-        inheritedRoles:
-          type: integer
-          format: int32
-        teamCount:
-          type: integer
-          format: int32
-        maxHierarchyDepth:
-          type: integer
-          format: int32
-        effectiveOperations:
           type: array
           items:
-            type: string
-        deniedOperations:
+            $ref: '#/components/schemas/DirectRolePermission'
+        teamPermissions:
           type: array
           items:
-            type: string
-    Permission:
+            $ref: '#/components/schemas/TeamPermission'
+        inheritedPermissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/InheritedPermission'
+        summary:
+          $ref: '#/components/schemas/PermissionSummary'
+    PolicyInfo:
       type: object
       properties:
-        operation:
-          type: string
-          enum:
-          - All
-          - Create
-          - BulkCreate
-          - CreateIngestionPipelineAutomator
-          - CreateTests
-          - Delete
-          - ViewAll
-          - ViewBasic
-          - ViewUsage
-          - ViewTests
-          - ViewQueries
-          - ViewDataProfile
-          - ViewProfilerGlobalConfiguration
-          - ViewSampleData
-          - ViewTestCaseFailedRowsSample
-          - ViewCustomFields
-          - EditAll
-          - BulkUpdate
-          - EditCustomFields
-          - EditDataProfile
-          - EditDescription
-          - EditDisplayName
-          - EditLineage
-          - EditEntityRelationship
-          - EditPolicy
-          - EditOwners
-          - EditQueries
-          - EditReviewers
-          - EditRole
-          - EditSampleData
-          - EditStatus
-          - EditTags
-          - EditGlossaryTerms
-          - EditTeams
-          - EditTier
-          - EditCertification
-          - EditTests
-          - EditUsage
-          - EditUsers
-          - EditLifeCycle
-          - EditKnowledgePanel
-          - EditPage
-          - EditIngestionPipelineStatus
-          - EditUserNotificationTemplate
-          - DeleteTestCaseFailedRowsSample
-          - Deploy
-          - Trigger
-          - Kill
-          - GenerateToken
-          - EditScim
-          - CreateScim
-          - DeleteScim
-          - ViewScim
-          - Impersonate
-          - AuditLogs
-          - ViewTestDefinitionLibrary
-          - EditTestDefinitionLibrary
-        access:
-          type: string
-          enum:
-          - deny
-          - allow
-          - conditionalDeny
-          - conditionalAllow
-          - notAllow
-        rule:
-          $ref: '#/components/schemas/Rule'
         policy:
-          type: string
-        role:
+          $ref: '#/components/schemas/EntityReference'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleInfo'
+        effect:
           type: string
     RuleInfo:
       type: object
@@ -634,19 +582,19 @@ components:
           type: string
         matches:
           type: boolean
-    InheritedPermission:
+    RolePermission:
       type: object
       properties:
-        permissionType:
-          type: string
-        source:
+        role:
           $ref: '#/components/schemas/EntityReference'
         policies:
           type: array
           items:
             $ref: '#/components/schemas/PolicyInfo'
-        description:
+        inheritedFrom:
           type: string
+        defaultRole:
+          type: boolean
     EntityError:
       type: object
       properties:
@@ -654,25 +602,6 @@ components:
           type: string
         entity:
           type: object
-    PermissionDebugInfo:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/EntityReference'
-        directRoles:
-          type: array
-          items:
-            $ref: '#/components/schemas/DirectRolePermission'
-        teamPermissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TeamPermission'
-        inheritedPermissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/InheritedPermission'
-        summary:
-          $ref: '#/components/schemas/PermissionSummary'
     TeamPermission:
       type: object
       properties:
@@ -695,67 +624,6 @@ components:
         hierarchyLevel:
           type: integer
           format: int32
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    PolicyEvaluationStep:
-      type: object
-      properties:
-        stepNumber:
-          type: integer
-          format: int32
-        source:
-          type: string
-        sourceEntity:
-          $ref: '#/components/schemas/EntityReference'
-        policy:
-          $ref: '#/components/schemas/EntityReference'
-        rule:
-          type: string
-        effect:
-          type: string
-        matched:
-          type: boolean
-        matchReason:
-          type: string
-        conditionEvaluations:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConditionEvaluation'
-    PolicyInfo:
-      type: object
-      properties:
-        policy:
-          $ref: '#/components/schemas/EntityReference'
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleInfo'
-        effect:
-          type: string
     Rule:
       required:
       - effect
@@ -845,6 +713,138 @@ components:
             type: string
         condition:
           type: string
+    DirectRolePermission:
+      type: object
+      properties:
+        role:
+          $ref: '#/components/schemas/EntityReference'
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyInfo'
+        source:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    Permission:
+      type: object
+      properties:
+        operation:
+          type: string
+          enum:
+          - All
+          - Create
+          - BulkCreate
+          - CreateIngestionPipelineAutomator
+          - CreateTests
+          - Delete
+          - ViewAll
+          - ViewBasic
+          - ViewUsage
+          - ViewTests
+          - ViewQueries
+          - ViewDataProfile
+          - ViewProfilerGlobalConfiguration
+          - ViewSampleData
+          - ViewTestCaseFailedRowsSample
+          - ViewCustomFields
+          - EditAll
+          - BulkUpdate
+          - EditCustomFields
+          - EditDataProfile
+          - EditDescription
+          - EditDisplayName
+          - EditLineage
+          - EditEntityRelationship
+          - EditPolicy
+          - EditOwners
+          - EditQueries
+          - EditReviewers
+          - EditRole
+          - EditSampleData
+          - EditStatus
+          - EditTags
+          - EditGlossaryTerms
+          - EditTeams
+          - EditTier
+          - EditCertification
+          - EditTests
+          - EditUsage
+          - EditUsers
+          - EditLifeCycle
+          - EditKnowledgePanel
+          - EditPage
+          - EditIngestionPipelineStatus
+          - EditUserNotificationTemplate
+          - DeleteTestCaseFailedRowsSample
+          - Deploy
+          - Trigger
+          - Kill
+          - GenerateToken
+          - EditScim
+          - CreateScim
+          - DeleteScim
+          - ViewScim
+          - Impersonate
+          - AuditLogs
+          - ViewTestDefinitionLibrary
+          - EditTestDefinitionLibrary
+        access:
+          type: string
+          enum:
+          - deny
+          - allow
+          - conditionalDeny
+          - conditionalAllow
+          - notAllow
+        rule:
+          $ref: '#/components/schemas/Rule'
+        policy:
+          type: string
+        role:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
   securitySchemes:
     BearerAuth:
       type: http

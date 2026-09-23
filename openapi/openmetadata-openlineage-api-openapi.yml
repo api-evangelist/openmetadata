@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions OpenLineage API
+  title: OpenMetadata Open Lineage API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -69,6 +69,215 @@ paths:
           description: Not authorized to create lineage
 components:
   schemas:
+    SymlinkIdentifier:
+      required:
+      - name
+      - namespace
+      - type
+      type: object
+      properties:
+        namespace:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+    OwnershipFacet:
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/Owner'
+    DatasourceFacet:
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        name:
+          type: string
+        uri:
+          type: string
+          format: uri
+    Run:
+      required:
+      - runId
+      type: object
+      properties:
+        runId:
+          type: string
+          format: uuid
+    SchemaFacet:
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaField'
+    InputDatasetFacets:
+      type: object
+    DocumentationFacet:
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        description:
+          type: string
+    OutputDatasetFacets:
+      type: object
+      properties:
+        columnLineage:
+          $ref: '#/components/schemas/ColumnLineageFacet'
+    SchemaField:
+      required:
+      - name
+      - type
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+    SymlinksFacet:
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SymlinkIdentifier'
+    OpenLineageInputDataset:
+      required:
+      - name
+      - namespace
+      type: object
+      properties:
+        namespace:
+          type: string
+        name:
+          type: string
+        facets:
+          $ref: '#/components/schemas/DatasetFacets'
+        inputFacets:
+          $ref: '#/components/schemas/InputDatasetFacets'
+    ProcessingEngineFacet:
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+        openlineageAdapterVersion:
+          type: string
+    RunFacets:
+      type: object
+      properties:
+        parent:
+          $ref: '#/components/schemas/ParentRunFacet'
+        errorMessage:
+          $ref: '#/components/schemas/ErrorMessageFacet'
+        processing_engine:
+          $ref: '#/components/schemas/ProcessingEngineFacet'
+    SqlJobFacet:
+      required:
+      - query
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        query:
+          type: string
+    ParentJobFacet:
+      required:
+      - name
+      - namespace
+      type: object
+      properties:
+        namespace:
+          type: string
+        name:
+          type: string
+    OpenLineageJob:
+      required:
+      - name
+      - namespace
+      type: object
+      properties:
+        namespace:
+          type: string
+        name:
+          type: string
+        facets:
+          $ref: '#/components/schemas/JobFacets'
+    OpenLineageOutputDataset:
+      required:
+      - name
+      - namespace
+      type: object
+      properties:
+        namespace:
+          type: string
+        name:
+          type: string
+        facets:
+          $ref: '#/components/schemas/DatasetFacets'
+        outputFacets:
+          $ref: '#/components/schemas/OutputDatasetFacets'
+    ColumnLineageFacet:
+      required:
+      - fields
+      type: object
+      properties:
+        _producer:
+          type: string
+        _schemaURL:
+          type: string
+        fields:
+          $ref: '#/components/schemas/Fields'
+    Fields:
+      type: object
+    Owner:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+    OpenLineageRun:
+      required:
+      - runId
+      type: object
+      properties:
+        runId:
+          type: string
+          format: uuid
+        facets:
+          $ref: '#/components/schemas/RunFacets'
     OpenLineageResponse:
       required:
       - status
@@ -91,39 +300,19 @@ components:
         lineageEdgesCreated:
           type: integer
           format: int32
-    SchemaField:
+    ParentRunFacet:
       required:
-      - name
-      - type
-      type: object
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-    ParentJobFacet:
-      required:
-      - name
-      - namespace
-      type: object
-      properties:
-        namespace:
-          type: string
-        name:
-          type: string
-    SymlinksFacet:
+      - job
       type: object
       properties:
         _producer:
           type: string
         _schemaURL:
           type: string
-        identifiers:
-          type: array
-          items:
-            $ref: '#/components/schemas/SymlinkIdentifier'
+        run:
+          $ref: '#/components/schemas/Run'
+        job:
+          $ref: '#/components/schemas/ParentJobFacet'
     ErrorMessageFacet:
       required:
       - message
@@ -139,51 +328,41 @@ components:
           type: string
         stackTrace:
           type: string
-    OpenLineageOutputDataset:
-      required:
-      - name
-      - namespace
-      type: object
-      properties:
-        namespace:
-          type: string
-        name:
-          type: string
-        facets:
-          $ref: '#/components/schemas/DatasetFacets'
-        outputFacets:
-          $ref: '#/components/schemas/OutputDatasetFacets'
     JobFacets:
       type: object
       properties:
         sql:
           $ref: '#/components/schemas/SqlJobFacet'
-    SymlinkIdentifier:
-      required:
-      - name
-      - namespace
-      - type
+    ProcessingSummary:
       type: object
       properties:
-        namespace:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-    FailedEvent:
-      required:
-      - index
-      - reason
-      type: object
-      properties:
-        index:
+        received:
           type: integer
           format: int32
-        reason:
-          type: string
-        retriable:
-          type: boolean
+        successful:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+        skipped:
+          type: integer
+          format: int32
+    DatasetFacets:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/SchemaFacet'
+        symlinks:
+          $ref: '#/components/schemas/SymlinksFacet'
+        datasource:
+          $ref: '#/components/schemas/DatasourceFacet'
+        documentation:
+          $ref: '#/components/schemas/DocumentationFacet'
+        ownership:
+          $ref: '#/components/schemas/OwnershipFacet'
+        columnLineage:
+          $ref: '#/components/schemas/ColumnLineageFacet'
     OpenLineageRunEvent:
       required:
       - eventTime
@@ -223,62 +402,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OpenLineageOutputDataset'
-    OutputDatasetFacets:
-      type: object
-      properties:
-        columnLineage:
-          $ref: '#/components/schemas/ColumnLineageFacet'
-    Owner:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-    ColumnLineageFacet:
-      required:
-      - fields
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        fields:
-          $ref: '#/components/schemas/Fields'
-    OpenLineageJob:
-      required:
-      - name
-      - namespace
-      type: object
-      properties:
-        namespace:
-          type: string
-        name:
-          type: string
-        facets:
-          $ref: '#/components/schemas/JobFacets'
-    DocumentationFacet:
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        description:
-          type: string
-    OpenLineageRun:
-      required:
-      - runId
-      type: object
-      properties:
-        runId:
-          type: string
-          format: uuid
-        facets:
-          $ref: '#/components/schemas/RunFacets'
     OpenLineageBatchRequest:
       required:
       - events
@@ -290,142 +413,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OpenLineageRunEvent'
-    DatasetFacets:
+    FailedEvent:
+      required:
+      - index
+      - reason
       type: object
       properties:
-        schema:
-          $ref: '#/components/schemas/SchemaFacet'
-        symlinks:
-          $ref: '#/components/schemas/SymlinksFacet'
-        datasource:
-          $ref: '#/components/schemas/DatasourceFacet'
-        documentation:
-          $ref: '#/components/schemas/DocumentationFacet'
-        ownership:
-          $ref: '#/components/schemas/OwnershipFacet'
-        columnLineage:
-          $ref: '#/components/schemas/ColumnLineageFacet'
-    InputDatasetFacets:
-      type: object
-    Fields:
-      type: object
-    OwnershipFacet:
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/Owner'
-    ProcessingSummary:
-      type: object
-      properties:
-        received:
+        index:
           type: integer
           format: int32
-        successful:
-          type: integer
-          format: int32
-        failed:
-          type: integer
-          format: int32
-        skipped:
-          type: integer
-          format: int32
-    Run:
-      required:
-      - runId
-      type: object
-      properties:
-        runId:
+        reason:
           type: string
-          format: uuid
-    ProcessingEngineFacet:
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        name:
-          type: string
-        version:
-          type: string
-        openlineageAdapterVersion:
-          type: string
-    OpenLineageInputDataset:
-      required:
-      - name
-      - namespace
-      type: object
-      properties:
-        namespace:
-          type: string
-        name:
-          type: string
-        facets:
-          $ref: '#/components/schemas/DatasetFacets'
-        inputFacets:
-          $ref: '#/components/schemas/InputDatasetFacets'
-    ParentRunFacet:
-      required:
-      - job
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        run:
-          $ref: '#/components/schemas/Run'
-        job:
-          $ref: '#/components/schemas/ParentJobFacet'
-    DatasourceFacet:
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        name:
-          type: string
-        uri:
-          type: string
-          format: uri
-    RunFacets:
-      type: object
-      properties:
-        parent:
-          $ref: '#/components/schemas/ParentRunFacet'
-        errorMessage:
-          $ref: '#/components/schemas/ErrorMessageFacet'
-        processing_engine:
-          $ref: '#/components/schemas/ProcessingEngineFacet'
-    SqlJobFacet:
-      required:
-      - query
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        query:
-          type: string
-    SchemaFacet:
-      type: object
-      properties:
-        _producer:
-          type: string
-        _schemaURL:
-          type: string
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SchemaField'
+        retriable:
+          type: boolean
   securitySchemes:
     BearerAuth:
       type: http

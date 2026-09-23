@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Query Cost Record Manager API
+  title: OpenMetadata Query Cost Record Manager API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -26,7 +26,6 @@ paths:
       tags:
       - Query Cost Record Manager
       summary: Create query cost record
-      description: Create query cost record
       operationId: createQueryCostRecord
       requestBody:
         content:
@@ -45,7 +44,6 @@ paths:
       tags:
       - Query Cost Record Manager
       summary: Get query cost record by id
-      description: Get query cost record by id
       operationId: getQueryCostRecord
       parameters:
       - name: id
@@ -67,7 +65,6 @@ paths:
       tags:
       - Query Cost Record Manager
       summary: Get Query Cost By Service
-      description: Get Query Cost By Service
       operationId: getQueryCostByService
       parameters:
       - name: serviceName
@@ -84,30 +81,6 @@ paths:
                 $ref: '#/components/schemas/CreateQueryCostRecord'
 components:
   schemas:
-    CreateQueryCostRecord:
-      required:
-      - cost
-      - count
-      - queryReference
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        jsonSchema:
-          type: string
-        queryReference:
-          $ref: '#/components/schemas/EntityReference'
-        cost:
-          type: number
-          format: double
-        count:
-          type: number
-          format: double
-        totalDuration:
-          type: number
-          format: double
     EntityReference:
       required:
       - id
@@ -134,6 +107,30 @@ components:
         href:
           type: string
           format: uri
+    CreateQueryCostRecord:
+      required:
+      - cost
+      - count
+      - queryReference
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        jsonSchema:
+          type: string
+        queryReference:
+          $ref: '#/components/schemas/EntityReference'
+        cost:
+          type: number
+          format: double
+        count:
+          type: number
+          format: double
+        totalDuration:
+          type: number
+          format: double
     QueryCostRecord:
       required:
       - cost

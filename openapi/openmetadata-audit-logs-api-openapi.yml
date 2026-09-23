@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Audit Logs API
+  title: OpenMetadata Audit Logs API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -173,31 +173,13 @@ paths:
                 $ref: '#/components/schemas/ResultList'
 components:
   schemas:
-    EntityError:
+    CSVExportResponse:
       type: object
       properties:
+        jobId:
+          type: string
         message:
           type: string
-        entity:
-          type: object
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     ResultList:
       required:
       - data
@@ -220,13 +202,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    CSVExportResponse:
+    Paging:
+      required:
+      - total
       type: object
       properties:
-        jobId:
+        before:
           type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    EntityError:
+      type: object
+      properties:
         message:
           type: string
+        entity:
+          type: object
   securitySchemes:
     BearerAuth:
       type: http

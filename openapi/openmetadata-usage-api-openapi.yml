@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Usage API
+  title: OpenMetadata Usage API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -245,6 +245,32 @@ paths:
           description: Bad request
 components:
   schemas:
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    EntityUsage:
+      required:
+      - entity
+      - usage
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/EntityReference'
+        usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageDetails'
     DailyCount:
       required:
       - count
@@ -253,24 +279,10 @@ components:
       properties:
         count:
           minimum: 0
-          exclusiveMinimum: false
           type: integer
           format: int32
         date:
           type: string
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
     EntityReference:
       required:
       - id
@@ -297,32 +309,18 @@ components:
         href:
           type: string
           format: uri
-    EntityUsage:
+    UsageStats:
       required:
-      - entity
-      - usage
+      - count
       type: object
       properties:
-        entity:
-          $ref: '#/components/schemas/EntityReference'
-        usage:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageDetails'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
   securitySchemes:
     BearerAuth:
       type: http

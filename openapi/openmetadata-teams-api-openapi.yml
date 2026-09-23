@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Teams API
+  title: OpenMetadata Teams API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -26,7 +26,6 @@ paths:
       tags:
       - Teams
       summary: Bulk Add Assets
-      description: Bulk Add Assets
       operationId: bulkAddAssets_2
       parameters:
       - name: name
@@ -54,7 +53,6 @@ paths:
       tags:
       - Teams
       summary: Bulk Remove Assets
-      description: Bulk Remove Assets
       operationId: bulkRemoveAssets_2
       parameters:
       - name: name
@@ -506,7 +504,7 @@ paths:
     put:
       tags:
       - Teams
-      summary: Import from CSV to create, and update teams.
+      summary: Import from CSV to create, and update teams
       operationId: importTeams
       parameters:
       - name: name
@@ -536,7 +534,7 @@ paths:
     put:
       tags:
       - Teams
-      summary: Import from CSV to create, and update teams asynchronously.
+      summary: Import from CSV to create, and update teams asynchronously
       operationId: importTeamsAsync
       parameters:
       - name: name
@@ -567,7 +565,7 @@ paths:
       tags:
       - Teams
       summary: List all entity versions within a time range
-      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      description: Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch.
       operationId: listAllEntityVersionsByTimestamp_59
       parameters:
       - name: startTs
@@ -746,7 +744,7 @@ paths:
     patch:
       tags:
       - Teams
-      summary: Update a team using name.
+      summary: Update a team using name
       description: Update an existing team with JsonPatch.
       externalDocs:
         description: JsonPatch RFC
@@ -820,31 +818,15 @@ paths:
           description: Team not found
 components:
   schemas:
-    TagLabelRecognizerMetadata:
+    RestoreEntity:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - id
       type: object
       properties:
-        recognizerId:
+        id:
           type: string
           format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    BulkOperationResult:
+    CsvImportResult:
       type: object
       properties:
         dryRun:
@@ -861,278 +843,18 @@ components:
           type: string
         numberOfRowsProcessed:
           minimum: 0
-          exclusiveMinimum: false
           type: integer
           format: int32
         numberOfRowsPassed:
           minimum: 0
-          exclusiveMinimum: false
           type: integer
           format: int32
         numberOfRowsFailed:
           minimum: 0
-          exclusiveMinimum: false
           type: integer
           format: int32
-        successRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-        failedRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
+        importResultsCsv:
           type: string
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    Profile:
-      type: object
-      properties:
-        images:
-          $ref: '#/components/schemas/ImageList'
-        subscription:
-          $ref: '#/components/schemas/SubscriptionConfig'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    CreateTeam:
-      required:
-      - name
-      - teamType
-      type: object
-      properties:
-        teamType:
-          type: string
-          enum:
-          - Group
-          - Department
-          - Division
-          - BusinessUnit
-          - Organization
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        email:
-          maxLength: 127
-          minLength: 6
-          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
-          type: string
-        displayName:
-          type: string
-        externalId:
-          type: string
-        description:
-          type: string
-        profile:
-          $ref: '#/components/schemas/Profile'
-        parents:
-          type: array
-          items:
-            type: string
-            format: uuid
-        children:
-          type: array
-          items:
-            type: string
-            format: uuid
-        users:
-          type: array
-          items:
-            type: string
-            format: uuid
-        defaultRoles:
-          type: array
-          items:
-            type: string
-            format: uuid
-        defaultPersona:
-          type: string
-          format: uuid
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        isJoinable:
-          type: boolean
-        policies:
-          type: array
-          items:
-            type: string
-            format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-        extension:
-          type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    Webhook:
-      type: object
-      properties:
-        receivers:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        endpoint:
-          type: string
-          format: uri
-        headers:
-          type: object
-          additionalProperties:
-            type: string
-        queryParams:
-          type: object
-          additionalProperties:
-            type: string
-        httpMethod:
-          type: string
-          enum:
-          - POST
-          - PUT
-        sendToAdmins:
-          type: boolean
-        sendToOwners:
-          type: boolean
-        authType:
-          type: object
-        sendToFollowers:
-          type: boolean
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    BulkResponse:
-      type: object
-      properties:
-        request:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    JsonPatch:
-      type: object
     Team:
       required:
       - id
@@ -1289,6 +1011,105 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    CreateTeam:
+      required:
+      - name
+      - teamType
+      type: object
+      properties:
+        teamType:
+          type: string
+          enum:
+          - Group
+          - Department
+          - Division
+          - BusinessUnit
+          - Organization
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+        displayName:
+          type: string
+        externalId:
+          type: string
+        description:
+          type: string
+        profile:
+          $ref: '#/components/schemas/Profile'
+        parents:
+          type: array
+          items:
+            type: string
+            format: uuid
+        children:
+          type: array
+          items:
+            type: string
+            format: uuid
+        users:
+          type: array
+          items:
+            type: string
+            format: uuid
+        defaultRoles:
+          type: array
+          items:
+            type: string
+            format: uuid
+        defaultPersona:
+          type: string
+          format: uuid
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        isJoinable:
+          type: boolean
+        policies:
+          type: array
+          items:
+            type: string
+            format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
     ChangeDescription:
       type: object
       properties:
@@ -1309,7 +1130,19 @@ components:
           format: double
         changeSummary:
           $ref: '#/components/schemas/ChangeSummaryMap'
-    TeamList:
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    ResultList:
       required:
       - data
       type: object
@@ -1317,7 +1150,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Team'
+            type: object
         paging:
           $ref: '#/components/schemas/Paging'
         errors:
@@ -1331,13 +1164,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    CSVExportResponse:
-      type: object
-      properties:
-        jobId:
-          type: string
-        message:
-          type: string
     ChangeEvent:
       required:
       - entityId
@@ -1405,110 +1231,116 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    UsageStats:
-      required:
-      - count
+    FieldChange:
       type: object
       properties:
-        count:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    BulkAssets:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
       type: object
       properties:
-        assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dryRun:
-          type: boolean
-    Style:
+        url:
+          type: string
+        position:
+          type: string
+    BulkResponse:
       type: object
       properties:
-        color:
+        request:
+          type: object
+        message:
           type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    ImageList:
-      type: object
-      properties:
-        image:
-          type: string
-          format: uri
-        image24:
-          type: string
-          format: uri
-        image32:
-          type: string
-          format: uri
-        image48:
-          type: string
-          format: uri
-        image72:
-          type: string
-          format: uri
-        image192:
-          type: string
-          format: uri
-        image512:
-          type: string
-          format: uri
-    CsvImportResult:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
         status:
+          type: integer
+          format: int32
+    Webhook:
+      type: object
+      properties:
+        receivers:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        endpoint:
+          type: string
+          format: uri
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        queryParams:
+          type: object
+          additionalProperties:
+            type: string
+        httpMethod:
           type: string
           enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
+          - POST
+          - PUT
+        sendToAdmins:
+          type: boolean
+        sendToOwners:
+          type: boolean
+        authType:
+          type: object
+        sendToFollowers:
+          type: boolean
+    SubscriptionConfig:
+      type: object
+      properties:
+        slack:
+          $ref: '#/components/schemas/Webhook'
+        msTeams:
+          $ref: '#/components/schemas/Webhook'
+        gChat:
+          $ref: '#/components/schemas/Webhook'
+        generic:
+          $ref: '#/components/schemas/Webhook'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
           type: string
-        numberOfRowsProcessed:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        importResultsCsv:
+          format: uuid
+        recognizerName:
           type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    ChangeSummaryMap:
+      type: object
     TagLabel:
       required:
       - labelType
@@ -1557,27 +1389,6 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
     EntityError:
       type: object
       properties:
@@ -1585,17 +1396,127 @@ components:
           type: string
         entity:
           type: object
-    SubscriptionConfig:
+    Style:
       type: object
       properties:
-        slack:
-          $ref: '#/components/schemas/Webhook'
-        msTeams:
-          $ref: '#/components/schemas/Webhook'
-        gChat:
-          $ref: '#/components/schemas/Webhook'
-        generic:
-          $ref: '#/components/schemas/Webhook'
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    JsonPatch:
+      type: object
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    ImageList:
+      type: object
+      properties:
+        image:
+          type: string
+          format: uri
+        image24:
+          type: string
+          format: uri
+        image32:
+          type: string
+          format: uri
+        image48:
+          type: string
+          format: uri
+        image72:
+          type: string
+          format: uri
+        image192:
+          type: string
+          format: uri
+        image512:
+          type: string
+          format: uri
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    TeamList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     EntityReference:
       required:
       - id
@@ -1622,20 +1543,90 @@ components:
         href:
           type: string
           format: uri
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
+    BulkAssets:
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dryRun:
+          type: boolean
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
           type: string
+        message:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    Profile:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/ImageList'
+        subscription:
+          $ref: '#/components/schemas/SubscriptionConfig'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

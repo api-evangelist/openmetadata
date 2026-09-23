@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Workflow Instances API
+  title: OpenMetadata Workflow Instances API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -78,31 +78,6 @@ paths:
                 $ref: '#/components/schemas/WorkflowInstanceResultList'
 components:
   schemas:
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     WorkflowInstanceResultList:
       required:
       - data
@@ -125,31 +100,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    Stage:
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        startedAt:
-          type: integer
-          format: int64
-        endedAt:
-          type: integer
-          format: int64
-        tasks:
-          type: array
-          items:
-            type: string
-            format: uuid
-        variables:
-          type: object
-          additionalProperties:
-            type: object
     WorkflowInstanceState:
       type: object
       properties:
@@ -179,6 +129,56 @@ components:
           - EXCEPTION
         exception:
           type: string
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Stage:
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        startedAt:
+          type: integer
+          format: int64
+        endedAt:
+          type: integer
+          format: int64
+        tasks:
+          type: array
+          items:
+            type: string
+            format: uuid
+        variables:
+          type: object
+          additionalProperties:
+            type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
   securitySchemes:
     BearerAuth:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Workflow Definitions API
+  title: OpenMetadata Workflow Definitions API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -187,7 +187,7 @@ paths:
     patch:
       tags:
       - Workflow Definitions
-      summary: Update a Workflow Definition by name.
+      summary: Update a Workflow Definition by name
       description: Update an existing Workflow Definition using JsonPatch.
       externalDocs:
         description: JsonPatch RFC
@@ -386,7 +386,7 @@ paths:
       tags:
       - Workflow Definitions
       summary: List all entity versions within a time range
-      description: 'Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch. '
+      description: Get a paginated list of all entity versions within a given time range specified by `startTs` and `endTs` in milliseconds since epoch.
       operationId: listAllEntityVersionsByTimestamp_31
       parameters:
       - name: startTs
@@ -477,7 +477,7 @@ paths:
     put:
       tags:
       - Workflow Definitions
-      summary: Restore a soft deleted Workflow Definition.
+      summary: Restore a soft deleted Workflow Definition
       description: Restore a soft deleted Workflow Definition.
       operationId: restore_23
       requestBody:
@@ -580,6 +580,188 @@ paths:
             application/json: {}
 components:
   schemas:
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    WorkflowConfiguration:
+      required:
+      - storeStageStatus
+      type: object
+      properties:
+        storeStageStatus:
+          type: boolean
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    WorkflowNodeDefinitionInterface:
+      type: object
+      properties:
+        subType:
+          type: string
+        inputNamespaceMap:
+          type: object
+        input:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        type:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        config:
+          type: object
+        output:
+          type: array
+          items:
+            type: string
+      discriminator:
+        propertyName: subType
+    CreateWorkflowDefinition:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        type:
+          type: string
+          enum:
+          - eventBasedEntity
+          - noOp
+          - periodicBatchEntity
+        config:
+          $ref: '#/components/schemas/WorkflowConfiguration'
+        trigger:
+          $ref: '#/components/schemas/WorkflowTriggerInterface'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowNodeDefinitionInterface'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdgeDefinition'
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
     TagLabelRecognizerMetadata:
       required:
       - recognizerId
@@ -604,77 +786,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PatternMatch'
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    EdgeDefinition:
-      required:
-      - from
-      - to
-      type: object
-      properties:
-        from:
-          type: string
-        to:
-          type: string
-        condition:
-          type: string
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
     AssetCertification:
       required:
       - appliedDate
@@ -690,7 +801,57 @@ components:
         expiryDate:
           type: integer
           format: int64
-    ResultList:
+    ChangeSummaryMap:
+      type: object
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    WorkflowDefinitionList:
       required:
       - data
       type: object
@@ -698,7 +859,7 @@ components:
         data:
           type: array
           items:
-            type: object
+            $ref: '#/components/schemas/WorkflowDefinition'
         paging:
           $ref: '#/components/schemas/Paging'
         errors:
@@ -712,26 +873,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    Paging:
-      required:
-      - total
+    EntityError:
       type: object
       properties:
-        before:
+        message:
           type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    JsonPatch:
+        entity:
+          type: object
+    UsageStats:
+      required:
+      - count
       type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
     WorkflowDefinition:
       required:
       - description
@@ -853,26 +1034,29 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    ChangeDescription:
+    JsonPatch:
+      type: object
+    EdgeDefinition:
+      required:
+      - from
+      - to
       type: object
       properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
+        from:
+          type: string
+        to:
+          type: string
+        condition:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
     WorkflowTriggerInterface:
       type: object
       properties:
@@ -887,50 +1071,6 @@ components:
             type: string
       discriminator:
         propertyName: type
-    WorkflowDefinitionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkflowDefinition'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          exclusiveMinimum: false
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
     Votes:
       type: object
       properties:
@@ -948,116 +1088,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-    TagLabel:
+    UsageDetails:
       required:
-      - labelType
-      - source
-      - state
-      - tagFQN
+      - dailyStats
+      - date
       type: object
       properties:
-        tagFQN:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
           type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    WorkflowConfiguration:
-      required:
-      - storeStageStatus
-      type: object
-      properties:
-        storeStageStatus:
-          type: boolean
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    WorkflowNodeDefinitionInterface:
-      type: object
-      properties:
-        subType:
-          type: string
-        inputNamespaceMap:
-          type: object
-        input:
-          type: array
-          items:
-            type: string
-        name:
-          type: string
-        type:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        config:
-          type: object
-        output:
-          type: array
-          items:
-            type: string
-      discriminator:
-        propertyName: subType
     EntityReference:
       required:
       - id
@@ -1084,77 +1128,32 @@ components:
         href:
           type: string
           format: uri
-    CreateWorkflowDefinition:
+    Paging:
       required:
-      - description
-      - name
+      - total
       type: object
       properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
+        before:
           type: string
-        displayName:
+        after:
           type: string
-        description:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        type:
-          type: string
-          enum:
-          - eventBasedEntity
-          - noOp
-          - periodicBatchEntity
-        config:
-          $ref: '#/components/schemas/WorkflowConfiguration'
-        trigger:
-          $ref: '#/components/schemas/WorkflowTriggerInterface'
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkflowNodeDefinitionInterface'
-        edges:
-          type: array
-          items:
-            $ref: '#/components/schemas/EdgeDefinition'
-        extension:
-          type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TagLabelMetadata:
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

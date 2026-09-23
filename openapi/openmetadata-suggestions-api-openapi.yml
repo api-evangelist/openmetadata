@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Suggestions API
+  title: OpenMetadata Suggestions API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -221,7 +221,7 @@ paths:
     put:
       tags:
       - Suggestions
-      summary: Update a suggestion by `Id`.
+      summary: Update a suggestion by `Id`
       description: Update an existing suggestion using JsonPatch.
       externalDocs:
         description: JsonPatch RFC
@@ -249,7 +249,6 @@ paths:
       tags:
       - Suggestions
       summary: Reject all Suggestions from a user and an Entity
-      description: Reject all Suggestions from a user and an Entity
       operationId: rejectAllSuggestion
       parameters:
       - name: userId
@@ -302,6 +301,37 @@ paths:
           description: Bad request
 components:
   schemas:
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     Suggestion:
       type: object
       properties:
@@ -343,6 +373,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagLabel'
+    SuggestionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Suggestion'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     TagLabel:
       required:
       - labelType
@@ -391,30 +443,13 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
+    EntityError:
       type: object
       properties:
-        recognizerId:
+        message:
           type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
+        entity:
+          type: object
     PatternMatch:
       required:
       - name
@@ -428,78 +463,6 @@ components:
         score:
           type: number
           format: double
-    CreateSuggestion:
-      type: object
-      properties:
-        description:
-          type: string
-        tagLabels:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        type:
-          type: string
-          enum:
-          - SuggestDescription
-          - SuggestTagLabel
-        entityLink:
-          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
-          type: string
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    SuggestionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Suggestion'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     EntityReference:
       required:
       - id
@@ -526,6 +489,23 @@ components:
         href:
           type: string
           format: uri
+    CreateSuggestion:
+      type: object
+      properties:
+        description:
+          type: string
+        tagLabels:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        type:
+          type: string
+          enum:
+          - SuggestDescription
+          - SuggestTagLabel
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
     Style:
       type: object
       properties:
@@ -535,13 +515,32 @@ components:
           type: string
         coverImage:
           $ref: '#/components/schemas/CoverImage'
-    CoverImage:
+    Paging:
+      required:
+      - total
       type: object
       properties:
-        url:
+        before:
           type: string
-        position:
+        after:
           type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
   securitySchemes:
     BearerAuth:
       type: http

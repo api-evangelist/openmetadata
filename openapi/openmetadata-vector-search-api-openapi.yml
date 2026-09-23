@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: OpenMetadata APIs Agent Executions Vector Search API
+  title: OpenMetadata Vector Search API
   description: Common types and API definition for OpenMetadata
   contact:
     name: OpenMetadata
@@ -42,6 +42,23 @@ paths:
                 $ref: '#/components/schemas/VectorSearchResponse'
 components:
   schemas:
+    VectorSearchResponse:
+      type: object
+      properties:
+        tookMillis:
+          type: integer
+          format: int64
+        hits:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+        totalHits:
+          type: integer
+          format: int64
+        hasMore:
+          type: boolean
     VectorSearchRequest:
       type: object
       properties:
@@ -65,23 +82,6 @@ components:
         threshold:
           type: number
           format: double
-    VectorSearchResponse:
-      type: object
-      properties:
-        tookMillis:
-          type: integer
-          format: int64
-        hits:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-        totalHits:
-          type: integer
-          format: int64
-        hasMore:
-          type: boolean
   securitySchemes:
     BearerAuth:
       type: http
