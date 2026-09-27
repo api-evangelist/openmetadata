@@ -154,7 +154,7 @@ paths:
       - Tables
       summary: Delete table profiler config
       description: delete table profile config to the table.
-      operationId: delete DataProfilerConfig_2
+      operationId: deleteDataProfilerConfig_2
       parameters:
       - name: id
         in: path
@@ -170,6 +170,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Table'
+      x-operation-id-source: normalized
+      x-operation-id-original: delete DataProfilerConfig_2
   /v1/tables/{id}/followers:
     put:
       tags:
@@ -1040,7 +1042,7 @@ paths:
       - Tables
       summary: Get the latest table profile
       description: Get the latest table and column profile
-      operationId: Get the latest table and column profile
+      operationId: GetTheLatestTableAndColumnProfile
       parameters:
       - name: fqn
         in: path
@@ -1061,6 +1063,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Table'
+      x-operation-id-source: normalized
+      x-operation-id-original: Get the latest table and column profile
   /v1/tables/name/{fqn}/pipelineObservability:
     get:
       tags:
@@ -1326,7 +1330,7 @@ paths:
       - Tables
       summary: List of column profiles
       description: Get a list of all the column profiles for the given table fqn, optionally filtered by `extension`, `startTs` and `endTs` of the profile. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.
-      operationId: list column Profiles
+      operationId: listColumnProfiles
       parameters:
       - name: fqn
         in: path
@@ -1353,6 +1357,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ColumnProfileList'
+      x-operation-id-source: normalized
+      x-operation-id-original: list column Profiles
   /v1/tables/history:
     get:
       tags:
@@ -1407,7 +1413,7 @@ paths:
       - Tables
       summary: List of system profiles
       description: Get a list of all the system profiles for the given table fqn, filtered by `extension`, `startTs` and `endTs` of the profile. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.
-      operationId: list system Profiles
+      operationId: listSystemProfiles
       parameters:
       - name: fqn
         in: path
@@ -1434,13 +1440,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SystemProfileList'
+      x-operation-id-source: normalized
+      x-operation-id-original: list system Profiles
   /v1/tables/{fqn}/tableProfile:
     get:
       tags:
       - Tables
       summary: List of table profiles
       description: Get a list of all the table profiles for the given table fqn, optionally filtered by `extension`, `startTs` and `endTs` of the profile. Use cursor-based pagination to limit the number of entries in the list using `limit` and `before` or `after` query params.
-      operationId: list Profiles
+      operationId: listProfiles
       parameters:
       - name: fqn
         in: path
@@ -1465,6 +1473,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TableProfileList'
+      x-operation-id-source: normalized
+      x-operation-id-original: list Profiles
   /v1/tables/{id}/versions:
     get:
       tags:
@@ -1822,44 +1832,41 @@ paths:
           description: model for instance {id} is not found
 components:
   schemas:
-    RelationshipRef:
+    JsonPatch:
+      type: object
+    CoverImage:
       type: object
       properties:
-        id:
+        url:
           type: string
-          format: uuid
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
+        position:
           type: string
-        fqnHash:
-          type: string
-        type:
-          type: string
-    RestoreEntity:
+    EntityReference:
       required:
       - id
+      - type
       type: object
       properties:
         id:
           type: string
           format: uuid
-    TableJoins:
-      type: object
-      properties:
-        startDate:
+        type:
           type: string
-        dayCount:
-          type: integer
-          format: int32
-        columnJoins:
-          type: array
-          items:
-            $ref: '#/components/schemas/ColumnJoin'
-        directTableJoins:
-          type: array
-          items:
-            $ref: '#/components/schemas/JoinedWith'
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
     Partitioning:
       required:
       - partitionColumn
@@ -1871,1014 +1878,18 @@ components:
           type: string
         upperBound:
           type: string
-    CsvImportResult:
+    UsageStats:
+      required:
+      - count
       type: object
       properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
+        count:
           minimum: 0
           type: integer
           format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        importResultsCsv:
-          type: string
-    TableProfile:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        columnCount:
+        percentileRank:
           type: number
           format: double
-        rowCount:
-          type: number
-          format: double
-        sizeInByte:
-          type: number
-          format: double
-        createDateTime:
-          type: string
-          format: date-time
-        customMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetricProfile'
-        profileSample:
-          type: number
-          format: double
-        profileSampleType:
-          type: string
-          enum:
-          - PERCENTAGE
-          - ROWS
-    ColumnProfilerConfig:
-      type: object
-      properties:
-        columnName:
-          type: string
-        metrics:
-          type: array
-          items:
-            type: string
-    CompressionStrategy:
-      type: object
-      properties:
-        compressionType:
-          type: string
-          enum:
-          - AUTOMATIC
-          - MANUAL
-          - POLICY_BASED
-        segmentColumns:
-          type: array
-          items:
-            type: string
-        orderColumns:
-          type: array
-          items:
-            type: string
-        compressionLevel:
-          maximum: 9
-          minimum: 1
-          type: integer
-          format: int32
-    TableList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Table'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    ColumnJoin:
-      type: object
-      properties:
-        columnName:
-          maxLength: 2147483647
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        joinedWith:
-          type: array
-          items:
-            $ref: '#/components/schemas/JoinedWith'
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    ProfileSampleConfig:
-      type: object
-      properties:
-        sampleConfigType:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        config:
-          type: object
-    CreateCustomMetric:
-      required:
-      - expression
-      - name
-      type: object
-      properties:
-        description:
-          type: string
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        columnName:
-          type: string
-        expression:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-    LayerPaging:
-      type: object
-      properties:
-        entityDownstreamCount:
-          type: integer
-          format: int32
-        entityUpstreamCount:
-          type: integer
-          format: int32
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    SystemProfileList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SystemProfile'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    ColumnProfile:
-      required:
-      - name
-      - timestamp
-      type: object
-      properties:
-        name:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        valuesCount:
-          type: number
-          format: double
-        valuesPercentage:
-          type: number
-          format: double
-        validCount:
-          type: number
-          format: double
-        duplicateCount:
-          type: number
-          format: double
-        nullCount:
-          type: number
-          format: double
-        nullProportion:
-          type: number
-          format: double
-        missingPercentage:
-          type: number
-          format: double
-        missingCount:
-          type: number
-          format: double
-        uniqueCount:
-          type: number
-          format: double
-        uniqueProportion:
-          type: number
-          format: double
-        distinctCount:
-          type: number
-          format: double
-        distinctProportion:
-          type: number
-          format: double
-        min:
-          type: object
-        max:
-          type: object
-        minLength:
-          type: number
-          format: double
-        maxLength:
-          type: number
-          format: double
-        mean:
-          type: number
-          format: double
-        sum:
-          type: number
-          format: double
-        stddev:
-          type: number
-          format: double
-        variance:
-          type: number
-          format: double
-        median:
-          type: number
-          format: double
-        firstQuartile:
-          type: number
-          format: double
-        thirdQuartile:
-          type: number
-          format: double
-        interQuartileRange:
-          type: number
-          format: double
-        nonParametricSkew:
-          type: number
-          format: double
-        histogram:
-          $ref: '#/components/schemas/Histogram'
-        customMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetricProfile'
-        cardinalityDistribution:
-          $ref: '#/components/schemas/CardinalityDistribution'
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    EsEntityRelationshipData:
-      type: object
-      properties:
-        entity:
-          $ref: '#/components/schemas/RelationshipRef'
-        relatedEntity:
-          $ref: '#/components/schemas/RelationshipRef'
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        description:
-          type: string
-        docId:
-          type: string
-        relationshipType:
-          type: string
-    TableProfilerConfig:
-      type: object
-      properties:
-        sampleDataCount:
-          type: integer
-          format: int32
-        randomizedSample:
-          type: boolean
-        profileQuery:
-          type: string
-        excludeColumns:
-          type: array
-          items:
-            type: string
-        includeColumns:
-          type: array
-          items:
-            $ref: '#/components/schemas/ColumnProfilerConfig'
-        partitioning:
-          $ref: '#/components/schemas/PartitionProfilerConfig'
-        computeTableMetrics:
-          type: boolean
-        computeColumnMetrics:
-          type: boolean
-        sparkTableProfilerConfig:
-          $ref: '#/components/schemas/SparkTableProfilerConfig'
-        profileSampleConfig:
-          $ref: '#/components/schemas/ProfileSampleConfig'
-    PartitionProfilerConfig:
-      type: object
-      properties:
-        enablePartitioning:
-          type: boolean
-        partitionColumnName:
-          type: string
-        partitionIntervalType:
-          type: string
-          enum:
-          - TIME-UNIT
-          - INTEGER-RANGE
-          - INGESTION-TIME
-          - COLUMN-VALUE
-          - INJECTED
-          - ENUM
-          - OTHER
-        partitionInterval:
-          type: integer
-          format: int32
-        partitionIntervalUnit:
-          type: string
-          enum:
-          - YEAR
-          - MONTH
-          - DAY
-          - HOUR
-        partitionValues:
-          type: array
-          items:
-            type: object
-        partitionIntegerRangeStart:
-          type: integer
-          format: int32
-        partitionIntegerRangeEnd:
-          type: integer
-          format: int32
-    SearchEntityRelationshipResult:
-      type: object
-      properties:
-        nodes:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/NodeInformation'
-        upstreamEdges:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EsEntityRelationshipData'
-        downstreamEdges:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EsEntityRelationshipData'
-    CreateTable:
-      required:
-      - columns
-      - databaseSchema
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        tableType:
-          type: string
-          enum:
-          - Regular
-          - External
-          - Dynamic
-          - View
-          - SecureView
-          - MaterializedView
-          - Iceberg
-          - Local
-          - Partitioned
-          - Foreign
-          - Transient
-          - Stream
-          - Stage
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        dataModel:
-          $ref: '#/components/schemas/DataModel'
-        locationPath:
-          type: string
-        tableConstraints:
-          type: array
-          items:
-            $ref: '#/components/schemas/TableConstraint'
-        tablePartition:
-          $ref: '#/components/schemas/TablePartition'
-        tableProfilerConfig:
-          $ref: '#/components/schemas/TableProfilerConfig'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        databaseSchema:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        schemaDefinition:
-          type: string
-        retentionPeriod:
-          type: string
-        extension:
-          type: object
-        sourceUrl:
-          type: string
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        fileFormat:
-          type: string
-          enum:
-          - csv
-          - csv.gz
-          - tsv
-          - avro
-          - parquet
-          - pq
-          - pqt
-          - parq
-          - parquet.snappy
-          - json
-          - json.gz
-          - json.zip
-          - jsonl
-          - jsonl.gz
-          - jsonl.zip
-          - MF4
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-        sourceHash:
-          maxLength: 32
-          minLength: 1
-          type: string
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    TablePartition:
-      type: object
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartitionColumnDetails'
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    JoinedWith:
-      required:
-      - fullyQualifiedName
-      - joinCount
-      type: object
-      properties:
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        joinCount:
-          type: integer
-          format: int32
-    Column:
-      required:
-      - dataType
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 2147483647
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        dataType:
-          type: string
-          enum:
-          - NUMBER
-          - TINYINT
-          - SMALLINT
-          - INT
-          - BIGINT
-          - BYTEINT
-          - BYTES
-          - FLOAT
-          - DOUBLE
-          - DECIMAL
-          - NUMERIC
-          - TIMESTAMP
-          - TIMESTAMPZ
-          - TIME
-          - DATE
-          - DATETIME
-          - INTERVAL
-          - STRING
-          - MEDIUMTEXT
-          - TEXT
-          - CHAR
-          - LONG
-          - VARCHAR
-          - BOOLEAN
-          - BINARY
-          - VARBINARY
-          - ARRAY
-          - BLOB
-          - LONGBLOB
-          - MEDIUMBLOB
-          - MAP
-          - STRUCT
-          - UNION
-          - SET
-          - GEOGRAPHY
-          - ENUM
-          - JSON
-          - UUID
-          - VARIANT
-          - GEOMETRY
-          - BYTEA
-          - AGGREGATEFUNCTION
-          - ERROR
-          - FIXED
-          - RECORD
-          - 'NULL'
-          - SUPER
-          - HLLSKETCH
-          - PG_LSN
-          - PG_SNAPSHOT
-          - TSQUERY
-          - TXID_SNAPSHOT
-          - XML
-          - MACADDR
-          - TSVECTOR
-          - UNKNOWN
-          - CIDR
-          - INET
-          - CLOB
-          - ROWID
-          - LOWCARDINALITY
-          - YEAR
-          - POINT
-          - POLYGON
-          - TUPLE
-          - SPATIAL
-          - TABLE
-          - NTEXT
-          - IMAGE
-          - IPV4
-          - IPV6
-          - DATETIMERANGE
-          - HLL
-          - LARGEINT
-          - QUANTILE_STATE
-          - AGG_STATE
-          - BITMAP
-          - UINT
-          - BIT
-          - MONEY
-          - MEASURE HIDDEN
-          - MEASURE VISIBLE
-          - MEASURE
-          - KPI
-          - HEIRARCHY
-          - HIERARCHYID
-        arrayDataType:
-          type: string
-          enum:
-          - NUMBER
-          - TINYINT
-          - SMALLINT
-          - INT
-          - BIGINT
-          - BYTEINT
-          - BYTES
-          - FLOAT
-          - DOUBLE
-          - DECIMAL
-          - NUMERIC
-          - TIMESTAMP
-          - TIMESTAMPZ
-          - TIME
-          - DATE
-          - DATETIME
-          - INTERVAL
-          - STRING
-          - MEDIUMTEXT
-          - TEXT
-          - CHAR
-          - LONG
-          - VARCHAR
-          - BOOLEAN
-          - BINARY
-          - VARBINARY
-          - ARRAY
-          - BLOB
-          - LONGBLOB
-          - MEDIUMBLOB
-          - MAP
-          - STRUCT
-          - UNION
-          - SET
-          - GEOGRAPHY
-          - ENUM
-          - JSON
-          - UUID
-          - VARIANT
-          - GEOMETRY
-          - BYTEA
-          - AGGREGATEFUNCTION
-          - ERROR
-          - FIXED
-          - RECORD
-          - 'NULL'
-          - SUPER
-          - HLLSKETCH
-          - PG_LSN
-          - PG_SNAPSHOT
-          - TSQUERY
-          - TXID_SNAPSHOT
-          - XML
-          - MACADDR
-          - TSVECTOR
-          - UNKNOWN
-          - CIDR
-          - INET
-          - CLOB
-          - ROWID
-          - LOWCARDINALITY
-          - YEAR
-          - POINT
-          - POLYGON
-          - TUPLE
-          - SPATIAL
-          - TABLE
-          - NTEXT
-          - IMAGE
-          - IPV4
-          - IPV6
-          - DATETIMERANGE
-          - HLL
-          - LARGEINT
-          - QUANTILE_STATE
-          - AGG_STATE
-          - BITMAP
-          - UINT
-          - BIT
-          - MONEY
-          - MEASURE HIDDEN
-          - MEASURE VISIBLE
-          - MEASURE
-          - KPI
-          - HEIRARCHY
-          - HIERARCHYID
-        dataLength:
-          type: integer
-          format: int32
-        precision:
-          type: integer
-          format: int32
-        scale:
-          type: integer
-          format: int32
-        dataTypeDisplay:
-          type: string
-        description:
-          type: string
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        constraint:
-          type: string
-          enum:
-          - 'NULL'
-          - NOT_NULL
-          - UNIQUE
-          - PRIMARY_KEY
-        ordinalPosition:
-          type: integer
-          format: int32
-        jsonSchema:
-          type: string
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        profile:
-          $ref: '#/components/schemas/ColumnProfile'
-        customMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetric'
-        extension:
-          type: object
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    VoteRequest:
-      type: object
-      properties:
-        updatedVoteType:
-          type: string
-          enum:
-          - votedUp
-          - votedDown
-          - unVoted
-    SystemProfile:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        operation:
-          type: string
-          enum:
-          - UPDATE
-          - INSERT
-          - DELETE
-          - WRITE
-        rowsAffected:
-          type: integer
-          format: int32
-    TableProfileList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TableProfile'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    CreateTableProfile:
-      required:
-      - tableProfile
-      type: object
-      properties:
-        tableProfile:
-          $ref: '#/components/schemas/TableProfile'
-        columnProfile:
-          type: array
-          items:
-            $ref: '#/components/schemas/ColumnProfile'
-        systemProfile:
-          type: array
-          items:
-            $ref: '#/components/schemas/SystemProfile'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    Histogram:
-      type: object
-      properties:
-        boundaries:
-          type: array
-          items:
-            type: object
-        frequencies:
-          type: array
-          items:
-            type: object
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    BulkResponse:
-      type: object
-      properties:
-        request:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
     Table:
       required:
       - columns
@@ -3141,6 +2152,59 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
+    CardinalityDistribution:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
+          type: boolean
+    ProfileSampleConfig:
+      type: object
+      properties:
+        sampleConfigType:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        config:
+          type: object
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     AssetCertification:
       required:
       - appliedDate
@@ -3156,35 +2220,162 @@ components:
         expiryDate:
           type: integer
           format: int64
-    CustomMetric:
+    UsageDetails:
       required:
-      - expression
-      - name
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    NodeInformation:
+      type: object
+      properties:
+        entity:
+          type: object
+          additionalProperties:
+            type: object
+        paging:
+          $ref: '#/components/schemas/LayerPaging'
+        nodeDepth:
+          minimum: 0
+          type: integer
+          format: int32
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
       type: object
       properties:
         id:
           type: string
           format: uuid
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
+        eventType:
           type: string
-        description:
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
           type: string
-        columnName:
+        entityId:
           type: string
-        expression:
-          type: string
-        owners:
+          format: uuid
+        domains:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-        updatedAt:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
           type: integer
           format: int64
-        updatedBy:
-          type: string
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    SparkTableProfilerConfig:
+      type: object
+      properties:
+        partitioning:
+          $ref: '#/components/schemas/Partitioning'
+    SystemProfileList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SystemProfile'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     TagLabel:
       required:
       - labelType
@@ -3233,67 +2424,400 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    EntityError:
+    TableData:
       type: object
       properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ChangeSummaryMap:
-      type: object
-    PartitionColumnDetails:
+        columns:
+          type: array
+          items:
+            type: string
+        rows:
+          type: array
+          items:
+            type: array
+            items:
+              type: object
+    ColumnJoin:
       type: object
       properties:
         columnName:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
           type: string
-        intervalType:
-          type: string
-          enum:
-          - TIME-UNIT
-          - INTEGER-RANGE
-          - INGESTION-TIME
-          - COLUMN-VALUE
-          - INJECTED
-          - ENUM
-          - OTHER
-        interval:
-          type: string
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
+        joinedWith:
           type: array
           items:
-            type: object
-    UsageStats:
-      required:
-      - count
+            $ref: '#/components/schemas/JoinedWith'
+    CompressionStrategy:
       type: object
       properties:
-        count:
-          minimum: 0
+        compressionType:
+          type: string
+          enum:
+          - AUTOMATIC
+          - MANUAL
+          - POLICY_BASED
+        segmentColumns:
+          type: array
+          items:
+            type: string
+        orderColumns:
+          type: array
+          items:
+            type: string
+        compressionLevel:
+          maximum: 9
+          minimum: 1
           type: integer
           format: int32
-        percentileRank:
+    CustomMetricProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
           type: number
           format: double
-    JsonPatch:
+    CreateTable:
+      required:
+      - columns
+      - databaseSchema
+      - name
       type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        tableType:
+          type: string
+          enum:
+          - Regular
+          - External
+          - Dynamic
+          - View
+          - SecureView
+          - MaterializedView
+          - Iceberg
+          - Local
+          - Partitioned
+          - Foreign
+          - Transient
+          - Stream
+          - Stage
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        dataModel:
+          $ref: '#/components/schemas/DataModel'
+        locationPath:
+          type: string
+        tableConstraints:
+          type: array
+          items:
+            $ref: '#/components/schemas/TableConstraint'
+        tablePartition:
+          $ref: '#/components/schemas/TablePartition'
+        tableProfilerConfig:
+          $ref: '#/components/schemas/TableProfilerConfig'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        databaseSchema:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        schemaDefinition:
+          type: string
+        retentionPeriod:
+          type: string
+        extension:
+          type: object
+        sourceUrl:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        fileFormat:
+          type: string
+          enum:
+          - csv
+          - csv.gz
+          - tsv
+          - avro
+          - parquet
+          - pq
+          - pqt
+          - parq
+          - parquet.snappy
+          - json
+          - json.gz
+          - json.zip
+          - jsonl
+          - jsonl.gz
+          - jsonl.zip
+          - MF4
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    TableColumnList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    DataModel:
+      required:
+      - modelType
+      type: object
+      properties:
+        modelType:
+          type: string
+          enum:
+          - DBT
+          - DDL
+        resourceType:
+          type: string
+        dbtSourceProject:
+          type: string
+        description:
+          type: string
+        path:
+          type: string
+        rawSql:
+          type: string
+        sql:
+          type: string
+        upstream:
+          type: array
+          items:
+            type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        generatedAt:
+          type: string
+          format: date-time
+    TableList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    CustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        description:
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+    TableJoins:
+      type: object
+      properties:
+        startDate:
+          type: string
+        dayCount:
+          type: integer
+          format: int32
+        columnJoins:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnJoin'
+        directTableJoins:
+          type: array
+          items:
+            $ref: '#/components/schemas/JoinedWith'
+    SearchEntityRelationshipResult:
+      type: object
+      properties:
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NodeInformation'
+        upstreamEdges:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EsEntityRelationshipData'
+        downstreamEdges:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EsEntityRelationshipData'
+    TableConstraint:
+      type: object
+      properties:
+        constraintType:
+          type: string
+          enum:
+          - UNIQUE
+          - PRIMARY_KEY
+          - FOREIGN_KEY
+          - SORT_KEY
+          - DIST_KEY
+          - CLUSTER_KEY
+        columns:
+          type: array
+          items:
+            type: string
+        referredColumns:
+          type: array
+          items:
+            type: string
+        relationshipType:
+          type: string
+          enum:
+          - ONE_TO_ONE
+          - ONE_TO_MANY
+          - MANY_TO_ONE
+          - MANY_TO_MANY
+    CreateCustomMetric:
+      required:
+      - expression
+      - name
+      type: object
+      properties:
+        description:
+          type: string
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        columnName:
+          type: string
+        expression:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
     ColumnProfileList:
       required:
       - data
@@ -3316,28 +2840,716 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    LifeCycle:
+    SystemProfile:
       type: object
       properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    TableData:
+        timestamp:
+          type: integer
+          format: int64
+        operation:
+          type: string
+          enum:
+          - UPDATE
+          - INSERT
+          - DELETE
+          - WRITE
+        rowsAffected:
+          type: integer
+          format: int32
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    TableProfilerConfig:
+      type: object
+      properties:
+        sampleDataCount:
+          type: integer
+          format: int32
+        randomizedSample:
+          type: boolean
+        profileQuery:
+          type: string
+        excludeColumns:
+          type: array
+          items:
+            type: string
+        includeColumns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnProfilerConfig'
+        partitioning:
+          $ref: '#/components/schemas/PartitionProfilerConfig'
+        computeTableMetrics:
+          type: boolean
+        computeColumnMetrics:
+          type: boolean
+        sparkTableProfilerConfig:
+          $ref: '#/components/schemas/SparkTableProfilerConfig'
+        profileSampleConfig:
+          $ref: '#/components/schemas/ProfileSampleConfig'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    TablePartition:
       type: object
       properties:
         columns:
           type: array
           items:
-            type: string
-        rows:
+            $ref: '#/components/schemas/PartitionColumnDetails'
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    TableProfileList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
           type: array
           items:
-            type: array
-            items:
-              type: object
+            $ref: '#/components/schemas/TableProfile'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    LayerPaging:
+      type: object
+      properties:
+        entityDownstreamCount:
+          type: integer
+          format: int32
+        entityUpstreamCount:
+          type: integer
+          format: int32
+    CreateTableProfile:
+      required:
+      - tableProfile
+      type: object
+      properties:
+        tableProfile:
+          $ref: '#/components/schemas/TableProfile'
+        columnProfile:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnProfile'
+        systemProfile:
+          type: array
+          items:
+            $ref: '#/components/schemas/SystemProfile'
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    JoinedWith:
+      required:
+      - fullyQualifiedName
+      - joinCount
+      type: object
+      properties:
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        joinCount:
+          type: integer
+          format: int32
+    PartitionProfilerConfig:
+      type: object
+      properties:
+        enablePartitioning:
+          type: boolean
+        partitionColumnName:
+          type: string
+        partitionIntervalType:
+          type: string
+          enum:
+          - TIME-UNIT
+          - INTEGER-RANGE
+          - INGESTION-TIME
+          - COLUMN-VALUE
+          - INJECTED
+          - ENUM
+          - OTHER
+        partitionInterval:
+          type: integer
+          format: int32
+        partitionIntervalUnit:
+          type: string
+          enum:
+          - YEAR
+          - MONTH
+          - DAY
+          - HOUR
+        partitionValues:
+          type: array
+          items:
+            type: object
+        partitionIntegerRangeStart:
+          type: integer
+          format: int32
+        partitionIntegerRangeEnd:
+          type: integer
+          format: int32
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    ChangeSummaryMap:
+      type: object
+    BulkResponse:
+      type: object
+      properties:
+        request:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    ColumnProfilerConfig:
+      type: object
+      properties:
+        columnName:
+          type: string
+        metrics:
+          type: array
+          items:
+            type: string
+    EsEntityRelationshipData:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/RelationshipRef'
+        relatedEntity:
+          $ref: '#/components/schemas/RelationshipRef'
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        description:
+          type: string
+        docId:
+          type: string
+        relationshipType:
+          type: string
+    PartitionColumnDetails:
+      type: object
+      properties:
+        columnName:
+          type: string
+        intervalType:
+          type: string
+          enum:
+          - TIME-UNIT
+          - INTEGER-RANGE
+          - INGESTION-TIME
+          - COLUMN-VALUE
+          - INJECTED
+          - ENUM
+          - OTHER
+        interval:
+          type: string
+    Column:
+      required:
+      - dataType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        arrayDataType:
+          type: string
+          enum:
+          - NUMBER
+          - TINYINT
+          - SMALLINT
+          - INT
+          - BIGINT
+          - BYTEINT
+          - BYTES
+          - FLOAT
+          - DOUBLE
+          - DECIMAL
+          - NUMERIC
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - INTERVAL
+          - STRING
+          - MEDIUMTEXT
+          - TEXT
+          - CHAR
+          - LONG
+          - VARCHAR
+          - BOOLEAN
+          - BINARY
+          - VARBINARY
+          - ARRAY
+          - BLOB
+          - LONGBLOB
+          - MEDIUMBLOB
+          - MAP
+          - STRUCT
+          - UNION
+          - SET
+          - GEOGRAPHY
+          - ENUM
+          - JSON
+          - UUID
+          - VARIANT
+          - GEOMETRY
+          - BYTEA
+          - AGGREGATEFUNCTION
+          - ERROR
+          - FIXED
+          - RECORD
+          - 'NULL'
+          - SUPER
+          - HLLSKETCH
+          - PG_LSN
+          - PG_SNAPSHOT
+          - TSQUERY
+          - TXID_SNAPSHOT
+          - XML
+          - MACADDR
+          - TSVECTOR
+          - UNKNOWN
+          - CIDR
+          - INET
+          - CLOB
+          - ROWID
+          - LOWCARDINALITY
+          - YEAR
+          - POINT
+          - POLYGON
+          - TUPLE
+          - SPATIAL
+          - TABLE
+          - NTEXT
+          - IMAGE
+          - IPV4
+          - IPV6
+          - DATETIMERANGE
+          - HLL
+          - LARGEINT
+          - QUANTILE_STATE
+          - AGG_STATE
+          - BITMAP
+          - UINT
+          - BIT
+          - MONEY
+          - MEASURE HIDDEN
+          - MEASURE VISIBLE
+          - MEASURE
+          - KPI
+          - HEIRARCHY
+          - HIERARCHYID
+        dataLength:
+          type: integer
+          format: int32
+        precision:
+          type: integer
+          format: int32
+        scale:
+          type: integer
+          format: int32
+        dataTypeDisplay:
+          type: string
+        description:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        constraint:
+          type: string
+          enum:
+          - 'NULL'
+          - NOT_NULL
+          - UNIQUE
+          - PRIMARY_KEY
+        ordinalPosition:
+          type: integer
+          format: int32
+        jsonSchema:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Column'
+        profile:
+          $ref: '#/components/schemas/ColumnProfile'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetric'
+        extension:
+          type: object
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
+    RelationshipRef:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        fqnHash:
+          type: string
+        type:
+          type: string
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
     PipelineObservability:
       required:
       - pipeline
@@ -3394,251 +3606,49 @@ components:
         averageRunTime:
           type: number
           format: double
-    Votes:
+    Histogram:
       type: object
       properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
+        boundaries:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
-    SparkTableProfilerConfig:
-      type: object
-      properties:
-        partitioning:
-          $ref: '#/components/schemas/Partitioning'
-    NodeInformation:
-      type: object
-      properties:
-        entity:
-          type: object
-          additionalProperties:
             type: object
-        paging:
-          $ref: '#/components/schemas/LayerPaging'
-        nodeDepth:
-          minimum: 0
+        frequencies:
+          type: array
+          items:
+            type: object
+    TableProfile:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
           type: integer
-          format: int32
-    TableConstraint:
-      type: object
-      properties:
-        constraintType:
-          type: string
-          enum:
-          - UNIQUE
-          - PRIMARY_KEY
-          - FOREIGN_KEY
-          - SORT_KEY
-          - DIST_KEY
-          - CLUSTER_KEY
-        columns:
-          type: array
-          items:
-            type: string
-        referredColumns:
-          type: array
-          items:
-            type: string
-        relationshipType:
-          type: string
-          enum:
-          - ONE_TO_ONE
-          - ONE_TO_MANY
-          - MANY_TO_ONE
-          - MANY_TO_MANY
-    CustomMetricProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
+          format: int64
+        columnCount:
           type: number
           format: double
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    TableColumnList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    BulkOperationResult:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        successRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-        failedRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-    DataModel:
-      required:
-      - modelType
-      type: object
-      properties:
-        modelType:
-          type: string
-          enum:
-          - DBT
-          - DDL
-        resourceType:
-          type: string
-        dbtSourceProject:
-          type: string
-        description:
-          type: string
-        path:
-          type: string
-        rawSql:
-          type: string
-        sql:
-          type: string
-        upstream:
-          type: array
-          items:
-            type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/Column'
-        generatedAt:
+        rowCount:
+          type: number
+          format: double
+        sizeInByte:
+          type: number
+          format: double
+        createDateTime:
           type: string
           format: date-time
-    CardinalityDistribution:
-      type: object
-      properties:
-        categories:
+        customMetrics:
           type: array
           items:
-            type: string
-        counts:
-          type: array
-          items:
-            type: integer
-            format: int32
-        percentages:
-          type: array
-          items:
-            type: number
-            format: double
-        allValuesUnique:
-          type: boolean
+            $ref: '#/components/schemas/CustomMetricProfile'
+        profileSample:
+          type: number
+          format: double
+        profileSampleType:
+          type: string
+          enum:
+          - PERCENTAGE
+          - ROWS
   securitySchemes:
     BearerAuth:
       type: http

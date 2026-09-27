@@ -173,35 +173,6 @@ paths:
                 $ref: '#/components/schemas/ResultList'
 components:
   schemas:
-    CSVExportResponse:
-      type: object
-      properties:
-        jobId:
-          type: string
-        message:
-          type: string
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
     Paging:
       required:
       - total
@@ -227,6 +198,35 @@ components:
           type: string
         entity:
           type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
   securitySchemes:
     BearerAuth:
       type: http

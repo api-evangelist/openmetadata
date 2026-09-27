@@ -989,90 +989,323 @@ paths:
           description: Event Subscription with the name {fqn} is not found
 components:
   schemas:
-    CreateEventSubscription:
-      required:
-      - alertType
-      - name
+    JsonPatch:
+      type: object
+    FilterResourceDescriptor:
       type: object
       properties:
         name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
           type: string
-        className:
+        supportedFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+        supportedActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    NewCookie:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        version:
+          type: integer
+          format: int32
+        path:
+          type: string
+        domain:
+          type: string
+        comment:
+          type: string
+        maxAge:
+          type: integer
+          format: int32
+        expiry:
+          type: string
+          format: date-time
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+        sameSite:
+          type: string
+          enum:
+          - NONE
+          - LAX
+          - STRICT
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    EventsRecord:
+      type: object
+      properties:
+        totalEventsCount:
+          type: integer
+          format: int64
+        pendingEventsCount:
+          type: integer
+          format: int64
+        successfulEventsCount:
+          type: integer
+          format: int64
+        failedEventsCount:
+          type: integer
+          format: int64
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
           type: string
         displayName:
           type: string
         description:
           type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        enabled:
-          type: boolean
-        batchSize:
-          type: integer
-          format: int32
-        alertType:
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
           type: string
           enum:
-          - Notification
-          - Observability
-          - ActivityFeed
-          - GovernanceWorkflowChangeEvent
-          - Custom
-        trigger:
-          $ref: '#/components/schemas/TriggerConfig'
-        resources:
-          type: array
-          items:
-            type: string
-        destinations:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionDestination'
-        provider:
+          - Classification
+          - Glossary
+        labelType:
           type: string
           enum:
-          - system
-          - user
-          - automation
-        retries:
-          type: integer
-          format: int32
-        pollInterval:
-          type: integer
-          format: int32
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    Argument:
+      type: object
+      properties:
+        name:
+          type: string
         input:
-          $ref: '#/components/schemas/AlertFilteringInput'
-        notificationTemplate:
-          $ref: '#/components/schemas/EntityReference'
-        domains:
           type: array
           items:
             type: string
-        config:
-          type: object
-          additionalProperties:
-            type: object
-        extension:
-          type: object
-        tags:
+    EventSubscriptionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/TagLabel'
-        reviewers:
+            $ref: '#/components/schemas/EventSubscription'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
           type: array
           items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
     Response:
       type: object
       properties:
@@ -1182,283 +1415,15 @@ components:
             type: array
             items:
               type: object
-    EventsRecord:
+    LifeCycle:
       type: object
       properties:
-        totalEventsCount:
-          type: integer
-          format: int64
-        pendingEventsCount:
-          type: integer
-          format: int64
-        successfulEventsCount:
-          type: integer
-          format: int64
-        failedEventsCount:
-          type: integer
-          format: int64
-    MediaType:
-      type: object
-      properties:
-        type:
-          type: string
-        subtype:
-          type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        wildcardType:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    EventList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangeEvent'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Link:
-      type: object
-      properties:
-        type:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: string
-        uri:
-          type: string
-          format: uri
-        title:
-          type: string
-        uriBuilder:
-          $ref: '#/components/schemas/UriBuilder'
-        rel:
-          type: string
-        rels:
-          type: array
-          items:
-            type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    UriBuilder:
-      type: object
-    SubscriptionDestination:
-      required:
-      - category
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        category:
-          type: string
-          enum:
-          - Users
-          - Teams
-          - Admins
-          - Assignees
-          - Owners
-          - Mentions
-          - Followers
-          - External
-        type:
-          type: string
-          enum:
-          - Webhook
-          - Slack
-          - MsTeams
-          - GChat
-          - Email
-          - ActivityFeed
-          - GovernanceWorkflowChangeEvent
-        statusDetails:
-          type: object
-        timeout:
-          type: integer
-          format: int32
-        readTimeout:
-          type: integer
-          format: int32
-        enabled:
-          type: boolean
-        config:
-          type: object
-        notifyDownstream:
-          type: boolean
-        downstreamDepth:
-          minimum: 1
-          type: integer
-          format: int32
-    NewCookie:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        version:
-          type: integer
-          format: int32
-        path:
-          type: string
-        domain:
-          type: string
-        comment:
-          type: string
-        maxAge:
-          type: integer
-          format: int32
-        expiry:
-          type: string
-          format: date-time
-        secure:
-          type: boolean
-        httpOnly:
-          type: boolean
-        sameSite:
-          type: string
-          enum:
-          - NONE
-          - LAX
-          - STRICT
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    Argument:
-      type: object
-      properties:
-        name:
-          type: string
-        input:
-          type: array
-          items:
-            type: string
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
     SubscriptionStatus:
       type: object
       properties:
@@ -1487,6 +1452,100 @@ components:
         timestamp:
           type: integer
           format: int64
+    FilteringRules:
+      required:
+      - resources
+      type: object
+      properties:
+        resources:
+          type: array
+          items:
+            type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventFilterRule'
+    EventList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeEvent'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TriggerConfig:
+      required:
+      - triggerType
+      type: object
+      properties:
+        triggerType:
+          type: string
+          enum:
+          - RealTime
+          - Scheduled
+        scheduleInfo:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Monthly
+          - Custom
+        cronExpression:
+          type: string
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    StatusType:
+      type: object
+      properties:
+        family:
+          type: string
+          enum:
+          - INFORMATIONAL
+          - SUCCESSFUL
+          - REDIRECTION
+          - CLIENT_ERROR
+          - SERVER_ERROR
+          - OTHER
+        statusCode:
+          type: integer
+          format: int32
+        reasonPhrase:
+          type: string
+    EntityTag:
+      type: object
+      properties:
+        value:
+          type: string
+        weak:
+          type: boolean
     EventFilterRule:
       required:
       - condition
@@ -1534,42 +1593,6 @@ components:
           type: object
         newValue:
           type: object
-    EventSubscriptionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventSubscription'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    EventSubscriptionDestinationTestRequest:
-      type: object
-      properties:
-        destinations:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionDestination'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
     ResultListFilterResourceDescriptor:
       required:
       - data
@@ -1592,181 +1615,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    AlertFilteringInput:
+    Votes:
       type: object
       properties:
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArgumentsInput'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArgumentsInput'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    EventSubscriptionDiagnosticInfo:
-      type: object
-      properties:
-        latestOffset:
-          type: integer
-          format: int64
-        currentOffset:
-          type: integer
-          format: int64
-        startingOffset:
-          type: integer
-          format: int64
-        hasProcessedAllEvents:
-          type: boolean
-        successfulEventsCount:
-          type: integer
-          format: int64
-        failedEventsCount:
-          type: integer
-          format: int64
-        relevantUnprocessedEventsCount:
-          type: integer
-          format: int64
-        totalUnprocessedEventsCount:
-          type: integer
-          format: int64
-        relevantUnprocessedEventsList:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangeEvent'
-        totalUnprocessedEventsList:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangeEvent'
-    StatusType:
-      type: object
-      properties:
-        family:
-          type: string
-          enum:
-          - INFORMATIONAL
-          - SUCCESSFUL
-          - REDIRECTION
-          - CLIENT_ERROR
-          - SERVER_ERROR
-          - OTHER
-        statusCode:
+        upVotes:
           type: integer
           format: int32
-        reasonPhrase:
-          type: string
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
+        downVotes:
           type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    ChangeSummaryMap:
-      type: object
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    FilteringRules:
-      required:
-      - resources
-      type: object
-      properties:
-        resources:
+          format: int32
+        upVoters:
           type: array
           items:
-            type: string
-        rules:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
           type: array
           items:
-            $ref: '#/components/schemas/EventFilterRule'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventFilterRule'
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
+            $ref: '#/components/schemas/EntityReference'
+    EventSubscriptionDestinationTestRequest:
       type: object
       properties:
-        tagFQN:
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+    Style:
+      type: object
+      properties:
+        color:
           type: string
-        name:
+        iconURL:
           type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
     EventSubscription:
       required:
       - alertType
@@ -1911,81 +1792,259 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    Style:
+    TagLabelMetadata:
       type: object
       properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
           type: integer
-          format: int32
-        percentileRank:
+          format: int64
+    ChangeSummaryMap:
+      type: object
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    EventSubscriptionDiagnosticInfo:
+      type: object
+      properties:
+        latestOffset:
+          type: integer
+          format: int64
+        currentOffset:
+          type: integer
+          format: int64
+        startingOffset:
+          type: integer
+          format: int64
+        hasProcessedAllEvents:
+          type: boolean
+        successfulEventsCount:
+          type: integer
+          format: int64
+        failedEventsCount:
+          type: integer
+          format: int64
+        relevantUnprocessedEventsCount:
+          type: integer
+          format: int64
+        totalUnprocessedEventsCount:
+          type: integer
+          format: int64
+        relevantUnprocessedEventsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeEvent'
+        totalUnprocessedEventsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeEvent'
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
           type: number
           format: double
-    EntityHistory:
+    SubscriptionDestination:
       required:
-      - entityType
-      - versions
+      - category
+      - type
       type: object
       properties:
-        entityType:
+        id:
           type: string
-        versions:
+          format: uuid
+        category:
+          type: string
+          enum:
+          - Users
+          - Teams
+          - Admins
+          - Assignees
+          - Owners
+          - Mentions
+          - Followers
+          - External
+        type:
+          type: string
+          enum:
+          - Webhook
+          - Slack
+          - MsTeams
+          - GChat
+          - Email
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+        statusDetails:
+          type: object
+        timeout:
+          type: integer
+          format: int32
+        readTimeout:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        config:
+          type: object
+        notifyDownstream:
+          type: boolean
+        downstreamDepth:
+          minimum: 1
+          type: integer
+          format: int32
+    Link:
+      type: object
+      properties:
+        type:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: string
+        uri:
+          type: string
+          format: uri
+        title:
+          type: string
+        uriBuilder:
+          $ref: '#/components/schemas/UriBuilder'
+        rel:
+          type: string
+        rels:
           type: array
           items:
+            type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    CreateEventSubscription:
+      required:
+      - alertType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        className:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        enabled:
+          type: boolean
+        batchSize:
+          type: integer
+          format: int32
+        alertType:
+          type: string
+          enum:
+          - Notification
+          - Observability
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+          - Custom
+        trigger:
+          $ref: '#/components/schemas/TriggerConfig'
+        resources:
+          type: array
+          items:
+            type: string
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        retries:
+          type: integer
+          format: int32
+        pollInterval:
+          type: integer
+          format: int32
+        input:
+          $ref: '#/components/schemas/AlertFilteringInput'
+        notificationTemplate:
+          $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        config:
+          type: object
+          additionalProperties:
             type: object
-    JsonPatch:
-      type: object
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-        downVoters:
+        dataProducts:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
     ArgumentsInput:
       type: object
       properties:
@@ -2005,97 +2064,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Argument'
-    EntityReference:
-      required:
-      - id
-      - type
+    AlertFilteringInput:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    EntityTag:
-      type: object
-      properties:
-        value:
-          type: string
-        weak:
-          type: boolean
-    TriggerConfig:
-      required:
-      - triggerType
-      type: object
-      properties:
-        triggerType:
-          type: string
-          enum:
-          - RealTime
-          - Scheduled
-        scheduleInfo:
-          type: string
-          enum:
-          - Daily
-          - Weekly
-          - Monthly
-          - Custom
-        cronExpression:
-          type: string
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    FilterResourceDescriptor:
-      type: object
-      properties:
-        name:
-          type: string
-        supportedFilters:
+        filters:
           type: array
           items:
-            $ref: '#/components/schemas/EventFilterRule'
-        supportedActions:
+            $ref: '#/components/schemas/ArgumentsInput'
+        actions:
           type: array
           items:
-            $ref: '#/components/schemas/EventFilterRule'
-    TagLabelMetadata:
+            $ref: '#/components/schemas/ArgumentsInput'
+    AccessDetails:
+      required:
+      - timestamp
       type: object
       properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
+        timestamp:
           type: integer
           format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    UriBuilder:
+      type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
   securitySchemes:
     BearerAuth:
       type: http

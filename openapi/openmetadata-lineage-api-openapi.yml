@@ -876,63 +876,23 @@ paths:
                 $ref: '#/components/schemas/SearchResponse'
 components:
   schemas:
-    RelationshipRef:
+    SearchLineageResult:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        fqnHash:
-          type: string
-        type:
-          type: string
-    EntityLineage:
-      required:
-      - entity
-      type: object
-      properties:
-        entity:
-          $ref: '#/components/schemas/EntityReference'
         nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NodeInformation'
         upstreamEdges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Edge'
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EsLineageData'
         downstreamEdges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Edge'
-    EntitiesEdge:
-      required:
-      - fromEntity
-      - toEntity
-      type: object
-      properties:
-        fromEntity:
-          $ref: '#/components/schemas/EntityReference'
-        toEntity:
-          $ref: '#/components/schemas/EntityReference'
-        description:
-          type: string
-        lineageDetails:
-          $ref: '#/components/schemas/LineageDetails'
-    TempLineageTable:
-      required:
-      - fromEntity
-      - toEntity
-      type: object
-      properties:
-        fromEntity:
-          type: string
-        toEntity:
-          type: string
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EsLineageData'
+        paginationInfo:
+          $ref: '#/components/schemas/LineagePaginationInfo'
     ColumnLineage:
       type: object
       properties:
@@ -946,145 +906,8 @@ components:
           type: string
         function:
           type: string
-    LineageDetails:
-      type: object
-      properties:
-        sqlQuery:
-          type: string
-        columnsLineage:
-          type: array
-          items:
-            $ref: '#/components/schemas/ColumnLineage'
-        pipeline:
-          $ref: '#/components/schemas/EntityReference'
-        description:
-          type: string
-        source:
-          type: string
-          enum:
-          - Manual
-          - ViewLineage
-          - QueryLineage
-          - PipelineLineage
-          - DashboardLineage
-          - DbtLineage
-          - SparkLineage
-          - OpenLineage
-          - ExternalTableLineage
-          - CrossDatabaseLineage
-          - ChildAssets
-        createdAt:
-          type: integer
-          format: int64
-        createdBy:
-          type: string
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-        assetEdges:
-          type: integer
-          format: int32
-        tempLineageTables:
-          type: array
-          items:
-            $ref: '#/components/schemas/TempLineageTable'
-    SearchResponse:
-      type: object
-    CSVExportMessage:
-      type: object
-      properties:
-        jobId:
-          type: string
-        status:
-          type: string
-        data:
-          type: string
-        error:
-          type: string
-        progress:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-        message:
-          type: string
     JsonPatch:
       type: object
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    DepthInfo:
-      required:
-      - depth
-      - entityCount
-      type: object
-      properties:
-        depth:
-          minimum: 0
-          type: integer
-          format: int32
-        entityCount:
-          minimum: 0
-          type: integer
-          format: int32
-    Edge:
-      required:
-      - fromEntity
-      - toEntity
-      type: object
-      properties:
-        fromEntity:
-          type: string
-          format: uuid
-        toEntity:
-          type: string
-          format: uuid
-        description:
-          type: string
-        lineageDetails:
-          $ref: '#/components/schemas/LineageDetails'
-    LayerPaging:
-      type: object
-      properties:
-        entityDownstreamCount:
-          type: integer
-          format: int32
-        entityUpstreamCount:
-          type: integer
-          format: int32
-    AddLineage:
-      required:
-      - edge
-      type: object
-      properties:
-        edge:
-          $ref: '#/components/schemas/EntitiesEdge'
     EsLineageData:
       type: object
       properties:
@@ -1129,19 +952,81 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TempLineageTable'
-    NodeInformation:
+    EntityLineage:
+      required:
+      - entity
       type: object
       properties:
         entity:
-          type: object
-          additionalProperties:
-            type: object
-        paging:
-          $ref: '#/components/schemas/LayerPaging'
-        nodeDepth:
+          $ref: '#/components/schemas/EntityReference'
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        upstreamEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Edge'
+        downstreamEdges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Edge'
+    EntitiesEdge:
+      required:
+      - fromEntity
+      - toEntity
+      type: object
+      properties:
+        fromEntity:
+          $ref: '#/components/schemas/EntityReference'
+        toEntity:
+          $ref: '#/components/schemas/EntityReference'
+        description:
+          type: string
+        lineageDetails:
+          $ref: '#/components/schemas/LineageDetails'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    DepthInfo:
+      required:
+      - depth
+      - entityCount
+      type: object
+      properties:
+        depth:
           minimum: 0
           type: integer
           format: int32
+        entityCount:
+          minimum: 0
+          type: integer
+          format: int32
+    SearchResponse:
+      type: object
     LineagePaginationInfo:
       required:
       - downstreamDepthInfo
@@ -1176,23 +1061,138 @@ components:
           minimum: 0
           type: integer
           format: int32
-    SearchLineageResult:
+    TempLineageTable:
+      required:
+      - fromEntity
+      - toEntity
       type: object
       properties:
-        nodes:
+        fromEntity:
+          type: string
+        toEntity:
+          type: string
+    CSVExportMessage:
+      type: object
+      properties:
+        jobId:
+          type: string
+        status:
+          type: string
+        data:
+          type: string
+        error:
+          type: string
+        progress:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        message:
+          type: string
+    AddLineage:
+      required:
+      - edge
+      type: object
+      properties:
+        edge:
+          $ref: '#/components/schemas/EntitiesEdge'
+    Edge:
+      required:
+      - fromEntity
+      - toEntity
+      type: object
+      properties:
+        fromEntity:
+          type: string
+          format: uuid
+        toEntity:
+          type: string
+          format: uuid
+        description:
+          type: string
+        lineageDetails:
+          $ref: '#/components/schemas/LineageDetails'
+    LineageDetails:
+      type: object
+      properties:
+        sqlQuery:
+          type: string
+        columnsLineage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnLineage'
+        pipeline:
+          $ref: '#/components/schemas/EntityReference'
+        description:
+          type: string
+        source:
+          type: string
+          enum:
+          - Manual
+          - ViewLineage
+          - QueryLineage
+          - PipelineLineage
+          - DashboardLineage
+          - DbtLineage
+          - SparkLineage
+          - OpenLineage
+          - ExternalTableLineage
+          - CrossDatabaseLineage
+          - ChildAssets
+        createdAt:
+          type: integer
+          format: int64
+        createdBy:
+          type: string
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        assetEdges:
+          type: integer
+          format: int32
+        tempLineageTables:
+          type: array
+          items:
+            $ref: '#/components/schemas/TempLineageTable'
+    RelationshipRef:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        fqnHash:
+          type: string
+        type:
+          type: string
+    NodeInformation:
+      type: object
+      properties:
+        entity:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/NodeInformation'
-        upstreamEdges:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EsLineageData'
-        downstreamEdges:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/EsLineageData'
-        paginationInfo:
-          $ref: '#/components/schemas/LineagePaginationInfo'
+            type: object
+        paging:
+          $ref: '#/components/schemas/LayerPaging'
+        nodeDepth:
+          minimum: 0
+          type: integer
+          format: int32
+    LayerPaging:
+      type: object
+      properties:
+        entityDownstreamCount:
+          type: integer
+          format: int32
+        entityUpstreamCount:
+          type: integer
+          format: int32
   securitySchemes:
     BearerAuth:
       type: http

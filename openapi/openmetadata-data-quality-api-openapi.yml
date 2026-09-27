@@ -102,15 +102,23 @@ paths:
                 $ref: '#/components/schemas/TestCaseDimensionResultList'
 components:
   schemas:
-    TestResultValue:
+    DimensionValue:
+      required:
+      - name
+      - value
       type: object
       properties:
         name:
           type: string
         value:
           type: string
-        predictedValue:
+    EntityError:
+      type: object
+      properties:
+        message:
           type: string
+        entity:
+          type: object
     TestCaseDimensionResult:
       required:
       - dimensionKey
@@ -166,13 +174,15 @@ components:
         impactScore:
           type: number
           format: double
-    EntityError:
+    TestResultValue:
       type: object
       properties:
-        message:
+        name:
           type: string
-        entity:
-          type: object
+        value:
+          type: string
+        predictedValue:
+          type: string
     EntityReference:
       required:
       - id
@@ -199,16 +209,6 @@ components:
         href:
           type: string
           format: uri
-    DimensionValue:
-      required:
-      - name
-      - value
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
     Paging:
       required:
       - total

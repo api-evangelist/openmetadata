@@ -649,88 +649,212 @@ paths:
           description: model for instance {id} is not found
 components:
   schemas:
-    RestoreEntity:
+    JsonPatch:
+      type: object
+    EntityReference:
       required:
       - id
+      - type
       type: object
       properties:
         id:
           type: string
           format: uuid
-    PatternMatch:
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    SearchIndexSettings:
+      type: object
+    UsageStats:
       required:
-      - name
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
       - score
       type: object
       properties:
-        name:
+        recognizerId:
           type: string
-        regex:
+          format: uuid
+        recognizerName:
           type: string
         score:
           type: number
           format: double
-    SearchIndexSampleData:
-      type: object
-      properties:
-        messages:
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
           type: array
           items:
-            type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    AccessDetails:
+            $ref: '#/components/schemas/PatternMatch'
+    UsageDetails:
       required:
-      - timestamp
+      - dailyStats
+      - date
       type: object
       properties:
-        timestamp:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
           type: integer
           format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    ResultList:
-      required:
-      - data
+        expiryDate:
+          type: integer
+          format: int64
+    BulkOperationResult:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
           type: integer
           format: int32
-        warnings:
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        successRequest:
           type: array
           items:
-            $ref: '#/components/schemas/EntityError'
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    SearchIndexField:
+      required:
+      - dataType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        dataType:
+          type: string
+          enum:
+          - NUMBER
+          - TEXT
+          - BINARY
+          - TIMESTAMP
+          - TIMESTAMPZ
+          - TIME
+          - DATE
+          - DATETIME
+          - KEYWORD
+          - ARRAY
+          - OBJECT
+          - FLATTENED
+          - NESTED
+          - JOIN
+          - RANGE
+          - IP
+          - VERSION
+          - MURMUR3
+          - AGGREGATE_METRIC_DOUBLE
+          - HISTOGRAM
+          - ANNOTATED-TEXT
+          - COMPLETION
+          - SEARCH_AS_YOU_TYPE
+          - DENSE_VECTOR
+          - RANK_FEATURE
+          - RANK_FEATURES
+          - GEO_POINT
+          - GEO_SHAPE
+          - POINT
+          - SHAPE
+          - PERCOLATOR
+          - BOOLEAN
+          - CONSTANT_KEYWORD
+          - WILDCARD
+          - LONG
+          - INTEGER
+          - SHORT
+          - BYTE
+          - DOUBLE
+          - FLOAT
+          - HALF_FLOAT
+          - SCALED_FLOAT
+          - UNSIGNED_LONG
+          - UNKNOWN
+        dataTypeDisplay:
+          type: string
+        description:
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchIndexField'
     ChangeEvent:
       required:
       - entityId
@@ -798,15 +922,54 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    FieldChange:
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
       type: object
       properties:
+        tagFQN:
+          type: string
         name:
           type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
     VoteRequest:
       type: object
       properties:
@@ -946,112 +1109,24 @@ components:
             $ref: '#/components/schemas/EntityReference'
         usageSummary:
           $ref: '#/components/schemas/UsageDetails'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    TagLabelRecognizerMetadata:
+    Paging:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - total
       type: object
       properties:
-        recognizerId:
+        before:
           type: string
-          format: uuid
-        recognizerName:
+        after:
           type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    BulkResponse:
-      type: object
-      properties:
-        request:
-          type: object
-        message:
-          type: string
-        status:
+        offset:
           type: integer
           format: int32
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
+        limit:
           type: integer
-          format: int64
-        expiryDate:
+          format: int32
+        total:
           type: integer
-          format: int64
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    ChangeSummaryMap:
-      type: object
+          format: int32
     SearchIndexList:
       required:
       - data
@@ -1074,46 +1149,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    EntityError:
+    LifeCycle:
       type: object
       properties:
-        message:
-          type: string
-        entity:
-          type: object
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
     CreateSearchIndex:
       required:
       - fields
@@ -1173,19 +1217,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-    JsonPatch:
-      type: object
-    SearchIndexSettings:
-      type: object
-    LifeCycle:
+    RestoreEntity:
+      required:
+      - id
       type: object
       properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
+        id:
+          type: string
+          format: uuid
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
     Votes:
       type: object
       properties:
@@ -1203,175 +1263,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
+    Style:
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        color:
           type: string
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
+        iconURL:
           type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    BulkOperationResult:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        successRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-        failedRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-    SearchIndexField:
-      required:
-      - dataType
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        dataType:
-          type: string
-          enum:
-          - NUMBER
-          - TEXT
-          - BINARY
-          - TIMESTAMP
-          - TIMESTAMPZ
-          - TIME
-          - DATE
-          - DATETIME
-          - KEYWORD
-          - ARRAY
-          - OBJECT
-          - FLATTENED
-          - NESTED
-          - JOIN
-          - RANGE
-          - IP
-          - VERSION
-          - MURMUR3
-          - AGGREGATE_METRIC_DOUBLE
-          - HISTOGRAM
-          - ANNOTATED-TEXT
-          - COMPLETION
-          - SEARCH_AS_YOU_TYPE
-          - DENSE_VECTOR
-          - RANK_FEATURE
-          - RANK_FEATURES
-          - GEO_POINT
-          - GEO_SHAPE
-          - POINT
-          - SHAPE
-          - PERCOLATOR
-          - BOOLEAN
-          - CONSTANT_KEYWORD
-          - WILDCARD
-          - LONG
-          - INTEGER
-          - SHORT
-          - BYTE
-          - DOUBLE
-          - FLOAT
-          - HALF_FLOAT
-          - SCALED_FLOAT
-          - UNSIGNED_LONG
-          - UNKNOWN
-        dataTypeDisplay:
-          type: string
-        description:
-          type: string
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchIndexField'
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
     TagLabelMetadata:
       type: object
       properties:
@@ -1380,6 +1280,106 @@ components:
         expiryDate:
           type: integer
           format: int64
+    ChangeSummaryMap:
+      type: object
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    BulkResponse:
+      type: object
+      properties:
+        request:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    SearchIndexSampleData:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: string
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
   securitySchemes:
     BearerAuth:
       type: http

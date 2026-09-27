@@ -154,106 +154,15 @@ paths:
           description: Successfully deleted MCP Execution Data
 components:
   schemas:
-    McpExecutionMetrics:
+    Arguments__1:
+      type: object
+    EntityError:
       type: object
       properties:
-        totalToolCalls:
-          type: integer
-          format: int32
-        successfulToolCalls:
-          type: integer
-          format: int32
-        totalResourceAccesses:
-          type: integer
-          format: int32
-        totalPromptUses:
-          type: integer
-          format: int32
-        piiDataAccessed:
-          type: boolean
-        highSensitivityDataAccessed:
-          type: boolean
-        highRiskOperations:
-          type: integer
-          format: int32
-        complianceViolations:
-          type: integer
-          format: int32
-    McpExecutionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/McpExecution'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    McpToolCallRecord:
-      type: object
-      properties:
-        toolName:
+        message:
           type: string
-        parameters:
-          $ref: '#/components/schemas/Parameters__2'
-        result:
-          type: string
-        success:
-          type: boolean
-        latencyMs:
-          type: number
-          format: double
-        timestamp:
-          type: integer
-          format: int64
-        errorMessage:
-          type: string
-        dataAccessed:
-          type: array
-          items:
-            $ref: '#/components/schemas/McpDataAccessRecord'
-    McpDataAccessRecord:
-      type: object
-      properties:
-        dataSource:
-          $ref: '#/components/schemas/EntityReference'
-        accessType:
-          type: string
-          enum:
-          - Read
-          - Write
-          - Delete
-        recordCount:
-          type: integer
-          format: int32
-        columns:
-          type: array
-          items:
-            type: string
-        piiAccessed:
-          type: boolean
-        sensitivityLevel:
-          type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
-        timestamp:
-          type: integer
-          format: int64
+        entity:
+          type: object
     McpExecution:
       required:
       - server
@@ -334,49 +243,6 @@ components:
           $ref: '#/components/schemas/Metadata__1'
         deleted:
           type: boolean
-    Metadata__1:
-      type: object
-    McpComplianceCheckRecord:
-      type: object
-      properties:
-        checkName:
-          type: string
-        passed:
-          type: boolean
-        details:
-          type: string
-        severity:
-          type: string
-          enum:
-          - Info
-          - Warning
-          - Error
-          - Critical
-        timestamp:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    Parameters__2:
-      type: object
-    McpPromptUseRecord:
-      type: object
-      properties:
-        promptName:
-          type: string
-        arguments:
-          $ref: '#/components/schemas/Arguments__1'
-        timestamp:
-          type: integer
-          format: int64
-        tokensGenerated:
-          type: integer
-          format: int32
     EntityReference:
       required:
       - id
@@ -403,6 +269,26 @@ components:
         href:
           type: string
           format: uri
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Metadata__1:
+      type: object
     McpResourceAccessRecord:
       type: object
       properties:
@@ -424,26 +310,140 @@ components:
         bytesTransferred:
           type: integer
           format: int32
-    Paging:
+    McpExecutionList:
       required:
-      - total
+      - data
       type: object
       properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpExecution'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
           type: integer
           format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    Arguments__1:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    McpDataAccessRecord:
       type: object
+      properties:
+        dataSource:
+          $ref: '#/components/schemas/EntityReference'
+        accessType:
+          type: string
+          enum:
+          - Read
+          - Write
+          - Delete
+        recordCount:
+          type: integer
+          format: int32
+        columns:
+          type: array
+          items:
+            type: string
+        piiAccessed:
+          type: boolean
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+        timestamp:
+          type: integer
+          format: int64
+    Parameters__2:
+      type: object
+    McpComplianceCheckRecord:
+      type: object
+      properties:
+        checkName:
+          type: string
+        passed:
+          type: boolean
+        details:
+          type: string
+        severity:
+          type: string
+          enum:
+          - Info
+          - Warning
+          - Error
+          - Critical
+        timestamp:
+          type: integer
+          format: int64
+    McpExecutionMetrics:
+      type: object
+      properties:
+        totalToolCalls:
+          type: integer
+          format: int32
+        successfulToolCalls:
+          type: integer
+          format: int32
+        totalResourceAccesses:
+          type: integer
+          format: int32
+        totalPromptUses:
+          type: integer
+          format: int32
+        piiDataAccessed:
+          type: boolean
+        highSensitivityDataAccessed:
+          type: boolean
+        highRiskOperations:
+          type: integer
+          format: int32
+        complianceViolations:
+          type: integer
+          format: int32
+    McpToolCallRecord:
+      type: object
+      properties:
+        toolName:
+          type: string
+        parameters:
+          $ref: '#/components/schemas/Parameters__2'
+        result:
+          type: string
+        success:
+          type: boolean
+        latencyMs:
+          type: number
+          format: double
+        timestamp:
+          type: integer
+          format: int64
+        errorMessage:
+          type: string
+        dataAccessed:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpDataAccessRecord'
+    McpPromptUseRecord:
+      type: object
+      properties:
+        promptName:
+          type: string
+        arguments:
+          $ref: '#/components/schemas/Arguments__1'
+        timestamp:
+          type: integer
+          format: int64
+        tokensGenerated:
+          type: integer
+          format: int32
   securitySchemes:
     BearerAuth:
       type: http
