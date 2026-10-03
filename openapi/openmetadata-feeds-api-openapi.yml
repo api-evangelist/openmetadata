@@ -419,285 +419,6 @@ paths:
           description: Bad request
 components:
   schemas:
-    ThreadCountList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ThreadCount'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    JsonPatch:
-      type: object
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    CreateTaskDetails:
-      required:
-      - assignees
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - RequestDescription
-          - UpdateDescription
-          - RequestTag
-          - UpdateTag
-          - RequestApproval
-          - RequestTestCaseFailureResolution
-          - RecognizerFeedbackApproval
-          - Generic
-        assignees:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        oldValue:
-          type: string
-        suggestion:
-          type: string
-    FeedInfo:
-      type: object
-      properties:
-        headerMessage:
-          type: string
-        fieldName:
-          type: string
-        entitySpecificInfo:
-          type: object
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    ResolveTask:
-      required:
-      - newValue
-      type: object
-      properties:
-        newValue:
-          type: string
-        testCaseFailureReason:
-          type: string
-          enum:
-          - FalsePositive
-          - MissingData
-          - Duplicates
-          - OutOfBounds
-          - Other
-        testCaseFQN:
-          maxLength: 3072
-          minLength: 1
-          type: string
-    Resolution:
-      type: object
-      properties:
-        action:
-          type: string
-          enum:
-          - ADDED_TO_EXCEPTION_LIST
-          - PATTERN_ADJUSTED
-          - THRESHOLD_INCREASED
-          - RECOGNIZER_DISABLED_FOR_ENTITY
-          - NO_ACTION_NEEDED
-        resolvedBy:
-          $ref: '#/components/schemas/EntityReference'
-        resolvedAt:
-          type: integer
-          format: int64
-        resolutionNotes:
-          type: string
-    RecognizerFeedback:
-      required:
-      - entityLink
-      - feedbackType
-      - tagFQN
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        entityLink:
-          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
-          type: string
-        tagFQN:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        feedbackType:
-          type: string
-          enum:
-          - FALSE_POSITIVE
-          - INCORRECT_CLASSIFICATION
-          - OVERLY_BROAD
-          - CONTEXT_SPECIFIC
-        userReason:
-          type: string
-          enum:
-          - NOT_SENSITIVE_DATA
-          - WRONG_DATA_TYPE
-          - INTERNAL_IDENTIFIER
-          - PUBLIC_INFORMATION
-          - TEST_DATA
-          - ENCRYPTED_DATA
-          - OTHER
-        userComments:
-          type: string
-        suggestedTag:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        sampleValues:
-          type: array
-          items:
-            type: string
-        recognizerInfo:
-          $ref: '#/components/schemas/RecognizerInfo'
-        createdBy:
-          $ref: '#/components/schemas/EntityReference'
-        createdAt:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum:
-          - PENDING
-          - REVIEWED
-          - APPLIED
-          - REJECTED
-        resolution:
-          $ref: '#/components/schemas/Resolution'
-    PostList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Post'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    Post:
-      required:
-      - from
-      - id
-      - message
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        message:
-          type: string
-        postTs:
-          type: integer
-          format: int64
-        from:
-          type: string
-        reactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reaction'
-    RecognizerInfo:
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        matchPattern:
-          type: string
-        confidenceScore:
-          type: number
-          format: double
     ThreadList:
       required:
       - data
@@ -720,59 +441,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    ChatbotDetails:
-      type: object
-      properties:
-        query:
-          type: string
-    TaskDetails:
-      required:
-      - assignees
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        type:
-          type: string
-          enum:
-          - RequestDescription
-          - UpdateDescription
-          - RequestTag
-          - UpdateTag
-          - RequestApproval
-          - RequestTestCaseFailureResolution
-          - RecognizerFeedbackApproval
-          - Generic
-        assignees:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        status:
-          type: string
-          enum:
-          - Open
-          - Closed
-        closedBy:
-          type: string
-        closedAt:
-          type: integer
-          format: int64
-        oldValue:
-          type: string
-        suggestion:
-          type: string
-        newValue:
-          type: string
-        testCaseResolutionStatusId:
-          type: string
-          format: uuid
-        feedback:
-          $ref: '#/components/schemas/RecognizerFeedback'
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
     Thread:
       required:
       - about
@@ -872,14 +540,14 @@ components:
           $ref: '#/components/schemas/AnnouncementDetails'
         chatbot:
           $ref: '#/components/schemas/ChatbotDetails'
-    FieldChange:
+    FeedInfo:
       type: object
       properties:
-        name:
+        headerMessage:
           type: string
-        oldValue:
-          type: object
-        newValue:
+        fieldName:
+          type: string
+        entitySpecificInfo:
           type: object
     Reaction:
       required:
@@ -900,6 +568,387 @@ components:
           - eyes
         user:
           $ref: '#/components/schemas/EntityReference'
+    CreateThread:
+      required:
+      - about
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+        addressedTo:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        about:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        type:
+          type: string
+          enum:
+          - Conversation
+          - Task
+          - Announcement
+          - Chatbot
+        taskDetails:
+          $ref: '#/components/schemas/CreateTaskDetails'
+        announcementDetails:
+          $ref: '#/components/schemas/AnnouncementDetails'
+        chatbotDetails:
+          $ref: '#/components/schemas/ChatbotDetails'
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+    ChatbotDetails:
+      type: object
+      properties:
+        query:
+          type: string
+    PostList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ResolveTask:
+      required:
+      - newValue
+      type: object
+      properties:
+        newValue:
+          type: string
+        testCaseFailureReason:
+          type: string
+          enum:
+          - FalsePositive
+          - MissingData
+          - Duplicates
+          - OutOfBounds
+          - Other
+        testCaseFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+    Resolution:
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+          - ADDED_TO_EXCEPTION_LIST
+          - PATTERN_ADJUSTED
+          - THRESHOLD_INCREASED
+          - RECOGNIZER_DISABLED_FOR_ENTITY
+          - NO_ACTION_NEEDED
+        resolvedBy:
+          $ref: '#/components/schemas/EntityReference'
+        resolvedAt:
+          type: integer
+          format: int64
+        resolutionNotes:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    CreateTaskDetails:
+      required:
+      - assignees
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - RequestDescription
+          - UpdateDescription
+          - RequestTag
+          - UpdateTag
+          - RequestApproval
+          - RequestTestCaseFailureResolution
+          - RecognizerFeedbackApproval
+          - Generic
+        assignees:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        oldValue:
+          type: string
+        suggestion:
+          type: string
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    RecognizerFeedback:
+      required:
+      - entityLink
+      - feedbackType
+      - tagFQN
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityLink:
+          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
+          type: string
+        tagFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        feedbackType:
+          type: string
+          enum:
+          - FALSE_POSITIVE
+          - INCORRECT_CLASSIFICATION
+          - OVERLY_BROAD
+          - CONTEXT_SPECIFIC
+        userReason:
+          type: string
+          enum:
+          - NOT_SENSITIVE_DATA
+          - WRONG_DATA_TYPE
+          - INTERNAL_IDENTIFIER
+          - PUBLIC_INFORMATION
+          - TEST_DATA
+          - ENCRYPTED_DATA
+          - OTHER
+        userComments:
+          type: string
+        suggestedTag:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        sampleValues:
+          type: array
+          items:
+            type: string
+        recognizerInfo:
+          $ref: '#/components/schemas/RecognizerInfo'
+        createdBy:
+          $ref: '#/components/schemas/EntityReference'
+        createdAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - PENDING
+          - REVIEWED
+          - APPLIED
+          - REJECTED
+        resolution:
+          $ref: '#/components/schemas/Resolution'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    JsonPatch:
+      type: object
+    Post:
+      required:
+      - from
+      - id
+      - message
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        postTs:
+          type: integer
+          format: int64
+        from:
+          type: string
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reaction'
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    AnnouncementDetails:
+      required:
+      - endTime
+      - startTime
+      type: object
+      properties:
+        description:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+    RecognizerInfo:
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        matchPattern:
+          type: string
+        confidenceScore:
+          type: number
+          format: double
+    CreatePost:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+    ChangeSummaryMap:
+      type: object
+    CloseTask:
+      required:
+      - comment
+      type: object
+      properties:
+        comment:
+          type: string
+        testCaseFQN:
+          maxLength: 3072
+          minLength: 1
+          type: string
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ThreadCountList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreadCount'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     ThreadCount:
       type: object
       properties:
@@ -938,112 +987,63 @@ components:
         entityLink:
           pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
           type: string
-    AnnouncementDetails:
-      required:
-      - endTime
-      - startTime
-      type: object
-      properties:
-        description:
-          type: string
-        startTime:
-          type: integer
-          format: int64
-        endTime:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ChangeSummaryMap:
-      type: object
-    CreateThread:
-      required:
-      - about
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-        addressedTo:
-          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
-          type: string
-        about:
-          pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
-          type: string
-        type:
-          type: string
-          enum:
-          - Conversation
-          - Task
-          - Announcement
-          - Chatbot
-        taskDetails:
-          $ref: '#/components/schemas/CreateTaskDetails'
-        announcementDetails:
-          $ref: '#/components/schemas/AnnouncementDetails'
-        chatbotDetails:
-          $ref: '#/components/schemas/ChatbotDetails'
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-    CloseTask:
-      required:
-      - comment
-      type: object
-      properties:
-        comment:
-          type: string
-        testCaseFQN:
-          maxLength: 3072
-          minLength: 1
-          type: string
-    PatternMatch:
-      required:
-      - name
-      - score
+    FieldChange:
       type: object
       properties:
         name:
           type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    CreatePost:
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    TaskDetails:
       required:
-      - message
+      - assignees
+      - id
+      - type
       type: object
       properties:
-        message:
+        id:
+          type: integer
+          format: int32
+        type:
           type: string
+          enum:
+          - RequestDescription
+          - UpdateDescription
+          - RequestTag
+          - UpdateTag
+          - RequestApproval
+          - RequestTestCaseFailureResolution
+          - RecognizerFeedbackApproval
+          - Generic
+        assignees:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        status:
+          type: string
+          enum:
+          - Open
+          - Closed
+        closedBy:
+          type: string
+        closedAt:
+          type: integer
+          format: int64
+        oldValue:
+          type: string
+        suggestion:
+          type: string
+        newValue:
+          type: string
+        testCaseResolutionStatusId:
+          type: string
+          format: uuid
+        feedback:
+          $ref: '#/components/schemas/RecognizerFeedback'
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
   securitySchemes:
     BearerAuth:
       type: http

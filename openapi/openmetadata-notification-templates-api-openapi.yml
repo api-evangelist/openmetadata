@@ -622,85 +622,150 @@ paths:
           description: Bad request
 components:
   schemas:
-    JsonPatch:
-      type: object
-    EntityReference:
+    NotificationTemplateSendRequest:
       required:
-      - id
+      - destinations
+      - renderRequest
+      type: object
+      properties:
+        renderRequest:
+          $ref: '#/components/schemas/NotificationTemplateRenderRequest'
+        destinations:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+    NotificationTemplateList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationTemplate'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    SubscriptionDestination:
+      required:
+      - category
       - type
       type: object
       properties:
         id:
           type: string
           format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
+        category:
           type: string
           enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    AssetCertification:
+          - Users
+          - Teams
+          - Admins
+          - Assignees
+          - Owners
+          - Mentions
+          - Followers
+          - External
+        type:
+          type: string
+          enum:
+          - Webhook
+          - Slack
+          - MsTeams
+          - GChat
+          - Email
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+        statusDetails:
+          type: object
+        timeout:
+          type: integer
+          format: int32
+        readTimeout:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        config:
+          type: object
+        notifyDownstream:
+          type: boolean
+        downstreamDepth:
+          minimum: 1
+          type: integer
+          format: int32
+    NotificationTemplateValidationRequest:
       required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
+      - templateBody
+      - templateSubject
       type: object
       properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
+        templateBody:
+          maxLength: 65536
+          minLength: 1
+          type: string
+        templateSubject:
+          maxLength: 256
+          minLength: 1
+          type: string
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
           type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
     UsageDetails:
       required:
       - dailyStats
@@ -715,65 +780,18 @@ components:
           $ref: '#/components/schemas/UsageStats'
         date:
           type: string
-    NotificationTemplateValidationResponse:
+    UsageStats:
       required:
-      - isValid
+      - count
       type: object
       properties:
-        isValid:
-          type: boolean
-        subjectError:
-          type: string
-        bodyError:
-          type: string
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
     NotificationTemplate:
       required:
       - id
@@ -909,15 +927,104 @@ components:
         total:
           type: integer
           format: int32
-    LifeCycle:
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
       type: object
       properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    NotificationTemplateRenderResponse:
+      required:
+      - validation
+      type: object
+      properties:
+        validation:
+          $ref: '#/components/schemas/NotificationTemplateValidationResponse'
+        render:
+          $ref: '#/components/schemas/TemplateRenderResult'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
     NotificationTemplateRenderRequest:
       required:
       - resource
@@ -961,97 +1068,105 @@ components:
           - suggestionDeleted
           - userLogin
           - userLogout
-    RestoreEntity:
+    NotificationTemplateValidationResponse:
+      required:
+      - isValid
+      type: object
+      properties:
+        isValid:
+          type: boolean
+        subjectError:
+          type: string
+        bodyError:
+          type: string
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    EntityReference:
       required:
       - id
+      - type
       type: object
       properties:
         id:
           type: string
           format: uuid
-    NotificationTemplateSendRequest:
-      required:
-      - destinations
-      - renderRequest
-      type: object
-      properties:
-        renderRequest:
-          $ref: '#/components/schemas/NotificationTemplateRenderRequest'
-        destinations:
-          maxItems: 2147483647
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionDestination'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
+        type:
           type: string
-        versions:
-          type: array
-          items:
-            type: object
-    NotificationTemplateRenderResponse:
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    AssetCertification:
       required:
-      - validation
+      - appliedDate
+      - expiryDate
+      - tagLabel
       type: object
       properties:
-        validation:
-          $ref: '#/components/schemas/NotificationTemplateValidationResponse'
-        render:
-          $ref: '#/components/schemas/TemplateRenderResult'
-    FieldChange:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    HandlebarsHelperMetadata:
+      required:
+      - description
+      - name
+      - usages
       type: object
       properties:
         name:
           type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    NotificationTemplateList:
-      required:
-      - data
+        description:
+          type: string
+        cursorOffset:
+          type: integer
+          format: int32
+        usages:
+          type: array
+          items:
+            $ref: '#/components/schemas/HandlebarsHelperUsage'
+    JsonPatch:
+      type: object
+    EntityError:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/NotificationTemplate'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
+        message:
+          type: string
+        entity:
+          type: object
     Style:
       type: object
       properties:
@@ -1119,23 +1234,26 @@ components:
           type: string
         example:
           type: string
-    TagLabelMetadata:
+    RestoreEntity:
+      required:
+      - id
       type: object
       properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    ChangeSummaryMap:
-      type: object
-    EntityError:
-      type: object
-      properties:
-        message:
+        id:
           type: string
-        entity:
-          type: object
+          format: uuid
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
     TemplateRenderResult:
       required:
       - body
@@ -1145,6 +1263,20 @@ components:
         subject:
           type: string
         body:
+          type: string
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
           type: string
     PatternMatch:
       required:
@@ -1159,147 +1291,15 @@ components:
         score:
           type: number
           format: double
-    SubscriptionDestination:
-      required:
-      - category
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        category:
-          type: string
-          enum:
-          - Users
-          - Teams
-          - Admins
-          - Assignees
-          - Owners
-          - Mentions
-          - Followers
-          - External
-        type:
-          type: string
-          enum:
-          - Webhook
-          - Slack
-          - MsTeams
-          - GChat
-          - Email
-          - ActivityFeed
-          - GovernanceWorkflowChangeEvent
-        statusDetails:
-          type: object
-        timeout:
-          type: integer
-          format: int32
-        readTimeout:
-          type: integer
-          format: int32
-        enabled:
-          type: boolean
-        config:
-          type: object
-        notifyDownstream:
-          type: boolean
-        downstreamDepth:
-          minimum: 1
-          type: integer
-          format: int32
-    NotificationTemplateValidationRequest:
-      required:
-      - templateBody
-      - templateSubject
-      type: object
-      properties:
-        templateBody:
-          maxLength: 65536
-          minLength: 1
-          type: string
-        templateSubject:
-          maxLength: 256
-          minLength: 1
-          type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    HandlebarsHelperMetadata:
-      required:
-      - description
-      - name
-      - usages
+    FieldChange:
       type: object
       properties:
         name:
           type: string
-        description:
-          type: string
-        cursorOffset:
-          type: integer
-          format: int32
-        usages:
-          type: array
-          items:
-            $ref: '#/components/schemas/HandlebarsHelperUsage'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
   securitySchemes:
     BearerAuth:
       type: http

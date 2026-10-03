@@ -490,33 +490,200 @@ paths:
           description: Bad request
 components:
   schemas:
-    EntityReference:
+    ColumnUpdatePreview:
       required:
-      - id
-      - type
+      - columnFQN
+      - currentValues
+      - entityFQN
+      - entityType
+      - hasChanges
+      - newValues
       type: object
       properties:
-        id:
+        columnFQN:
           type: string
-          format: uuid
-        type:
+        entityType:
           type: string
+        entityFQN:
+          type: string
+        entityDisplayName:
+          type: string
+        serviceName:
+          type: string
+        databaseName:
+          type: string
+        schemaName:
+          type: string
+        currentValues:
+          $ref: '#/components/schemas/ColumnMetadata'
+        newValues:
+          $ref: '#/components/schemas/ColumnMetadata'
+        hasChanges:
+          type: boolean
+    CardinalityDistribution:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        counts:
+          type: array
+          items:
+            type: integer
+            format: int32
+        percentages:
+          type: array
+          items:
+            type: number
+            format: double
+        allValuesUnique:
+          type: boolean
+    CustomMetricProfile:
+      type: object
+      properties:
         name:
           type: string
-        fullyQualifiedName:
+        value:
+          type: number
+          format: double
+    ColumnProfile:
+      required:
+      - name
+      - timestamp
+      type: object
+      properties:
+        name:
           type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
+        timestamp:
+          type: integer
+          format: int64
+        valuesCount:
+          type: number
+          format: double
+        valuesPercentage:
+          type: number
+          format: double
+        validCount:
+          type: number
+          format: double
+        duplicateCount:
+          type: number
+          format: double
+        nullCount:
+          type: number
+          format: double
+        nullProportion:
+          type: number
+          format: double
+        missingPercentage:
+          type: number
+          format: double
+        missingCount:
+          type: number
+          format: double
+        uniqueCount:
+          type: number
+          format: double
+        uniqueProportion:
+          type: number
+          format: double
+        distinctCount:
+          type: number
+          format: double
+        distinctProportion:
+          type: number
+          format: double
+        min:
+          type: object
+        max:
+          type: object
+        minLength:
+          type: number
+          format: double
+        maxLength:
+          type: number
+          format: double
+        mean:
+          type: number
+          format: double
+        sum:
+          type: number
+          format: double
+        stddev:
+          type: number
+          format: double
+        variance:
+          type: number
+          format: double
+        median:
+          type: number
+          format: double
+        firstQuartile:
+          type: number
+          format: double
+        thirdQuartile:
+          type: number
+          format: double
+        interQuartileRange:
+          type: number
+          format: double
+        nonParametricSkew:
+          type: number
+          format: double
+        histogram:
+          $ref: '#/components/schemas/Histogram'
+        customMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMetricProfile'
+        cardinalityDistribution:
+          $ref: '#/components/schemas/CardinalityDistribution'
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
           type: boolean
-        inherited:
-          type: boolean
-        href:
+        status:
           type: string
-          format: uri
-    ColumnMetadata:
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    CSVImportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+    UpdateColumn:
       type: object
       properties:
         displayName:
@@ -527,6 +694,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagLabel'
+        constraint:
+          type: string
+          enum:
+          - 'NULL'
+          - NOT_NULL
+          - UNIQUE
+          - PRIMARY_KEY
+        removeConstraint:
+          type: boolean
+        extension:
+          type: object
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
     ColumnMetadataGroup:
       required:
       - groupId
@@ -565,14 +750,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ColumnChild'
-    ColumnUpdatePreview:
+    GroupedColumnsResponse:
+      required:
+      - columnName
+      - occurrences
+      - totalCount
+      type: object
+      properties:
+        columnName:
+          type: string
+        occurrences:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnOccurrence'
+        totalCount:
+          minimum: 0
+          type: integer
+          format: int32
+    ColumnOccurrence:
       required:
       - columnFQN
-      - currentValues
       - entityFQN
       - entityType
-      - hasChanges
-      - newValues
       type: object
       properties:
         columnFQN:
@@ -589,55 +788,16 @@ components:
           type: string
         schemaName:
           type: string
-        currentValues:
-          $ref: '#/components/schemas/ColumnMetadata'
-        newValues:
-          $ref: '#/components/schemas/ColumnMetadata'
-        hasChanges:
-          type: boolean
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
+        displayName:
           type: string
-          format: uuid
-        recognizerName:
+        description:
           type: string
-        score:
-          type: number
-          format: double
-        target:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        dataType:
           type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    CardinalityDistribution:
-      type: object
-      properties:
-        categories:
-          type: array
-          items:
-            type: string
-        counts:
-          type: array
-          items:
-            type: integer
-            format: int32
-        percentages:
-          type: array
-          items:
-            type: number
-            format: double
-        allValuesUnique:
-          type: boolean
     BulkColumnUpdateRequest:
       type: object
       properties:
@@ -670,6 +830,33 @@ components:
             $ref: '#/components/schemas/ColumnUpdate'
         dryRun:
           type: boolean
+    ColumnGridItem:
+      required:
+      - columnName
+      - groups
+      - hasVariations
+      - totalOccurrences
+      type: object
+      properties:
+        columnName:
+          type: string
+        totalOccurrences:
+          minimum: 0
+          type: integer
+          format: int32
+        hasVariations:
+          type: boolean
+        metadataStatus:
+          type: string
+          enum:
+          - MISSING
+          - INCOMPLETE
+          - INCONSISTENT
+          - COMPLETE
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnMetadataGroup'
     TagLabel:
       required:
       - labelType
@@ -718,35 +905,92 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    CustomMetricProfile:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
       type: object
       properties:
-        name:
+        recognizerId:
           type: string
-        value:
+          format: uuid
+        recognizerName:
+          type: string
+        score:
           type: number
           format: double
-    ColumnGridResponse:
-      required:
-      - columns
-      - totalOccurrences
-      - totalUniqueColumns
-      type: object
-      properties:
-        columns:
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
           type: array
           items:
-            $ref: '#/components/schemas/ColumnGridItem'
-        totalUniqueColumns:
-          minimum: 0
-          type: integer
-          format: int32
-        totalOccurrences:
-          minimum: 0
-          type: integer
-          format: int32
-        cursor:
+            $ref: '#/components/schemas/PatternMatch'
+    ColumnMetadata:
+      type: object
+      properties:
+        displayName:
           type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+    Histogram:
+      type: object
+      properties:
+        boundaries:
+          type: array
+          items:
+            type: object
+        frequencies:
+          type: array
+          items:
+            type: object
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    BulkColumnUpdatePreview:
+      required:
+      - columnPreviews
+      - totalColumns
+      type: object
+      properties:
+        totalColumns:
+          minimum: 0
+          type: integer
+          format: int32
+        columnPreviews:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnUpdatePreview'
     CustomMetric:
       required:
       - expression
@@ -776,33 +1020,33 @@ components:
           format: int64
         updatedBy:
           type: string
-    ColumnGridItem:
+    ColumnUpdate:
       required:
-      - columnName
-      - groups
-      - hasVariations
-      - totalOccurrences
+      - columnFQN
+      - entityType
       type: object
       properties:
-        columnName:
+        columnFQN:
           type: string
-        totalOccurrences:
-          minimum: 0
-          type: integer
-          format: int32
-        hasVariations:
-          type: boolean
-        metadataStatus:
+        entityType:
           type: string
-          enum:
-          - MISSING
-          - INCOMPLETE
-          - INCONSISTENT
-          - COMPLETE
-        groups:
+        displayName:
+          type: string
+        description:
+          type: string
+        tags:
           type: array
           items:
-            $ref: '#/components/schemas/ColumnMetadataGroup'
+            $ref: '#/components/schemas/TagLabel'
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
     ColumnOccurrenceRef:
       required:
       - columnFQN
@@ -824,84 +1068,40 @@ components:
           type: string
         schemaName:
           type: string
-    BulkColumnUpdatePreview:
+    PatternMatch:
       required:
-      - columnPreviews
-      - totalColumns
+      - name
+      - score
       type: object
       properties:
-        totalColumns:
-          minimum: 0
-          type: integer
-          format: int32
-        columnPreviews:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ColumnGridResponse:
+      required:
+      - columns
+      - totalOccurrences
+      - totalUniqueColumns
+      type: object
+      properties:
+        columns:
           type: array
           items:
-            $ref: '#/components/schemas/ColumnUpdatePreview'
-    CsvImportResult:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
+            $ref: '#/components/schemas/ColumnGridItem'
+        totalUniqueColumns:
           minimum: 0
           type: integer
           format: int32
-        numberOfRowsPassed:
+        totalOccurrences:
           minimum: 0
           type: integer
           format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        importResultsCsv:
+        cursor:
           type: string
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    ColumnUpdate:
-      required:
-      - columnFQN
-      - entityType
-      type: object
-      properties:
-        columnFQN:
-          type: string
-        entityType:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
     ColumnChild:
       required:
       - name
@@ -1161,206 +1361,6 @@ components:
             $ref: '#/components/schemas/CustomMetric'
         extension:
           type: object
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    CSVImportResponse:
-      type: object
-      properties:
-        jobId:
-          type: string
-        message:
-          type: string
-    ColumnOccurrence:
-      required:
-      - columnFQN
-      - entityFQN
-      - entityType
-      type: object
-      properties:
-        columnFQN:
-          type: string
-        entityType:
-          type: string
-        entityFQN:
-          type: string
-        entityDisplayName:
-          type: string
-        serviceName:
-          type: string
-        databaseName:
-          type: string
-        schemaName:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        dataType:
-          type: string
-    ColumnProfile:
-      required:
-      - name
-      - timestamp
-      type: object
-      properties:
-        name:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        valuesCount:
-          type: number
-          format: double
-        valuesPercentage:
-          type: number
-          format: double
-        validCount:
-          type: number
-          format: double
-        duplicateCount:
-          type: number
-          format: double
-        nullCount:
-          type: number
-          format: double
-        nullProportion:
-          type: number
-          format: double
-        missingPercentage:
-          type: number
-          format: double
-        missingCount:
-          type: number
-          format: double
-        uniqueCount:
-          type: number
-          format: double
-        uniqueProportion:
-          type: number
-          format: double
-        distinctCount:
-          type: number
-          format: double
-        distinctProportion:
-          type: number
-          format: double
-        min:
-          type: object
-        max:
-          type: object
-        minLength:
-          type: number
-          format: double
-        maxLength:
-          type: number
-          format: double
-        mean:
-          type: number
-          format: double
-        sum:
-          type: number
-          format: double
-        stddev:
-          type: number
-          format: double
-        variance:
-          type: number
-          format: double
-        median:
-          type: number
-          format: double
-        firstQuartile:
-          type: number
-          format: double
-        thirdQuartile:
-          type: number
-          format: double
-        interQuartileRange:
-          type: number
-          format: double
-        nonParametricSkew:
-          type: number
-          format: double
-        histogram:
-          $ref: '#/components/schemas/Histogram'
-        customMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomMetricProfile'
-        cardinalityDistribution:
-          $ref: '#/components/schemas/CardinalityDistribution'
-    GroupedColumnsResponse:
-      required:
-      - columnName
-      - occurrences
-      - totalCount
-      type: object
-      properties:
-        columnName:
-          type: string
-        occurrences:
-          type: array
-          items:
-            $ref: '#/components/schemas/ColumnOccurrence'
-        totalCount:
-          minimum: 0
-          type: integer
-          format: int32
-    UpdateColumn:
-      type: object
-      properties:
-        displayName:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        constraint:
-          type: string
-          enum:
-          - 'NULL'
-          - NOT_NULL
-          - UNIQUE
-          - PRIMARY_KEY
-        removeConstraint:
-          type: boolean
-        extension:
-          type: object
-    Histogram:
-      type: object
-      properties:
-        boundaries:
-          type: array
-          items:
-            type: object
-        frequencies:
-          type: array
-          items:
-            type: object
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
   securitySchemes:
     BearerAuth:
       type: http

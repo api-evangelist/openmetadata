@@ -102,23 +102,72 @@ paths:
                 $ref: '#/components/schemas/TestCaseDimensionResultList'
 components:
   schemas:
-    DimensionValue:
+    EntityReference:
       required:
-      - name
-      - value
+      - id
+      - type
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
         name:
           type: string
-        value:
+        fullyQualifiedName:
           type: string
-    EntityError:
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    TestCaseDimensionResultList:
+      required:
+      - data
       type: object
       properties:
-        message:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseDimensionResult'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
           type: string
-        entity:
-          type: object
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
     TestCaseDimensionResult:
       required:
       - dimensionKey
@@ -174,6 +223,13 @@ components:
         impactScore:
           type: number
           format: double
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
     TestResultValue:
       type: object
       properties:
@@ -183,72 +239,16 @@ components:
           type: string
         predictedValue:
           type: string
-    EntityReference:
+    DimensionValue:
       required:
-      - id
-      - type
+      - name
+      - value
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
         name:
           type: string
-        fullyQualifiedName:
+        value:
           type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    TestCaseDimensionResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCaseDimensionResult'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
   securitySchemes:
     BearerAuth:
       type: http

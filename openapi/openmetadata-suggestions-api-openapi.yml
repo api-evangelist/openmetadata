@@ -301,14 +301,28 @@ paths:
           description: Bad request
 components:
   schemas:
-    TagLabelMetadata:
+    SuggestionList:
+      required:
+      - data
       type: object
       properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Suggestion'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
           type: integer
-          format: int64
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     Suggestion:
       type: object
       properties:
@@ -350,35 +364,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagLabel'
-    SuggestionList:
-      required:
-      - data
+    CoverImage:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Suggestion'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    EntityError:
-      type: object
-      properties:
-        message:
+        url:
           type: string
-        entity:
-          type: object
+        position:
+          type: string
     EntityReference:
       required:
       - id
@@ -405,24 +397,6 @@ components:
         href:
           type: string
           format: uri
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     PatternMatch:
       required:
       - name
@@ -453,30 +427,39 @@ components:
         entityLink:
           pattern: (?U)^<#E::\w+::(?:[^:<>|]|:[^:<>|])+(?:::(?:[^:<>|]|:[^:<>|])+)*>$
           type: string
-    TagLabelRecognizerMetadata:
+    Paging:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - total
       type: object
       properties:
-        recognizerId:
+        before:
           type: string
-          format: uuid
-        recognizerName:
+        after:
           type: string
-        score:
-          type: number
-          format: double
-        target:
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    EntityError:
+      type: object
+      properties:
+        message:
           type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
+        entity:
+          type: object
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
     Style:
       type: object
       properties:
@@ -534,13 +517,30 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    CoverImage:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
       type: object
       properties:
-        url:
+        recognizerId:
           type: string
-        position:
+          format: uuid
+        recognizerName:
           type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
   securitySchemes:
     BearerAuth:
       type: http

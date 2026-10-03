@@ -552,673 +552,6 @@ components:
           type: array
           items:
             type: string
-    JsonPatch:
-      type: object
-    AIApplicationList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AIApplication'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    ScopeAndDeployment:
-      type: object
-      properties:
-        scope:
-          type: string
-          enum:
-          - Internal
-          - External
-          - Both
-        deploymentRegions:
-          type: array
-          items:
-            type: string
-        affectedUserCount:
-          type: integer
-          format: int32
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    Parameters:
-      type: object
-    TransparencyObligations:
-      type: object
-      properties:
-        usersInformed:
-          type: boolean
-        deepfakeLabeling:
-          type: boolean
-        emotionRecognitionDisclosure:
-          type: boolean
-    DimensionScores:
-      type: object
-      properties:
-        gender:
-          type: number
-          format: double
-        race:
-          type: number
-          format: double
-        age:
-          type: number
-          format: double
-        religion:
-          type: number
-          format: double
-        disability:
-          type: number
-          format: double
-        socioeconomic:
-          type: number
-          format: double
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    HighRiskSystems:
-      type: object
-      properties:
-        criticalInfrastructure:
-          type: boolean
-        educationVocationalTraining:
-          type: boolean
-        employment:
-          type: boolean
-        essentialPrivateServices:
-          type: boolean
-        essentialPublicServices:
-          type: boolean
-        lawEnforcement:
-          type: boolean
-        migrationAsylumBorderControl:
-          type: boolean
-        administrationOfJustice:
-          type: boolean
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    ProhibitedPractices:
-      type: object
-      properties:
-        subliminalManipulativeTechniques:
-          type: boolean
-        exploitationOfVulnerabilities:
-          type: boolean
-        socialScoringSystem:
-          type: boolean
-        riskAssessmentCriminalOffences:
-          type: boolean
-        facialRecognitionDatabaseCreation:
-          type: boolean
-        emotionInferenceWorkplaceEducation:
-          type: boolean
-        biometricCategorisation:
-          type: boolean
-        realTimeBiometricIdentification:
-          type: boolean
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    PerformanceMetrics:
-      type: object
-      properties:
-        totalExecutions:
-          type: integer
-          format: int32
-        successRate:
-          type: number
-          format: double
-        averageLatencyMs:
-          type: number
-          format: double
-        p95LatencyMs:
-          type: number
-          format: double
-        p99LatencyMs:
-          type: number
-          format: double
-        averageCost:
-          type: number
-          format: double
-        totalCost:
-          type: number
-          format: double
-        currency:
-          type: string
-        lastExecutionAt:
-          type: integer
-          format: int64
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    ModelConfiguration:
-      required:
-      - model
-      - purpose
-      type: object
-      properties:
-        model:
-          $ref: '#/components/schemas/EntityReference'
-        purpose:
-          type: string
-          enum:
-          - Primary
-          - Reasoning
-          - Embedding
-          - CodeGeneration
-          - Fallback
-          - CostOptimization
-        selectionCriteria:
-          $ref: '#/components/schemas/SelectionCriteria'
-        parameters:
-          $ref: '#/components/schemas/Parameters'
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    SafetyMetrics:
-      type: object
-      properties:
-        piiLeakageRate:
-          type: number
-          format: double
-        harmfulContentRate:
-          type: number
-          format: double
-        promptInjectionAttempts:
-          type: integer
-          format: int32
-        blockedRequests:
-          type: integer
-          format: int32
-    EthicalAIAssessment:
-      type: object
-      properties:
-        privacyLevel:
-          type: string
-          enum:
-          - Public
-          - Sensitive
-          - PersonalData
-        fairnessRisk:
-          type: string
-          enum:
-          - Low
-          - Medium
-          - High
-        biasMitigationCoverage:
-          type: string
-          enum:
-          - None
-          - Partial
-          - Full
-        reliabilitySafetyRisk:
-          type: string
-          enum:
-          - Low
-          - Moderate
-          - High
-        transparencyLevel:
-          type: string
-          enum:
-          - None
-          - Partial
-          - FullDisclosure
-        accountabilityMeasures:
-          $ref: '#/components/schemas/AccountabilityMeasures'
-        environmentalConsciousness:
-          type: string
-          enum:
-          - LowRisk
-          - MediumRisk
-          - HighRisk
-    QualityMetrics:
-      type: object
-      properties:
-        answerRelevancy:
-          type: number
-          format: double
-        contextPrecision:
-          type: number
-          format: double
-        faithfulness:
-          type: number
-          format: double
-        hallucinationRate:
-          type: number
-          format: double
-    CreateAIApplication:
-      required:
-      - applicationType
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        applicationType:
-          type: string
-          enum:
-          - Chatbot
-          - Agent
-          - Copilot
-          - Assistant
-          - RAG
-          - CodeGenerator
-          - DataAnalyst
-          - AutomationBot
-          - MultiAgent
-          - Custom
-        developmentStage:
-          type: string
-          enum:
-          - Proposal
-          - Development
-          - Testing
-          - Staging
-          - Production
-          - Deprecated
-          - Unauthorized
-        modelConfigurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/ModelConfiguration'
-        primaryModel:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        promptTemplates:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        tools:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        knowledgeBases:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        upstreamApplications:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downstreamApplications:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        framework:
-          $ref: '#/components/schemas/FrameworkInfo'
-        governanceMetadata:
-          $ref: '#/components/schemas/GovernanceMetadata'
-        biasMetrics:
-          $ref: '#/components/schemas/BiasMetrics'
-        performanceMetrics:
-          $ref: '#/components/schemas/PerformanceMetrics'
-        qualityMetrics:
-          $ref: '#/components/schemas/QualityMetrics'
-        safetyMetrics:
-          $ref: '#/components/schemas/SafetyMetrics'
-        testSuites:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        sourceCode:
-          type: string
-        deploymentUrl:
-          type: string
-        documentation:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    FrameworkInfo:
-      type: object
-      properties:
-        name:
-          type: string
-          enum:
-          - LangChain
-          - LlamaIndex
-          - AutoGen
-          - CrewAI
-          - Semantic Kernel
-          - Haystack
-          - Custom
-        version:
-          type: string
-        language:
-          type: string
-          enum:
-          - Python
-          - TypeScript
-          - JavaScript
-          - Java
-          - C#
-          - Go
-    Verification:
-      type: object
-      properties:
-        isVerified:
-          type: boolean
-        verifiedBy:
-          type: string
-        verifiedAt:
-          type: integer
-          format: int64
-        verificationNotes:
-          type: string
-        certificateUrl:
-          type: string
-    SelectionCriteria:
-      type: object
-      properties:
-        queryTypes:
-          type: array
-          items:
-            type: string
-        maxTokens:
-          type: integer
-          format: int32
-        costThreshold:
-          type: number
-          format: double
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    AccountabilityMeasures:
-      type: object
-      properties:
-        hasOwner:
-          type: boolean
-        subjectToHumanOversight:
-          type: boolean
-        auditTrailEnabled:
-          type: boolean
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    AICompliance:
-      type: object
-      properties:
-        complianceRecords:
-          type: array
-          items:
-            $ref: '#/components/schemas/AIComplianceRecord'
     AIApplication:
       required:
       - applicationType
@@ -1413,15 +746,558 @@ components:
           - Deprecated
           - Rejected
           - Unprocessed
-    FieldChange:
+    GovernanceMetadata:
+      type: object
+      properties:
+        registrationStatus:
+          type: string
+          enum:
+          - Registered
+          - Unregistered
+          - PendingApproval
+          - Approved
+          - Rejected
+        registeredBy:
+          type: string
+        registeredAt:
+          type: integer
+          format: int64
+        approvedBy:
+          type: string
+        approvedAt:
+          type: integer
+          format: int64
+        riskAssessment:
+          $ref: '#/components/schemas/RiskAssessment'
+        dataClassification:
+          $ref: '#/components/schemas/DataClassification'
+        governancePolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        aiCompliance:
+          $ref: '#/components/schemas/AICompliance'
+        intakeNotes:
+          type: string
+        approvalComments:
+          type: string
+    RiskAssessment:
+      type: object
+      properties:
+        riskLevel:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+        riskFactors:
+          type: array
+          items:
+            type: string
+        mitigations:
+          type: array
+          items:
+            type: string
+        assessedBy:
+          type: string
+        assessedAt:
+          type: integer
+          format: int64
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    ScopeAndDeployment:
+      type: object
+      properties:
+        scope:
+          type: string
+          enum:
+          - Internal
+          - External
+          - Both
+        deploymentRegions:
+          type: array
+          items:
+            type: string
+        affectedUserCount:
+          type: integer
+          format: int32
+    AICompliance:
+      type: object
+      properties:
+        complianceRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AIComplianceRecord'
+    HighRiskSystems:
+      type: object
+      properties:
+        criticalInfrastructure:
+          type: boolean
+        educationVocationalTraining:
+          type: boolean
+        employment:
+          type: boolean
+        essentialPrivateServices:
+          type: boolean
+        essentialPublicServices:
+          type: boolean
+        lawEnforcement:
+          type: boolean
+        migrationAsylumBorderControl:
+          type: boolean
+        administrationOfJustice:
+          type: boolean
+    QualityMetrics:
+      type: object
+      properties:
+        answerRelevancy:
+          type: number
+          format: double
+        contextPrecision:
+          type: number
+          format: double
+        faithfulness:
+          type: number
+          format: double
+        hallucinationRate:
+          type: number
+          format: double
+    ConformityAssessment:
+      type: object
+      properties:
+        assessmentRequired:
+          type: boolean
+        assessmentType:
+          type: string
+          enum:
+          - Internal
+          - ThirdParty
+          - NotRequired
+        assessmentBody:
+          type: string
+        certificateNumber:
+          type: string
+        validUntil:
+          type: integer
+          format: int64
+    FrameworkInfo:
       type: object
       properties:
         name:
           type: string
-        oldValue:
+          enum:
+          - LangChain
+          - LlamaIndex
+          - AutoGen
+          - CrewAI
+          - Semantic Kernel
+          - Haystack
+          - Custom
+        version:
+          type: string
+        language:
+          type: string
+          enum:
+          - Python
+          - TypeScript
+          - JavaScript
+          - Java
+          - C#
+          - Go
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    SafetyMetrics:
+      type: object
+      properties:
+        piiLeakageRate:
+          type: number
+          format: double
+        harmfulContentRate:
+          type: number
+          format: double
+        promptInjectionAttempts:
+          type: integer
+          format: int32
+        blockedRequests:
+          type: integer
+          format: int32
+    ProhibitedPractices:
+      type: object
+      properties:
+        subliminalManipulativeTechniques:
+          type: boolean
+        exploitationOfVulnerabilities:
+          type: boolean
+        socialScoringSystem:
+          type: boolean
+        riskAssessmentCriminalOffences:
+          type: boolean
+        facialRecognitionDatabaseCreation:
+          type: boolean
+        emotionInferenceWorkplaceEducation:
+          type: boolean
+        biometricCategorisation:
+          type: boolean
+        realTimeBiometricIdentification:
+          type: boolean
+    SelectionCriteria:
+      type: object
+      properties:
+        queryTypes:
+          type: array
+          items:
+            type: string
+        maxTokens:
+          type: integer
+          format: int32
+        costThreshold:
+          type: number
+          format: double
+    EthicalAIAssessment:
+      type: object
+      properties:
+        privacyLevel:
+          type: string
+          enum:
+          - Public
+          - Sensitive
+          - PersonalData
+        fairnessRisk:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+        biasMitigationCoverage:
+          type: string
+          enum:
+          - None
+          - Partial
+          - Full
+        reliabilitySafetyRisk:
+          type: string
+          enum:
+          - Low
+          - Moderate
+          - High
+        transparencyLevel:
+          type: string
+          enum:
+          - None
+          - Partial
+          - FullDisclosure
+        accountabilityMeasures:
+          $ref: '#/components/schemas/AccountabilityMeasures'
+        environmentalConsciousness:
+          type: string
+          enum:
+          - LowRisk
+          - MediumRisk
+          - HighRisk
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    PerformanceMetrics:
+      type: object
+      properties:
+        totalExecutions:
+          type: integer
+          format: int32
+        successRate:
+          type: number
+          format: double
+        averageLatencyMs:
+          type: number
+          format: double
+        p95LatencyMs:
+          type: number
+          format: double
+        p99LatencyMs:
+          type: number
+          format: double
+        averageCost:
+          type: number
+          format: double
+        totalCost:
+          type: number
+          format: double
+        currency:
+          type: string
+        lastExecutionAt:
+          type: integer
+          format: int64
+    CreateAIApplication:
+      required:
+      - applicationType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        applicationType:
+          type: string
+          enum:
+          - Chatbot
+          - Agent
+          - Copilot
+          - Assistant
+          - RAG
+          - CodeGenerator
+          - DataAnalyst
+          - AutomationBot
+          - MultiAgent
+          - Custom
+        developmentStage:
+          type: string
+          enum:
+          - Proposal
+          - Development
+          - Testing
+          - Staging
+          - Production
+          - Deprecated
+          - Unauthorized
+        modelConfigurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelConfiguration'
+        primaryModel:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        promptTemplates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        knowledgeBases:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        upstreamApplications:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downstreamApplications:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        framework:
+          $ref: '#/components/schemas/FrameworkInfo'
+        governanceMetadata:
+          $ref: '#/components/schemas/GovernanceMetadata'
+        biasMetrics:
+          $ref: '#/components/schemas/BiasMetrics'
+        performanceMetrics:
+          $ref: '#/components/schemas/PerformanceMetrics'
+        qualityMetrics:
+          $ref: '#/components/schemas/QualityMetrics'
+        safetyMetrics:
+          $ref: '#/components/schemas/SafetyMetrics'
+        testSuites:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        sourceCode:
+          type: string
+        deploymentUrl:
+          type: string
+        documentation:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
           type: object
-        newValue:
-          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     Votes:
       type: object
       properties:
@@ -1439,6 +1315,175 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
+    DimensionScores:
+      type: object
+      properties:
+        gender:
+          type: number
+          format: double
+        race:
+          type: number
+          format: double
+        age:
+          type: number
+          format: double
+        religion:
+          type: number
+          format: double
+        disability:
+          type: number
+          format: double
+        socioeconomic:
+          type: number
+          format: double
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    Parameters:
+      type: object
+    AccountabilityMeasures:
+      type: object
+      properties:
+        hasOwner:
+          type: boolean
+        subjectToHumanOversight:
+          type: boolean
+        auditTrailEnabled:
+          type: boolean
+    JsonPatch:
+      type: object
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
     Style:
       type: object
       properties:
@@ -1448,6 +1493,132 @@ components:
           type: string
         coverImage:
           $ref: '#/components/schemas/CoverImage'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    AIApplicationList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AIApplication'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    TransparencyObligations:
+      type: object
+      properties:
+        usersInformed:
+          type: boolean
+        deepfakeLabeling:
+          type: boolean
+        emotionRecognitionDisclosure:
+          type: boolean
+    ChangeSummaryMap:
+      type: object
+    Verification:
+      type: object
+      properties:
+        isVerified:
+          type: boolean
+        verifiedBy:
+          type: string
+        verifiedAt:
+          type: integer
+          format: int64
+        verificationNotes:
+          type: string
+        certificateUrl:
+          type: string
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    DataClassification:
+      type: object
+      properties:
+        accessesPII:
+          type: boolean
+        accessesSensitiveData:
+          type: boolean
+        dataCategories:
+          type: array
+          items:
+            type: string
+        dataRetentionPeriod:
+          type: string
+    ModelConfiguration:
+      required:
+      - model
+      - purpose
+      type: object
+      properties:
+        model:
+          $ref: '#/components/schemas/EntityReference'
+        purpose:
+          type: string
+          enum:
+          - Primary
+          - Reasoning
+          - Embedding
+          - CodeGeneration
+          - Fallback
+          - CostOptimization
+        selectionCriteria:
+          $ref: '#/components/schemas/SelectionCriteria'
+        parameters:
+          $ref: '#/components/schemas/Parameters'
     AIComplianceRecord:
       required:
       - framework
@@ -1496,143 +1667,15 @@ components:
           type: array
           items:
             type: string
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    ChangeSummaryMap:
-      type: object
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    GovernanceMetadata:
-      type: object
-      properties:
-        registrationStatus:
-          type: string
-          enum:
-          - Registered
-          - Unregistered
-          - PendingApproval
-          - Approved
-          - Rejected
-        registeredBy:
-          type: string
-        registeredAt:
-          type: integer
-          format: int64
-        approvedBy:
-          type: string
-        approvedAt:
-          type: integer
-          format: int64
-        riskAssessment:
-          $ref: '#/components/schemas/RiskAssessment'
-        dataClassification:
-          $ref: '#/components/schemas/DataClassification'
-        governancePolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        aiCompliance:
-          $ref: '#/components/schemas/AICompliance'
-        intakeNotes:
-          type: string
-        approvalComments:
-          type: string
-    PatternMatch:
-      required:
-      - name
-      - score
+    FieldChange:
       type: object
       properties:
         name:
           type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    ConformityAssessment:
-      type: object
-      properties:
-        assessmentRequired:
-          type: boolean
-        assessmentType:
-          type: string
-          enum:
-          - Internal
-          - ThirdParty
-          - NotRequired
-        assessmentBody:
-          type: string
-        certificateNumber:
-          type: string
-        validUntil:
-          type: integer
-          format: int64
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
     EUAIActCompliance:
       type: object
       properties:
@@ -1653,49 +1696,6 @@ components:
           $ref: '#/components/schemas/ConformityAssessment'
         transparencyObligations:
           $ref: '#/components/schemas/TransparencyObligations'
-    RiskAssessment:
-      type: object
-      properties:
-        riskLevel:
-          type: string
-          enum:
-          - Low
-          - Medium
-          - High
-          - Critical
-        riskFactors:
-          type: array
-          items:
-            type: string
-        mitigations:
-          type: array
-          items:
-            type: string
-        assessedBy:
-          type: string
-        assessedAt:
-          type: integer
-          format: int64
-    DataClassification:
-      type: object
-      properties:
-        accessesPII:
-          type: boolean
-        accessesSensitiveData:
-          type: boolean
-        dataCategories:
-          type: array
-          items:
-            type: string
-        dataRetentionPeriod:
-          type: string
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
   securitySchemes:
     BearerAuth:
       type: http

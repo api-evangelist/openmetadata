@@ -559,8 +559,245 @@ paths:
                 $ref: '#/components/schemas/MetadataService'
 components:
   schemas:
-    JsonPatch:
+    TagLabelMetadata:
       type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    TestConnectionResult:
+      required:
+      - steps
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Running
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestConnectionStepResult'
+    MetadataServiceList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataService'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
     EntityReference:
       required:
       - id
@@ -587,42 +824,6 @@ components:
         href:
           type: string
           format: uri
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
     AssetCertification:
       required:
       - appliedDate
@@ -638,38 +839,68 @@ components:
         expiryDate:
           type: integer
           format: int64
-    UsageDetails:
+    JsonPatch:
+      type: object
+    CreateMetadataService:
       required:
-      - dailyStats
-      - date
+      - name
+      - serviceType
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
           type: string
-    TestConnectionResult:
-      required:
-      - steps
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: integer
-          format: int64
-        status:
+        displayName:
+          type: string
+        description:
+          type: string
+        serviceType:
           type: string
           enum:
-          - Successful
-          - Failed
-          - Running
-        steps:
+          - Amundsen
+          - MetadataES
+          - OpenMetadata
+          - Atlas
+          - Alation
+          - AlationSink
+          - Collibra
+        connection:
+          $ref: '#/components/schemas/MetadataConnection'
+        owners:
           type: array
           items:
-            $ref: '#/components/schemas/TestConnectionStepResult'
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        domains:
+          type: array
+          items:
+            type: string
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
     ChangeEvent:
       required:
       - entityId
@@ -737,173 +968,15 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    MetadataServiceList:
-      required:
-      - data
+    Style:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetadataService'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
+        color:
           type: string
-        name:
+        iconURL:
           type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    CreateMetadataService:
-      required:
-      - name
-      - serviceType
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        serviceType:
-          type: string
-          enum:
-          - Amundsen
-          - MetadataES
-          - OpenMetadata
-          - Atlas
-          - Alation
-          - AlationSink
-          - Collibra
-        connection:
-          $ref: '#/components/schemas/MetadataConnection'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        domains:
-          type: array
-          items:
-            type: string
-        ingestionRunner:
-          $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    TestConnectionStepResult:
-      required:
-      - mandatory
-      - name
-      - passed
-      type: object
-      properties:
-        name:
-          type: string
-        mandatory:
-          type: boolean
-        passed:
-          type: boolean
-        message:
-          type: string
-        errorLog:
-          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
     RestoreEntity:
       required:
       - id
@@ -924,58 +997,37 @@ components:
           type: array
           items:
             type: object
-    FieldChange:
+    ChangeSummaryMap:
+      type: object
+    TestConnectionStepResult:
+      required:
+      - mandatory
+      - name
+      - passed
       type: object
       properties:
         name:
           type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    ChangeSummaryMap:
-      type: object
-    EntityError:
-      type: object
-      properties:
+        mandatory:
+          type: boolean
+        passed:
+          type: boolean
         message:
           type: string
-        entity:
-          type: object
+        errorLog:
+          type: string
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
     PatternMatch:
       required:
       - name
@@ -1115,72 +1167,20 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
     MetadataConnection:
       type: object
       properties:
         config:
           type: object
-    ResultList:
-      required:
-      - data
+    FieldChange:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
+        name:
           type: string
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
   securitySchemes:
     BearerAuth:
       type: http

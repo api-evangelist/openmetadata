@@ -191,13 +191,13 @@ components:
         total:
           type: integer
           format: int32
-    EntityError:
+    CSVExportResponse:
       type: object
       properties:
+        jobId:
+          type: string
         message:
           type: string
-        entity:
-          type: object
     ResultList:
       required:
       - data
@@ -220,13 +220,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    CSVExportResponse:
+    EntityError:
       type: object
       properties:
-        jobId:
-          type: string
         message:
           type: string
+        entity:
+          type: object
   securitySchemes:
     BearerAuth:
       type: http

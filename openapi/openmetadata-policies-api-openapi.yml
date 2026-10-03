@@ -503,90 +503,119 @@ paths:
           description: Invalid expression
 components:
   schemas:
-    JsonPatch:
-      type: object
-    EntityReference:
-      required:
-      - id
-      - type
+    TagLabelMetadata:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    ParamAdditionalContext:
-      type: object
-      properties:
-        data:
-          type: object
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
         expiryDate:
           type: integer
           format: int64
+    ResourceDescriptor:
+      type: object
+      properties:
+        name:
+          type: string
+        operations:
+          type: array
+          items:
+            type: string
+            enum:
+            - All
+            - Create
+            - BulkCreate
+            - CreateIngestionPipelineAutomator
+            - CreateTests
+            - Delete
+            - ViewAll
+            - ViewBasic
+            - ViewUsage
+            - ViewTests
+            - ViewQueries
+            - ViewDataProfile
+            - ViewProfilerGlobalConfiguration
+            - ViewSampleData
+            - ViewTestCaseFailedRowsSample
+            - ViewCustomFields
+            - EditAll
+            - BulkUpdate
+            - EditCustomFields
+            - EditDataProfile
+            - EditDescription
+            - EditDisplayName
+            - EditLineage
+            - EditEntityRelationship
+            - EditPolicy
+            - EditOwners
+            - EditQueries
+            - EditReviewers
+            - EditRole
+            - EditSampleData
+            - EditStatus
+            - EditTags
+            - EditGlossaryTerms
+            - EditTeams
+            - EditTier
+            - EditCertification
+            - EditTests
+            - EditUsage
+            - EditUsers
+            - EditLifeCycle
+            - EditKnowledgePanel
+            - EditPage
+            - EditIngestionPipelineStatus
+            - EditUserNotificationTemplate
+            - DeleteTestCaseFailedRowsSample
+            - Deploy
+            - Trigger
+            - Kill
+            - GenerateToken
+            - EditScim
+            - CreateScim
+            - DeleteScim
+            - ViewScim
+            - Impersonate
+            - AuditLogs
+            - ViewTestDefinitionLibrary
+            - EditTestDefinitionLibrary
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
     UsageDetails:
       required:
       - dailyStats
@@ -601,6 +630,88 @@ components:
           $ref: '#/components/schemas/UsageStats'
         date:
           type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    CreatePolicy:
+      required:
+      - name
+      - rules
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        enabled:
+          type: boolean
+        location:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    ResultListFunction:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Function'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     Rule:
       required:
       - effect
@@ -690,6 +801,24 @@ components:
             type: string
         condition:
           type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
     TagLabel:
       required:
       - labelType
@@ -738,167 +867,70 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    CreatePolicy:
-      required:
-      - name
-      - rules
+    Function:
       type: object
       properties:
         name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
           type: string
-        displayName:
+        input:
           type: string
         description:
           type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rule'
-        enabled:
-          type: boolean
-        location:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-        extension:
-          type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    ResultListFunction:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Function'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    ResultListResourceDescriptor:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourceDescriptor'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
+        examples:
           type: array
           items:
             type: object
-    PolicyList:
+        parameterInputType:
+          type: string
+          enum:
+          - NotRequired
+          - AllIndexElasticSearch
+          - SpecificIndexElasticSearch
+          - ReadFromParamContext
+          - ReadFromParamContextPerEntity
+        paramAdditionalContext:
+          $ref: '#/components/schemas/ParamAdditionalContext'
+    TagLabelRecognizerMetadata:
       required:
-      - data
+      - recognizerId
+      - recognizerName
+      - score
       type: object
       properties:
-        data:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
           type: array
           items:
-            $ref: '#/components/schemas/Policy'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
+            $ref: '#/components/schemas/PatternMatch'
+    Votes:
+      type: object
+      properties:
+        upVotes:
           type: integer
           format: int32
-        warnings:
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
           type: array
           items:
-            $ref: '#/components/schemas/EntityError'
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
     Policy:
       required:
       - id
@@ -1028,94 +1060,6 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    Function:
-      type: object
-      properties:
-        name:
-          type: string
-        input:
-          type: string
-        description:
-          type: string
-        examples:
-          type: array
-          items:
-            type: object
-        parameterInputType:
-          type: string
-          enum:
-          - NotRequired
-          - AllIndexElasticSearch
-          - SpecificIndexElasticSearch
-          - ReadFromParamContext
-          - ReadFromParamContextPerEntity
-        paramAdditionalContext:
-          $ref: '#/components/schemas/ParamAdditionalContext'
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ChangeSummaryMap:
-      type: object
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
     ChangeDescription:
       type: object
       properties:
@@ -1136,7 +1080,7 @@ components:
           format: double
         changeSummary:
           $ref: '#/components/schemas/ChangeSummaryMap'
-    ResultList:
+    PolicyList:
       required:
       - data
       type: object
@@ -1144,7 +1088,7 @@ components:
         data:
           type: array
           items:
-            type: object
+            $ref: '#/components/schemas/Policy'
         paging:
           $ref: '#/components/schemas/Paging'
         errors:
@@ -1158,73 +1102,87 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    ResourceDescriptor:
+    EntityReference:
+      required:
+      - id
+      - type
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
         name:
           type: string
-        operations:
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    JsonPatch:
+      type: object
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
           type: array
           items:
-            type: string
-            enum:
-            - All
-            - Create
-            - BulkCreate
-            - CreateIngestionPipelineAutomator
-            - CreateTests
-            - Delete
-            - ViewAll
-            - ViewBasic
-            - ViewUsage
-            - ViewTests
-            - ViewQueries
-            - ViewDataProfile
-            - ViewProfilerGlobalConfiguration
-            - ViewSampleData
-            - ViewTestCaseFailedRowsSample
-            - ViewCustomFields
-            - EditAll
-            - BulkUpdate
-            - EditCustomFields
-            - EditDataProfile
-            - EditDescription
-            - EditDisplayName
-            - EditLineage
-            - EditEntityRelationship
-            - EditPolicy
-            - EditOwners
-            - EditQueries
-            - EditReviewers
-            - EditRole
-            - EditSampleData
-            - EditStatus
-            - EditTags
-            - EditGlossaryTerms
-            - EditTeams
-            - EditTier
-            - EditCertification
-            - EditTests
-            - EditUsage
-            - EditUsers
-            - EditLifeCycle
-            - EditKnowledgePanel
-            - EditPage
-            - EditIngestionPipelineStatus
-            - EditUserNotificationTemplate
-            - DeleteTestCaseFailedRowsSample
-            - Deploy
-            - Trigger
-            - Kill
-            - GenerateToken
-            - EditScim
-            - CreateScim
-            - DeleteScim
-            - ViewScim
-            - Impersonate
-            - AuditLogs
-            - ViewTestDefinitionLibrary
-            - EditTestDefinitionLibrary
+            type: object
+    ChangeSummaryMap:
+      type: object
     AccessDetails:
       required:
       - timestamp
@@ -1237,13 +1195,55 @@ components:
           $ref: '#/components/schemas/EntityReference'
         accessedByAProcess:
           type: string
-    CoverImage:
+    PatternMatch:
+      required:
+      - name
+      - score
       type: object
       properties:
-        url:
+        name:
           type: string
-        position:
+        regex:
           type: string
+        score:
+          type: number
+          format: double
+    ParamAdditionalContext:
+      type: object
+      properties:
+        data:
+          type: object
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    ResultListResourceDescriptor:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceDescriptor'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
   securitySchemes:
     BearerAuth:
       type: http

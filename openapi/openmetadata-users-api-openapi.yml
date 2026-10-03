@@ -1119,6 +1119,555 @@ paths:
           description: Bad request
 components:
   schemas:
+    Webhook:
+      type: object
+      properties:
+        receivers:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        endpoint:
+          type: string
+          format: uri
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        queryParams:
+          type: object
+          additionalProperties:
+            type: string
+        httpMethod:
+          type: string
+          enum:
+          - POST
+          - PUT
+        sendToAdmins:
+          type: boolean
+        sendToOwners:
+          type: boolean
+        authType:
+          type: object
+        sendToFollowers:
+          type: boolean
+    CsvImportResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        importResultsCsv:
+          type: string
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    LogoutRequest:
+      required:
+      - token
+      type: object
+      properties:
+        username:
+          type: string
+        token:
+          type: string
+        logoutTime:
+          type: string
+          format: date-time
+        refreshToken:
+          type: string
+    RevokePersonalTokenRequest:
+      type: object
+      properties:
+        tokenIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    SubscriptionConfig:
+      type: object
+      properties:
+        slack:
+          $ref: '#/components/schemas/Webhook'
+        msTeams:
+          $ref: '#/components/schemas/Webhook'
+        gChat:
+          $ref: '#/components/schemas/Webhook'
+        generic:
+          $ref: '#/components/schemas/Webhook'
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    RevokeTokenRequest:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+    Profile:
+      type: object
+      properties:
+        images:
+          $ref: '#/components/schemas/ImageList'
+        subscription:
+          $ref: '#/components/schemas/SubscriptionConfig'
+    PersonaPreferences:
+      required:
+      - personaId
+      - personaName
+      type: object
+      properties:
+        personaId:
+          type: string
+          format: uuid
+        personaName:
+          type: string
+        landingPageSettings:
+          $ref: '#/components/schemas/LandingPageSettings'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    JWTAuthMechanism:
+      required:
+      - JWTTokenExpiry
+      type: object
+      properties:
+        JWTToken:
+          type: string
+        JWTTokenExpiry:
+          type: string
+          enum:
+          - OneHour
+          - '1'
+          - '7'
+          - '30'
+          - '60'
+          - '90'
+          - Unlimited
+        JWTTokenExpiresAt:
+          type: integer
+          format: int64
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    LoginRequest:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    LandingPageSettings:
+      type: object
+      properties:
+        headerColor:
+          type: string
+        headerImage:
+          type: string
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangePasswordRequest:
+      required:
+      - confirmPassword
+      - newPassword
+      type: object
+      properties:
+        username:
+          type: string
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+        requestType:
+          type: string
+          enum:
+          - SELF
+          - USER
+    PasswordResetRequest:
+      required:
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          maxLength: 56
+          minLength: 8
+          type: string
+        confirmPassword:
+          maxLength: 56
+          minLength: 8
+          type: string
+        token:
+          type: string
+    PersonalAccessTokenList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonalAccessToken'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    RegistrationRequest:
+      required:
+      - email
+      - firstName
+      - lastName
+      - password
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+        password:
+          maxLength: 56
+          minLength: 8
+          type: string
+    JwtResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+        expiryDuration:
+          type: integer
+          format: int64
+    EmailRequest:
+      required:
+      - email
+      type: object
+      properties:
+        email:
+          maxLength: 127
+          minLength: 6
+          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    JsonPatch:
+      type: object
+    UserList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    GenerateTokenRequest:
+      required:
+      - JWTTokenExpiry
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        JWTTokenExpiry:
+          type: string
+          enum:
+          - OneHour
+          - '1'
+          - '7'
+          - '30'
+          - '60'
+          - '90'
+          - Unlimited
     CreateUser:
       required:
       - email
@@ -1204,113 +1753,67 @@ components:
             type: string
         lifeCycle:
           $ref: '#/components/schemas/LifeCycle'
-    JsonPatch:
-      type: object
-    LogoutRequest:
-      required:
-      - token
+    EntityError:
       type: object
       properties:
-        username:
+        message:
           type: string
-        token:
+        entity:
+          type: object
+    Style:
+      type: object
+      properties:
+        color:
           type: string
-        logoutTime:
+        iconURL:
           type: string
-          format: date-time
-        refreshToken:
-          type: string
-    EntityReference:
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    RestoreEntity:
       required:
       - id
-      - type
       type: object
       properties:
         id:
           type: string
           format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    UsageStats:
+    TokenRefreshRequest:
       required:
-      - count
+      - refreshToken
       type: object
       properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    TagLabelRecognizerMetadata:
+        refreshToken:
+          type: string
+    EntityHistory:
       required:
-      - recognizerId
-      - recognizerName
-      - score
+      - entityType
+      - versions
       type: object
       properties:
-        recognizerId:
+        entityType:
           type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
+        versions:
           type: array
           items:
-            $ref: '#/components/schemas/PatternMatch'
-    AssetCertification:
+            type: object
+    CreatePersonalToken:
       required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
+      - JWTTokenExpiry
+      - tokenName
       type: object
       properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        tokenName:
           type: string
+        JWTTokenExpiry:
+          type: string
+          enum:
+          - OneHour
+          - '1'
+          - '7'
+          - '30'
+          - '60'
+          - '90'
+          - Unlimited
     ImageList:
       type: object
       properties:
@@ -1335,397 +1838,6 @@ components:
         image512:
           type: string
           format: uri
-    EmailRequest:
-      required:
-      - email
-      type: object
-      properties:
-        email:
-          maxLength: 127
-          minLength: 6
-          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
-          type: string
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    AuthenticationMechanism:
-      type: object
-      properties:
-        config:
-          type: object
-        authType:
-          type: string
-          enum:
-          - JWT
-          - SSO
-          - BASIC
-    Webhook:
-      type: object
-      properties:
-        receivers:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        endpoint:
-          type: string
-          format: uri
-        headers:
-          type: object
-          additionalProperties:
-            type: string
-        queryParams:
-          type: object
-          additionalProperties:
-            type: string
-        httpMethod:
-          type: string
-          enum:
-          - POST
-          - PUT
-        sendToAdmins:
-          type: boolean
-        sendToOwners:
-          type: boolean
-        authType:
-          type: object
-        sendToFollowers:
-          type: boolean
-    GenerateTokenRequest:
-      required:
-      - JWTTokenExpiry
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        JWTTokenExpiry:
-          type: string
-          enum:
-          - OneHour
-          - '1'
-          - '7'
-          - '30'
-          - '60'
-          - '90'
-          - Unlimited
-    CreatePersonalToken:
-      required:
-      - JWTTokenExpiry
-      - tokenName
-      type: object
-      properties:
-        tokenName:
-          type: string
-        JWTTokenExpiry:
-          type: string
-          enum:
-          - OneHour
-          - '1'
-          - '7'
-          - '30'
-          - '60'
-          - '90'
-          - Unlimited
-    UserList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    PersonalAccessTokenList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PersonalAccessToken'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    LoginRequest:
-      required:
-      - email
-      - password
-      type: object
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-    ChangePasswordRequest:
-      required:
-      - confirmPassword
-      - newPassword
-      type: object
-      properties:
-        username:
-          type: string
-        oldPassword:
-          type: string
-        newPassword:
-          type: string
-        confirmPassword:
-          type: string
-        requestType:
-          type: string
-          enum:
-          - SELF
-          - USER
-    SubscriptionConfig:
-      type: object
-      properties:
-        slack:
-          $ref: '#/components/schemas/Webhook'
-        msTeams:
-          $ref: '#/components/schemas/Webhook'
-        gChat:
-          $ref: '#/components/schemas/Webhook'
-        generic:
-          $ref: '#/components/schemas/Webhook'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    RegistrationRequest:
-      required:
-      - email
-      - firstName
-      - lastName
-      - password
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          maxLength: 127
-          minLength: 6
-          pattern: ^[\S.!#$%&’*+/=?^_`{|}~-]+@\S+\.\S+$
-          type: string
-        password:
-          maxLength: 56
-          minLength: 8
-          type: string
-    RevokePersonalTokenRequest:
-      type: object
-      properties:
-        tokenIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-    CsvImportResult:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        importResultsCsv:
-          type: string
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    PersonaPreferences:
-      required:
-      - personaId
-      - personaName
-      type: object
-      properties:
-        personaId:
-          type: string
-          format: uuid
-        personaName:
-          type: string
-        landingPageSettings:
-          $ref: '#/components/schemas/LandingPageSettings'
-    PasswordResetRequest:
-      required:
-      - username
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          maxLength: 56
-          minLength: 8
-          type: string
-        confirmPassword:
-          maxLength: 56
-          minLength: 8
-          type: string
-        token:
-          type: string
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
     User:
       required:
       - email
@@ -1895,43 +2007,20 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
     ChangeSummaryMap:
       type: object
-    JwtResponse:
+    AccessDetails:
+      required:
+      - timestamp
       type: object
       properties:
-        accessToken:
-          type: string
-        refreshToken:
-          type: string
-        tokenType:
-          type: string
-        expiryDuration:
+        timestamp:
           type: integer
           format: int64
-    RevokeTokenRequest:
-      required:
-      - id
-      type: object
-      properties:
-        id:
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
           type: string
-          format: uuid
     PatternMatch:
       required:
       - name
@@ -1973,115 +2062,26 @@ components:
           format: int64
         jwtToken:
           type: string
-    CSVExportResponse:
+    AuthenticationMechanism:
       type: object
       properties:
-        jobId:
-          type: string
-        message:
-          type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    JWTAuthMechanism:
-      required:
-      - JWTTokenExpiry
-      type: object
-      properties:
-        JWTToken:
-          type: string
-        JWTTokenExpiry:
+        config:
+          type: object
+        authType:
           type: string
           enum:
-          - OneHour
-          - '1'
-          - '7'
-          - '30'
-          - '60'
-          - '90'
-          - Unlimited
-        JWTTokenExpiresAt:
-          type: integer
-          format: int64
-    ResultList:
-      required:
-      - data
+          - JWT
+          - SSO
+          - BASIC
+    FieldChange:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    TokenRefreshRequest:
-      required:
-      - refreshToken
-      type: object
-      properties:
-        refreshToken:
+        name:
           type: string
-    LandingPageSettings:
-      type: object
-      properties:
-        headerColor:
-          type: string
-        headerImage:
-          type: string
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    Profile:
-      type: object
-      properties:
-        images:
-          $ref: '#/components/schemas/ImageList'
-        subscription:
-          $ref: '#/components/schemas/SubscriptionConfig'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
   securitySchemes:
     BearerAuth:
       type: http

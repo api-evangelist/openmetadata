@@ -1216,155 +1216,6 @@ paths:
           description: Application for instance {id} is not found
 components:
   schemas:
-    JsonPatch:
-      type: object
-    ExtraHeaders:
-      type: object
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AppMarketPlaceDefinitionList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AppMarketPlaceDefinition'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
-    NewCookie:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-        version:
-          type: integer
-          format: int32
-        path:
-          type: string
-        domain:
-          type: string
-        comment:
-          type: string
-        maxAge:
-          type: integer
-          format: int32
-        expiry:
-          type: string
-          format: date-time
-        secure:
-          type: boolean
-        httpOnly:
-          type: boolean
-        sameSite:
-          type: string
-          enum:
-          - NONE
-          - LAX
-          - STRICT
     AppList:
       required:
       - data
@@ -1387,6 +1238,390 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
+    CreateEventSubscription:
+      required:
+      - alertType
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        className:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        enabled:
+          type: boolean
+        batchSize:
+          type: integer
+          format: int32
+        alertType:
+          type: string
+          enum:
+          - Notification
+          - Observability
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+          - Custom
+        trigger:
+          $ref: '#/components/schemas/TriggerConfig'
+        resources:
+          type: array
+          items:
+            type: string
+        destinations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionDestination'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        retries:
+          type: integer
+          format: int32
+        pollInterval:
+          type: integer
+          format: int32
+        input:
+          $ref: '#/components/schemas/AlertFilteringInput'
+        notificationTemplate:
+          $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            type: string
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    ExtraHeaders:
+      type: object
+    FilterPattern:
+      type: object
+      properties:
+        includes:
+          type: array
+          items:
+            type: string
+        excludes:
+          type: array
+          items:
+            type: string
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    SubscriptionDestination:
+      required:
+      - category
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+          enum:
+          - Users
+          - Teams
+          - Admins
+          - Assignees
+          - Owners
+          - Mentions
+          - Followers
+          - External
+        type:
+          type: string
+          enum:
+          - Webhook
+          - Slack
+          - MsTeams
+          - GChat
+          - Email
+          - ActivityFeed
+          - GovernanceWorkflowChangeEvent
+        statusDetails:
+          type: object
+        timeout:
+          type: integer
+          format: int32
+        readTimeout:
+          type: integer
+          format: int32
+        enabled:
+          type: boolean
+        config:
+          type: object
+        notifyDownstream:
+          type: boolean
+        downstreamDepth:
+          minimum: 1
+          type: integer
+          format: int32
+    StepStats:
+      type: object
+      properties:
+        totalRecords:
+          minimum: 0
+          type: integer
+          format: int32
+        successRecords:
+          minimum: 0
+          type: integer
+          format: int32
+        failedRecords:
+          minimum: 0
+          type: integer
+          format: int32
+        warningRecords:
+          minimum: 0
+          type: integer
+          format: int32
+        vectorSuccessRecords:
+          minimum: 0
+          type: integer
+          format: int32
+        vectorFailedRecords:
+          minimum: 0
+          type: integer
+          format: int32
+        totalTimeMs:
+          minimum: 0
+          type: integer
+          format: int64
+        readerTimeMs:
+          minimum: 0
+          type: integer
+          format: int64
+        processTimeMs:
+          minimum: 0
+          type: integer
+          format: int64
+        sinkTimeMs:
+          minimum: 0
+          type: integer
+          format: int64
+        vectorTimeMs:
+          minimum: 0
+          type: integer
+          format: int64
+    FailureContext:
+      type: object
+      properties:
+        failure:
+          $ref: '#/components/schemas/IndexingError'
+    AppRunRecord:
+      type: object
+      properties:
+        appId:
+          type: string
+          format: uuid
+        appName:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        extension:
+          type: string
+        status:
+          type: string
+          enum:
+          - started
+          - running
+          - completed
+          - failed
+          - active
+          - activeError
+          - stopped
+          - stopInProgress
+          - success
+          - pending
+        runType:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+        executionTime:
+          type: integer
+          format: int64
+        failureContext:
+          $ref: '#/components/schemas/FailureContext'
+        successContext:
+          $ref: '#/components/schemas/SuccessContext'
+        scheduleInfo:
+          $ref: '#/components/schemas/AppSchedule'
+        config:
+          type: object
+          additionalProperties:
+            type: object
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    Stats:
+      type: object
+      properties:
+        jobStats:
+          $ref: '#/components/schemas/StepStats'
+        readerStats:
+          $ref: '#/components/schemas/StepStats'
+        processStats:
+          $ref: '#/components/schemas/StepStats'
+        sinkStats:
+          $ref: '#/components/schemas/StepStats'
+        vectorStats:
+          $ref: '#/components/schemas/StepStats'
+        entityStats:
+          $ref: '#/components/schemas/EntityStats'
+    OpenMetadataJWTClientConfig:
+      required:
+      - jwtToken
+      type: object
+      properties:
+        jwtToken:
+          type: string
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    UriBuilder:
+      type: object
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
     TagLabel:
       required:
       - labelType
@@ -1435,40 +1670,464 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    Argument:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    Response:
+      type: object
+      properties:
+        closed:
+          type: boolean
+        length:
+          type: integer
+          format: int32
+        location:
+          type: string
+          format: uri
+        language:
+          type: object
+          properties:
+            language:
+              type: string
+            displayName:
+              type: string
+            country:
+              type: string
+            variant:
+              type: string
+            script:
+              type: string
+            unicodeLocaleAttributes:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            unicodeLocaleKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            displayLanguage:
+              type: string
+            displayScript:
+              type: string
+            displayCountry:
+              type: string
+            displayVariant:
+              type: string
+            extensionKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            iso3Language:
+              type: string
+            iso3Country:
+              type: string
+        date:
+          type: string
+          format: date-time
+        lastModified:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: object
+        status:
+          type: integer
+          format: int32
+        entity:
+          type: object
+        cookies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NewCookie'
+        links:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        statusInfo:
+          $ref: '#/components/schemas/StatusType'
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        allowedMethods:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        entityTag:
+          $ref: '#/components/schemas/EntityTag'
+        stringHeaders:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        headers:
+          type: object
+          properties:
+            empty:
+              type: boolean
+          additionalProperties:
+            type: array
+            items:
+              type: object
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    CreateApp:
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        bot:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        appConfiguration:
+          type: object
+        appSchedule:
+          $ref: '#/components/schemas/AppSchedule'
+        domains:
+          type: array
+          items:
+            type: string
+        supportsInterrupt:
+          type: boolean
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        allowBotImpersonation:
+          type: boolean
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    AppExtension:
+      required:
+      - appId
+      - appName
+      - extension
+      type: object
+      properties:
+        appId:
+          type: string
+          format: uuid
+        appName:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        extension:
+          type: string
+          enum:
+          - status
+          - limits
+          - custom
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    SuccessContext:
+      type: object
+      properties:
+        stats:
+          $ref: '#/components/schemas/Stats'
+    TriggerConfig:
+      required:
+      - triggerType
+      type: object
+      properties:
+        triggerType:
+          type: string
+          enum:
+          - RealTime
+          - Scheduled
+        scheduleInfo:
+          type: string
+          enum:
+          - Daily
+          - Weekly
+          - Monthly
+          - Custom
+        cronExpression:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    JsonPatch:
+      type: object
+    NewCookie:
       type: object
       properties:
         name:
           type: string
-        input:
+        value:
+          type: string
+        version:
+          type: integer
+          format: int32
+        path:
+          type: string
+        domain:
+          type: string
+        comment:
+          type: string
+        maxAge:
+          type: integer
+          format: int32
+        expiry:
+          type: string
+          format: date-time
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+        sameSite:
+          type: string
+          enum:
+          - NONE
+          - LAX
+          - STRICT
+    IndexingError:
+      type: object
+      properties:
+        errorSource:
+          type: string
+          enum:
+          - Job
+          - Reader
+          - Processor
+          - Sink
+        lastFailedCursor:
+          type: string
+        message:
+          type: string
+        failedEntities:
           type: array
           items:
-            type: string
-    OpenMetadataJWTClientConfig:
-      required:
-      - jwtToken
+            $ref: '#/components/schemas/EntityError'
+        reason:
+          type: string
+        stackTrace:
+          type: string
+        submittedCount:
+          type: integer
+          format: int32
+        successCount:
+          type: integer
+          format: int32
+        failedCount:
+          type: integer
+          format: int32
+    EntityError:
       type: object
       properties:
-        jwtToken:
+        message:
           type: string
-    Paging:
-      required:
-      - total
+        entity:
+          type: object
+    Style:
       type: object
       properties:
-        before:
+        color:
           type: string
-        after:
+        iconURL:
           type: string
-        offset:
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    AppRefList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
           type: integer
           format: int32
-        limit:
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    ElasticsSearch:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+        config:
+          $ref: '#/components/schemas/ComponentConfig'
+    StatusType:
+      type: object
+      properties:
+        family:
+          type: string
+          enum:
+          - INFORMATIONAL
+          - SUCCESSFUL
+          - REDIRECTION
+          - CLIENT_ERROR
+          - SERVER_ERROR
+          - OTHER
+        statusCode:
           type: integer
           format: int32
-        total:
-          type: integer
-          format: int32
+        reasonPhrase:
+          type: string
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
     AppSchedule:
       required:
       - scheduleTimeline
@@ -1485,17 +2144,28 @@ components:
           - None
         cronExpression:
           type: string
-    FilterPattern:
+    AppRunList:
+      required:
+      - data
       type: object
       properties:
-        includes:
+        data:
           type: array
           items:
-            type: string
-        excludes:
+            $ref: '#/components/schemas/AppRunRecord'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     App:
       required:
       - appType
@@ -1686,61 +2356,27 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    ElasticsSearch:
+    ChangeSummaryMap:
+      type: object
+    AccessDetails:
       required:
-      - type
+      - timestamp
       type: object
       properties:
-        type:
-          type: string
-        config:
-          $ref: '#/components/schemas/ComponentConfig'
-    SuccessContext:
-      type: object
-      properties:
-        stats:
-          $ref: '#/components/schemas/Stats'
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    IndexingError:
-      type: object
-      properties:
-        errorSource:
-          type: string
-          enum:
-          - Job
-          - Reader
-          - Processor
-          - Sink
-        lastFailedCursor:
-          type: string
-        message:
-          type: string
-        failedEntities:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        reason:
-          type: string
-        stackTrace:
-          type: string
-        submittedCount:
+        timestamp:
           type: integer
-          format: int32
-        successCount:
-          type: integer
-          format: int32
-        failedCount:
-          type: integer
-          format: int32
-    CreateApp:
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    CreateAppMarketPlaceDefinitionReq:
+      required:
+      - appType
+      - className
+      - name
+      - permission
+      - scheduleType
       type: object
       properties:
         name:
@@ -1752,34 +2388,88 @@ components:
           type: string
         description:
           type: string
+        features:
+          type: string
         owners:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
-        bot:
-          maxLength: 3072
-          minLength: 1
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        developer:
           type: string
+        developerUrl:
+          type: string
+        privacyPolicyUrl:
+          type: string
+        supportEmail:
+          type: string
+        className:
+          type: string
+        sourcePythonClass:
+          type: string
+        appType:
+          type: string
+          enum:
+          - internal
+          - external
+        agentType:
+          type: string
+          enum:
+          - CollateAI
+          - CollateAITierAgent
+          - CollateAIQualityAgent
+          - Metadata
+        scheduleType:
+          type: string
+          enum:
+          - Live
+          - Scheduled
+          - ScheduledOrManual
+          - NoSchedule
+          - OnlyManual
+        permission:
+          type: string
+          enum:
+          - All
+        runtime:
+          type: object
+        allowConfiguration:
+          type: boolean
         appConfiguration:
           type: object
-        appSchedule:
-          $ref: '#/components/schemas/AppSchedule'
+        appLogoUrl:
+          type: string
+          format: uri
+        appScreenshots:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        system:
+          type: boolean
         domains:
           type: array
           items:
             type: string
         supportsInterrupt:
           type: boolean
-        ingestionRunner:
-          $ref: '#/components/schemas/EntityReference'
+        eventSubscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateEventSubscription'
+        enabled:
+          type: boolean
+        supportsIngestionRunner:
+          type: boolean
+        allowConcurrentExecution:
+          type: boolean
         allowBotImpersonation:
           type: boolean
         extension:
           type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
         reviewers:
           type: array
           items:
@@ -1790,6 +2480,35 @@ components:
             type: string
         lifeCycle:
           $ref: '#/components/schemas/LifeCycle'
+    EntityTag:
+      type: object
+      properties:
+        value:
+          type: string
+        weak:
+          type: boolean
+    Argument:
+      type: object
+      properties:
+        name:
+          type: string
+        input:
+          type: array
+          items:
+            type: string
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
     AppMarketPlaceDefinition:
       required:
       - appType
@@ -1967,362 +2686,41 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    Response:
+    EntityStats:
+      type: object
+    Link:
       type: object
       properties:
-        closed:
-          type: boolean
-        length:
-          type: integer
-          format: int32
-        location:
+        type:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: string
+        uri:
           type: string
           format: uri
-        language:
-          type: object
-          properties:
-            language:
-              type: string
-            displayName:
-              type: string
-            country:
-              type: string
-            variant:
-              type: string
-            script:
-              type: string
-            unicodeLocaleAttributes:
-              uniqueItems: true
-              type: array
-              items:
-                type: string
-            unicodeLocaleKeys:
-              uniqueItems: true
-              type: array
-              items:
-                type: string
-            displayLanguage:
-              type: string
-            displayScript:
-              type: string
-            displayCountry:
-              type: string
-            displayVariant:
-              type: string
-            extensionKeys:
-              uniqueItems: true
-              type: array
-              items:
-                type: string
-            iso3Language:
-              type: string
-            iso3Country:
-              type: string
-        date:
+        title:
           type: string
-          format: date-time
-        lastModified:
+        uriBuilder:
+          $ref: '#/components/schemas/UriBuilder'
+        rel:
           type: string
-          format: date-time
-        metadata:
-          type: object
-          properties:
-            empty:
-              type: boolean
-          additionalProperties:
-            type: array
-            items:
-              type: object
-        status:
-          type: integer
-          format: int32
-        entity:
-          type: object
-        cookies:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/NewCookie'
-        links:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Link'
-        statusInfo:
-          $ref: '#/components/schemas/StatusType'
-        mediaType:
-          $ref: '#/components/schemas/MediaType'
-        allowedMethods:
-          uniqueItems: true
+        rels:
           type: array
           items:
             type: string
-        entityTag:
-          $ref: '#/components/schemas/EntityTag'
-        stringHeaders:
-          type: object
-          properties:
-            empty:
-              type: boolean
-          additionalProperties:
-            type: array
-            items:
-              type: string
-        headers:
-          type: object
-          properties:
-            empty:
-              type: boolean
-          additionalProperties:
-            type: array
-            items:
-              type: object
-    CreateAppMarketPlaceDefinitionReq:
-      required:
-      - appType
-      - className
-      - name
-      - permission
-      - scheduleType
+    AlertFilteringInput:
       type: object
       properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        features:
-          type: string
-        owners:
+        filters:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-        tags:
+            $ref: '#/components/schemas/ArgumentsInput'
+        actions:
           type: array
           items:
-            $ref: '#/components/schemas/TagLabel'
-        developer:
-          type: string
-        developerUrl:
-          type: string
-        privacyPolicyUrl:
-          type: string
-        supportEmail:
-          type: string
-        className:
-          type: string
-        sourcePythonClass:
-          type: string
-        appType:
-          type: string
-          enum:
-          - internal
-          - external
-        agentType:
-          type: string
-          enum:
-          - CollateAI
-          - CollateAITierAgent
-          - CollateAIQualityAgent
-          - Metadata
-        scheduleType:
-          type: string
-          enum:
-          - Live
-          - Scheduled
-          - ScheduledOrManual
-          - NoSchedule
-          - OnlyManual
-        permission:
-          type: string
-          enum:
-          - All
-        runtime:
-          type: object
-        allowConfiguration:
-          type: boolean
-        appConfiguration:
-          type: object
-        appLogoUrl:
-          type: string
-          format: uri
-        appScreenshots:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        system:
-          type: boolean
-        domains:
-          type: array
-          items:
-            type: string
-        supportsInterrupt:
-          type: boolean
-        eventSubscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateEventSubscription'
-        enabled:
-          type: boolean
-        supportsIngestionRunner:
-          type: boolean
-        allowConcurrentExecution:
-          type: boolean
-        allowBotImpersonation:
-          type: boolean
-        extension:
-          type: object
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    TriggerConfig:
-      required:
-      - triggerType
-      type: object
-      properties:
-        triggerType:
-          type: string
-          enum:
-          - RealTime
-          - Scheduled
-        scheduleInfo:
-          type: string
-          enum:
-          - Daily
-          - Weekly
-          - Monthly
-          - Custom
-        cronExpression:
-          type: string
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    FailureContext:
-      type: object
-      properties:
-        failure:
-          $ref: '#/components/schemas/IndexingError'
-    StatusType:
-      type: object
-      properties:
-        family:
-          type: string
-          enum:
-          - INFORMATIONAL
-          - SUCCESSFUL
-          - REDIRECTION
-          - CLIENT_ERROR
-          - SERVER_ERROR
-          - OTHER
-        statusCode:
-          type: integer
-          format: int32
-        reasonPhrase:
-          type: string
-    EntityTag:
-      type: object
-      properties:
-        value:
-          type: string
-        weak:
-          type: boolean
-    StepStats:
-      type: object
-      properties:
-        totalRecords:
-          minimum: 0
-          type: integer
-          format: int32
-        successRecords:
-          minimum: 0
-          type: integer
-          format: int32
-        failedRecords:
-          minimum: 0
-          type: integer
-          format: int32
-        warningRecords:
-          minimum: 0
-          type: integer
-          format: int32
-        vectorSuccessRecords:
-          minimum: 0
-          type: integer
-          format: int32
-        vectorFailedRecords:
-          minimum: 0
-          type: integer
-          format: int32
-        totalTimeMs:
-          minimum: 0
-          type: integer
-          format: int64
-        readerTimeMs:
-          minimum: 0
-          type: integer
-          format: int64
-        processTimeMs:
-          minimum: 0
-          type: integer
-          format: int64
-        sinkTimeMs:
-          minimum: 0
-          type: integer
-          format: int64
-        vectorTimeMs:
-          minimum: 0
-          type: integer
-          format: int64
-    AppRunList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AppRunRecord'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
+            $ref: '#/components/schemas/ArgumentsInput'
     FieldChange:
       type: object
       properties:
@@ -2332,34 +2730,6 @@ components:
           type: object
         newValue:
           type: object
-    EntityStats:
-      type: object
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
     OpenMetadataConnection:
       required:
       - hostPort
@@ -2466,286 +2836,7 @@ components:
           type: boolean
         extraHeaders:
           $ref: '#/components/schemas/ExtraHeaders'
-    ComponentConfig:
-      type: object
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    ChangeSummaryMap:
-      type: object
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    MediaType:
-      type: object
-      properties:
-        type:
-          type: string
-        subtype:
-          type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        wildcardType:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
-    AppRunRecord:
-      type: object
-      properties:
-        appId:
-          type: string
-          format: uuid
-        appName:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        extension:
-          type: string
-        status:
-          type: string
-          enum:
-          - started
-          - running
-          - completed
-          - failed
-          - active
-          - activeError
-          - stopped
-          - stopInProgress
-          - success
-          - pending
-        runType:
-          type: string
-        startTime:
-          type: integer
-          format: int64
-        endTime:
-          type: integer
-          format: int64
-        executionTime:
-          type: integer
-          format: int64
-        failureContext:
-          $ref: '#/components/schemas/FailureContext'
-        successContext:
-          $ref: '#/components/schemas/SuccessContext'
-        scheduleInfo:
-          $ref: '#/components/schemas/AppSchedule'
-        config:
-          type: object
-          additionalProperties:
-            type: object
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    SubscriptionDestination:
-      required:
-      - category
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        category:
-          type: string
-          enum:
-          - Users
-          - Teams
-          - Admins
-          - Assignees
-          - Owners
-          - Mentions
-          - Followers
-          - External
-        type:
-          type: string
-          enum:
-          - Webhook
-          - Slack
-          - MsTeams
-          - GChat
-          - Email
-          - ActivityFeed
-          - GovernanceWorkflowChangeEvent
-        statusDetails:
-          type: object
-        timeout:
-          type: integer
-          format: int32
-        readTimeout:
-          type: integer
-          format: int32
-        enabled:
-          type: boolean
-        config:
-          type: object
-        notifyDownstream:
-          type: boolean
-        downstreamDepth:
-          minimum: 1
-          type: integer
-          format: int32
-    Link:
-      type: object
-      properties:
-        type:
-          type: string
-        params:
-          type: object
-          additionalProperties:
-            type: string
-        uri:
-          type: string
-          format: uri
-        title:
-          type: string
-        uriBuilder:
-          $ref: '#/components/schemas/UriBuilder'
-        rel:
-          type: string
-        rels:
-          type: array
-          items:
-            type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    CreateEventSubscription:
-      required:
-      - alertType
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        className:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        enabled:
-          type: boolean
-        batchSize:
-          type: integer
-          format: int32
-        alertType:
-          type: string
-          enum:
-          - Notification
-          - Observability
-          - ActivityFeed
-          - GovernanceWorkflowChangeEvent
-          - Custom
-        trigger:
-          $ref: '#/components/schemas/TriggerConfig'
-        resources:
-          type: array
-          items:
-            type: string
-        destinations:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionDestination'
-        provider:
-          type: string
-          enum:
-          - system
-          - user
-          - automation
-        retries:
-          type: integer
-          format: int32
-        pollInterval:
-          type: integer
-          format: int32
-        input:
-          $ref: '#/components/schemas/AlertFilteringInput'
-        notificationTemplate:
-          $ref: '#/components/schemas/EntityReference'
-        domains:
-          type: array
-          items:
-            type: string
-        config:
-          type: object
-          additionalProperties:
-            type: object
-        extension:
-          type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    ResultList:
+    AppMarketPlaceDefinitionList:
       required:
       - data
       type: object
@@ -2753,7 +2844,7 @@ components:
         data:
           type: array
           items:
-            type: object
+            $ref: '#/components/schemas/AppMarketPlaceDefinition'
         paging:
           $ref: '#/components/schemas/Paging'
         errors:
@@ -2767,6 +2858,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
+    ComponentConfig:
+      type: object
     ArgumentsInput:
       type: object
       properties:
@@ -2786,99 +2879,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Argument'
-    AlertFilteringInput:
-      type: object
-      properties:
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArgumentsInput'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArgumentsInput'
-    AppRefList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    Stats:
-      type: object
-      properties:
-        jobStats:
-          $ref: '#/components/schemas/StepStats'
-        readerStats:
-          $ref: '#/components/schemas/StepStats'
-        processStats:
-          $ref: '#/components/schemas/StepStats'
-        sinkStats:
-          $ref: '#/components/schemas/StepStats'
-        vectorStats:
-          $ref: '#/components/schemas/StepStats'
-        entityStats:
-          $ref: '#/components/schemas/EntityStats'
-    AppExtension:
-      required:
-      - appId
-      - appName
-      - extension
-      type: object
-      properties:
-        appId:
-          type: string
-          format: uuid
-        appName:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        extension:
-          type: string
-          enum:
-          - status
-          - limits
-          - custom
-    UriBuilder:
-      type: object
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
   securitySchemes:
     BearerAuth:
       type: http
