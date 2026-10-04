@@ -534,235 +534,6 @@ paths:
                 $ref: '#/components/schemas/McpServer'
 components:
   schemas:
-    Arguments:
-      type: object
-    McpServerInfo:
-      type: object
-      properties:
-        serverName:
-          type: string
-        serverVersion:
-          type: string
-        vendor:
-          type: string
-        repositoryUrl:
-          type: string
-        documentationUrl:
-          type: string
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    InputSchema:
-      type: object
-    ScopeAndDeployment:
-      type: object
-      properties:
-        scope:
-          type: string
-          enum:
-          - Internal
-          - External
-          - Both
-        deploymentRegions:
-          type: array
-          items:
-            type: string
-        affectedUserCount:
-          type: integer
-          format: int32
-    OutputClassification:
-      type: object
-      properties:
-        sensitivityLevel:
-          type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
-        mayContainPII:
-          type: boolean
-        outputCategories:
-          type: array
-          items:
-            type: string
-    AICompliance:
-      type: object
-      properties:
-        complianceRecords:
-          type: array
-          items:
-            $ref: '#/components/schemas/AIComplianceRecord'
-    HighRiskSystems:
-      type: object
-      properties:
-        criticalInfrastructure:
-          type: boolean
-        educationVocationalTraining:
-          type: boolean
-        employment:
-          type: boolean
-        essentialPrivateServices:
-          type: boolean
-        essentialPublicServices:
-          type: boolean
-        lawEnforcement:
-          type: boolean
-        migrationAsylumBorderControl:
-          type: boolean
-        administrationOfJustice:
-          type: boolean
-    McpPromptMessage:
-      required:
-      - content
-      - role
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - user
-          - assistant
-          - system
-        content:
-          type: string
-    McpGovernanceMetadata:
-      type: object
-      properties:
-        registrationStatus:
-          type: string
-          enum:
-          - Registered
-          - Unregistered
-          - PendingApproval
-          - Approved
-          - Rejected
-        registeredBy:
-          type: string
-        registeredAt:
-          type: integer
-          format: int64
-        approvedBy:
-          type: string
-        approvedAt:
-          type: integer
-          format: int64
-        riskAssessment:
-          $ref: '#/components/schemas/RiskAssessment__1'
-        dataClassification:
-          $ref: '#/components/schemas/DataClassification__2'
-        governancePolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        aiCompliance:
-          $ref: '#/components/schemas/AICompliance'
-        intakeNotes:
-          type: string
-        approvalComments:
-          type: string
-    McpSecurityMetrics:
-      type: object
-      properties:
-        authenticationRequired:
-          type: boolean
-        authorizationEnforced:
-          type: boolean
-        auditLoggingEnabled:
-          type: boolean
-        encryptionInTransit:
-          type: boolean
-        sandboxed:
-          type: boolean
-        secretsManagement:
-          type: string
-    ConformityAssessment:
-      type: object
-      properties:
-        assessmentRequired:
-          type: boolean
-        assessmentType:
-          type: string
-          enum:
-          - Internal
-          - ThirdParty
-          - NotRequired
-        assessmentBody:
-          type: string
-        certificateNumber:
-          type: string
-        validUntil:
-          type: integer
-          format: int64
-    McpUsageMetrics:
-      type: object
-      properties:
-        totalInvocations:
-          type: integer
-          format: int32
-        successRate:
-          type: number
-          format: double
-        averageLatencyMs:
-          type: number
-          format: double
-        p95LatencyMs:
-          type: number
-          format: double
-        lastInvokedAt:
-          type: integer
-          format: int64
-        uniqueUsers:
-          type: integer
-          format: int32
-        dailyActiveUsers:
-          type: integer
-          format: int32
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    OutputSchema:
-      type: object
     McpPromptArgument:
       required:
       - name
@@ -790,51 +561,21 @@ components:
             type: object
         sensitive:
           type: boolean
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
+    McpSecurityMetrics:
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        authenticationRequired:
+          type: boolean
+        authorizationEnforced:
+          type: boolean
+        auditLoggingEnabled:
+          type: boolean
+        encryptionInTransit:
+          type: boolean
+        sandboxed:
+          type: boolean
+        secretsManagement:
           type: string
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    ProhibitedPractices:
-      type: object
-      properties:
-        subliminalManipulativeTechniques:
-          type: boolean
-        exploitationOfVulnerabilities:
-          type: boolean
-        socialScoringSystem:
-          type: boolean
-        riskAssessmentCriminalOffences:
-          type: boolean
-        facialRecognitionDatabaseCreation:
-          type: boolean
-        emotionInferenceWorkplaceEducation:
-          type: boolean
-        biometricCategorisation:
-          type: boolean
-        realTimeBiometricIdentification:
-          type: boolean
     McpServerList:
       required:
       - data
@@ -857,6 +598,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
     EthicalAIAssessment:
       type: object
       properties:
@@ -898,530 +654,6 @@ components:
           - LowRisk
           - MediumRisk
           - HighRisk
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    CreateMcpServer:
-      required:
-      - name
-      - serverType
-      - service
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        service:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        serverType:
-          type: string
-          enum:
-          - DataAccess
-          - FileSystem
-          - WebAPI
-          - Database
-          - Cloud
-          - Security
-          - Development
-          - Communication
-          - Custom
-        transportType:
-          type: string
-          enum:
-          - Stdio
-          - SSE
-          - StreamableHTTP
-        protocolVersion:
-          type: string
-        developmentStage:
-          type: string
-          enum:
-          - Proposal
-          - Development
-          - Testing
-          - Staging
-          - Production
-          - Deprecated
-          - Unauthorized
-        serverInfo:
-          $ref: '#/components/schemas/McpServerInfo'
-        connectionConfig:
-          $ref: '#/components/schemas/McpConnectionConfig'
-        capabilities:
-          $ref: '#/components/schemas/McpServerCapabilities'
-        tools:
-          type: array
-          items:
-            $ref: '#/components/schemas/McpTool'
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/McpResource'
-        prompts:
-          type: array
-          items:
-            $ref: '#/components/schemas/McpPrompt'
-        governanceMetadata:
-          $ref: '#/components/schemas/McpGovernanceMetadata'
-        dataAccessSummary:
-          $ref: '#/components/schemas/McpDataAccessSummary'
-        securityMetrics:
-          $ref: '#/components/schemas/McpSecurityMetrics'
-        sourceCode:
-          type: string
-        deploymentUrl:
-          type: string
-        documentation:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    McpDataAccessSummary:
-      type: object
-      properties:
-        dataSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        accessPatterns:
-          type: array
-          items:
-            type: string
-            enum:
-            - Read
-            - Write
-            - Execute
-        sensitivityLevel:
-          type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
-        piiAccess:
-          type: boolean
-        externalApiAccess:
-          type: boolean
-        fileSystemAccess:
-          type: boolean
-        networkAccess:
-          type: boolean
-        databaseAccess:
-          type: boolean
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    McpTool:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        toolCategory:
-          type: string
-          enum:
-          - FileOperation
-          - WebOperation
-          - DataOperation
-          - DatabaseOperation
-          - SystemOperation
-          - SecurityOperation
-          - CommunicationOperation
-          - CodeOperation
-          - SearchOperation
-          - Custom
-        inputSchema:
-          $ref: '#/components/schemas/InputSchema'
-        outputSchema:
-          $ref: '#/components/schemas/OutputSchema'
-        riskLevel:
-          type: string
-          enum:
-          - Low
-          - Medium
-          - High
-          - Critical
-        riskFactors:
-          type: array
-          items:
-            type: string
-        dataAccess:
-          $ref: '#/components/schemas/DataAccess__1'
-        requiredPermissions:
-          type: array
-          items:
-            type: string
-        sideEffects:
-          type: boolean
-        idempotent:
-          type: boolean
-        reversible:
-          type: boolean
-        timeout:
-          type: integer
-          format: int32
-        rateLimitPerMinute:
-          type: integer
-          format: int32
-        annotations:
-          $ref: '#/components/schemas/Annotations'
-        usageCount:
-          type: integer
-          format: int32
-        lastUsedAt:
-          type: integer
-          format: int64
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    AccountabilityMeasures:
-      type: object
-      properties:
-        hasOwner:
-          type: boolean
-        subjectToHumanOversight:
-          type: boolean
-        auditTrailEnabled:
-          type: boolean
-    McpConnectionConfig:
-      type: object
-      properties:
-        command:
-          type: string
-        args:
-          type: array
-          items:
-            type: string
-        env:
-          $ref: '#/components/schemas/Env'
-        workingDirectory:
-          type: string
-        url:
-          type: string
-        timeout:
-          type: integer
-          format: int32
-        retryAttempts:
-          type: integer
-          format: int32
-    JsonPatch:
-      type: object
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    McpServerCapabilities:
-      type: object
-      properties:
-        toolsSupported:
-          type: boolean
-        resourcesSupported:
-          type: boolean
-        promptsSupported:
-          type: boolean
-        loggingSupported:
-          type: boolean
-        samplingSupported:
-          type: boolean
-        rootsSupported:
-          type: boolean
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    DataClassification__2:
-      type: object
-      properties:
-        accessesPII:
-          type: boolean
-        accessesSensitiveData:
-          type: boolean
-        dataCategories:
-          type: array
-          items:
-            type: string
-        dataRetentionPeriod:
-          type: string
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
     EntityHistory:
       required:
       - entityType
@@ -1434,54 +666,6 @@ components:
           type: array
           items:
             type: object
-    DataClassification__1:
-      type: object
-      properties:
-        sensitivityLevel:
-          type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
-        containsPII:
-          type: boolean
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        dataCategories:
-          type: array
-          items:
-            type: string
-        retentionPeriod:
-          type: string
-        complianceRequirements:
-          type: array
-          items:
-            type: string
-    TransparencyObligations:
-      type: object
-      properties:
-        usersInformed:
-          type: boolean
-        deepfakeLabeling:
-          type: boolean
-        emotionRecognitionDisclosure:
-          type: boolean
-    Annotations:
-      type: object
-      properties:
-        title:
-          type: string
-        readOnlyHint:
-          type: boolean
-        destructiveHint:
-          type: boolean
-        idempotentHint:
-          type: boolean
-        openWorldHint:
-          type: boolean
     McpServer:
       required:
       - id
@@ -1660,6 +844,34 @@ components:
           - Deprecated
           - Rejected
           - Unprocessed
+    McpPromptMessage:
+      required:
+      - content
+      - role
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          - system
+        content:
+          type: string
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
     McpPrompt:
       required:
       - name
@@ -1711,20 +923,393 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagLabel'
-    Verification:
+    Paging:
+      required:
+      - total
       type: object
       properties:
-        isVerified:
-          type: boolean
-        verifiedBy:
+        before:
           type: string
-        verifiedAt:
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    InputSchema:
+      type: object
+    OutputClassification:
+      type: object
+      properties:
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+        mayContainPII:
+          type: boolean
+        outputCategories:
+          type: array
+          items:
+            type: string
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    McpTool:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        toolCategory:
+          type: string
+          enum:
+          - FileOperation
+          - WebOperation
+          - DataOperation
+          - DatabaseOperation
+          - SystemOperation
+          - SecurityOperation
+          - CommunicationOperation
+          - CodeOperation
+          - SearchOperation
+          - Custom
+        inputSchema:
+          $ref: '#/components/schemas/InputSchema'
+        outputSchema:
+          $ref: '#/components/schemas/OutputSchema'
+        riskLevel:
+          type: string
+          enum:
+          - Low
+          - Medium
+          - High
+          - Critical
+        riskFactors:
+          type: array
+          items:
+            type: string
+        dataAccess:
+          $ref: '#/components/schemas/DataAccess__1'
+        requiredPermissions:
+          type: array
+          items:
+            type: string
+        sideEffects:
+          type: boolean
+        idempotent:
+          type: boolean
+        reversible:
+          type: boolean
+        timeout:
+          type: integer
+          format: int32
+        rateLimitPerMinute:
+          type: integer
+          format: int32
+        annotations:
+          $ref: '#/components/schemas/Annotations'
+        usageCount:
+          type: integer
+          format: int32
+        lastUsedAt:
           type: integer
           format: int64
-        verificationNotes:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+    HighRiskSystems:
+      type: object
+      properties:
+        criticalInfrastructure:
+          type: boolean
+        educationVocationalTraining:
+          type: boolean
+        employment:
+          type: boolean
+        essentialPrivateServices:
+          type: boolean
+        essentialPublicServices:
+          type: boolean
+        lawEnforcement:
+          type: boolean
+        migrationAsylumBorderControl:
+          type: boolean
+        administrationOfJustice:
+          type: boolean
+    DataAccess__1:
+      type: object
+      properties:
+        readsData:
+          type: boolean
+        writesData:
+          type: boolean
+        deletesData:
+          type: boolean
+        sensitivityLevel:
           type: string
-        certificateUrl:
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+        piiAccess:
+          type: boolean
+        dataTypes:
+          type: array
+          items:
+            type: string
+    McpGovernanceMetadata:
+      type: object
+      properties:
+        registrationStatus:
           type: string
+          enum:
+          - Registered
+          - Unregistered
+          - PendingApproval
+          - Approved
+          - Rejected
+        registeredBy:
+          type: string
+        registeredAt:
+          type: integer
+          format: int64
+        approvedBy:
+          type: string
+        approvedAt:
+          type: integer
+          format: int64
+        riskAssessment:
+          $ref: '#/components/schemas/RiskAssessment__1'
+        dataClassification:
+          $ref: '#/components/schemas/DataClassification__2'
+        governancePolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        aiCompliance:
+          $ref: '#/components/schemas/AICompliance'
+        intakeNotes:
+          type: string
+        approvalComments:
+          type: string
+    ProhibitedPractices:
+      type: object
+      properties:
+        subliminalManipulativeTechniques:
+          type: boolean
+        exploitationOfVulnerabilities:
+          type: boolean
+        socialScoringSystem:
+          type: boolean
+        riskAssessmentCriminalOffences:
+          type: boolean
+        facialRecognitionDatabaseCreation:
+          type: boolean
+        emotionInferenceWorkplaceEducation:
+          type: boolean
+        biometricCategorisation:
+          type: boolean
+        realTimeBiometricIdentification:
+          type: boolean
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    McpUsageMetrics:
+      type: object
+      properties:
+        totalInvocations:
+          type: integer
+          format: int32
+        successRate:
+          type: number
+          format: double
+        averageLatencyMs:
+          type: number
+          format: double
+        p95LatencyMs:
+          type: number
+          format: double
+        lastInvokedAt:
+          type: integer
+          format: int64
+        uniqueUsers:
+          type: integer
+          format: int32
+        dailyActiveUsers:
+          type: integer
+          format: int32
+    CreateMcpServer:
+      required:
+      - name
+      - serverType
+      - service
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        service:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        serverType:
+          type: string
+          enum:
+          - DataAccess
+          - FileSystem
+          - WebAPI
+          - Database
+          - Cloud
+          - Security
+          - Development
+          - Communication
+          - Custom
+        transportType:
+          type: string
+          enum:
+          - Stdio
+          - SSE
+          - StreamableHTTP
+        protocolVersion:
+          type: string
+        developmentStage:
+          type: string
+          enum:
+          - Proposal
+          - Development
+          - Testing
+          - Staging
+          - Production
+          - Deprecated
+          - Unauthorized
+        serverInfo:
+          $ref: '#/components/schemas/McpServerInfo'
+        connectionConfig:
+          $ref: '#/components/schemas/McpConnectionConfig'
+        capabilities:
+          $ref: '#/components/schemas/McpServerCapabilities'
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpTool'
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpResource'
+        prompts:
+          type: array
+          items:
+            $ref: '#/components/schemas/McpPrompt'
+        governanceMetadata:
+          $ref: '#/components/schemas/McpGovernanceMetadata'
+        dataAccessSummary:
+          $ref: '#/components/schemas/McpDataAccessSummary'
+        securityMetrics:
+          $ref: '#/components/schemas/McpSecurityMetrics'
+        sourceCode:
+          type: string
+        deploymentUrl:
+          type: string
+        documentation:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
     Example:
       type: object
       properties:
@@ -1734,30 +1319,46 @@ components:
           $ref: '#/components/schemas/Arguments'
         expectedOutput:
           type: string
-    AccessDetails:
+    RestoreEntity:
       required:
-      - timestamp
+      - id
       type: object
       properties:
-        timestamp:
+        id:
+          type: string
+          format: uuid
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
           type: integer
           format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    ChangeSummaryMap:
-      type: object
-    Annotations__1:
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
       type: object
       properties:
-        audience:
-          type: array
-          items:
-            type: string
-        priority:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
           type: number
           format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     RiskAssessment__1:
       type: object
       properties:
@@ -1781,28 +1382,21 @@ components:
         assessedAt:
           type: integer
           format: int64
-    PatternMatch:
-      required:
-      - name
-      - score
+    McpDataAccessSummary:
       type: object
       properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    DataAccess__1:
-      type: object
-      properties:
-        readsData:
-          type: boolean
-        writesData:
-          type: boolean
-        deletesData:
-          type: boolean
+        dataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        accessPatterns:
+          type: array
+          items:
+            type: string
+            enum:
+            - Read
+            - Write
+            - Execute
         sensitivityLevel:
           type: string
           enum:
@@ -1812,12 +1406,39 @@ components:
           - Restricted
         piiAccess:
           type: boolean
-        dataTypes:
-          type: array
-          items:
-            type: string
-    Env:
+        externalApiAccess:
+          type: boolean
+        fileSystemAccess:
+          type: boolean
+        networkAccess:
+          type: boolean
+        databaseAccess:
+          type: boolean
+    McpServerInfo:
       type: object
+      properties:
+        serverName:
+          type: string
+        serverVersion:
+          type: string
+        vendor:
+          type: string
+        repositoryUrl:
+          type: string
+        documentationUrl:
+          type: string
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
     AIComplianceRecord:
       required:
       - framework
@@ -1866,6 +1487,87 @@ components:
           type: array
           items:
             type: string
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    AICompliance:
+      type: object
+      properties:
+        complianceRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AIComplianceRecord'
+    Annotations__1:
+      type: object
+      properties:
+        audience:
+          type: array
+          items:
+            type: string
+        priority:
+          type: number
+          format: double
+    AccountabilityMeasures:
+      type: object
+      properties:
+        hasOwner:
+          type: boolean
+        subjectToHumanOversight:
+          type: boolean
+        auditTrailEnabled:
+          type: boolean
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
     McpResource:
       required:
       - name
@@ -1925,15 +1627,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagLabel'
-    FieldChange:
+    Annotations:
       type: object
       properties:
-        name:
+        title:
           type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
+        readOnlyHint:
+          type: boolean
+        destructiveHint:
+          type: boolean
+        idempotentHint:
+          type: boolean
+        openWorldHint:
+          type: boolean
     EUAIActCompliance:
       type: object
       properties:
@@ -1954,6 +1660,300 @@ components:
           $ref: '#/components/schemas/ConformityAssessment'
         transparencyObligations:
           $ref: '#/components/schemas/TransparencyObligations'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    JsonPatch:
+      type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    ConformityAssessment:
+      type: object
+      properties:
+        assessmentRequired:
+          type: boolean
+        assessmentType:
+          type: string
+          enum:
+          - Internal
+          - ThirdParty
+          - NotRequired
+        assessmentBody:
+          type: string
+        certificateNumber:
+          type: string
+        validUntil:
+          type: integer
+          format: int64
+    McpServerCapabilities:
+      type: object
+      properties:
+        toolsSupported:
+          type: boolean
+        resourcesSupported:
+          type: boolean
+        promptsSupported:
+          type: boolean
+        loggingSupported:
+          type: boolean
+        samplingSupported:
+          type: boolean
+        rootsSupported:
+          type: boolean
+    McpConnectionConfig:
+      type: object
+      properties:
+        command:
+          type: string
+        args:
+          type: array
+          items:
+            type: string
+        env:
+          $ref: '#/components/schemas/Env'
+        workingDirectory:
+          type: string
+        url:
+          type: string
+        timeout:
+          type: integer
+          format: int32
+        retryAttempts:
+          type: integer
+          format: int32
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    ScopeAndDeployment:
+      type: object
+      properties:
+        scope:
+          type: string
+          enum:
+          - Internal
+          - External
+          - Both
+        deploymentRegions:
+          type: array
+          items:
+            type: string
+        affectedUserCount:
+          type: integer
+          format: int32
+    Arguments:
+      type: object
+    TransparencyObligations:
+      type: object
+      properties:
+        usersInformed:
+          type: boolean
+        deepfakeLabeling:
+          type: boolean
+        emotionRecognitionDisclosure:
+          type: boolean
+    Env:
+      type: object
+    DataClassification__1:
+      type: object
+      properties:
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+        containsPII:
+          type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        dataCategories:
+          type: array
+          items:
+            type: string
+        retentionPeriod:
+          type: string
+        complianceRequirements:
+          type: array
+          items:
+            type: string
+    OutputSchema:
+      type: object
+    DataClassification__2:
+      type: object
+      properties:
+        accessesPII:
+          type: boolean
+        accessesSensitiveData:
+          type: boolean
+        dataCategories:
+          type: array
+          items:
+            type: string
+        dataRetentionPeriod:
+          type: string
+    Verification:
+      type: object
+      properties:
+        isVerified:
+          type: boolean
+        verifiedBy:
+          type: string
+        verifiedAt:
+          type: integer
+          format: int64
+        verificationNotes:
+          type: string
+        certificateUrl:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
   securitySchemes:
     BearerAuth:
       type: http

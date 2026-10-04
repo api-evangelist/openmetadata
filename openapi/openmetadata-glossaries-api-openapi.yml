@@ -1699,20 +1699,6 @@ paths:
           description: model for instance {id} is not found
 components:
   schemas:
-    AddGlossaryToAssetsRequest:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        assets:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    MoveGlossaryTermRequest:
-      type: object
-      properties:
-        parent:
-          $ref: '#/components/schemas/EntityReference'
     GlossaryTerm:
       required:
       - description
@@ -1850,15 +1836,142 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    VoteRequest:
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
       type: object
       properties:
-        updatedVoteType:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    CSVImportResponse:
+      type: object
+      properties:
+        jobId:
           type: string
-          enum:
-          - votedUp
-          - votedDown
-          - unVoted
+        message:
+          type: string
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    GlossaryTermList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlossaryTerm'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    GlossaryList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Glossary'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
     CsvImportResult:
       type: object
       properties:
@@ -1888,6 +2001,190 @@ components:
           format: int32
         importResultsCsv:
           type: string
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    AddGlossaryToAssetsRequest:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    CreateGlossaryTerm:
+      required:
+      - description
+      - glossary
+      - name
+      type: object
+      properties:
+        glossary:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        parent:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        synonyms:
+          type: array
+          items:
+            type: string
+        relatedTerms:
+          type: array
+          items:
+            type: string
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/TermReference'
+        conceptMappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConceptMapping'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        mutuallyExclusive:
+          type: boolean
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     TagLabelMetadata:
       type: object
       properties:
@@ -2013,6 +2310,22 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    TermReference:
+      type: object
+      properties:
+        name:
+          type: string
+        endpoint:
+          type: string
+          format: uri
     ConceptMapping:
       required:
       - conceptIri
@@ -2036,75 +2349,6 @@ components:
           format: uri
         source:
           type: string
-    TermRelation:
-      required:
-      - term
-      type: object
-      properties:
-        relationType:
-          pattern: ^[a-zA-Z][a-zA-Z0-9]*$
-          type: string
-        term:
-          $ref: '#/components/schemas/EntityReference'
-    CSVImportResponse:
-      type: object
-      properties:
-        jobId:
-          type: string
-        message:
-          type: string
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
     UsageStats:
       required:
       - count
@@ -2117,41 +2361,23 @@ components:
         percentileRank:
           type: number
           format: double
-    CSVExportResponse:
+    CoverImage:
       type: object
       properties:
-        jobId:
+        url:
           type: string
-        message:
+        position:
           type: string
-    BulkResponse:
-      type: object
-      properties:
-        request:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
-    Paging:
+    TermRelation:
       required:
-      - total
+      - term
       type: object
       properties:
-        before:
+        relationType:
+          pattern: ^[a-zA-Z][a-zA-Z0-9]*$
           type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
+        term:
+          $ref: '#/components/schemas/EntityReference'
     TagLabel:
       required:
       - labelType
@@ -2200,47 +2426,6 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
     ChangeDescription:
       type: object
       properties:
@@ -2261,56 +2446,8 @@ components:
           format: double
         changeSummary:
           $ref: '#/components/schemas/ChangeSummaryMap'
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
     JsonPatch:
       type: object
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
     ChangeEvent:
       required:
       - entityId
@@ -2378,240 +2515,17 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    Style:
+    MoveGlossaryTermRequest:
       type: object
       properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    ValidateGlossaryTagsRequest:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        glossaryTags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    CreateGlossaryTerm:
-      required:
-      - description
-      - glossary
-      - name
-      type: object
-      properties:
-        glossary:
-          maxLength: 3072
-          minLength: 1
-          type: string
         parent:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        synonyms:
-          type: array
-          items:
-            type: string
-        relatedTerms:
-          type: array
-          items:
-            type: string
-        references:
-          type: array
-          items:
-            $ref: '#/components/schemas/TermReference'
-        conceptMappings:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConceptMapping'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        provider:
-          type: string
-          enum:
-          - system
-          - user
-          - automation
-        mutuallyExclusive:
-          type: boolean
-        extension:
-          type: object
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    ChangeSummaryMap:
-      type: object
-    GlossaryList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Glossary'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
           $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    GlossaryTermList:
-      required:
-      - data
+    EntityError:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GlossaryTerm'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
+        message:
           type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
-    TermReference:
-      type: object
-      properties:
-        name:
-          type: string
-        endpoint:
-          type: string
-          format: uri
-    BulkOperationResult:
-      type: object
-      properties:
-        dryRun:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        successRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-        failedRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
+        entity:
           type: object
     CreateGlossary:
       required:
@@ -2660,6 +2574,92 @@ components:
             type: string
         lifeCycle:
           $ref: '#/components/schemas/LifeCycle'
+    CSVExportResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+        message:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
+    ValidateGlossaryTagsRequest:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        glossaryTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+    BulkResponse:
+      type: object
+      properties:
+        request:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
   securitySchemes:
     BearerAuth:
       type: http

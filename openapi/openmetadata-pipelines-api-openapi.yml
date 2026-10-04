@@ -1134,6 +1134,111 @@ paths:
           description: model for instance {id} is not found
 components:
   schemas:
+    Task:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        sourceUrl:
+          type: string
+        downstreamTasks:
+          type: array
+          items:
+            type: string
+        taskType:
+          type: string
+        taskSQL:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    CreatePipeline:
+      required:
+      - name
+      - service
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        sourceUrl:
+          type: string
+        concurrency:
+          type: integer
+          format: int32
+        pipelineLocation:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        state:
+          type: string
+          enum:
+          - Active
+          - Inactive
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        extension:
+          type: object
+        scheduleInterval:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        sourceHash:
+          maxLength: 32
+          minLength: 1
+          type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    Progress:
+      type: object
     PipelineStatus:
       type: object
       properties:
@@ -1169,37 +1274,196 @@ components:
           type: object
           additionalProperties:
             type: object
-    PipelineStatusList:
+    PipelineMetrics:
       required:
-      - data
+      - dataAvailable
+      - totalPipelines
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PipelineStatus'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
+        totalPipelines:
           type: integer
           format: int32
-        warnings:
+        serviceCount:
+          type: integer
+          format: int32
+        activePipelines:
+          type: integer
+          format: int32
+        inactivePipelines:
+          type: integer
+          format: int32
+        failedPipelines:
+          type: integer
+          format: int32
+        successfulPipelines:
+          type: integer
+          format: int32
+        pipelinesWithoutStatus:
+          type: integer
+          format: int32
+        serviceBreakdown:
           type: array
           items:
-            $ref: '#/components/schemas/EntityError'
-    VoteRequest:
+            $ref: '#/components/schemas/ServiceBreakdown'
+        dataAvailable:
+          type: boolean
+        errorMessage:
+          type: string
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
       type: object
       properties:
-        updatedVoteType:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    PipelineObservability:
+      required:
+      - pipeline
+      type: object
+      properties:
+        pipeline:
+          $ref: '#/components/schemas/EntityReference'
+        serviceType:
           type: string
           enum:
-          - votedUp
-          - votedDown
-          - unVoted
+          - Airflow
+          - GluePipeline
+          - KinesisFirehose
+          - Airbyte
+          - Fivetran
+          - Flink
+          - Dagster
+          - Nifi
+          - DomoPipeline
+          - CustomPipeline
+          - DatabricksPipeline
+          - Spline
+          - Spark
+          - OpenLineage
+          - KafkaConnect
+          - DBTCloud
+          - Matillion
+          - Stitch
+          - DataFactory
+          - Wherescape
+          - SSIS
+          - Snowplow
+          - Mulesoft
+          - MicrosoftFabricPipeline
+        scheduleInterval:
+          type: string
+        startTime:
+          type: integer
+          format: int64
+        endTime:
+          type: integer
+          format: int64
+        lastRunTime:
+          type: integer
+          format: int64
+        lastRunStatus:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Pending
+          - Skipped
+          - Running
+        averageRunTime:
+          type: number
+          format: double
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    TableObservabilityData:
+      required:
+      - observabilityData
+      - tableFqn
+      - tableId
+      type: object
+      properties:
+        tableId:
+          type: string
+          format: uuid
+        tableFqn:
+          type: string
+        observabilityData:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineObservability'
+    PipelineRuntimeTrend:
+      required:
+      - date
+      - timestamp
+      - totalPipelines
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        date:
+          type: string
+        maxRuntime:
+          type: number
+          format: double
+        minRuntime:
+          type: number
+          format: double
+        avgRuntime:
+          type: number
+          format: double
+        totalPipelines:
+          type: integer
+          format: int32
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
     Pipeline:
       required:
       - id
@@ -1363,6 +1627,177 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityReference'
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    PipelineSummaryList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineSummary'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    VoteRequest:
+      type: object
+      properties:
+        updatedVoteType:
+          type: string
+          enum:
+          - votedUp
+          - votedDown
+          - unVoted
+    ChangeSummaryMap:
+      type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    PipelineStatusList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineStatus'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    BulkOperationResult:
+      type: object
+      properties:
+        dryRun:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          - aborted
+          - partialSuccess
+          - running
+        abortReason:
+          type: string
+        numberOfRowsProcessed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsPassed:
+          minimum: 0
+          type: integer
+          format: int32
+        numberOfRowsFailed:
+          minimum: 0
+          type: integer
+          format: int32
+        successRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+        failedRequest:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkResponse'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     TagLabelMetadata:
       type: object
       properties:
@@ -1371,110 +1806,289 @@ components:
         expiryDate:
           type: integer
           format: int64
-    StepSummary:
+    RestoreEntity:
       required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    ServiceBreakdown:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        serviceType:
+          type: string
+        count:
+          type: integer
+          format: int32
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    StackTraceError:
+      required:
+      - error
       - name
       type: object
       properties:
         name:
           type: string
-        records:
-          type: integer
-          format: int32
-        updated_records:
-          type: integer
-          format: int32
-        warnings:
-          type: integer
-          format: int32
-        errors:
-          type: integer
-          format: int32
-        filtered:
-          type: integer
-          format: int32
-        failures:
-          type: array
-          items:
-            $ref: '#/components/schemas/StackTraceError'
-        progress:
-          $ref: '#/components/schemas/Progress'
-        operationMetrics:
-          $ref: '#/components/schemas/OperationMetrics'
-        sourceTimeMs:
-          type: number
-          format: double
-        sinkTimeMs:
-          type: number
-          format: double
-    CreatePipeline:
-      required:
-      - name
-      - service
+        error:
+          type: string
+        stackTrace:
+          type: string
+    CoverImage:
       type: object
       properties:
+        url:
+          type: string
+        position:
+          type: string
+    PipelineExecutionTrend:
+      required:
+      - date
+      - timestamp
+      - totalCount
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        date:
+          type: string
+        successCount:
+          type: integer
+          format: int32
+        failedCount:
+          type: integer
+          format: int32
+        pendingCount:
+          type: integer
+          format: int32
+        skippedCount:
+          type: integer
+          format: int32
+        runningCount:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
         name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
           type: string
         displayName:
           type: string
         description:
           type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        sourceUrl:
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
           type: string
-        concurrency:
-          type: integer
-          format: int32
-        pipelineLocation:
+          enum:
+          - Classification
+          - Glossary
+        labelType:
           type: string
-        startDate:
-          type: string
-          format: date-time
-        tasks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Task'
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
         state:
           type: string
           enum:
-          - Active
-          - Inactive
-        tags:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
           type: array
           items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
-        service:
-          maxLength: 3072
-          minLength: 1
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    JsonPatch:
+      type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
           type: string
-        extension:
-          type: object
-        scheduleInterval:
+          format: uuid
+        eventType:
           type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
         domains:
           type: array
           items:
             type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-        sourceHash:
-          maxLength: 32
-          minLength: 1
+            format: uuid
+        entityFullyQualifiedName:
           type: string
-        reviewers:
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    PipelineList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/EntityReference'
+            $ref: '#/components/schemas/Pipeline'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    PipelineObservabilityResponse:
+      required:
+      - pipelineFqn
+      - pipelineId
+      - tableObservabilityData
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          format: uuid
+        pipelineFqn:
+          type: string
+        tableObservabilityData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TableObservabilityData'
+        paging:
+          $ref: '#/components/schemas/Paging'
+    PipelineRuntimeTrendList:
+      required:
+      - data
+      - dataAvailable
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineRuntimeTrend'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        startDate:
+          type: string
+        endDate:
+          type: string
+        dataAvailable:
+          type: boolean
+        errorMessage:
+          type: string
     PipelineSummary:
       required:
       - impactedAssetsCount
@@ -1544,254 +2158,89 @@ components:
           type: array
           items:
             type: string
-    ResultList:
-      required:
-      - data
+    FieldChange:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
+        name:
           type: string
-        position:
-          type: string
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    UsageDetails:
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    AccessDetails:
       required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    PipelineRuntimeTrend:
-      required:
-      - date
       - timestamp
-      - totalPipelines
       type: object
       properties:
         timestamp:
           type: integer
           format: int64
-        date:
-          type: string
-        maxRuntime:
-          type: number
-          format: double
-        minRuntime:
-          type: number
-          format: double
-        avgRuntime:
-          type: number
-          format: double
-        totalPipelines:
-          type: integer
-          format: int32
-    BulkResponse:
-      type: object
-      properties:
-        request:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
-    PipelineObservability:
-      required:
-      - pipeline
-      type: object
-      properties:
-        pipeline:
+        accessedBy:
           $ref: '#/components/schemas/EntityReference'
-        serviceType:
+        accessedByAProcess:
           type: string
-          enum:
-          - Airflow
-          - GluePipeline
-          - KinesisFirehose
-          - Airbyte
-          - Fivetran
-          - Flink
-          - Dagster
-          - Nifi
-          - DomoPipeline
-          - CustomPipeline
-          - DatabricksPipeline
-          - Spline
-          - Spark
-          - OpenLineage
-          - KafkaConnect
-          - DBTCloud
-          - Matillion
-          - Stitch
-          - DataFactory
-          - Wherescape
-          - SSIS
-          - Snowplow
-          - Mulesoft
-          - MicrosoftFabricPipeline
-        scheduleInterval:
-          type: string
-        startTime:
-          type: integer
-          format: int64
-        endTime:
-          type: integer
-          format: int64
-        lastRunTime:
-          type: integer
-          format: int64
-        lastRunStatus:
-          type: string
-          enum:
-          - Successful
-          - Failed
-          - Pending
-          - Skipped
-          - Running
-        averageRunTime:
-          type: number
-          format: double
-    ServiceBreakdown:
-      type: object
-      properties:
-        serviceName:
-          type: string
-        serviceType:
-          type: string
-        count:
-          type: integer
-          format: int32
-    Paging:
+    EntityReference:
       required:
-      - total
+      - id
+      - type
       type: object
       properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    PipelineObservabilityResponse:
-      required:
-      - pipelineFqn
-      - pipelineId
-      - tableObservabilityData
-      type: object
-      properties:
-        pipelineId:
+        id:
           type: string
           format: uuid
-        pipelineFqn:
-          type: string
-        tableObservabilityData:
-          type: array
-          items:
-            $ref: '#/components/schemas/TableObservabilityData'
-        paging:
-          $ref: '#/components/schemas/Paging'
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
+        type:
           type: string
         name:
           type: string
-        displayName:
+        fullyQualifiedName:
           type: string
         description:
           type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
+        displayName:
           type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
         href:
           type: string
           format: uri
-        reason:
+    StepSummary:
+      required:
+      - name
+      type: object
+      properties:
+        name:
           type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
+        records:
+          type: integer
+          format: int32
+        updated_records:
+          type: integer
+          format: int32
+        warnings:
+          type: integer
+          format: int32
+        errors:
+          type: integer
+          format: int32
+        filtered:
+          type: integer
+          format: int32
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StackTraceError'
+        progress:
+          $ref: '#/components/schemas/Progress'
+        operationMetrics:
+          $ref: '#/components/schemas/OperationMetrics'
+        sourceTimeMs:
+          type: number
+          format: double
+        sinkTimeMs:
+          type: number
+          format: double
     PipelineExecutionTrendList:
       required:
       - data
@@ -1821,356 +2270,6 @@ components:
           type: boolean
         errorMessage:
           type: string
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    PipelineMetrics:
-      required:
-      - dataAvailable
-      - totalPipelines
-      type: object
-      properties:
-        totalPipelines:
-          type: integer
-          format: int32
-        serviceCount:
-          type: integer
-          format: int32
-        activePipelines:
-          type: integer
-          format: int32
-        inactivePipelines:
-          type: integer
-          format: int32
-        failedPipelines:
-          type: integer
-          format: int32
-        successfulPipelines:
-          type: integer
-          format: int32
-        pipelinesWithoutStatus:
-          type: integer
-          format: int32
-        serviceBreakdown:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceBreakdown'
-        dataAvailable:
-          type: boolean
-        errorMessage:
-          type: string
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    PipelineExecutionTrend:
-      required:
-      - date
-      - timestamp
-      - totalCount
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        date:
-          type: string
-        successCount:
-          type: integer
-          format: int32
-        failedCount:
-          type: integer
-          format: int32
-        pendingCount:
-          type: integer
-          format: int32
-        skippedCount:
-          type: integer
-          format: int32
-        runningCount:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int32
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    JsonPatch:
-      type: object
-    OperationMetrics:
-      type: object
-    TableObservabilityData:
-      required:
-      - observabilityData
-      - tableFqn
-      - tableId
-      type: object
-      properties:
-        tableId:
-          type: string
-          format: uuid
-        tableFqn:
-          type: string
-        observabilityData:
-          type: array
-          items:
-            $ref: '#/components/schemas/PipelineObservability'
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    PipelineList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Pipeline'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    PipelineSummaryList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PipelineSummary'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    Progress:
-      type: object
     PatternMatch:
       required:
       - name
@@ -2184,117 +2283,18 @@ components:
         score:
           type: number
           format: double
-    BulkOperationResult:
+    OperationMetrics:
+      type: object
+    BulkResponse:
       type: object
       properties:
-        dryRun:
-          type: boolean
+        request:
+          type: object
+        message:
+          type: string
         status:
-          type: string
-          enum:
-          - success
-          - failure
-          - aborted
-          - partialSuccess
-          - running
-        abortReason:
-          type: string
-        numberOfRowsProcessed:
-          minimum: 0
           type: integer
           format: int32
-        numberOfRowsPassed:
-          minimum: 0
-          type: integer
-          format: int32
-        numberOfRowsFailed:
-          minimum: 0
-          type: integer
-          format: int32
-        successRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-        failedRequest:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkResponse'
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    StackTraceError:
-      required:
-      - error
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-        error:
-          type: string
-        stackTrace:
-          type: string
-    Task:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        sourceUrl:
-          type: string
-        downstreamTasks:
-          type: array
-          items:
-            type: string
-        taskType:
-          type: string
-        taskSQL:
-          type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    PipelineRuntimeTrendList:
-      required:
-      - data
-      - dataAvailable
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PipelineRuntimeTrend'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        startDate:
-          type: string
-        endDate:
-          type: string
-        dataAvailable:
-          type: boolean
-        errorMessage:
-          type: string
   securitySchemes:
     BearerAuth:
       type: http

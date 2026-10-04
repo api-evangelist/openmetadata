@@ -558,19 +558,98 @@ paths:
                 $ref: '#/components/schemas/StorageService'
 components:
   schemas:
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
     StorageConnection:
       type: object
       properties:
         config:
           type: object
-    TagLabelMetadata:
+    Votes:
       type: object
       properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
+        upVotes:
           type: integer
-          format: int64
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
     ResultList:
       required:
       - data
@@ -593,13 +672,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
     LifeCycle:
       type: object
       properties:
@@ -609,20 +681,46 @@ components:
           $ref: '#/components/schemas/AccessDetails'
         accessed:
           $ref: '#/components/schemas/AccessDetails'
-    UsageDetails:
+    RestoreEntity:
       required:
-      - dailyStats
-      - date
+      - id
       type: object
       properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
+        id:
           type: string
+          format: uuid
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     UsageStats:
       required:
       - count
@@ -635,24 +733,13 @@ components:
         percentileRank:
           type: number
           format: double
-    Paging:
-      required:
-      - total
+    CoverImage:
       type: object
       properties:
-        before:
+        url:
           type: string
-        after:
+        position:
           type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     TagLabel:
       required:
       - labelType
@@ -701,453 +788,11 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    TestConnectionResult:
-      required:
-      - steps
-      type: object
-      properties:
-        lastUpdatedAt:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum:
-          - Successful
-          - Failed
-          - Running
-        steps:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestConnectionStepResult'
-    CreateStorageService:
-      required:
-      - name
-      - serviceType
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        serviceType:
-          type: string
-          enum:
-          - S3
-          - ADLS
-          - GCS
-          - CustomStorage
-        connection:
-          $ref: '#/components/schemas/StorageConnection'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        domains:
-          type: array
-          items:
-            type: string
-        ingestionRunner:
-          $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    JsonPatch:
-      type: object
     DatabaseConnection:
       type: object
       properties:
         config:
           type: object
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    StorageService:
-      required:
-      - id
-      - name
-      - serviceType
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        fullyQualifiedName:
-          maxLength: 3072
-          minLength: 1
-          type: string
-        displayName:
-          type: string
-        serviceType:
-          type: string
-          enum:
-          - S3
-          - ADLS
-          - GCS
-          - CustomStorage
-        description:
-          type: string
-        connection:
-          $ref: '#/components/schemas/StorageConnection'
-        pipelines:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        testConnectionResult:
-          $ref: '#/components/schemas/TestConnectionResult'
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        version:
-          type: number
-          format: double
-        updatedAt:
-          type: integer
-          format: int64
-        updatedBy:
-          type: string
-        impersonatedBy:
-          type: string
-        href:
-          type: string
-          format: uri
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        deleted:
-          type: boolean
-        entityStatus:
-          type: string
-          enum:
-          - Draft
-          - In Review
-          - Approved
-          - Archived
-          - Deprecated
-          - Rejected
-          - Unprocessed
-        dataProducts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataContract:
-          $ref: '#/components/schemas/EntityReference'
-        followers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        domains:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        ingestionRunner:
-          $ref: '#/components/schemas/EntityReference'
-        provider:
-          type: string
-          enum:
-          - system
-          - user
-          - automation
-        extension:
-          type: object
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        service:
-          $ref: '#/components/schemas/EntityReference'
-        style:
-          $ref: '#/components/schemas/Style'
-        experts:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        usageSummary:
-          $ref: '#/components/schemas/UsageDetails'
-        votes:
-          $ref: '#/components/schemas/Votes'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-        certification:
-          $ref: '#/components/schemas/AssetCertification'
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    ChangeSummaryMap:
-      type: object
-    TestConnectionStepResult:
-      required:
-      - mandatory
-      - name
-      - passed
-      type: object
-      properties:
-        name:
-          type: string
-        mandatory:
-          type: boolean
-        passed:
-          type: boolean
-        message:
-          type: string
-        errorLog:
-          type: string
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
     DatabaseService:
       required:
       - id
@@ -1325,6 +970,268 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    JsonPatch:
+      type: object
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    StorageService:
+      required:
+      - id
+      - name
+      - serviceType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        fullyQualifiedName:
+          maxLength: 3072
+          minLength: 1
+          type: string
+        displayName:
+          type: string
+        serviceType:
+          type: string
+          enum:
+          - S3
+          - ADLS
+          - GCS
+          - CustomStorage
+        description:
+          type: string
+        connection:
+          $ref: '#/components/schemas/StorageConnection'
+        pipelines:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        testConnectionResult:
+          $ref: '#/components/schemas/TestConnectionResult'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        version:
+          type: number
+          format: double
+        updatedAt:
+          type: integer
+          format: int64
+        updatedBy:
+          type: string
+        impersonatedBy:
+          type: string
+        href:
+          type: string
+          format: uri
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        deleted:
+          type: boolean
+        entityStatus:
+          type: string
+          enum:
+          - Draft
+          - In Review
+          - Approved
+          - Archived
+          - Deprecated
+          - Rejected
+          - Unprocessed
+        dataProducts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataContract:
+          $ref: '#/components/schemas/EntityReference'
+        followers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        extension:
+          type: object
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        service:
+          $ref: '#/components/schemas/EntityReference'
+        style:
+          $ref: '#/components/schemas/Style'
+        experts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        usageSummary:
+          $ref: '#/components/schemas/UsageDetails'
+        votes:
+          $ref: '#/components/schemas/Votes'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+        certification:
+          $ref: '#/components/schemas/AssetCertification'
+    CreateStorageService:
+      required:
+      - name
+      - serviceType
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        serviceType:
+          type: string
+          enum:
+          - S3
+          - ADLS
+          - GCS
+          - CustomStorage
+        connection:
+          $ref: '#/components/schemas/StorageConnection'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        domains:
+          type: array
+          items:
+            type: string
+        ingestionRunner:
+          $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
     StorageServiceList:
       required:
       - data
@@ -1347,6 +1254,48 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    TestConnectionStepResult:
+      required:
+      - mandatory
+      - name
+      - passed
+      type: object
+      properties:
+        name:
+          type: string
+        mandatory:
+          type: boolean
+        passed:
+          type: boolean
+        message:
+          type: string
+        errorLog:
+          type: string
+    TestConnectionResult:
+      required:
+      - steps
+      type: object
+      properties:
+        lastUpdatedAt:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - Successful
+          - Failed
+          - Running
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestConnectionStepResult'
     FieldChange:
       type: object
       properties:
@@ -1356,6 +1305,57 @@ components:
           type: object
         newValue:
           type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
   securitySchemes:
     BearerAuth:
       type: http

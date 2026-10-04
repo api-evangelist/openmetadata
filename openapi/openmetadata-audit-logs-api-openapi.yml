@@ -173,24 +173,6 @@ paths:
                 $ref: '#/components/schemas/ResultList'
 components:
   schemas:
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     CSVExportResponse:
       type: object
       properties:
@@ -198,6 +180,13 @@ components:
           type: string
         message:
           type: string
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
     ResultList:
       required:
       - data
@@ -220,13 +209,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    EntityError:
+    Paging:
+      required:
+      - total
       type: object
       properties:
-        message:
+        before:
           type: string
-        entity:
-          type: object
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
   securitySchemes:
     BearerAuth:
       type: http

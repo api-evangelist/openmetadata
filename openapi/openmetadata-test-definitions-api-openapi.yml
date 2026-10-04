@@ -560,6 +560,342 @@ paths:
                 $ref: '#/components/schemas/TestDefinition'
 components:
   schemas:
+    CreateTestDefinition:
+      required:
+      - entityType
+      - name
+      - testPlatforms
+      type: object
+      properties:
+        name:
+          maxLength: 2147483647
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        entityType:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+        testPlatforms:
+          type: array
+          items:
+            type: string
+            enum:
+            - OpenMetadata
+            - GreatExpectations
+            - dbt
+            - Deequ
+            - Soda
+            - Other
+        supportedDataTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - NUMBER
+            - TINYINT
+            - SMALLINT
+            - INT
+            - BIGINT
+            - BYTEINT
+            - BYTES
+            - FLOAT
+            - DOUBLE
+            - DECIMAL
+            - NUMERIC
+            - TIMESTAMP
+            - TIMESTAMPZ
+            - TIME
+            - DATE
+            - DATETIME
+            - INTERVAL
+            - STRING
+            - MEDIUMTEXT
+            - TEXT
+            - CHAR
+            - LONG
+            - VARCHAR
+            - BOOLEAN
+            - BINARY
+            - VARBINARY
+            - ARRAY
+            - BLOB
+            - LONGBLOB
+            - MEDIUMBLOB
+            - MAP
+            - STRUCT
+            - UNION
+            - SET
+            - GEOGRAPHY
+            - ENUM
+            - JSON
+            - UUID
+            - VARIANT
+            - GEOMETRY
+            - BYTEA
+            - AGGREGATEFUNCTION
+            - ERROR
+            - FIXED
+            - RECORD
+            - 'NULL'
+            - SUPER
+            - HLLSKETCH
+            - PG_LSN
+            - PG_SNAPSHOT
+            - TSQUERY
+            - TXID_SNAPSHOT
+            - XML
+            - MACADDR
+            - TSVECTOR
+            - UNKNOWN
+            - CIDR
+            - INET
+            - CLOB
+            - ROWID
+            - LOWCARDINALITY
+            - YEAR
+            - POINT
+            - POLYGON
+            - TUPLE
+            - SPATIAL
+            - TABLE
+            - NTEXT
+            - IMAGE
+            - IPV4
+            - IPV6
+            - DATETIMERANGE
+            - HLL
+            - LARGEINT
+            - QUANTILE_STATE
+            - AGG_STATE
+            - BITMAP
+            - UINT
+            - BIT
+            - MONEY
+            - MEASURE HIDDEN
+            - MEASURE VISIBLE
+            - MEASURE
+            - KPI
+            - HEIRARCHY
+            - HIERARCHYID
+        provider:
+          type: string
+          enum:
+          - system
+          - user
+          - automation
+        parameterDefinition:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseParameter'
+        dataQualityDimension:
+          type: string
+          enum:
+          - Completeness
+          - Accuracy
+          - Consistency
+          - Validity
+          - Uniqueness
+          - Integrity
+          - SQL
+          - NoDimension
+        supportedServices:
+          type: array
+          items:
+            type: string
+        domains:
+          type: array
+          items:
+            type: string
+        sqlExpression:
+          type: string
+        validatorClass:
+          type: string
+        extension:
+          type: object
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
+      type: object
+      properties:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    TestDefinitionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestDefinition'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    TestCaseParameterValidationRule:
+      type: object
+      properties:
+        parameterField:
+          type: string
+        rule:
+          type: string
+          enum:
+          - EQUALS
+          - NOT_EQUALS
+          - GREATER_THAN_OR_EQUALS
+          - LESS_THAN_OR_EQUALS
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
     TagLabelMetadata:
       type: object
       properties:
@@ -568,6 +904,97 @@ components:
         expiryDate:
           type: integer
           format: int64
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
     TestDefinition:
       required:
       - name
@@ -809,211 +1236,35 @@ components:
           $ref: '#/components/schemas/LifeCycle'
         certification:
           $ref: '#/components/schemas/AssetCertification'
-    TestDefinitionList:
-      required:
-      - data
+    JsonPatch:
+      type: object
+    ChangeDescription:
       type: object
       properties:
-        data:
+        fieldsAdded:
           type: array
           items:
-            $ref: '#/components/schemas/TestDefinition'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
           type: array
           items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
           type: array
           items:
-            $ref: '#/components/schemas/EntityError'
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
           type: number
           format: double
-    Paging:
-      required:
-      - total
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    EntityError:
       type: object
       properties:
-        before:
+        message:
           type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    TestCaseParameterValidationRule:
-      type: object
-      properties:
-        parameterField:
-          type: string
-        rule:
-          type: string
-          enum:
-          - EQUALS
-          - NOT_EQUALS
-          - GREATER_THAN_OR_EQUALS
-          - LESS_THAN_OR_EQUALS
+        entity:
+          type: object
     TestCaseParameter:
       type: object
       properties:
@@ -1048,26 +1299,27 @@ components:
             type: object
         validationRule:
           $ref: '#/components/schemas/TestCaseParameterValidationRule'
-    ChangeDescription:
+    FieldChange:
       type: object
       properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
     EntityReference:
       required:
       - id
@@ -1094,249 +1346,6 @@ components:
         href:
           type: string
           format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    JsonPatch:
-      type: object
-    CreateTestDefinition:
-      required:
-      - entityType
-      - name
-      - testPlatforms
-      type: object
-      properties:
-        name:
-          maxLength: 2147483647
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        entityType:
-          type: string
-          enum:
-          - TABLE
-          - COLUMN
-        testPlatforms:
-          type: array
-          items:
-            type: string
-            enum:
-            - OpenMetadata
-            - GreatExpectations
-            - dbt
-            - Deequ
-            - Soda
-            - Other
-        supportedDataTypes:
-          type: array
-          items:
-            type: string
-            enum:
-            - NUMBER
-            - TINYINT
-            - SMALLINT
-            - INT
-            - BIGINT
-            - BYTEINT
-            - BYTES
-            - FLOAT
-            - DOUBLE
-            - DECIMAL
-            - NUMERIC
-            - TIMESTAMP
-            - TIMESTAMPZ
-            - TIME
-            - DATE
-            - DATETIME
-            - INTERVAL
-            - STRING
-            - MEDIUMTEXT
-            - TEXT
-            - CHAR
-            - LONG
-            - VARCHAR
-            - BOOLEAN
-            - BINARY
-            - VARBINARY
-            - ARRAY
-            - BLOB
-            - LONGBLOB
-            - MEDIUMBLOB
-            - MAP
-            - STRUCT
-            - UNION
-            - SET
-            - GEOGRAPHY
-            - ENUM
-            - JSON
-            - UUID
-            - VARIANT
-            - GEOMETRY
-            - BYTEA
-            - AGGREGATEFUNCTION
-            - ERROR
-            - FIXED
-            - RECORD
-            - 'NULL'
-            - SUPER
-            - HLLSKETCH
-            - PG_LSN
-            - PG_SNAPSHOT
-            - TSQUERY
-            - TXID_SNAPSHOT
-            - XML
-            - MACADDR
-            - TSVECTOR
-            - UNKNOWN
-            - CIDR
-            - INET
-            - CLOB
-            - ROWID
-            - LOWCARDINALITY
-            - YEAR
-            - POINT
-            - POLYGON
-            - TUPLE
-            - SPATIAL
-            - TABLE
-            - NTEXT
-            - IMAGE
-            - IPV4
-            - IPV6
-            - DATETIMERANGE
-            - HLL
-            - LARGEINT
-            - QUANTILE_STATE
-            - AGG_STATE
-            - BITMAP
-            - UINT
-            - BIT
-            - MONEY
-            - MEASURE HIDDEN
-            - MEASURE VISIBLE
-            - MEASURE
-            - KPI
-            - HEIRARCHY
-            - HIERARCHYID
-        provider:
-          type: string
-          enum:
-          - system
-          - user
-          - automation
-        parameterDefinition:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCaseParameter'
-        dataQualityDimension:
-          type: string
-          enum:
-          - Completeness
-          - Accuracy
-          - Consistency
-          - Validity
-          - Uniqueness
-          - Integrity
-          - SQL
-          - NoDimension
-        supportedServices:
-          type: array
-          items:
-            type: string
-        domains:
-          type: array
-          items:
-            type: string
-        sqlExpression:
-          type: string
-        validatorClass:
-          type: string
-        extension:
-          type: object
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
     PatternMatch:
       required:
       - name
@@ -1350,15 +1359,6 @@ components:
         score:
           type: number
           format: double
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
   securitySchemes:
     BearerAuth:
       type: http

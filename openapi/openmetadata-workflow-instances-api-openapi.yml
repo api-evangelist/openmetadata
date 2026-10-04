@@ -78,6 +78,28 @@ paths:
                 $ref: '#/components/schemas/WorkflowInstanceResultList'
 components:
   schemas:
+    WorkflowInstanceResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowInstanceState'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
     WorkflowInstanceState:
       type: object
       properties:
@@ -107,28 +129,13 @@ components:
           - EXCEPTION
         exception:
           type: string
-    WorkflowInstanceResultList:
-      required:
-      - data
+    EntityError:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkflowInstanceState'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
+        message:
+          type: string
+        entity:
+          type: object
     Paging:
       required:
       - total
@@ -147,13 +154,6 @@ components:
         total:
           type: integer
           format: int32
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
     Stage:
       type: object
       properties:

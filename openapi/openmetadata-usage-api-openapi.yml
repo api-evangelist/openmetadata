@@ -245,6 +245,18 @@ paths:
           description: Bad request
 components:
   schemas:
+    EntityUsage:
+      required:
+      - entity
+      - usage
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/EntityReference'
+        usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageDetails'
     UsageDetails:
       required:
       - dailyStats
@@ -259,18 +271,6 @@ components:
           $ref: '#/components/schemas/UsageStats'
         date:
           type: string
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
     EntityReference:
       required:
       - id
@@ -297,6 +297,18 @@ components:
         href:
           type: string
           format: uri
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
     DailyCount:
       required:
       - count
@@ -309,18 +321,6 @@ components:
           format: int32
         date:
           type: string
-    EntityUsage:
-      required:
-      - entity
-      - usage
-      type: object
-      properties:
-        entity:
-          $ref: '#/components/schemas/EntityReference'
-        usage:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageDetails'
   securitySchemes:
     BearerAuth:
       type: http

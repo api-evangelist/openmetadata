@@ -528,44 +528,18 @@ paths:
                 $ref: '#/components/schemas/PromptTemplate'
 components:
   schemas:
-    PromptTemplateList:
+    AssetCertification:
       required:
-      - data
+      - appliedDate
+      - expiryDate
+      - tagLabel
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptTemplate'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
           type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    PromptExample:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        variables:
-          $ref: '#/components/schemas/Variables'
-        expectedOutput:
-          type: string
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+          format: int64
         expiryDate:
           type: integer
           format: int64
@@ -713,6 +687,18 @@ components:
           - Unprocessed
         certification:
           $ref: '#/components/schemas/AssetCertification'
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
     TemplateVariable:
       required:
       - name
@@ -736,6 +722,106 @@ components:
           type: string
         validationPattern:
           type: string
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    PromptMetrics:
+      type: object
+      properties:
+        usageCount:
+          type: integer
+          format: int32
+        averageTokens:
+          type: number
+          format: double
+        averageLatencyMs:
+          type: number
+          format: double
+        successRate:
+          type: number
+          format: double
+        lastUsedAt:
+          type: integer
+          format: int64
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    PromptTemplateList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptTemplate'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
     ResultList:
       required:
       - data
@@ -758,27 +844,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
     LifeCycle:
       type: object
       properties:
@@ -788,6 +853,46 @@ components:
           $ref: '#/components/schemas/AccessDetails'
         accessed:
           $ref: '#/components/schemas/AccessDetails'
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
     UsageStats:
       required:
       - count
@@ -800,87 +905,15 @@ components:
         percentileRank:
           type: number
           format: double
-    CreatePromptTemplate:
-      required:
-      - name
-      - templateContent
+    CoverImage:
       type: object
       properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
+        url:
           type: string
-        displayName:
+        position:
           type: string
-        description:
-          type: string
-        templateContent:
-          type: string
-        systemPrompt:
-          type: string
-        variables:
-          type: array
-          items:
-            $ref: '#/components/schemas/TemplateVariable'
-        examples:
-          type: array
-          items:
-            $ref: '#/components/schemas/PromptExample'
-        templateType:
-          type: string
-          enum:
-          - ChatCompletion
-          - TextGeneration
-          - CodeGeneration
-          - Embedding
-          - Classification
-          - Extraction
-          - Custom
-        templateVersion:
-          type: string
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        domains:
-          type: array
-          items:
-            type: string
-        dataProducts:
-          type: array
-          items:
-            type: string
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    Paging:
-      required:
-      - total
+    Variables:
       type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
     TagLabel:
       required:
       - labelType
@@ -929,47 +962,6 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/TagLabelMetadata'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
     ChangeDescription:
       type: object
       properties:
@@ -992,72 +984,6 @@ components:
           $ref: '#/components/schemas/ChangeSummaryMap'
     JsonPatch:
       type: object
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    PromptMetrics:
-      type: object
-      properties:
-        usageCount:
-          type: integer
-          format: int32
-        averageTokens:
-          type: number
-          format: double
-        averageLatencyMs:
-          type: number
-          format: double
-        successRate:
-          type: number
-          format: double
-        lastUsedAt:
-          type: integer
-          format: int64
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
     ChangeEvent:
       required:
       - entityId
@@ -1125,37 +1051,96 @@ components:
           $ref: '#/components/schemas/ChangeDescription'
         entity:
           type: object
-    Style:
+    EntityError:
       type: object
       properties:
-        color:
+        message:
           type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    RestoreEntity:
+        entity:
+          type: object
+    CreatePromptTemplate:
       required:
-      - id
+      - name
+      - templateContent
       type: object
       properties:
-        id:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
           type: string
-          format: uuid
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
+        displayName:
           type: string
-        versions:
+        description:
+          type: string
+        templateContent:
+          type: string
+        systemPrompt:
+          type: string
+        variables:
           type: array
           items:
-            type: object
-    ChangeSummaryMap:
+            $ref: '#/components/schemas/TemplateVariable'
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptExample'
+        templateType:
+          type: string
+          enum:
+          - ChatCompletion
+          - TextGeneration
+          - CodeGeneration
+          - Embedding
+          - Classification
+          - Extraction
+          - Custom
+        templateVersion:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        dataProducts:
+          type: array
+          items:
+            type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    PromptExample:
       type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        variables:
+          $ref: '#/components/schemas/Variables'
+        expectedOutput:
+          type: string
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
     AccessDetails:
       required:
       - timestamp
@@ -1168,8 +1153,32 @@ components:
           $ref: '#/components/schemas/EntityReference'
         accessedByAProcess:
           type: string
-    Variables:
+    EntityReference:
+      required:
+      - id
+      - type
       type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
     PatternMatch:
       required:
       - name
@@ -1183,15 +1192,6 @@ components:
         score:
           type: number
           format: double
-    FieldChange:
-      type: object
-      properties:
-        name:
-          type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
   securitySchemes:
     BearerAuth:
       type: http

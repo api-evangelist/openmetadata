@@ -528,606 +528,23 @@ paths:
                 $ref: '#/components/schemas/AIGovernancePolicy'
 components:
   schemas:
-    BiasThreshold:
+    PerformanceStandard:
       type: object
       properties:
-        maxOverallBiasScore:
+        minAccuracy:
           type: number
           format: double
-        dimensionThresholds:
-          $ref: '#/components/schemas/DimensionThresholds'
-        evaluationFrequency:
-          type: string
-          enum:
-          - Continuous
-          - Daily
-          - Weekly
-          - Monthly
-          - OnDemand
-    DataAccessControl:
-      type: object
-      properties:
-        allowedDataSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        prohibitedDataSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        maxSensitivityLevel:
-          type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
-        piiAccessAllowed:
-          type: boolean
-        requireApprovalForSensitiveData:
-          type: boolean
-        dataRetentionDays:
-          type: integer
-          format: int32
-    ComplianceRequirement:
-      type: object
-      properties:
-        standard:
-          type: string
-          enum:
-          - GDPR
-          - HIPAA
-          - SOC2
-          - ISO27001
-          - NIST_AI_RMF
-          - EU_AI_Act
-          - OWASP_LLM_Top10
-          - Custom
-        requirements:
-          type: array
-          items:
-            type: string
-        attestationRequired:
-          type: boolean
-        auditFrequency:
-          type: string
-          enum:
-          - Continuous
-          - Weekly
-          - Monthly
-          - Quarterly
-          - Annually
-    TagLabelMetadata:
-      type: object
-      properties:
-        recognizer:
-          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
-        expiryDate:
-          type: integer
-          format: int64
-    PolicyViolation:
-      type: object
-      properties:
-        violatedRule:
-          type: string
-        violatingEntity:
+        maxLatencyMs:
+          type: number
+          format: double
+        minSuccessRate:
+          type: number
+          format: double
+        maxErrorRate:
+          type: number
+          format: double
+        evaluationDataset:
           $ref: '#/components/schemas/EntityReference'
-        timestamp:
-          type: integer
-          format: int64
-        details:
-          type: string
-        resolved:
-          type: boolean
-        resolvedBy:
-          type: string
-        resolvedAt:
-          type: integer
-          format: int64
-    ResultList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    CoverImage:
-      type: object
-      properties:
-        url:
-          type: string
-        position:
-          type: string
-    UsageDetails:
-      required:
-      - dailyStats
-      - date
-      type: object
-      properties:
-        dailyStats:
-          $ref: '#/components/schemas/UsageStats'
-        weeklyStats:
-          $ref: '#/components/schemas/UsageStats'
-        monthlyStats:
-          $ref: '#/components/schemas/UsageStats'
-        date:
-          type: string
-    LifeCycle:
-      type: object
-      properties:
-        created:
-          $ref: '#/components/schemas/AccessDetails'
-        updated:
-          $ref: '#/components/schemas/AccessDetails'
-        accessed:
-          $ref: '#/components/schemas/AccessDetails'
-    UsageStats:
-      required:
-      - count
-      type: object
-      properties:
-        count:
-          minimum: 0
-          type: integer
-          format: int32
-        percentileRank:
-          type: number
-          format: double
-    CreateAIGovernancePolicy:
-      required:
-      - name
-      - policyType
-      type: object
-      properties:
-        name:
-          maxLength: 256
-          minLength: 1
-          pattern: ^((?!::).)*$
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        policyType:
-          type: string
-          enum:
-          - ModelApproval
-          - DataAccess
-          - BiasThreshold
-          - ComplianceCheck
-          - CostControl
-          - PerformanceStandard
-          - SecurityControl
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/PolicyRule'
-        biasThresholds:
-          $ref: '#/components/schemas/BiasThreshold'
-        dataAccessControls:
-          $ref: '#/components/schemas/DataAccessControl'
-        costControls:
-          $ref: '#/components/schemas/CostControl'
-        complianceRequirements:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComplianceRequirement'
-        performanceStandards:
-          $ref: '#/components/schemas/PerformanceStandard'
-        appliesTo:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        enforcementLevel:
-          type: string
-          enum:
-          - Advisory
-          - Warning
-          - Blocking
-        enabled:
-          type: boolean
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagLabel'
-        owners:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        extension:
-          type: object
-        domains:
-          type: array
-          items:
-            type: string
-        reviewers:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        dataProducts:
-          type: array
-          items:
-            type: string
-        lifeCycle:
-          $ref: '#/components/schemas/LifeCycle'
-    DimensionThresholds:
-      type: object
-      properties:
-        gender:
-          type: number
-          format: double
-        race:
-          type: number
-          format: double
-        age:
-          type: number
-          format: double
-        religion:
-          type: number
-          format: double
-        disability:
-          type: number
-          format: double
-        nationality:
-          type: number
-          format: double
-        socioeconomic:
-          type: number
-          format: double
-    Paging:
-      required:
-      - total
-      type: object
-      properties:
-        before:
-          type: string
-        after:
-          type: string
-        offset:
-          type: integer
-          format: int32
-        limit:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
-    TagLabel:
-      required:
-      - labelType
-      - source
-      - state
-      - tagFQN
-      type: object
-      properties:
-        tagFQN:
-          type: string
-        name:
-          type: string
-        displayName:
-          type: string
-        description:
-          type: string
-        style:
-          $ref: '#/components/schemas/Style'
-        source:
-          type: string
-          enum:
-          - Classification
-          - Glossary
-        labelType:
-          type: string
-          enum:
-          - Manual
-          - Propagated
-          - Automated
-          - Derived
-          - Generated
-        state:
-          type: string
-          enum:
-          - Suggested
-          - Confirmed
-        href:
-          type: string
-          format: uri
-        reason:
-          type: string
-        appliedAt:
-          type: string
-          format: date-time
-        appliedBy:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/TagLabelMetadata'
-    TagLabelRecognizerMetadata:
-      required:
-      - recognizerId
-      - recognizerName
-      - score
-      type: object
-      properties:
-        recognizerId:
-          type: string
-          format: uuid
-        recognizerName:
-          type: string
-        score:
-          type: number
-          format: double
-        target:
-          type: string
-          enum:
-          - content
-          - column_name
-        patterns:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatternMatch'
-    Votes:
-      type: object
-      properties:
-        upVotes:
-          type: integer
-          format: int32
-        downVotes:
-          type: integer
-          format: int32
-        upVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-        downVoters:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityReference'
-    ChangeDescription:
-      type: object
-      properties:
-        fieldsAdded:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsUpdated:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        fieldsDeleted:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldChange'
-        previousVersion:
-          type: number
-          format: double
-        changeSummary:
-          $ref: '#/components/schemas/ChangeSummaryMap'
-    EntityReference:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    AssetCertification:
-      required:
-      - appliedDate
-      - expiryDate
-      - tagLabel
-      type: object
-      properties:
-        tagLabel:
-          $ref: '#/components/schemas/TagLabel'
-        appliedDate:
-          type: integer
-          format: int64
-        expiryDate:
-          type: integer
-          format: int64
-    CostControl:
-      type: object
-      properties:
-        dailyBudget:
-          type: number
-          format: double
-        monthlyBudget:
-          type: number
-          format: double
-        perExecutionLimit:
-          type: number
-          format: double
-        warningThreshold:
-          type: number
-          format: double
-        currency:
-          type: string
-    JsonPatch:
-      type: object
-    AIGovernancePolicyList:
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AIGovernancePolicy'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
-          type: integer
-          format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-    EntityError:
-      type: object
-      properties:
-        message:
-          type: string
-        entity:
-          type: object
-    ChangeEvent:
-      required:
-      - entityId
-      - entityType
-      - eventType
-      - id
-      - timestamp
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        eventType:
-          type: string
-          enum:
-          - entityCreated
-          - entityUpdated
-          - entityFieldsChanged
-          - entityNoChange
-          - entitySoftDeleted
-          - entityDeleted
-          - entityRestored
-          - threadCreated
-          - threadUpdated
-          - postCreated
-          - postUpdated
-          - taskResolved
-          - taskClosed
-          - logicalTestCaseAdded
-          - suggestionCreated
-          - suggestionUpdated
-          - suggestionAccepted
-          - suggestionRejected
-          - suggestionDeleted
-          - userLogin
-          - userLogout
-        entityType:
-          type: string
-        entityId:
-          type: string
-          format: uuid
-        domains:
-          type: array
-          items:
-            type: string
-            format: uuid
-        entityFullyQualifiedName:
-          type: string
-        previousVersion:
-          type: number
-          format: double
-        currentVersion:
-          type: number
-          format: double
-        userName:
-          type: string
-        impersonatedBy:
-          type: string
-        timestamp:
-          type: integer
-          format: int64
-        changeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        incrementalChangeDescription:
-          $ref: '#/components/schemas/ChangeDescription'
-        entity:
-          type: object
-    Style:
-      type: object
-      properties:
-        color:
-          type: string
-        iconURL:
-          type: string
-        coverImage:
-          $ref: '#/components/schemas/CoverImage'
-    RestoreEntity:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    EntityHistory:
-      required:
-      - entityType
-      - versions
-      type: object
-      properties:
-        entityType:
-          type: string
-        versions:
-          type: array
-          items:
-            type: object
-    ChangeSummaryMap:
-      type: object
-    AccessDetails:
-      required:
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        accessedBy:
-          $ref: '#/components/schemas/EntityReference'
-        accessedByAProcess:
-          type: string
-    PatternMatch:
-      required:
-      - name
-      - score
-      type: object
-      properties:
-        name:
-          type: string
-        regex:
-          type: string
-        score:
-          type: number
-          format: double
     PolicyRule:
       required:
       - action
@@ -1166,32 +583,33 @@ components:
           - Critical
         enabled:
           type: boolean
-    FieldChange:
+    AssetCertification:
+      required:
+      - appliedDate
+      - expiryDate
+      - tagLabel
       type: object
       properties:
-        name:
+        tagLabel:
+          $ref: '#/components/schemas/TagLabel'
+        appliedDate:
+          type: integer
+          format: int64
+        expiryDate:
+          type: integer
+          format: int64
+    EntityHistory:
+      required:
+      - entityType
+      - versions
+      type: object
+      properties:
+        entityType:
           type: string
-        oldValue:
-          type: object
-        newValue:
-          type: object
-    PerformanceStandard:
-      type: object
-      properties:
-        minAccuracy:
-          type: number
-          format: double
-        maxLatencyMs:
-          type: number
-          format: double
-        minSuccessRate:
-          type: number
-          format: double
-        maxErrorRate:
-          type: number
-          format: double
-        evaluationDataset:
-          $ref: '#/components/schemas/EntityReference'
+        versions:
+          type: array
+          items:
+            type: object
     AIGovernancePolicy:
       required:
       - id
@@ -1354,6 +772,588 @@ components:
           - Unprocessed
         certification:
           $ref: '#/components/schemas/AssetCertification'
+    UsageDetails:
+      required:
+      - dailyStats
+      - date
+      type: object
+      properties:
+        dailyStats:
+          $ref: '#/components/schemas/UsageStats'
+        weeklyStats:
+          $ref: '#/components/schemas/UsageStats'
+        monthlyStats:
+          $ref: '#/components/schemas/UsageStats'
+        date:
+          type: string
+    Paging:
+      required:
+      - total
+      type: object
+      properties:
+        before:
+          type: string
+        after:
+          type: string
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+    Style:
+      type: object
+      properties:
+        color:
+          type: string
+        iconURL:
+          type: string
+        coverImage:
+          $ref: '#/components/schemas/CoverImage'
+    CreateAIGovernancePolicy:
+      required:
+      - name
+      - policyType
+      type: object
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: ^((?!::).)*$
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        policyType:
+          type: string
+          enum:
+          - ModelApproval
+          - DataAccess
+          - BiasThreshold
+          - ComplianceCheck
+          - CostControl
+          - PerformanceStandard
+          - SecurityControl
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyRule'
+        biasThresholds:
+          $ref: '#/components/schemas/BiasThreshold'
+        dataAccessControls:
+          $ref: '#/components/schemas/DataAccessControl'
+        costControls:
+          $ref: '#/components/schemas/CostControl'
+        complianceRequirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceRequirement'
+        performanceStandards:
+          $ref: '#/components/schemas/PerformanceStandard'
+        appliesTo:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        enforcementLevel:
+          type: string
+          enum:
+          - Advisory
+          - Warning
+          - Blocking
+        enabled:
+          type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagLabel'
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        extension:
+          type: object
+        domains:
+          type: array
+          items:
+            type: string
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        dataProducts:
+          type: array
+          items:
+            type: string
+        lifeCycle:
+          $ref: '#/components/schemas/LifeCycle'
+    AIGovernancePolicyList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AIGovernancePolicy'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    Votes:
+      type: object
+      properties:
+        upVotes:
+          type: integer
+          format: int32
+        downVotes:
+          type: integer
+          format: int32
+        upVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        downVoters:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+    ChangeSummaryMap:
+      type: object
+    ResultList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+    LifeCycle:
+      type: object
+      properties:
+        created:
+          $ref: '#/components/schemas/AccessDetails'
+        updated:
+          $ref: '#/components/schemas/AccessDetails'
+        accessed:
+          $ref: '#/components/schemas/AccessDetails'
+    TagLabelRecognizerMetadata:
+      required:
+      - recognizerId
+      - recognizerName
+      - score
+      type: object
+      properties:
+        recognizerId:
+          type: string
+          format: uuid
+        recognizerName:
+          type: string
+        score:
+          type: number
+          format: double
+        target:
+          type: string
+          enum:
+          - content
+          - column_name
+        patterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatternMatch'
+    TagLabelMetadata:
+      type: object
+      properties:
+        recognizer:
+          $ref: '#/components/schemas/TagLabelRecognizerMetadata'
+        expiryDate:
+          type: integer
+          format: int64
+    RestoreEntity:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    UsageStats:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          minimum: 0
+          type: integer
+          format: int32
+        percentileRank:
+          type: number
+          format: double
+    CoverImage:
+      type: object
+      properties:
+        url:
+          type: string
+        position:
+          type: string
+    DimensionThresholds:
+      type: object
+      properties:
+        gender:
+          type: number
+          format: double
+        race:
+          type: number
+          format: double
+        age:
+          type: number
+          format: double
+        religion:
+          type: number
+          format: double
+        disability:
+          type: number
+          format: double
+        nationality:
+          type: number
+          format: double
+        socioeconomic:
+          type: number
+          format: double
+    DataAccessControl:
+      type: object
+      properties:
+        allowedDataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        prohibitedDataSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityReference'
+        maxSensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
+        piiAccessAllowed:
+          type: boolean
+        requireApprovalForSensitiveData:
+          type: boolean
+        dataRetentionDays:
+          type: integer
+          format: int32
+    TagLabel:
+      required:
+      - labelType
+      - source
+      - state
+      - tagFQN
+      type: object
+      properties:
+        tagFQN:
+          type: string
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+        style:
+          $ref: '#/components/schemas/Style'
+        source:
+          type: string
+          enum:
+          - Classification
+          - Glossary
+        labelType:
+          type: string
+          enum:
+          - Manual
+          - Propagated
+          - Automated
+          - Derived
+          - Generated
+        state:
+          type: string
+          enum:
+          - Suggested
+          - Confirmed
+        href:
+          type: string
+          format: uri
+        reason:
+          type: string
+        appliedAt:
+          type: string
+          format: date-time
+        appliedBy:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/TagLabelMetadata'
+    ChangeDescription:
+      type: object
+      properties:
+        fieldsAdded:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsUpdated:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        fieldsDeleted:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldChange'
+        previousVersion:
+          type: number
+          format: double
+        changeSummary:
+          $ref: '#/components/schemas/ChangeSummaryMap'
+    CostControl:
+      type: object
+      properties:
+        dailyBudget:
+          type: number
+          format: double
+        monthlyBudget:
+          type: number
+          format: double
+        perExecutionLimit:
+          type: number
+          format: double
+        warningThreshold:
+          type: number
+          format: double
+        currency:
+          type: string
+    ChangeEvent:
+      required:
+      - entityId
+      - entityType
+      - eventType
+      - id
+      - timestamp
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - entityCreated
+          - entityUpdated
+          - entityFieldsChanged
+          - entityNoChange
+          - entitySoftDeleted
+          - entityDeleted
+          - entityRestored
+          - threadCreated
+          - threadUpdated
+          - postCreated
+          - postUpdated
+          - taskResolved
+          - taskClosed
+          - logicalTestCaseAdded
+          - suggestionCreated
+          - suggestionUpdated
+          - suggestionAccepted
+          - suggestionRejected
+          - suggestionDeleted
+          - userLogin
+          - userLogout
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        domains:
+          type: array
+          items:
+            type: string
+            format: uuid
+        entityFullyQualifiedName:
+          type: string
+        previousVersion:
+          type: number
+          format: double
+        currentVersion:
+          type: number
+          format: double
+        userName:
+          type: string
+        impersonatedBy:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        changeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        incrementalChangeDescription:
+          $ref: '#/components/schemas/ChangeDescription'
+        entity:
+          type: object
+    JsonPatch:
+      type: object
+    PolicyViolation:
+      type: object
+      properties:
+        violatedRule:
+          type: string
+        violatingEntity:
+          $ref: '#/components/schemas/EntityReference'
+        timestamp:
+          type: integer
+          format: int64
+        details:
+          type: string
+        resolved:
+          type: boolean
+        resolvedBy:
+          type: string
+        resolvedAt:
+          type: integer
+          format: int64
+    EntityError:
+      type: object
+      properties:
+        message:
+          type: string
+        entity:
+          type: object
+    FieldChange:
+      type: object
+      properties:
+        name:
+          type: string
+        oldValue:
+          type: object
+        newValue:
+          type: object
+    AccessDetails:
+      required:
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        accessedBy:
+          $ref: '#/components/schemas/EntityReference'
+        accessedByAProcess:
+          type: string
+    BiasThreshold:
+      type: object
+      properties:
+        maxOverallBiasScore:
+          type: number
+          format: double
+        dimensionThresholds:
+          $ref: '#/components/schemas/DimensionThresholds'
+        evaluationFrequency:
+          type: string
+          enum:
+          - Continuous
+          - Daily
+          - Weekly
+          - Monthly
+          - OnDemand
+    ComplianceRequirement:
+      type: object
+      properties:
+        standard:
+          type: string
+          enum:
+          - GDPR
+          - HIPAA
+          - SOC2
+          - ISO27001
+          - NIST_AI_RMF
+          - EU_AI_Act
+          - OWASP_LLM_Top10
+          - Custom
+        requirements:
+          type: array
+          items:
+            type: string
+        attestationRequired:
+          type: boolean
+        auditFrequency:
+          type: string
+          enum:
+          - Continuous
+          - Weekly
+          - Monthly
+          - Quarterly
+          - Annually
+    EntityReference:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    PatternMatch:
+      required:
+      - name
+      - score
+      type: object
+      properties:
+        name:
+          type: string
+        regex:
+          type: string
+        score:
+          type: number
+          format: double
   securitySchemes:
     BearerAuth:
       type: http

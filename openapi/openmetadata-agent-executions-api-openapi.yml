@@ -153,46 +153,42 @@ paths:
           description: Successfully deleted Agent Execution Data
 components:
   schemas:
-    ExecutionMetrics:
-      type: object
-      properties:
-        totalRowsProcessed:
-          type: integer
-          format: int32
-        totalBytesProcessed:
-          type: integer
-          format: int32
-        cpuTime:
-          type: number
-          format: double
-        memoryUsed:
-          type: integer
-          format: int32
-        cost:
-          type: number
-          format: double
-    AgentExecutionList:
+    DataAccess:
       required:
-      - data
+      - accessType
+      - dataSource
       type: object
       properties:
-        data:
+        dataSource:
+          $ref: '#/components/schemas/EntityReference'
+        accessType:
+          type: string
+          enum:
+          - Read
+          - Write
+          - Update
+          - Delete
+        columns:
           type: array
           items:
-            $ref: '#/components/schemas/AgentExecution'
-        paging:
-          $ref: '#/components/schemas/Paging'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
-        warningsCount:
+            type: string
+        recordCount:
           type: integer
           format: int32
-        warnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityError'
+        query:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        piiAccessed:
+          type: boolean
+        sensitivityLevel:
+          type: string
+          enum:
+          - Public
+          - Internal
+          - Confidential
+          - Restricted
     AgentExecution:
       required:
       - agent
@@ -266,7 +262,7 @@ components:
           $ref: '#/components/schemas/Metadata'
         deleted:
           type: boolean
-    Metadata:
+    Parameters__1:
       type: object
     ComplianceCheck:
       type: object
@@ -284,51 +280,13 @@ components:
           - Medium
           - High
           - Critical
-    EntityReference:
-      required:
-      - id
-      - type
+    EntityError:
       type: object
       properties:
-        id:
+        message:
           type: string
-          format: uuid
-        type:
-          type: string
-        name:
-          type: string
-        fullyQualifiedName:
-          type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        deleted:
-          type: boolean
-        inherited:
-          type: boolean
-        href:
-          type: string
-          format: uri
-    ToolCall:
-      type: object
-      properties:
-        tool:
-          $ref: '#/components/schemas/EntityReference'
-        parameters:
-          $ref: '#/components/schemas/Parameters__1'
-        result:
-          type: string
-        success:
-          type: boolean
-        latencyMs:
-          type: number
-          format: double
-        timestamp:
-          type: integer
-          format: int64
-        errorMessage:
-          type: string
+        entity:
+          type: object
     ModelCall:
       type: object
       properties:
@@ -355,44 +313,45 @@ components:
           format: int64
         purpose:
           type: string
-    Parameters__1:
+    Metadata:
       type: object
-    DataAccess:
-      required:
-      - accessType
-      - dataSource
+    ToolCall:
       type: object
       properties:
-        dataSource:
+        tool:
           $ref: '#/components/schemas/EntityReference'
-        accessType:
+        parameters:
+          $ref: '#/components/schemas/Parameters__1'
+        result:
           type: string
-          enum:
-          - Read
-          - Write
-          - Update
-          - Delete
-        columns:
-          type: array
-          items:
-            type: string
-        recordCount:
-          type: integer
-          format: int32
-        query:
-          type: string
+        success:
+          type: boolean
+        latencyMs:
+          type: number
+          format: double
         timestamp:
           type: integer
           format: int64
-        piiAccessed:
-          type: boolean
-        sensitivityLevel:
+        errorMessage:
           type: string
-          enum:
-          - Public
-          - Internal
-          - Confidential
-          - Restricted
+    ExecutionMetrics:
+      type: object
+      properties:
+        totalRowsProcessed:
+          type: integer
+          format: int32
+        totalBytesProcessed:
+          type: integer
+          format: int32
+        cpuTime:
+          type: number
+          format: double
+        memoryUsed:
+          type: integer
+          format: int32
+        cost:
+          type: number
+          format: double
     Paging:
       required:
       - total
@@ -411,13 +370,54 @@ components:
         total:
           type: integer
           format: int32
-    EntityError:
+    EntityReference:
+      required:
+      - id
+      - type
       type: object
       properties:
-        message:
+        id:
           type: string
-        entity:
-          type: object
+          format: uuid
+        type:
+          type: string
+        name:
+          type: string
+        fullyQualifiedName:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        deleted:
+          type: boolean
+        inherited:
+          type: boolean
+        href:
+          type: string
+          format: uri
+    AgentExecutionList:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentExecution'
+        paging:
+          $ref: '#/components/schemas/Paging'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
+        warningsCount:
+          type: integer
+          format: int32
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityError'
   securitySchemes:
     BearerAuth:
       type: http

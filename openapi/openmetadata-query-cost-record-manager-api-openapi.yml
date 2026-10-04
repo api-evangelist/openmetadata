@@ -81,30 +81,6 @@ paths:
                 $ref: '#/components/schemas/CreateQueryCostRecord'
 components:
   schemas:
-    CreateQueryCostRecord:
-      required:
-      - cost
-      - count
-      - queryReference
-      - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-        jsonSchema:
-          type: string
-        queryReference:
-          $ref: '#/components/schemas/EntityReference'
-        cost:
-          type: number
-          format: double
-        count:
-          type: number
-          format: double
-        totalDuration:
-          type: number
-          format: double
     EntityReference:
       required:
       - id
@@ -159,6 +135,30 @@ components:
         updatedAt:
           type: integer
           format: int64
+        count:
+          type: number
+          format: double
+        totalDuration:
+          type: number
+          format: double
+    CreateQueryCostRecord:
+      required:
+      - cost
+      - count
+      - queryReference
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        jsonSchema:
+          type: string
+        queryReference:
+          $ref: '#/components/schemas/EntityReference'
+        cost:
+          type: number
+          format: double
         count:
           type: number
           format: double
